@@ -11,6 +11,7 @@
 
 Immediate plan when resuming after credit refresh:
 - 🚧 **Revert from custom installer to Tauri native packaging**: Ditch the custom installer in favor of Tauri's native bundler (NSIS and MSI on Windows, deb/AppImage on Linux, dmg/app on macOS) to guarantee complete app resource packaging, uninstallation, and reliable launch. Resolves [#4](https://github.com/HELIX-Origin/nhentai-desktop/issues/4).
+- 🚧 **Research native installer visual customization**: Investigate Tauri's native NSIS configuration capabilities (custom `.nsi` template, `installerMode`, header/sidebar branding art, dark aesthetic styling, and language mappings) and macOS DMG styling to make the native installer visual presentation as close as possible to the modern design attempted with the custom installer.
 - 🚧 **Retain portable formats**: Keep PortableApps.com format (`.paf.exe`) and portable `.zip` archives.
 - 🚧 **Clean up custom installer artifacts**: Remove `/installer` route and obsolete platform installer hooks.
 - 🚧 **Align CI & documentation**: Update `.github/workflows/package.yml`, `AGENTS.md` (decision log), `rules/installer.md`, and wiki pages.
