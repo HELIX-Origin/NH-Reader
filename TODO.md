@@ -13,7 +13,7 @@ M1 Foundation, M9.1 localization core, and v0.5.0 installer enhancements are com
 Active work is focused on downloads/background-service (M7) and release-hardening (M8) polish. **M9.2 — the remaining
 14 language packs — is planned in this file for community contributions.**
 
-- ✅ **v0.5.0 released 2026-09-30** (Installation scopes [Current user, All users, Custom directory with native picker], portable mode [.portable marker + data/ runtime isolation], and PortableApps PAF installer packaging) — gates green: `cargo test` 10/10, `npm run check` 0/0, `npm run i18n:check` 87/87, `npm run check:agents` whole tree clean, `npm run build`
+- ✅ **[v0.5.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.5.0) released 2026-09-30** (Installation scopes [Current user, All users, Custom directory with native picker], portable mode [.portable marker + data/ runtime isolation], and PortableApps PAF installer packaging) — gates green: `cargo test` 10/10, `npm run check` 0/0, `npm run i18n:check` 87/87, `npm run check:agents` whole tree clean, `npm run build`
 - ✅ **v0.4.0 released 2026-09-30** (dedicated uninstaller executable + HELIX Origin publisher attribution + drop-in localization + DB poison recovery) — gates
   green: `cargo test` 10/10, `npm run check` 0/0, `npm run i18n:check` 78/78, `npm run check:agents` whole tree clean, `npm run build`,
   `npm run build:installer` produced `NH Desktop-Setup-0.4.0-win-x64.exe` and `uninstall.exe`
