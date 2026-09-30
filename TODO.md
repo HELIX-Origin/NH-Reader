@@ -7,11 +7,15 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
-## 🚧 Current focus: M7 downloads & background services + M8 polish
+## 🚧 Current focus: Revert to Tauri Native Packaging (NSIS/MSI) & Resolve #4
 
-M1 Foundation, M9.1 localization core, and v0.5.0 installer enhancements are completely shipped and verified.
-Active work is focused on downloads/background-service (M7) and release-hardening (M8) polish. **M9.2 — the remaining
-14 language packs — is planned in this file for community contributions.**
+Immediate plan when resuming after credit refresh:
+- 🚧 **Revert from custom installer to Tauri native packaging**: Ditch the custom installer in favor of Tauri's native bundler (NSIS and MSI on Windows, deb/AppImage on Linux, dmg/app on macOS) to guarantee complete app resource packaging, uninstallation, and reliable launch. Resolves [#4](https://github.com/HELIX-Origin/nhentai-desktop/issues/4).
+- 🚧 **Retain portable formats**: Keep PortableApps.com format (`.paf.exe`) and portable `.zip` archives.
+- 🚧 **Clean up custom installer artifacts**: Remove `/installer` route and obsolete platform installer hooks.
+- 🚧 **Align CI & documentation**: Update `.github/workflows/package.yml`, `AGENTS.md` (decision log), `rules/installer.md`, and wiki pages.
+
+M1 Foundation, M9.1 localization core, and v0.5.0 installer enhancements are shipped. Active focus is resolving #4 via native packaging. **M9.2 — the remaining 14 language packs — is planned in this file for community contributions.**
 
 - ✅ **[v0.5.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.5.0) released 2026-09-30** (Installation scopes [Current user, All users, Custom directory with native picker], portable mode [.portable marker + data/ runtime isolation], and PortableApps PAF installer packaging) — gates green: `cargo test` 10/10, `npm run check` 0/0, `npm run i18n:check` 87/87, `npm run check:agents` whole tree clean, `npm run build`
 - ✅ **v0.4.0 released 2026-09-30** (dedicated uninstaller executable + HELIX Origin publisher attribution + drop-in localization + DB poison recovery) — gates
