@@ -49,5 +49,5 @@ maintainer contact in PRIVACY.md.
 
 ## 🔗 Related
 
-- [Security](Security.md) · [Settings & API Key](Settings-and-API-Key.md) ·
-  [Architecture](Architecture.md) · [Getting Started](Getting-Started.md)
+- [Security](Security) · [Settings & API Key](Settings-and-API-Key) ·
+  [Architecture](Architecture) · [Getting Started](Getting-Started)

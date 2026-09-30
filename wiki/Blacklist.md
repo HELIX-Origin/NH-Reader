@@ -43,7 +43,7 @@ returns.
   gallery text fields client-side.
 - **Remove / edit entries** — inline in the list.
 - **Import/export** — JSON export/import of the whole list (planned — see
-  [Roadmap](Roadmap.md)).
+  [Roadmap](Roadmap)).
 
 ## 🕵️ Privacy & where it lives
 
@@ -81,4 +81,4 @@ returns.
 
 ---
 
-- Previous: [Search & Filters](Search-and-Filters.md) · Next: [Favorites & History](Favorites-and-History.md)
+- Previous: [Search & Filters](Search-and-Filters) · Next: [Favorites & History](Favorites-and-History)

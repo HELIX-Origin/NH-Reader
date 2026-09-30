@@ -7,9 +7,9 @@ seriously — both for the app itself and for the privacy of your local data.
 
 | Version | Supported |
 | --- | --- |
-| 0.2.x | ✅ Active |
-| 0.1.x | ⚠️ No longer supported; upgrade to latest |
-| < 0.1 | ❌ |
+| 0.4.x | ✅ Active |
+| 0.3.x | ⚠️ Upgrade recommended |
+| < 0.3 | ❌ No longer supported |
 
 Only the latest release receives security fixes. Check the
 [Releases page](https://github.com/HELIX-Origin/nhentai-desktop/releases) for the current
@@ -79,7 +79,7 @@ Out of scope:
 
 ## ⬜ Security hardening wishlist
 
-These are tracked in the Wiki's [Roadmap](wiki/Roadmap.md):
+These are tracked in the Wiki's [Roadmap](../../wiki/Roadmap):
 
 - 🔏 Code-signing / notarization for Windows + macOS release binaries.
 - Installer signature verification prior to launch-any-later-updates.

@@ -1,7 +1,7 @@
 use crate::db::Db;
 use crate::image_cache::ImageCache;
 use crate::nh_desktop::{
-    DownloadResponse, FavoriteResponse, GalleryDetail, GalleryList, NhDesktopClient, Paginated, RelatedGalleries,
+    FavoriteResponse, GalleryDetail, GalleryList, NhDesktopClient, Paginated, RelatedGalleries,
     TagResponse, UserMeResponse, GalleryListItem,
 };
 use crate::service::{get_auto_refresh, set_auto_refresh, AutoRefreshConfig, BackgroundService, ServiceStatus};
@@ -37,6 +37,7 @@ pub fn app_quit(app: tauri::AppHandle) {
 pub fn get_system_locale() -> String {
     sys_locale::get_locale().unwrap_or_else(|| "en".to_string())
 }
+
 
 #[tauri::command]
 pub async fn fetch_new(client: State<'_, NhDesktopClient>, db: State<'_, Db>, page: Option<u32>, per_page: Option<u32>) -> Result<GalleryList, String> {
@@ -218,12 +219,6 @@ pub async fn update_account_blacklist(client: State<'_, NhDesktopClient>, db: St
 }
 
 #[tauri::command]
-pub async fn download_gallery(client: State<'_, NhDesktopClient>, db: State<'_, Db>, id: u64, format: Option<String>) -> Result<DownloadResponse, String> {
-    let key = require_key(&db)?;
-    client.download(&key, id, format.as_deref().unwrap_or("zip")).await.map_err(|e| e.to_string())
-}
-
-#[tauri::command]
 pub async fn service_enqueue_download(service: State<'_, Arc<BackgroundService>>, id: u64, format: Option<String>) -> Result<u64, String> {
     service.enqueue_download(id, format.unwrap_or_else(|| "zip".to_string())).await
 }
@@ -340,7 +335,10 @@ pub fn installer_launch_app(target_dir: Option<String>) -> Result<crate::install
 pub fn open_maintenance_window(app: tauri::AppHandle) -> Result<(), String> {
 	let is_uninstall = std::env::args().any(|a| a == "--uninstall");
 	let flag = if is_uninstall { "--uninstall" } else { "--maintenance" };
-	let exe = std::env::current_exe().map_err(|e| e.to_string())?;
+	let exe = crate::platform::installed_uninstaller_path()
+		.filter(|p| p.exists())
+		.or_else(|| std::env::current_exe().ok())
+		.ok_or_else(|| "Could not locate uninstaller executable".to_string())?;
 	std::process::Command::new(exe)
 		.arg(flag)
 		.spawn()

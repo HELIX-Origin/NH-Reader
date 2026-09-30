@@ -75,8 +75,6 @@ select {
 	border-radius: var(--radius-sm);
 }
 
-/* ---------- shared controls ---------- */
-
 .btn {
 	display: inline-flex;
 	align-items: center;
@@ -199,8 +197,6 @@ select {
 	letter-spacing: 0.02em;
 }
 
-/* ---------- text helpers ---------- */
-
 .secondary {
 	color: var(--text-secondary);
 }
@@ -215,8 +211,6 @@ select {
 	white-space: nowrap;
 }
 
-/* ---------- misc ---------- */
-
 .sr-only {
 	position: absolute;
 	width: 1px;
@@ -229,8 +223,6 @@ select {
 .mono {
 	font-variant-numeric: tabular-nums;
 }
-
-/* ---------- page scaffolding ---------- */
 
 .page {
 	padding: 18px 24px 40px;

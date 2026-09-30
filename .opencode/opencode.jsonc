@@ -1,35 +1,44 @@
 {
   "$schema": "https://opencode.ai/config.json",
-
-  // 1. Corrected singular property name: "permission"
   "permission": {
     "bash": {
-      // Allows routine development commands autonomously.
       "*": "allow",
-      // Protects dangerous environment destructive mutations by forcing a prompt.
+      "git add*": "ask",
+      "git commit*": "ask",
+      "git push*": "ask",
+      "git tag*": "ask",
+      "gh pr create*": "ask",
+      "gh issue create*": "ask",
+      "gh release create*": "ask",
       "rm *": "ask",
+      "rm -rf *": "ask",
       "sudo *": "ask",
-      "git push *": "ask",
-      "git reset --hard*": "ask"
+      "git reset --hard*": "ask",
+      "git checkout --*": "ask",
+      "git clean*": "ask",
+      "magick*": "allow"
     },
     "external_directory": "allow",
     "webfetch": "allow",
     "websearch": "allow"
   },
-
-  // 2. Verified plugin mapping configuration
   "plugin": [
+    "@tarquinen/opencode-dcp@latest",
     "@plannotator/opencode@latest",
     "@franlol/opencode-md-table-formatter@latest",
     "opencode-agent-skills@latest",
     "opencode-websearch-cited@latest"
   ],
-
-  // Scoped project instructions mapped out for shell strategy
   "instructions": [
+    "AGENTS.md",
     "https://raw.githubusercontent.com/JRedeker/opencode-shell-strategy/trunk/shell_strategy.md"
   ],
-
-  // Built-in feature flag hooks for plugins
-  "formatter": true
+  "formatter": true,
+  "autoupdate": true,
+  "compaction": {
+    "auto": true
+  },
+  "logLevel": "DEBUG",
+  "autoshare": true,
+  "snapshot": true
 }

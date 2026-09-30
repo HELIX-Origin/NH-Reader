@@ -8,6 +8,10 @@ pub fn executable_name() -> String {
     format!("{EXE_NAME}.exe")
 }
 
+pub fn uninstaller_name() -> String {
+    "uninstall.exe".to_string()
+}
+
 pub fn default_install_dir() -> String {
     if let Some(local) = dirs::data_local_dir() {
         return local
@@ -28,9 +32,20 @@ pub fn installed_exe_path() -> Option<PathBuf> {
     }
 }
 
+pub fn installed_uninstaller_path() -> Option<PathBuf> {
+    let p = Path::new(&default_install_dir()).join(uninstaller_name());
+    if p.exists() {
+        Some(p)
+    } else {
+        None
+    }
+}
+
 pub fn place_executable(src: &Path, target_dir: &Path) -> Result<PathBuf, String> {
     let dest = target_dir.join(executable_name());
     std::fs::copy(src, &dest).map_err(|e| format!("copy {} -> {}: {e}", src.display(), dest.display()))?;
+    let uninst = target_dir.join(uninstaller_name());
+    std::fs::copy(src, &uninst).map_err(|e| format!("copy {} -> {}: {e}", src.display(), uninst.display()))?;
     Ok(dest)
 }
 
@@ -139,12 +154,13 @@ pub fn remove_start_menu_shortcut() -> Result<(), String> {
 
 pub fn register_uninstall(exe: &Path, install_dir: &Path) -> Result<(), String> {
     let key = r"HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\NH Desktop";
-    let uninstall_string = format!("\"{}\" --installer --maintenance", exe.to_string_lossy());
+    let uninstaller = install_dir.join(uninstaller_name());
+    let uninstall_string = format!("\"{}\"", uninstaller.to_string_lossy());
     let script = format!(
         r#"New-Item -Path '{key}' -Force | Out-Null
 New-ItemProperty -Path '{key}' -Name 'DisplayName' -Value '{name}' -PropertyType String -Force | Out-Null
 New-ItemProperty -Path '{key}' -Name 'DisplayVersion' -Value '{ver}' -PropertyType String -Force | Out-Null
-New-ItemProperty -Path '{key}' -Name 'Publisher' -Value 'NH Desktop' -PropertyType String -Force | Out-Null
+New-ItemProperty -Path '{key}' -Name 'Publisher' -Value 'HELIX Origin' -PropertyType String -Force | Out-Null
 New-ItemProperty -Path '{key}' -Name 'DisplayIcon' -Value '{icon}' -PropertyType String -Force | Out-Null
 New-ItemProperty -Path '{key}' -Name 'InstallLocation' -Value '{dir}' -PropertyType String -Force | Out-Null
 New-ItemProperty -Path '{key}' -Name 'UninstallString' -Value '{us}' -PropertyType String -Force | Out-Null

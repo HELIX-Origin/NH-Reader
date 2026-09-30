@@ -44,5 +44,5 @@ Security posture, reporting, and hardening notes for NH Desktop.
 
 ## 🔗 Related
 
-- [Privacy](Privacy.md) · [Installer Engine](Installer-Engine.md) ·
-  [Architecture](Architecture.md) · [Settings & API Key](Settings-and-API-Key.md)
+- [Privacy](Privacy) · [Installer Engine](Installer-Engine) ·
+  [Architecture](Architecture) · [Settings & API Key](Settings-and-API-Key)

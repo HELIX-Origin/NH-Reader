@@ -75,7 +75,6 @@ export async function refreshFavorite(id: number): Promise<void> {
 		const res = await backend.checkFavorite(id);
 		accountFavorites.set(id, res.favorited);
 	} catch {
-		// account favorites are best-effort
 	}
 }
 

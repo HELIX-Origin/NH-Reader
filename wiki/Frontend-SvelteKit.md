@@ -15,7 +15,8 @@ src/lib/
   image.ts          URL helpers (IMAGE_HOST/THUMB_HOST/AVATAR_HOST) +
                     pagePath()/thumbPath()/avatarUrl() + proxiedBlobUrl()
   format.ts         display helpers (sizes, dates, counts)
-  stores/           runes state (favorites/history/blacklist/settings/account/service)
+  i18n/             LocaleCatalog, en.json (default), drop-in packs
+  stores/           runes state (favorites/history/blacklist/settings/account/service/locale)
   components/       GalleryCard, GalleryGrid, FilterPanel, ReaderImage,
                     CoverImage, Pager, Loader, Drawer, TagChip, EmptyState,
                     ErrorNotice, SettingsView, FavoritesView, HistoryView,
@@ -45,7 +46,7 @@ src/routes/
 - Image URLs are derived from the API's relative path fragments via `image.ts`
   (`pagePath` / `thumbPath` / `avatarUrl`); images render direct from the `*.nhentai.net` CDNs
   and fall back to a `blob:` URL from `proxy_image` (served from the disk image cache) when the
-  CDN 404s (see [Reader & Galleries](Reader-and-Galleries.md)).
+  CDN 404s (see [Reader & Galleries](Reader-and-Galleries)).
 
 ## 🔍 Event flow (example: search)
 
@@ -69,7 +70,7 @@ In full:
 
 The layout detects sub-window routes (`/installer`) and renders them **without** the normal
 app shell (no sidebar). The maintenance window is opened from e.g. settings / sidebar via
-`open_maintenance_window` (Rust) — see [Installer Engine](Installer-Engine.md).
+`open_maintenance_window` (Rust) — see [Installer Engine](Installer-Engine).
 
 ## 🔄 Background services
 
@@ -90,5 +91,5 @@ shared `.btn`, `.input`, `.page` etc. live in `design/base.css`.
 
 ## 🤝 Related
 
-- [Architecture](Architecture.md) · [Backend (Rust)](Backend-Rust.md) ·
-  [Reader & Galleries](Reader-and-Galleries.md)
+- [Architecture](Architecture) · [Backend (Rust)](Backend-Rust) ·
+  [Reader & Galleries](Reader-and-Galleries)

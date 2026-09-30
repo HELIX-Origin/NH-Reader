@@ -1,4 +1,9 @@
 {
+	"_meta": {
+		"code": "en",
+		"name": "English",
+		"nativeName": "English"
+	},
 	"app": {
 		"name": "NH Desktop",
 		"setup": "NH Desktop Setup",

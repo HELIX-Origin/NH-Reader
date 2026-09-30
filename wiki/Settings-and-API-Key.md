@@ -12,9 +12,9 @@ behind `[data-theme='light']`).
   store directly.
 - 📐 **Grid density:** `Cozy` or `Compact`.
 - 🌍 **Language:** pick the interface language from the dropdown. Defaults to your system locale
-  on first launch; changes apply immediately and are shared with the installer. English,
-  Japanese, and Chinese (Simplified + Traditional) are complete — see
-  [Localization](Localization.md) to help add another.
+  on first launch; changes apply immediately and are shared with the installer. English is
+  provided by default — see [Localization](Localization) and
+  [Contributing Translations](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/CONTRIBUTING.md#contributing-translations) to drop in another language.
 - Accent color and image-quality/reader-preference options are planned (Settings backlog).
 
 ## 🔑 API key (optional)
@@ -77,7 +77,7 @@ Settings → **Background services** (backed by `src-tauri/src/service.rs` + the
 | **Recent jobs** | Live list of background jobs with progress, streamed over the `service://job` / `service://refresh` events (download, prefetch, maintenance, refresh, sync). |
 
 The service processes jobs one at a time from a throttled queue. Downloads land in the
-`downloads/` folder of the app data dir. See [Backend (Rust)](Backend-Rust.md) for the
+`downloads/` folder of the app data dir. See [Backend (Rust)](Backend-Rust) for the
 `service_*` commands.
 
 ## ⚙️ Other settings surfaces
@@ -93,6 +93,6 @@ Beyond the Settings page, related persistent state lives in:
 
 ## 🤝 Related
 
-- [Search & Filters](Search-and-Filters.md) · [Blacklist](Blacklist.md)
-- [Localization](Localization.md) — language packs and how to contribute one
-- [Backend (Rust)](Backend-Rust.md) — the commands behind these toggles
+- [Search & Filters](Search-and-Filters) · [Blacklist](Blacklist)
+- [Localization](Localization) — language packs and how to contribute one
+- [Backend (Rust)](Backend-Rust) — the commands behind these toggles

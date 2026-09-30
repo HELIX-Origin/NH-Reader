@@ -1,8 +1,8 @@
 # TODO.md
 
 > Actionable task ledger. Statuses: ⬜ backlog · 🚧 in progress · ✅ done.
-> High-level direction lives in `ROADMAP.md`; detailed per-item notes (optional) live in
-> `.agents/tracking/todos/TODO-###.md`.
+> High-level direction lives in `ROADMAP.md`; role and workflow definitions live in
+> `.agents/` (see `.agents/ROLES.md`).
 >
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
@@ -14,6 +14,9 @@ Active work is finishing the clean-clone verification gate and polishing the
 downloads/background-service (M7) and release-hardening (M8) milestones. **M9.2 — the remaining
 14 language packs — is planned in this file but deliberately not started.**
 
+- ✅ **v0.4.0 released 2026-09-30** (dedicated uninstaller executable + HELIX Origin publisher attribution + drop-in localization + DB poison recovery) — gates
+  green: `cargo test` 10/10, `npm run check` 0/0, `npm run i18n:check` 78/78, `npm run check:agents` whole tree clean, `npm run build`,
+  `npm run build:installer` produced `NH Desktop-Setup-0.4.0-win-x64.exe` and `uninstall.exe`
 - ✅ **v0.3.0 released 2026-09-25** (M9.1 localization + installer launch fix + titlebar search) — gates
   green: `cargo test` 9/9, `npm run check` 0/0, `npm run i18n:check` 3/3, `npm run build`,
   `npm run build:installer` produced `NH Desktop-Setup-0.3.0-win-x64.exe`
@@ -26,17 +29,15 @@ downloads/background-service (M7) and release-hardening (M8) milestones. **M9.2 
 - ✅ Language selector in `Settings → Appearance → Language`
 - ✅ `t()` wired through the app shell (titlebar, sidebar, account chip) and the full installer
 - ✅ Validator `npm run i18n:check` (missing / untranslated / unknown keys), fully offline
-- ✅ Contributor documentation: `wiki/Localization.md` (improve existing pack + add new language,
+- ✅ Contributor documentation: [Localization](../../wiki/Localization) (improve existing pack + add new language,
   with free terminology cross-reference resources), linked from Home / Settings / Installation
-- ✅ Core packs: `en` (source), `ja`, `zh-Hans`, `zh-Hant` — 78/78 keys each
+- ✅ Default pack: `en` (hand-rolled source) — 78/78 keys with 100% drop-in architecture
 
 ## ⬜ M9.2 — Remaining language packs (planned, not started)
 
-Deferred by decision — nothing here is scheduled or in progress. All 14 locales are already
-registered in `src/lib/i18n/locales.ts` and selectable in the app; each falls back to English
-per-key until its pack lands. Per the plan in `wiki/Localization.md`, each item is the same
-four steps: copy `en.json` → translate values → register the import in `src/lib/i18n/index.ts` →
-`npm run i18n:check` clean.
+Deferred to community contributions — packs are 100% drop-in. Adding a language simply requires
+dropping `<locale>.json` into `src/lib/i18n/` without editing any code or registries.
+Run `npm run i18n:check` to validate.
 
 | # | Pack | Code | Notes |
 | --- | --- | --- | --- |

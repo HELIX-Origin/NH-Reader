@@ -1,15 +1,17 @@
-# BUGS.md
+# 🐛 BUGS
 
-> Living index of known issues and quirks. One section per bug, most recent first.
-> Entering a bug → use the template in `.agents/templates/bug.md`; large investigations
-> get a detail file in `.agents/tracking/bugs/BUG-###.md` (link it here).
+> [!IMPORTANT]
+> All known bugs are listed here. Keep in mind, that if a bug is missing, it may not have been discovered or reported yet.
+> 
+> The repository maintainers (and contributors) actively search for new bugs and update this document accordingly. In some cases, a bug will be spotted and fixed without this page being immediately updated. This page is primarily a living index and may not always reflect the most current state of the codebase.
+> 
+> AI agents are strongly advised to update this page first and push it to the remote before working on any new bug fixes or features. This way the remote repository always has the most up-to-date list of known issues.
 
 ## 📖 Status legend
 
-- 🚨 **open** — reproducible, needs fixing
-- 🚧 **investigating** — repro/root-cause in progress
-- ⚠️ **wontfix** — accepted limitation
-- ✅ **fixed** — resolved (moved to this header, keep for history)
+- 🚨 **open** — reproducible, needs fixing *(Detailed lists with possible fixes encouraged. Attempt to include steps to reproduce, expected behavior, and actual behavior. An estimate of how long it might take to fix is also helpful.)*
+- 🚧 **investigating** — repro/root-cause in progress *(List of issues currently being worked on. Used for tracking active work. must reference an existing bug from the open section.)*
+- ⚠️ **wontfix** — accepted limitations *(features that can't be fixed at this time without significant changes or trade-offs)*
 
 ## ⚠️ Known quirks & external limitations (wontfix bucket)
 
@@ -24,7 +26,7 @@
 - **Search semantics are the site's:** query syntax is nhentai's (`-`, `,`, `:`, ranges).
   Our UI builds it, but edge semantics (e.g. OR-within-type) are inherited, not invented.
 - **Upload-date "popular" ordering:** the site exposes no stable *popularity* sort in search;
-  only recency. Surfaces limited accordingly.
+  only recency. Surfaces limited accordingly. *(This is not necessarily a won't fix. But until we can create our own way of determining popularity, this limitation remains.)*
 
 ## 🧠 Explicitly not bugs
 
@@ -33,17 +35,78 @@
 
 ## 🚨 Open
 
-*(no open issues)*
+- **Storage Problem**: The app is eating up a massive amount of storage. Potential Fixes include: 
+  - Optimize the data cache so only the necessary files are retained and old or redundant data is purged regularly.
+  - Introduce a method to store the cache into compressed archives to save space.
+  - Introduce a background cleanup task to periodically purge old or redundant cache files.
+  - Introduce a method for compressing the app's internal files via a suitable compression algorithm to save space. *(The app would need to be able to read from compressed files transparently. This would preferably be compressed resource packs that save space without degrading performance.)*
+- **Installation Options**: The app currently only supports installing to the user directory and does not provide options for system-wide installation. We need to implement the following options:
+  - Allow the user to choose between a user-specific installation and a system-wide installation during setup.
+  - Ensure that system-wide installation correctly sets up necessary permissions and paths.
+  - Provide a mechanism to migrate an existing user-specific installation to a system-wide installation if desired.
+  - Add option for setting a custom installation path during setup.
+- **Favorites Button**: The favorites button currently does not reflect the actual favorite status of a gallery. Potential Fixes include:
+  - Ensure the button correctly toggles the favorite status when clicked. *(Right now I have confirmed it does in fact add the gallery to favorites, but the button state does not update.)*
+  - Update the button state immediately after a change to reflect the current status.
+  - Synchronize the favorite status with the backend to maintain consistency across devices.
+- **UI Polish and Touch Up**: The app's user interface should be audited for any inconsistencies and areas that could benefit from visual refinement. Potential Fixes include:
+  - Standardize spacing, margins, and padding across all screens.
+  - Ensure consistent font sizes, colors, and styles throughout the app.
+  - Improve the responsiveness of UI elements to different screen sizes and orientations.
+  - Address any visual glitches or misalignments observed during usage.
+- **Theme Engine**: The app currently lacks a comprehensive theme engine, limiting customization options for users. Potential Fixes include:
+  - Implement a theme engine that allows users to switch between light, dark, and custom themes.
+  - Ensure that all UI components respond correctly to theme changes.
+  - Provide an option to save and load custom themes.
+  - Create multiple themes to have packaged into the app. We want modern themes with a unique visual identity for each. The themes should cover a range of aesthetics and provide a visually appealing experience for users. Each theme should have both light and dark modes that can be set via our theme toggle *(Light | Dark | System)*. Here are two themes I would like to include, but we should add more:
+    - **Compact**: A theme designed for efficiency and minimal screen real estate usage, with a focus on compact layouts and streamlined visuals.
+    - **Glassmorphism**: A theme featuring translucent elements, frosted glass effects, and a modern, layered aesthetic.
+    - **Acrylic**: A theme featuring semi-transparent elements, layered visuals, and a modern aesthetic, inspired by the Acrylic design language.
+    - **Liquid Glass**: A theme featuring translucent elements, frosted glass effects, and a modern, layered aesthetic. Inspired by the Liquid Glass effects in macOS 26.
+- **Navigation Buttons (Close | Minimize | Maximize)**: The macOS traffic light design we use is actually more due to the fact that the default ones on Windows and Linux are severely outdated and visually unappealing. We need to adjust them to incorporate the style of whatever theme is applied.
+- **Title Bar Menu Backgrounds**: When creating the theme engine, we need to ensure that the title bar menus have a consistent background that matches the overall theme and provides a visually appealing experience. A transparent background in the menus makes them illegible and detracts from the user experience.
+
+## 📝 Filing a bug
+
+Bug title on GitHub: `🐛 <problem summary>`. Body must include:
+
+- Steps to reproduce (reproduce-first)
+- Expected vs actual behavior
+- Environment (OS, app/CLI version, DM in use)
+- ≥1 verifiable diagram or log when applicable
+
+Entry format once filed:
+
+```
+## 2026-09-21 — <short title>  (#<issue>)
+- [ ] Reproduced
+- [ ] Root cause identified
+- [ ] Fix in PR (`Closes #<issue>`)
+
+---
+
+## 📖 Severity Legend
+- 🚨 Critical: Bugs that cause crashes or major functionality loss.
+- ⚠️ High: Bugs that significantly impact usability but do not crash the app.
+- 🟡 Medium: Bugs that affect certain features or have minor usability issues.
+- 🟢 Low: Minor bugs or visual glitches that do not significantly impact the user experience.
+
+
+| Severity | Description |
+| :---: | :---: |
+| 🚨 | The app is eating up a massive amount of storage |
+| 🚨 | Favorites Button does not reflect actual favorite status |
+| 🚨 | Theme Engine does not apply correctly to all UI components |
+| ⚠️ | Navigation Buttons do not match the applied theme |
+| ⚠️ | Title Bar Menu Backgrounds are inconsistent with the theme |
+| ⚠️ | Navigation buttons need to be redesigned |
+| 🟡 | Some UI elements have minor visual inconsistencies |
+| 🟢 | Minor text alignment issues in certain UI components |
+
+---
 
 ## ✅ Fixed
 
-- ✅ **Images blank everywhere (URL join bug).** nhentai API v2 returns *relative* paths without
-  a leading slash (e.g. `galleries/<id>/thumb.webp`); naive `host + path` concatenation produced
-  invalid URLs (`https://t.nhentai.netgalleries/...`) and images never loaded. Fixed by deriving
-  absolute URLs in `image.ts` (`joinUrl` via `pagePath`/`thumbPath`/`avatarUrl`). Old persisted
-  history thumbnails from the buggy era are re-joined idempotently by `thumbPath`.
-- ✅ **Sign-in chip showed "Sign in" with a registered key.** The chip derived from
-  `account.user`, so a failed `getCurrentUser()` at startup (e.g. network) made a configured key
-  look signed-out. Fixed: the chip now derives from `keyStatus.configured` — username when the
-  user fetch succeeded, "Connected" when a key exists but the fetch failed, "Sign in" only when
-  no key is stored.
+- **Dedicated uninstall executable missing (Fixed in v0.4.0)**: Implemented dedicated uninstaller executable (`uninstall.exe` on Windows, `uninstall` on Linux) that copies to temp on invocation to avoid locking files in the installation directory, allowing complete directory deletion.
+- **Uninstaller file locking on Windows (Fixed in v0.4.0)**: Executable lock prevented `remove_dir_all` from removing program files. Resolved via dedicated `uninstall.exe` executing from temp.
+- **Mutex poison unwrap panic in db.rs (Fixed in v0.4.0)**: Replaced 9 `.unwrap()` calls with `lock_conn()` poison recovery.

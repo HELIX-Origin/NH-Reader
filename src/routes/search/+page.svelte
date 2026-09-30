@@ -95,7 +95,7 @@
 	}
 </script>
 
-<div class="page">
+<div class="page" data-scope="page-search">
 	<div class="page-head">
 		<h1>Search</h1>
 		{#if appliedQuery}
@@ -145,67 +145,3 @@
 <Drawer title="Search filters" open={drawerOpen} width={400} onclose={() => (drawerOpen = false)}>
 	<FilterPanel model={model} onupdate={updateModel} />
 </Drawer>
-
-<style>
-	.query-pill {
-		max-width: 340px;
-		font-size: 12.5px;
-		color: var(--text-secondary);
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 999px;
-		padding: 3px 10px;
-	}
-
-	.btn.active {
-		border-color: var(--accent-border);
-		color: var(--text);
-		background: var(--accent-soft);
-	}
-
-	.count {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-width: 18px;
-		height: 18px;
-		padding: 0 5px;
-		border-radius: 9px;
-		background: var(--accent);
-		color: #fff;
-		font-size: 11px;
-		font-weight: 650;
-	}
-
-	.search-bar {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		padding: 10px 12px;
-		border-radius: var(--radius);
-		border: 1px solid var(--border-strong);
-		background: var(--bg-elevated);
-		margin-bottom: 20px;
-		color: var(--text-faint);
-		transition: border-color 0.12s ease, box-shadow 0.12s ease;
-	}
-
-	.search-bar:focus-within {
-		border-color: var(--accent);
-		box-shadow: 0 0 0 3px var(--accent-soft);
-	}
-
-	.search-input {
-		flex: 1;
-		border: none;
-		background: none;
-		outline: none;
-		color: var(--text);
-		font-size: 14px;
-		min-width: 0;
-	}
-
-	.search-input::placeholder {
-		color: var(--text-faint);
-	}
-</style>

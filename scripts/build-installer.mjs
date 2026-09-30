@@ -38,9 +38,13 @@ copyFileSync(srcBin, join(outDir, versionedName));
 console.log(`Copied -> ${join(outDir, versionedName)}`);
 
 copyFileSync(srcBin, join(outDir, genericName));
+const uninstallerName = isWindows ? 'uninstall.exe' : 'uninstall';
+copyFileSync(srcBin, join(outDir, uninstallerName));
 if (!isWindows) {
   chmodSync(join(outDir, versionedName), 0o755);
   chmodSync(join(outDir, genericName), 0o755);
+  chmodSync(join(outDir, uninstallerName), 0o755);
 }
 console.log(`Copied -> ${join(outDir, genericName)}`);
+console.log(`Copied -> ${join(outDir, uninstallerName)}`);
 console.log('Done.');

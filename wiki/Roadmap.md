@@ -30,19 +30,20 @@ Where the project is headed. Source of truth: the repo-root
 | M5 | Library | ✅ Shipped (core) | Favorites, history, local persistence; export/import still backlog |
 | M6 | Reader | ✅ Shipped (core) | Detail, paged thumbnails, strip mode, preload, fullscreen |
 | M7 | Downloads & background services | 🚧 In progress (core + UI shipped) | Background-service core shipped: zip/cbz/torrent downloads to disk with progress, image prefetch, cache/image maintenance, account sync, Popular auto-refresh, job events; per-gallery Download button + Downloads page shipped. Backlog: queue resume/persist, cache consumers, storage-management polish |
-| M8 | Polish / release | 🚧 In progress (0.2.0 shipped) | Release 0.2.0 shipped 2026-09-24. Backlog: accent picker, image quality, reader preload distance, end-to-end installer smoke test |
+| M8 | Polish / release | 🚧 In progress (0.4.0 shipped) | Release 0.4.0 shipped 2026-09-30 (100% drop-in hand-rolled localization, poison-recovered DB locks, translation contribution guide). Backlog: accent picker, image quality, reader preload distance |
+| M9 | Localization & language packs | ✅ Core shipped (M9.1) | 100% drop-in hand-rolled architecture with LocaleCatalog, English default, OS fallback, installer and settings language pickers. Remaining language packs open to community contributions |
 
 ## 🚧 Current focus
 
 M7's background-service core and downloads UI shipped (per-gallery Download button, ZIP/CBZ/
-torrent formats, Downloads page, configurable downloads folder). M8's 0.2.0 release shipped
-with light theme and the configurable downloads folder. Current focus: M1 closeout
+torrent formats, Downloads page, configurable downloads folder). M9's drop-in localization architecture
+shipped with English default and system locale fallback. Current focus: M1 closeout
 (clean-clone baseline verification) and remaining M8 hardening (accent picker, image quality,
-reader preload distance, end-to-end installer smoke test).
+reader preload distance).
 
-See [Backend (Rust)](Backend-Rust.md), [Frontend (SvelteKit)](Frontend-SvelteKit.md) and
-[Installer Engine](Installer-Engine.md) for implementation details.
+See [Backend (Rust)](Backend-Rust), [Frontend (SvelteKit)](Frontend-SvelteKit),
+[Installer Engine](Installer-Engine), and [Localization](Localization) for implementation details.
 
 ## 🔗 Related
 
-- [Home](Home.md) · [FAQ](FAQ.md) · [Development & Contributing](Development-and-Contributing.md)
+- [Home](Home) · [FAQ](FAQ) · [Development & Contributing](Development-and-Contributing)

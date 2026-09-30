@@ -3,7 +3,7 @@ import type {
 	ApiKeyStatus,
 	AutoRefreshConfig,
 	BlacklistListResponse,
-	DownloadResponse,
+	DownloadFormat,
 	FavoriteResponse,
 	GalleryDetail,
 	GalleryList,
@@ -42,6 +42,7 @@ export const backend = {
 	dbDump: () => call<[string, string][]>('db_dump'),
 	dbClear: () => call<void>('db_clear'),
 
+
 	setApiKey: (key: string) => call<void>('set_api_key', { key }),
 	getApiKeyStatus: () => call<ApiKeyStatus>('get_api_key_status'),
 	clearApiKey: () => call<void>('clear_api_key'),
@@ -58,10 +59,7 @@ export const backend = {
 	updateAccountBlacklist: (added: number[], removed: number[]) =>
 		call<unknown>('update_account_blacklist', { added, removed }),
 
-	downloadGallery: (id: number, format: 'zip' | 'cbz' | 'torrent' = 'zip') =>
-		call<DownloadResponse>('download_gallery', { id, format }),
-
-	serviceEnqueueDownload: (id: number, format: 'zip' | 'cbz' | 'torrent' = 'zip') =>
+	serviceEnqueueDownload: (id: number, format: DownloadFormat = 'zip') =>
 		call<number>('service_enqueue_download', { id, format }),
 	serviceEnqueuePrefetch: (urls: string[]) =>
 		call<number>('service_enqueue_prefetch', { urls }),

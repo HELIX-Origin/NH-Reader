@@ -1,62 +1,28 @@
-# Sub-Agent: Frontend Engineer
+# engineer / frontend
 
-Parent: `engineer`. Purpose: **Svelte UI & client state**.
+**Owns:** `src/**` — Svelte components, stores, flat lib modules, CSS tokens, i18n packs.
+**Reads:** `.agents/rules/frontend.md`, `.agents/rules/i18n.md`, `.agents/rules/no-comments.md`.
+**Hands off to:** `reviewer/correctness`.
 
-## 👤 Identity
+## Does
 
-```yaml
-name: frontend
-role: Svelte UI & client state
-parent: engineer
-reads: rules/frontend.md, rules/security.md, rules/testing.md, rules/git-workflow.md, rules/general.md
-writes: src/lib/**, src/routes/**
-verifies: npm run check
-```
+- Svelte 5 runes only: `$state`, `$derived`, `$effect`, `$props`. No `export let`, no
+  `on:` handlers, no `$:` labels.
+- TypeScript `strict`. Types live in `src/lib/types.ts`. No `any`.
+- Components `PascalCase`, modules and routes `kebab-case`.
+- Rune stores in `src/lib/stores/*.svelte.ts`.
+- Styling through `src/lib/design/tokens.css` custom properties.
+- Every string from the i18n packs; add the key to all four.
+- All nhentai data through `src/lib/client.ts` → Tauri commands. Never `fetch` nhentai.
 
-## ⚡ Responsibility
+## Never
 
-- Build the custom UI: views, gallery grid, filter/blacklist surfaces, reader, stores.
-- Own the client-side contract in `src/lib/types.ts` + `client.ts` (typed `invoke`).
-- Filter truth lives in `src/lib/query.ts` (query builder) — pure, auditable.
-- Apply the design tokens everywhere; accessibility = non-negotiable.
+- Never a direct network call to an nhentai host from the webview.
+- Never a raw colour, radius, or spacing literal when a token exists.
+- Never a literal user-facing string in markup.
+- Never mutate a prop.
+- Never add a CSS framework or utility library.
 
-## 🔄 Data flow (one view end-to-end)
+## Verify
 
-```mermaid
-sequenceDiagram
-    participant R as Route/View
-    participant S as store (runes)
-    participant C as api/client.ts
-    participant T as Tauri invoke
-    participant B as Rust commands
-
-    R->>S: read reactive state
-    S->>C: client.search(filter)
-    C->>T: invoke("search_galleries", {...})
-    T->>B: command call
-    B-->>T: SearchResponse
-    T-->>C: typed result
-    C-->>S: set results
-    S-->>R: re-render grid ${n} cards
-    R->>R: GalleryCard lazy <img>
-```
-
-## ⚠️ Frontend non-negotiables
-
-```mermaid
-flowchart TD
-    A[Any frontend change] --> B[Svelte 5 runes, strict TS]
-    B --> C[No framework CSS; tokens only]
-    C --> D[Filter/blacklist logic in pure utils]
-    D --> E[Keyboard + focus + reduced-motion OK]
-    E --> F[npm run check clean]
-    F --> G[Empty & error states handled]
-    G --> H[Update TODO/BUGS if scope moved]
-```
-
-## 💡 Notes
-
-- Never fetch nhentai directly from the browser; never `{@html}` API data.
-- Reuse existing components instead of drifting new variants (`GalleryCard` everywhere).
-- Follow `rules/frontend.md`; when a component pattern repeats thrice, extract it.
-- Cache prefix and storage keys use `nh-desktop:` (not the legacy `nhentai:` / `lewdclips:`).
+`npm run check`, plus `npm run i18n:check` if any string changed.

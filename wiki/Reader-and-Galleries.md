@@ -11,12 +11,12 @@ Rust backend for metadata and direct image loading with a Rust-side fallback.
   category, page count, upload age, score.
 - **Actions:**
   - **Open reader** — start paging through the gallery.
-  - **Favorite / Unfavorite** — see [Favorites & History](Favorites-and-History.md).
+  - **Favorite / Unfavorite** — see [Favorites & History](Favorites-and-History).
   - **Open on nhentai.net** — external browser (system opener).
   - **Quick-add blacklist** — blacklist a tag or the artist right from the page
-    (see [Blacklist](Blacklist.md)).
+    (see [Blacklist](Blacklist)).
 - **Tag clouds:** grouped by type (tag, artist, character, parody, group, language, category).
-  Clicking a tag navigates to that tag's gallery list — as anywhere, **the [blacklist](Blacklist.md)
+  Clicking a tag navigates to that tag's gallery list — as anywhere, **the [blacklist](Blacklist)
   is applied**.
 - **Related galleries:** the site's "related" list renders as a compact grid.
 
@@ -52,7 +52,7 @@ Other reader features:
   like `galleries/<id>/thumb.webp` *without* a leading slash, and `image.ts` joins them onto
   the right host (`https://i.nhentai.net` pages, `https://t.nhentai.net` thumbs,
   `https://static.nhentai.net` avatars).
-- Hosts are always loadable because of the [CSP](../README.md) allow-list
+- Hosts are always loadable because of the [CSP](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/README.md) allow-list
   (`img-src 'self' data: blob: https://nhentai.net https://*.nhentai.net`).
 
 ## 🖼️ Image loading pipeline
@@ -75,5 +75,5 @@ flowchart TD
 
 ## 🤝 Related
 
-- [Architecture](Architecture.md) — where these pieces live
-- [Favorites & History](Favorites-and-History.md) — opening a gallery records history
+- [Architecture](Architecture) — where these pieces live
+- [Favorites & History](Favorites-and-History) — opening a gallery records history

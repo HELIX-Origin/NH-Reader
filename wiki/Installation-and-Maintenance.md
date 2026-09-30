@@ -29,7 +29,7 @@ flowchart TD
    `C:\Program Files\NH Desktop`).
 4. Options (all on by default):
    - **Language** — the interface language; the installer is already translated into your
-     system language at this point. See [Localization](Localization.md).
+     system language at this point. See [Localization](Localization).
    - Create a **Desktop shortcut**
    - Create a **Start Menu shortcut**
    - Enable **CLI access (PATH)** — the `NH Desktop` command becomes available in a terminal
@@ -62,9 +62,11 @@ Run the app binary with any of these flags (or the installed entry points):
 | `--uninstall` | Open the **Uninstall** flow |
 | `--setup` | Alias for `--installer` |
 
+On Windows, a dedicated `uninstall.exe` is deployed alongside `NH Desktop.exe`.
 The Windows uninstall registry entry (`HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\NH Desktop`)
-launches the wizard with `--installer --maintenance` automatically, and the app's sidebar ⚙
-**Maintenance** button opens the same window.
+points directly to `uninstall.exe` with publisher `HELIX Origin`. When run, it executes
+via a temporary copy to avoid locking the application directory, enabling complete removal.
+The app's sidebar ⚙ **Maintenance** button also launches maintenance mode.
 
 From the **Maintenance** page you can:
 
@@ -84,10 +86,10 @@ The uninstaller asks whether to **delete all local user data**. Choose carefully
 
 - ❓ **Can I run both app and installer at once?** Yes — the wizard opens in a separate frameless
   window; the main app is unaffected. Only one installer window is allowed (focus is reused).
-- **Where's the data stored?** See [Privacy](Privacy.md) for exact paths.
+- **Where's the data stored?** See [Privacy](Privacy) for exact paths.
 - **Why no .exe/.msi bundles?** The product intentionally uses the Tauri-native unified
   installer; Windows installer bundles (WiX/NSIS) are deliberately not used.
 
 ---
 
-- Related: [Installer Engine](Installer-Engine.md) (how it works) · [Getting Started](Getting-Started.md)
+- Related: [Installer Engine](Installer-Engine) (how it works) · [Getting Started](Getting-Started)

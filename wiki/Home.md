@@ -18,9 +18,9 @@ characters, parodies).
 - **A real installer** — a Tauri-native unified setup/uninstall wizard (no NSIS/WiX MSI),
   single binary is both the app and the installer.
 - **Speaks your language** — the interface defaults to your system language and can be changed
-  in the installer or in Settings. English, Japanese, and Chinese (Simplified + Traditional)
-  ship complete; more are community-contributed. See
-  **[Localization](Localization.md)**.
+  in the installer or in Settings. English is provided by default, with automatic fallback
+  to your system locale and 100% drop-in language packs for community contributions. See
+  **[Localization](Localization)**.
 - **Background jobs built in** — a throttled worker queue handles gallery downloads (zip to
   disk), image prefetch, cache/image maintenance, account sync, and periodic Popular refreshes,
   with live progress in Settings. Launching the app twice just focuses the running window
@@ -45,14 +45,14 @@ characters, parodies).
 
 ## 🧭 Getting around
 
-- **[Getting Started](Getting-Started.md)** — first run, API key, what to expect.
-- **[Installation & Maintenance](Installation-and-Maintenance.md)** — installing, updating,
+- **[Getting Started](Getting-Started)** — first run, API key, what to expect.
+- **[Installation & Maintenance](Installation-and-Maintenance)** — installing, updating,
   uninstalling, shortcuts/PATH.
-- **[Search & Filters](Search-and-Filters.md)** — the query engine, full reference.
-- **[Blacklist](Blacklist.md)** — the blacklist, in depth.
-- **[Reader & Galleries](Reader-and-Galleries.md)** — detail pages and the reader.
-- **[Localization](Localization.md)** — changing the app language, and adding a new one.
-- **[Architecture](Architecture.md)** — how the pieces fit together.
+- **[Search & Filters](Search-and-Filters)** — the query engine, full reference.
+- **[Blacklist](Blacklist)** — the blacklist, in depth.
+- **[Reader & Galleries](Reader-and-Galleries)** — detail pages and the reader.
+- **[Localization](Localization)** — changing the app language, and adding a new one.
+- **[Architecture](Architecture)** — how the pieces fit together.
 
 ## 💡 Quick facts
 

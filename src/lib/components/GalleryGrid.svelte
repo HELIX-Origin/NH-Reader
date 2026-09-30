@@ -24,27 +24,9 @@
 		description="Everything here is filtered by your active blacklist."
 	/>
 {:else}
-	<div class="grid" class:compact={s.density === 'compact'} data-blur={showBlur}>
+	<div class="grid" data-scope="gallery-grid" class:compact={s.density === 'compact'} data-blur={showBlur}>
 		{#each visible as g}
 			<GalleryCard gallery={g} />
 		{/each}
 	</div>
 {/if}
-
-<style>
-	.grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
-		gap: 12px;
-		padding: 4px;
-	}
-
-	.grid.compact {
-		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-		gap: 8px;
-	}
-
-	.grid :global(.card) {
-		width: 100%;
-	}
-</style>

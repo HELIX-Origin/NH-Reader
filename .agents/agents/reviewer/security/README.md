@@ -1,49 +1,31 @@
-# Sub-Agent: Security Reviewer
+# reviewer / security
 
-Parent: `reviewer`. Purpose: **focused security pass** before changes touching trust
-boundaries ship.
+**Owns:** network surface, secrets, CSP, and host allowlists.
+**Reads:** `.agents/rules/security.md`, `.agents/rules/backend.md`,
+`AGENTS.md` §2.6.
+**Hands off to:** `reviewer` to assemble the verdict; a secrets or CSP defect is a hard
+block, not a note.
 
-## 👤 Identity
+## Does
 
-```yaml
-name: security
-role: security-focused review pass
-parent: reviewer
-reads: rules/security.md, rules/backend.md, rules/frontend.md, the diff under review
-writes: findings in the review report
-```
+- **CSP ↔ allowlist agreement.** `img-src` in `tauri.conf.json` and
+  `is_allowlisted_image_host` in Rust describe the same host set. A mismatch in either
+  direction is a defect: over-broad is a hole, too narrow is a broken image.
+- **Secrets.** The nhentai API key is never logged, never serialised into an error, never
+  placed in a URL query string, never committed. Check the diff for anything that looks
+  like a key, token, or personal path.
+- **No webview networking.** No `fetch`/XHR to nhentai from `src/**`. Data arrives via
+  Tauri commands.
+- **Throttling.** New request paths are rate-limited and back off on 429/5xx, honouring
+  `Retry-After`. No unbounded fan-out.
+- **Host validation.** Image and API URLs validated against the allowlist, not trusted
+  because they came from a response.
+- **Dependencies.** Any new dependency has a stated reason and no obvious license or
+  supply-chain red flag.
+- **Filesystem.** New file writes go through the cache/install path with atomic rename, not
+  ad-hoc temp files in arbitrary locations.
 
-## 🎯 Responsibility
+## Never
 
-- Verify the **CSP stays tight**: `img-src` only `self data: blob:` + the two site image
-  hosts (`t.nhentai.net`, `i.nhentai.net`); `connect-src` only `ipc:`/`http://ipc.localhost`
-  (+ dev loader). No `https:` wildcards.
-- Verify API traffic goes **only** through Rust commands (`invoke`), never `fetch` from the
-  browser.
-- Verify no `{@html}`/`innerHTML` of remote or API-derived data.
-- Verify secrets/API keys: only stored in the runtime DB (`nh-desktop.db` in app data),
-  never in the repo, never logged, never sent anywhere but nhentai.net.
-- Verify remote-image trust rules (placeholder + proxy fallback for 404/blocked).
-- Verify rate-limiting/throttle is present for any new endpoint call.
-
-## 🔄 Pass
-
-```mermaid
-flowchart TD
-    D[Diff touching trust boundary] --> C{Change type}
-    C -- CSP/config --> V1[Tightness check]
-    C -- data path --> V2[invoke-only + no unsafe render]
-    C -- storage/keys --> V3[Runtime-only, no repo]
-    C -- new endpoint --> V4[Throttle + dedupe present]
-    V1 & V2 & V3 & V4 --> R[Report findings with file:line]
-```
-
-## ⚠️ Rules
-
-- A security finding is a **blocker** on the review, not a suggestion.
-- Flag any identifier drift (e.g. a bare `nhentai` appearing as a *product* name) to the
-  standards sub-agent via project-context; the website/API references stay as-is.
-
-## ✅ Definition of done
-
-- Clear verdict: PASS or findings with file:line that must be resolved before approval.
+- Never approve a CSP wildcard to make a feature work.
+- Never approve logging that could carry a token, even at debug level.

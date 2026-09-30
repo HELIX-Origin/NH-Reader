@@ -1,9 +1,9 @@
 # NH Desktop (desktop client) — Terms of Service
 
-**Last updated:** 2026-09-25 · **Version 0.2.0**
+**Last updated:** 2026-09-30 · **Version 0.4.0**
 
 These Terms of Service ("Terms") govern your use of **NH Desktop**, a desktop application
-("the App") published by the **helix-origin** organization. By downloading, installing, or
+("the App") published by the **HELIX Origin** organization. By downloading, installing, or
 using the App you agree to these Terms. If you do not agree, do not use the App.
 
 ---
@@ -27,8 +27,8 @@ responsible for how you use, share, or keep any downloaded material.
 
 Subject to these Terms, we grant you a personal, non-exclusive, non-transferable, revocable
 license to install and use the App for personal, non-commercial purposes. The App is provided
-under the MIT License (see the `LICENSE` declaration in the source distribution). This section
-does not limit the MIT License.
+under the BSD 3-Clause License (see the `LICENSE.md` declaration in the source distribution). This section
+does not limit the BSD 3-Clause License.
 
 ## 🚫 4. Acceptable use
 
@@ -37,7 +37,7 @@ You agree **not** to:
 - 🚫 use the App to circumvent content restrictions, copyright protections, or paywalls;
 - use the App to scrape, crawl, or bulk-download nhentai.net beyond normal, human-like use, or
   in a way that violates nhentai.net's terms of service or their rate limits;
-- distribute, sell, or sublicense the App (beyond the MIT License's permissions) or use it to
+- distribute, sell, or sublicense the App (beyond the BSD 3-Clause License's permissions) or use it to
   build competing services;
 - use the App to harass, dox, or otherwise harm any person;
 - remove, obscure, or alter any copyright, trademark, or other proprietary notices.
@@ -54,7 +54,7 @@ your key private. We do not transmit, store, or log your key on any server.
 
 ## ⚖️ 6. Intellectual property
 
-The App's source code is licensed under the MIT License. All trademarks, product names, and
+The App's source code is licensed under the BSD 3-Clause License. All trademarks, product names, and
 service names referenced are the property of their respective owners. "nhentai" and nhentai.net
 are properties of their respective rights holders; the App is an independent, unaffiliated
 client. We claim no ownership of any content accessed through the App.

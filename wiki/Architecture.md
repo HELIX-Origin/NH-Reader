@@ -37,7 +37,7 @@ periodic Popular refreshes.
    image cache `cache/images`) returns bytes → `blob:` URL if the CDN 404s (legacy galleries
    are known to).
 5. **Blacklist is two layers.** Server-side `-tag:` excludes in every query, plus client-side
-   hide/blur in grids, plus a master toggle. See [Blacklist](Blacklist.md).
+   hide/blur in grids, plus a master toggle. See [Blacklist](Blacklist).
 6. **Plain CSS tokens.** Custom design system in `src/lib/design/tokens.css` + `base.css`;
    no CSS framework, no Tailwind — deliberate (see README).
 7. **Background services.** `service.rs` runs a throttled one-at-a-time worker queue
@@ -54,7 +54,7 @@ periodic Popular refreshes.
 - ⚡ Frontend calls typed commands through `src/lib/client.ts` (a thin `invoke()` wrapper) and
   `src/lib/api.ts` (the higher-level typed API surface).
 - Command names are camelCase (`fetch_new`, `search_galleries`, `proxy_image`, …); the full
-  list lives in [Backend (Rust)](Backend-Rust.md).
+  list lives in [Backend (Rust)](Backend-Rust).
 - Background jobs use the `service_*` commands (`service_enqueue_download`, …) and stream
   progress to the SPA as `service://job` / `service://refresh` Tauri events.
 - Errors cross the bridge as `Result<_, String>` (never Rust panics) and render as friendly
@@ -77,5 +77,5 @@ periodic Popular refreshes.
 
 ## 🤝 Related pages
 
-- [Backend (Rust)](Backend-Rust.md) · [Frontend (SvelteKit)](Frontend-SvelteKit.md) ·
-  [Installer Engine](Installer-Engine.md) · [Security](Security.md) · [Privacy](Privacy.md)
+- [Backend (Rust)](Backend-Rust) · [Frontend (SvelteKit)](Frontend-SvelteKit) ·
+  [Installer Engine](Installer-Engine) · [Security](Security) · [Privacy](Privacy)

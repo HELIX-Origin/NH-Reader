@@ -78,7 +78,7 @@
 	}
 </script>
 
-<div class="filters">
+<div class="filters" data-scope="filter-panel">
 	<section class="group">
 		<h4>Sort</h4>
 		<div class="seg">
@@ -187,92 +187,3 @@
 		<button class="btn btn-ghost faint" onclick={reset}>Reset filters</button>
 	</div>
 </div>
-
-<style>
-	.filters {
-		display: flex;
-		flex-direction: column;
-		gap: 18px;
-	}
-
-	.group {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-
-	h4 {
-		margin: 0;
-		font-size: 12px;
-		font-weight: 650;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		color: var(--text-faint);
-	}
-
-	.seg {
-		display: flex;
-		flex-wrap: wrap;
-		border-radius: var(--radius-sm);
-		overflow: hidden;
-		border: 1px solid var(--border-strong);
-	}
-
-	.seg button {
-		flex: 1;
-		min-width: 96px;
-		padding: 7px 8px;
-		font-size: 12.5px;
-		font-weight: 550;
-		color: var(--text-secondary);
-		transition: background 0.12s ease, color 0.12s ease;
-		border-right: 1px solid var(--border-strong);
-	}
-
-	.seg button:last-child {
-		border-right: none;
-	}
-
-	.seg button.on {
-		background: var(--accent-soft);
-		color: var(--text);
-	}
-
-	.chips {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-	}
-
-	.add-row {
-		display: flex;
-		gap: 8px;
-	}
-
-	.add-row .type {
-		width: auto;
-		min-width: 110px;
-	}
-
-	.add-actions {
-		display: flex;
-		gap: 8px;
-	}
-
-	.range-row {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-
-	.range-row .input {
-		width: 90px;
-	}
-
-	.foot {
-		display: flex;
-		justify-content: flex-end;
-		border-top: 1px solid var(--border);
-		padding-top: 12px;
-	}
-</style>

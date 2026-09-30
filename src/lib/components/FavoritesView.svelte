@@ -24,7 +24,7 @@
 	}
 </script>
 
-<div class="favorites">
+<div class="favorites" data-scope="favorites-view">
 	<div class="head">
 		<h2>Favorites</h2>
 		{#if sorted.length > 0}
@@ -62,100 +62,3 @@
 		</div>
 	{/if}
 </div>
-
-<style>
-	.favorites {
-		padding: 8px 0 24px;
-	}
-
-	.head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 14px;
-	}
-
-	h2 {
-		margin: 0;
-		font-size: 18px;
-		font-weight: 650;
-		letter-spacing: -0.01em;
-	}
-
-	.grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-		gap: 12px;
-	}
-
-	.cell {
-		position: relative;
-	}
-
-	.card {
-		display: flex;
-		gap: 12px;
-		align-items: center;
-		padding: 8px;
-		border-radius: var(--radius);
-		border: 1px solid transparent;
-		transition: background 0.12s ease, border-color 0.12s ease;
-	}
-
-	.card:hover {
-		background: var(--surface);
-		border-color: var(--border);
-	}
-
-	.card :global(.cover) {
-		width: 54px;
-		height: 76px;
-		flex-shrink: 0;
-	}
-
-	.info {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		min-width: 0;
-	}
-
-	.title {
-		font-size: 13.5px;
-		font-weight: 560;
-		line-height: 1.35;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
-
-	.meta {
-		font-size: 12px;
-	}
-
-	.remove {
-		position: absolute;
-		top: 12px;
-		right: 12px;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 24px;
-		height: 24px;
-		border-radius: 999px;
-		background: rgba(0, 0, 0, 0.55);
-		color: #fff;
-		opacity: 0;
-		transition: opacity 0.14s ease, background 0.12s ease;
-	}
-
-	.cell:hover .remove {
-		opacity: 1;
-	}
-
-	.remove:hover {
-		background: var(--danger);
-	}
-</style>

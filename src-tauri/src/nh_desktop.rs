@@ -131,12 +131,6 @@ pub struct BlacklistedTagResponse {
     pub count: u64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DownloadResponse {
-    pub url: String,
-    pub expires_at: u64,
-}
-
 #[derive(Clone)]
 pub struct NhDesktopClient {
     http: reqwest::Client,
@@ -161,7 +155,7 @@ impl NhDesktopClient {
         if elapsed < THROTTLE {
             tokio::time::sleep(THROTTLE - elapsed).await;
         }
-        *last = Instant::now();
+        { *last = Instant::now(); }
     }
 
     pub(crate) async fn request<T: for<'de> Deserialize<'de>>(
@@ -288,17 +282,6 @@ impl NhDesktopClient {
         self.request(Some(key), reqwest::Method::POST, "/blacklist", &[], Some(body)).await
     }
 
-    pub async fn download(&self, key: &str, id: u64, format: &str) -> Result<DownloadResponse, AppError> {
-        self.request(
-            Some(key),
-            reqwest::Method::GET,
-            &format!("/galleries/{id}/download"),
-            &[("format", format.to_string())],
-            None,
-        )
-        .await
-    }
-
     pub async fn image_bytes(&self, url: &str) -> Result<Vec<u8>, AppError> {
         let parsed = url::Url::parse(url).map_err(|e| AppError::InvalidInput(format!("bad url: {e}")))?;
         if parsed.scheme() != "https" {
@@ -315,20 +298,6 @@ impl NhDesktopClient {
             return Err(AppError::Status(status));
         }
         resp.bytes().await.map(|b| b.to_vec()).map_err(AppError::Http)
-    }
-
-    pub async fn open_bytes(&self, url: &str) -> Result<reqwest::Response, AppError> {
-        let parsed = url::Url::parse(url).map_err(|e| AppError::InvalidInput(format!("bad url: {e}")))?;
-        if parsed.scheme() != "https" {
-            return Err(AppError::InvalidInput("only https is allowed".into()));
-        }
-        self.pace().await;
-        let resp = self.http.get(url).send().await.map_err(AppError::Http)?;
-        let status = resp.status();
-        if !status.is_success() {
-            return Err(AppError::Status(status));
-        }
-        Ok(resp)
     }
 }
 

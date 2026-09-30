@@ -92,8 +92,12 @@
 			targetDir = detected.default_install_dir;
 
 			const requestedMode = page.url.searchParams.get('mode');
-			if (requestedMode === 'uninstall' || requestedMode === 'maintenance') {
+			if (requestedMode === 'uninstall') {
 				mode = 'maintenance';
+				maintenanceTab = 'uninstall_options';
+			} else if (requestedMode === 'maintenance') {
+				mode = 'maintenance';
+				maintenanceTab = 'manage';
 			} else if (requestedMode === 'install') {
 				mode = 'install';
 			} else {
@@ -152,7 +156,6 @@
 			try {
 				await invoke<OperationResult>('installer_launch_app', { target_dir: targetDir });
 			} catch {
-				// Launch failure is non-fatal; still close the wizard.
 			}
 		}
 		closeWindow();
@@ -633,7 +636,6 @@
 		flex: 1;
 	}
 
-	/* Default (Windows/Linux): traffic lights on the right. */
 	.titlebar .tb-title { order: 1; }
 	.titlebar .spacer { order: 2; }
 	.titlebar .traffic { order: 3; }
@@ -641,7 +643,6 @@
 	.titlebar .traffic .dot.max { order: 2; }
 	.titlebar .traffic .dot.close { order: 3; }
 
-	/* macOS: traffic lights on the left, close/min/max order. */
 	.titlebar.mac .traffic { order: 0; margin-right: 2px; }
 	.titlebar.mac .traffic .dot.close { order: 1; }
 	.titlebar.mac .traffic .dot.min { order: 2; }

@@ -24,100 +24,40 @@ system language has no pack yet, NH Desktop falls back to English until you choo
 
 ---
 
-## 📦 Available language packs
+## 📦 Language packs
 
-| Language | Code | Status |
-| --- | --- | --- |
-| English | `en` | Source language (always complete) |
-| 日本語 Japanese | `ja` | ✅ Complete |
-| 简体中文 Chinese (Simplified) | `zh-Hans` | ✅ Complete |
-| 繁體中文 Chinese (Traditional) | `zh-Hant` | ✅ Complete |
-| 한국어 Korean | `ko` | 🧩 Pluggable — pack not included yet |
-| Español Spanish | `es` | 🧩 Pluggable — pack not included yet |
-| Français French | `fr` | 🧩 Pluggable — pack not included yet |
-| Deutsch German | `de` | 🧩 Pluggable — pack not included yet |
-| Русский Russian | `ru` | 🧩 Pluggable — pack not included yet |
-| Português Portuguese | `pt` | 🧩 Pluggable — pack not included yet |
-| Italiano Italian | `it` | 🧩 Pluggable — pack not included yet |
-| ไทย Thai | `th` | 🧩 Pluggable — pack not included yet |
-| Tiếng Việt Vietnamese | `vi` | 🧩 Pluggable — pack not included yet |
-| Bahasa Indonesia Indonesian | `id` | 🧩 Pluggable — pack not included yet |
-| Polski Polish | `pl` | 🧩 Pluggable — pack not included yet |
-| Nederlands Dutch | `nl` | 🧩 Pluggable — pack not included yet |
-| Türkçe Turkish | `tr` | 🧩 Pluggable — pack not included yet |
-| العربية Arabic | `ar` | 🧩 Pluggable — pack not included yet |
+English (`en.json`) is the default hand-rolled language pack provided with the application.
+Other languages are provided as drop-in packs contributed by fluent community members.
 
-Only **English, Japanese, and Chinese** are planned for official release at this time. The rest
-are wired up and selectable, but ship without a pack and fall back to English key-by-key. Adding
-one is a small, self-contained pull request — see below. Contributions are welcome whenever you
-have time; there is no schedule and no obligation.
+If a language pack is missing or does not yet have a translation for a specific string, the application automatically falls back to your operating system locale (if available) and then to English.
 
 ---
 
 ## 🤝 Contributing a translation
 
-Everything you need lives in `src/lib/i18n/`. There is no build step, no compiled resource, and
-no tooling to install.
+Localization files are entirely drop-in. Contributors never have to edit multiple files or code to add a language.
 
-### Improving an existing pack
+### Adding a new language
 
-1. Open the file, e.g. `src/lib/i18n/ja.json`.
-2. Edit the strings you want to improve. Keep every key unchanged.
-3. Run the validator:
+1. **Copy the English template:**
+
+   ```bash
+   cp src/lib/i18n/en.json src/lib/i18n/<locale>.json
+   ```
+
+   Use a standard BCP-47 locale tag (e.g. `ja.json`, `es.json`, `fr.json`, `de.json`, `zh-Hans.json`).
+
+2. **Translate the strings.** Keep every key structure unchanged. You can optionally include a `_meta` object with `"name"` and `"nativeName"` if you want to customize how the language appears in settings.
+
+3. **Run the validator:**
 
    ```bash
    npm run i18n:check
    ```
 
-   It reports missing keys, untranslated leftovers, and typos (unknown keys):
+   It automatically discovers your new drop-in file and validates that all keys match `en.json`.
 
-   ```
-   ja          78/78 keys  OK
-   ```
-
-4. Open a pull request. That is the whole process.
-
-### Adding a new language
-
-1. **Pick a code.** Use a BCP-47 tag — `ko`, `es`, `fr`, `pt-BR`, `zh-Hant`, `ar`. Match an
-   existing code in `src/lib/i18n/locales.ts` if one is already registered; if the language is
-   new, add a new entry there too (see below).
-2. **Copy the source file.**
-
-   ```bash
-   cp src/lib/i18n/en.json src/lib/i18n/ko.json
-   ```
-
-3. **Translate every value.** Leave the keys exactly as they are. Do not add or remove keys —
-   that is what the validator is for.
-4. **Register the locale** in `src/lib/i18n/locales.ts`:
-
-   ```ts
-   { code: 'ko', name: 'Korean', nativeName: '한국어' },
-   ```
-
-   `name` is the English name, `nativeName` is what users see in the dropdown.
-5. **Import the pack** in `src/lib/i18n/index.ts`:
-
-   ```ts
-   import ko from './ko.json';
-
-   const dictionaries: Partial<Record<LocaleCode, Record<string, unknown>>> = {
-       en,
-       ja,
-       ko,
-   };
-   ```
-
-6. **Verify.**
-
-   ```bash
-   npm run i18n:check     # pack completeness
-   npm run check          # types
-   cargo check            # backend, if you touched it
-   ```
-
-7. Open a pull request with a title like `feat(i18n): add Korean (ko) translation pack`.
+4. **Open a pull request with only your JSON file.** That is the entire process.
 
 ### Style guidelines
 
@@ -137,12 +77,14 @@ no tooling to install.
 
 If you want to be certain a phrase reads naturally, cross-check against these free sources:
 
-- **Mozilla Fluent / DeepL glossary** — <https://www.deepl.com>
+- **DeepL glossary** — <https://www.deepl.com>
 - **Wiktionary** for term consistency — <https://www.wiktionary.org>
 - **translate-i18n** community terminology databases — <https://github.com/translate-i18n>
 - **Microsoft terminology** (many UI terms defined per locale) — <https://www.microsoft.com>
 - Your own OS: many desktop apps are already localized into your language. Inconsistent machine
   translation is easy to spot once you have seen how a competent app words the same button.
+
+For the full list of translation keys and their JSON structural schema, see [CONTRIBUTING.md](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/CONTRIBUTING.md#contributing-translations).
 
 ---
 
@@ -150,10 +92,9 @@ If you want to be certain a phrase reads naturally, cross-check against these fr
 
 | File | Role |
 | --- | --- |
-| `src/lib/i18n/en.json` | **Source of truth.** Every key must exist here first. |
-| `src/lib/i18n/<locale>.json` | One file per language, same shape as `en.json`. |
-| `src/lib/i18n/locales.ts` | Registry of supported codes, display names, and the default. |
-| `src/lib/i18n/index.ts` | Registers packs and implements lookup with English fallback. |
+| `src/lib/i18n/en.json` | **Source of truth.** Every key must exist here first. Includes `_meta` configuration. |
+| `src/lib/i18n/<locale>.json` | Drop-in language pack with optional `_meta` header. |
+| `src/lib/i18n/index.ts` | Dynamically imports all drop-in `.json` packs via `LocaleCatalog` with system locale fallback. |
 | `src/lib/stores/locale.svelte.ts` | Reactive current locale, system detection, persistence. |
 | `scripts/check-i18n.mjs` | `npm run i18n:check` validator. |
 

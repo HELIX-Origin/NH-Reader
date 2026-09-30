@@ -16,7 +16,7 @@ use tauri::Manager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let result = tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             if let Some(window) = app.get_webview_window("main") {
@@ -149,7 +149,6 @@ pub fn run() {
             commands::fetch_favorites,
             commands::fetch_account_blacklist,
             commands::update_account_blacklist,
-            commands::download_gallery,
             commands::service_enqueue_download,
             commands::service_enqueue_prefetch,
             commands::service_enqueue_maintenance,
@@ -169,15 +168,21 @@ pub fn run() {
             commands::installer_uninstall,
             commands::open_maintenance_window,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .run(tauri::generate_context!());
+        if result.is_err() {
+            std::process::exit(1);
+        }
 }
 
 pub fn run_installer() {
 	let _ = crate::platform::quit_running_app();
-	let is_uninstall = std::env::args().any(|a| a == "--uninstall" || a == "--maintenance");
+	let exe_name = std::env::current_exe()
+		.ok()
+		.and_then(|p| p.file_name().map(|n| n.to_string_lossy().to_lowercase()))
+		.unwrap_or_default();
+	let is_uninstall = exe_name.contains("uninstall") || std::env::args().any(|a| a == "--uninstall" || a == "--maintenance");
 	let mode = if is_uninstall { "uninstall" } else { "install" };
-	tauri::Builder::default()
+	let result = tauri::Builder::default()
 		.plugin(tauri_plugin_opener::init())
 		.setup(move |app| {
 			let data_dir = app.path().app_data_dir()?;
@@ -195,9 +200,12 @@ pub fn run_installer() {
             commands::installer_install,
             commands::installer_uninstall,
             commands::installer_launch_app,
+            commands::get_system_locale,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running installer");
+        .run(tauri::generate_context!());
+        if result.is_err() {
+            std::process::exit(1);
+        }
 }
 
 fn open_installer_window(app: &tauri::App, mode: &str) -> tauri::Result<()> {

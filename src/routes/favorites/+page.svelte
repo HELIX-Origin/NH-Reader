@@ -2,6 +2,6 @@
 	import FavoritesView from '$lib/components/FavoritesView.svelte';
 </script>
 
-<div class="page">
+<div class="page" data-scope="page-favorites">
 	<FavoritesView />
 </div>

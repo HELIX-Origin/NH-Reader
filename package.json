@@ -1,6 +1,6 @@
 {
   "name": "nh-desktop",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A modern desktop client for nhentai.net",
   "type": "module",
   "scripts": {
@@ -14,9 +14,11 @@
     "dev:tauri": "tauri dev",
     "build:installer": "node scripts/build-installer.mjs",
     "installer:build": "npm run build:installer",
-    "i18n:check": "node scripts/check-i18n.mjs"
+    "i18n:check": "node scripts/check-i18n.mjs",
+    "check:agents": "node scripts/check-agents.mjs"
   },
-  "license": "MIT",
+  "author": "HELIX Origin",
+  "license": "BSD-3-Clause",
   "dependencies": {
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2"

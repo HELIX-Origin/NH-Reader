@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { enqueueDownload, getServiceJobs } from '$lib/stores/service.svelte';
-	import { getAccountState } from '$lib/stores/account.svelte';
 	import Icon from './Icon.svelte';
 
 	let { galleryId }: { galleryId: number } = $props();
 
-	const account = $derived(getAccountState());
 	const jobs = $derived(getServiceJobs());
 
-	const FORMATS = ['zip', 'cbz', 'torrent'] as const;
+	const FORMATS = ['zip', 'cbz'] as const;
 	type Format = (typeof FORMATS)[number];
 
 	let open = $state(false);
@@ -66,7 +64,7 @@
 	}
 </script>
 
-<div class="download">
+<div class="download" data-scope="download-button">
 	{#if failed}
 		<button class="btn btn-danger" class:open={open} onclick={() => (failed = false)} title={message}>
 			<Icon name="alert" size={15} />
@@ -96,11 +94,7 @@
 		</button>
 	{/if}
 	<span class="note faint">
-		{#if account.keyStatus.configured}
-			{format === 'zip' ? 'ZIP' : format === 'cbz' ? 'CBZ' : 'Torrent'}
-		{:else}
-			Requires an API key in Settings
-		{/if}
+		{format === 'zip' ? 'ZIP' : 'CBZ'}
 	</span>
 
 	{#if open}
@@ -109,90 +103,10 @@
 				<button class="item" role="menuitem" onclick={() => start(fmt)}>
 					<span class="name">{fmt.toUpperCase()}</span>
 					<span class="desc">
-						{fmt === 'zip' ? 'Zip archive' : fmt === 'cbz' ? 'Comic book' : 'Seeder file'}
+						{fmt === 'zip' ? 'Zip archive' : 'Comic book archive'}
 					</span>
 				</button>
 			{/each}
 		</div>
 	{/if}
 </div>
-
-<style>
-	.download {
-		position: relative;
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-	}
-
-	.btn.open {
-		border-color: var(--accent);
-		color: var(--accent);
-	}
-
-	.menu {
-		position: absolute;
-		top: calc(100% + 6px);
-		left: 0;
-		z-index: 20;
-		min-width: 180px;
-		padding: 4px;
-		border-radius: var(--radius);
-		border: 1px solid var(--border-strong);
-		background: var(--bg-elevated);
-		box-shadow: var(--shadow-lg);
-	}
-
-	.item {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 1px;
-		width: 100%;
-		padding: 7px 10px;
-		border-radius: var(--radius-sm);
-		border: none;
-		background: none;
-		color: var(--text);
-		cursor: pointer;
-		text-align: left;
-	}
-
-	.item:hover {
-		background: var(--surface-hover);
-	}
-
-	.name {
-		font-size: 13px;
-		font-weight: 600;
-	}
-
-	.desc {
-		font-size: 11.5px;
-		color: var(--text-faint);
-	}
-
-	.note {
-		font-size: 12px;
-		max-width: 200px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.note.err {
-		color: var(--danger);
-		max-width: 260px;
-	}
-
-	.spin {
-		display: inline-flex;
-		animation: spin 1s linear infinite;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-</style>

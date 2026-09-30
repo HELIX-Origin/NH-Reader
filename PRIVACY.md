@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated:** 2026-09-25 · **Version 0.2.0**
+**Last updated:** 2026-09-30 · **Version 0.4.0**
 
 The NH Desktop client ("the App") is built around one principle: **your data stays on your
 machine**. This policy describes what the App collects, stores, and transmits in plain terms.

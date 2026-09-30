@@ -1,49 +1,28 @@
-# Rule: Backend (Rust · Tauri 2)
+# Rule: Backend
 
-## 🏗️ Module layout (`src-tauri/src/`)
+**Status:** CONDITIONAL
+**Triggers:** editing `src-tauri/**`, any `.rs` file, `Cargo.toml`, `tauri.conf.json`
+**Enforced by:** `cargo check` + `cargo test` + review (style)
 
-```
-main.rs        # bin entry, #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-lib.rs         # Builder::default() → plugins → invoke_handler → run()
-nh_desktop.rs  # nhentai API wire types (serde) + client functions (reqwest): gallery,
-               #   search, list_galleries, popular, tagged, download, current_user, etc.
-commands.rs    # #[tauri::command] wrappers — thin, typed, call client, no business logic
-error.rs       # AppError enum -> String messages; no panics across the command boundary
-db.rs          # SQLite persistence (kv table + api_key table)
-image_cache.rs # disk image cache (atomic tmp+rename writes, cache-first proxy fallback)
-service.rs     # background worker queue (downloads, prefetch, maintenance, sync, auto-refresh)
-installer.rs   # unified installer/uninstaller engine + status detection
-platform/      # per-OS installer helpers (windows, macos, linux)
-```
+## Must
 
-## 🦀 Conventions
+- **snake_case** for modules, functions, fields. Types are `CamelCase`.
+- **Small focused modules.** `nh_desktop.rs` (API client), `commands.rs` (Tauri surface),
+  `error.rs`, `db.rs`, `service.rs`, `image_cache.rs`, `installer.rs`, `platform/`.
+  If a module passes ~600 lines, split it.
+- **Every Tauri command returns `Result<T, AppError>`.** No panics, no `unwrap`, no
+  `expect` across the command boundary. A webview caller must always get a typed error.
+- **All nhentai traffic originates here** in `reqwest`. The webview never makes API calls.
+- **Throttle.** Serialize or rate-limit requests; exponential backoff with jitter on
+  429/5xx. Respect `Retry-After`. Set a descriptive `User-Agent` that identifies NH
+  Desktop and carries contact info.
+- **Errors** are constructed via the `AppError` variants in `error.rs`. No bare
+  `Box<dyn Error>` strings that lose structure.
+- **Panics** are acceptable only inside `main` startup and `#[cfg(test)]`.
 
-- snake_case functions/fields; `#[derive(Serialize, Deserialize)]` for wire types.
-- `reqwest::Client` is constructed once (with a browser-like `User-Agent` and a sane
-  timeout) and shared via `tauri::State`/managed state.
-- **Errors:** commands return `Result<T, String>` (Tauri-friendly). `AppError` implements
-  `Display`; map HTTP/network failures to friendly user text in `commands.rs`.
-- No `unwrap()`/`expect()`/`panic!()` on any path reachable from a command. Parse with
-  `?` / `ok_or`; log via `eprintln!`/`log` where it aids debugging.
-- Keep requests to nhentai polite: a shared throttle (e.g. a `Mutex<(Instant,())>`
-  enforcing ≥250 ms between API calls) plus in-flight dedupe (single-flight) for identical
-  recent requests. Never fire-and-forget retry loops.
+## Never
 
-## ⚙️ Tauri specifics
-
-- All app capabilities/permissions live in `src-tauri/capabilities/default.json`
-  (core + what plugins we actually use). Adding a plugin requires adding its permission.
-- The webview's CSP is defined in `tauri.conf.json` `app.security.csp`. Tighten, don't
-  loosen: API access goes through `invoke`, so the CSP needs no `connect-src` to the
-  nhentai API; images need `img-src 'self' data: blob: https://nhentai.net https://*.nhentai.net`
-  to cover `t.nhentai.net`, `i.nhentai.net`, and `static.nhentai.net` avatars.
-- `proxy_image` returns bytes (frontend builds a Blob URL) — keep an in-memory cap and
-  cache in-flight lookups so the reader doesn't duplicate fetches.
-
-## ✅ Verification (backend)
-
-- `cargo check` clean; `cargo test` for pure logic (URL builders, query serialization,
-  type mapping). Keep pure logic in free functions that don't touch a runtime so tests
-  run fast and headless.
-- Manual smoke: `npm run tauri dev`, hit search/detail from the UI, verify throttling and
-  error surfacing.
+- Never `unwrap()` / `expect()` in non-test code.
+- Never a blocking sleep longer than a few seconds; prefer timers/tasks.
+- Never write a secret to disk or logs.
+- Never spawn unbounded concurrency against nhentai.

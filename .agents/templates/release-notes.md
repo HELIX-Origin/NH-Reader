@@ -1,44 +1,44 @@
-# {{Project Name}} v{{ version }}
+# Release notes
 
-**Release date:** {{ YYYY-MM-DD }}
+The human-facing version of the changelog, for someone deciding whether to upgrade.
+Written for a person, not a log parser. See `.agents/skills/cut-release.md`.
 
-## ✨ Highlights
+```markdown
+# NH Desktop 0.4.0
 
-{{ 2–3 sentence summary for users. }}
+<One or two sentences: what this release is, in plain language.>
 
-## 🚀 Key Improvements & Features
+## Highlights
 
-- **{{ Feature name }}** — {{ Feature description }}
-- **{{ Feature name }}** — {{ Feature description }}
+- **<Big change>** — one or two sentences on what a user gets.
+- **<Big change>** —
 
-## ✅ Changed
+## New
 
-- {{ Change description }}
+- Feature — what it does, in one line.
 
-## 🐛 Fixed
+## Improved
 
-- {{ Bug fix description }}
+- Change — what is better, from the user's side.
 
-## 📦 Install & Upgrading
+## Fixed
 
-Download the installer for your platform from the Assets section below:
+- Bug — what was wrong and what happens now.
 
-- Windows: `{{Project Name}}-Setup-v{{ version }}-win-x64.exe`
-- macOS: `{{Project Name}}-Setup-v{{ version }}-macos-arm64` (or `macos-x64` if available)
-- Linux: `{{Project Name}}-Setup-v{{ version }}-linux-x64`
+## Breaking
 
-Upgrade in place: run the new installer over your existing installation. The unified installer will repair/replace files and update shortcuts.
+- Anything a user must change, or data that must be migrated. Omit if there is none.
 
-## Verification
+## Upgrade
 
-- `cargo check` + `cargo test` (src-tauri) — passed
-- `npm run check` (svelte-check) — 0 errors, 0 warnings
-- `npm run build` — adapter-static site generated successfully
+- Download the installer and run it over your existing install. Your library, settings, and
+  history carry over.
+```
 
-## 📄 Changes & Commits
+## Rules
 
-- `{{ commit title / description }}`
-- `{{ commit title / description }}`
-
-Full commit history: `git log --oneline {{ prev_tag }}..v{{ version }}`
-
+- Lead with what a user would notice. Not with commit subjects.
+- No internal file paths, no refactor chatter, no emoji in headings.
+- No secrets, tokens, or personal paths.
+- If nothing is breaking, omit the section rather than writing "None".
+- "Your data carries over" is a claim — only write it if it is true this release.

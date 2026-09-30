@@ -2,7 +2,7 @@
 
 The client keeps two personal libraries locally: **Favorites** and **History**. Both persist
 via the SQLite-backed KV cache (`src/lib/cache.ts` → `nh-desktop.db`), so they survive restarts
-and live only on your machine — see [Privacy](Privacy.md).
+and live only on your machine — see [Privacy](Privacy).
 
 ## ⭐ Favorites
 
@@ -46,7 +46,7 @@ Every gallery you **open** (reader or detail) is recorded with a timestamp. Hist
 ### 🗑️ Clearing
 
 History can be cleared as a batch from the History page. (Individual-entry removal is on the
-roadmap — see [Roadmap](Roadmap.md).)
+roadmap — see [Roadmap](Roadmap).)
 
 ## 💾 Storage & privacy
 
@@ -57,6 +57,6 @@ roadmap — see [Roadmap](Roadmap.md).)
 
 ## 🔗 Related
 
-- [Reader & Galleries](Reader-and-Galleries.md) — opening galleries (which populates history)
-- [Settings & API Key](Settings-and-API-Key.md) — account-sync enablement
-- [Privacy](Privacy.md)
+- [Reader & Galleries](Reader-and-Galleries) — opening galleries (which populates history)
+- [Settings & API Key](Settings-and-API-Key) — account-sync enablement
+- [Privacy](Privacy)

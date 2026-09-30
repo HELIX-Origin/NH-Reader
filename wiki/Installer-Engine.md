@@ -9,6 +9,7 @@ No NSIS, no WiX MSI. The pattern: the same executable routes on argv.
 
 | Condition | Action |
 | --- | --- |
+| exe filename contains `uninstall` | relocate to temp on Windows, run uninstaller wizard |
 | exe filename contains `installer` / `setup` | run installer wizard |
 | any arg `--installer` / `--setup` / `--uninstall` / `--maintenance` | run installer wizard |
 | otherwise (no special flag) | run the app |
@@ -18,17 +19,20 @@ The same decision as a small tree:
 ```mermaid
 flowchart TD
     Start([Launch the binary])
-    Start --> A{Exe named installer or setup?}
-    A -->|"yes"| B[Run installer wizard]
-    A -->|"no"| C{Installer flag passed?}
-    C -->|"yes"| B
-    C -->|"no"| D[Run the app]
+    Start --> A{Exe named uninstall?}
+    A -->|"yes"| U[Relocate to temp and run uninstaller]
+    A -->|"no"| B{Exe named installer or setup?}
+    B -->|"yes"| C[Run installer wizard]
+    B -->|"no"| D{Installer flag passed?}
+    D -->|"yes"| C
+    D -->|"no"| E[Run the app]
 ```
 
 On Windows release the `windows_subsystem = "windows"` attribute hides the console. The
-installer registers an HKCU uninstall entry whose `UninstallString` is
-`"<exe>" --installer --maintenance`, so "Add/Remove Programs" launches the maintenance
-wizard.
+installer deploys a dedicated `uninstall.exe` and registers an HKCU uninstall entry whose
+`UninstallString` is `"<install_dir>\uninstall.exe"` and `Publisher` is `HELIX Origin`.
+When `uninstall.exe` runs, it executes from temp so no file locks exist on the installation
+directory, allowing complete directory removal.
 
 `main.rs` → `run_installer()` (lib.rs) builds a Tauri app with only the installer commands;
 it opens a frameless `installer` window (`NH Desktop Setup`, 820×620, min 720×560, centered,
@@ -87,18 +91,18 @@ flowchart TD
 ## ⚡ Commands
 
 `installer_status`, `installer_disk_space`, `installer_install`, `installer_uninstall`,
-`open_maintenance_window`. See [Backend (Rust)](Backend-Rust.md).
+`installer_launch_app`, `open_maintenance_window`. See [Backend (Rust)](Backend-Rust).
 
 ## 🛠️ Building the installer binary
 
 `scripts/build-installer.mjs` (`npm run build:installer`): runs `tauri build --no-bundle`,
 then copies `src-tauri/target/release/nh-desktop(.exe)` to `dist/installer/` as
-`NH Desktop-Setup-{version}-{platform}-{arch}(.exe)` (e.g. `NH Desktop-Setup-0.2.0-win-x64.exe`)
+`NH Desktop-Setup-{version}-{platform}-{arch}(.exe)` (e.g. `NH Desktop-Setup-0.4.0-win-x64.exe`)
 with a non-versioned `NH Desktop-Setup-{platform}-{arch}(.exe)` alias. Because the binary
 routes on its own filename, the "Setup" name triggers the install wizard. See
-[Installation and Maintenance](Installation-and-Maintenance.md).
+[Installation and Maintenance](Installation-and-Maintenance).
 
 ## 🤝 Related
 
-- [Installation and Maintenance](Installation-and-Maintenance.md) ·
-  [Architecture](Architecture.md) · [Security](Security.md)
+- [Installation and Maintenance](Installation-and-Maintenance) ·
+  [Architecture](Architecture) · [Security](Security)

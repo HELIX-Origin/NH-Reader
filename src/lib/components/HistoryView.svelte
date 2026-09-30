@@ -21,7 +21,7 @@
 	}
 </script>
 
-<div class="history">
+<div class="history" data-scope="history-view">
 	<div class="head">
 		<h2>History</h2>
 		{#if filtered.length > 0}
@@ -73,93 +73,3 @@
 		</ul>
 	{/if}
 </div>
-
-<style>
-	.history {
-		padding: 8px 0 24px;
-	}
-
-	.head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 12px;
-	}
-
-	h2 {
-		margin: 0;
-		font-size: 18px;
-		font-weight: 650;
-		letter-spacing: -0.01em;
-	}
-
-	.list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-	}
-
-	li {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		border-radius: var(--radius-sm);
-		padding: 6px;
-		transition: background 0.12s ease;
-	}
-
-	li:hover {
-		background: var(--surface);
-	}
-
-	.row {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		flex: 1;
-		min-width: 0;
-	}
-
-	.thumb {
-		width: 44px;
-		height: 62px;
-		border-radius: var(--radius-sm);
-		overflow: hidden;
-		flex-shrink: 0;
-	}
-
-	.thumb img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-	}
-
-	.info {
-		display: flex;
-		flex-direction: column;
-		gap: 3px;
-		min-width: 0;
-	}
-
-	.title {
-		font-weight: 560;
-		font-size: 14px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.meta {
-		display: flex;
-		gap: 6px;
-		font-size: 12px;
-	}
-
-	.icon-btn.on {
-		color: var(--danger);
-	}
-</style>

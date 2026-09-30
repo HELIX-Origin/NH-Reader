@@ -28,15 +28,15 @@ public API — we fetch data, we don't scrape aggressively.
 
 | # | Milestone | Status | Scope |
 | --- | --- | --- | --- |
-| M1 | Foundation | ✅ Shipped (core); closeout pending | Scaffold, green toolchain, Rust client + 43 commands, CSP, app shell, tokens, stores, all views; remaining: clean-clone baseline verification |
+| M1 | Foundation | ✅ Shipped (core); closeout pending | Scaffold, green toolchain, Rust client + 44 commands, CSP, app shell, tokens, stores, all views; remaining: clean-clone baseline verification |
 | M2 | Browse & discover | ✅ Shipped (core) | Home (new releases), popular, gallery grid/cards, pagination, lazy images with proxy fallback |
 | M3 | Search & filters | ✅ Shipped (core) | Query builder, filter drawer (text, language, category, per-type tag include/exclude, page ranges, sort), results + count |
 | M4 | Global blacklist | ✅ Shipped (core) | Manage panel, server-side `-tag:` excludes, client-side hide/blur, master toggle |
 | M5 | Library | ✅ Shipped (core) | Favorites, history, local persistence; import/export JSON still backlog |
 | M6 | Reader | ✅ Shipped (core) | Gallery detail, paged thumbnails, strip mode, preload, fullscreen |
 | M7 | Downloads & background services | 🚧 In progress (core + UI shipped) | Background-service core shipped (zip/cbz/torrent downloads to disk with progress, image prefetch, cache/image maintenance, account sync, Popular auto-refresh with job events); per-gallery Download button + Downloads page shipped; still backlog: queue resume/persist, cache consumers, storage-management polish |
-| M8 | Polish / release | 🚧 In progress (0.3.0 shipped) | Release 0.3.0 shipped 2026-09-25 (localization, installer launch fix, centered titlebar search); still backlog: accent picker, image quality, reader preload distance |
-| M9 | Localization & language packs | ✅ Core shipped (M9.1) | System-locale default, installer + Settings language pickers, English fallback per key, `en`/`ja`/`zh-Hans`/`zh-Hant` packs complete. **M9.2** (14 remaining nhentai language packs + RTL pass for Arabic) is planned in `TODO.md`, not started |
+| M8 | Polish / release | 🚧 In progress (0.4.0 shipped) | Release 0.4.0 shipped 2026-09-30 (dedicated uninstaller executable, HELIX Origin publisher attribution, poison-recovered DB locks, drop-in localization architecture); still backlog: accent picker, image quality, reader preload distance |
+| M9 | Localization & language packs | ✅ Core shipped (M9.1) | 100% drop-in hand-rolled architecture with LocaleCatalog, English default with OS fallback, installer + Settings language pickers, translation contribution guide in CONTRIBUTING.md. Community packs open for contribution |
 
 ## 🎯 Current focus
 
@@ -54,7 +54,7 @@ Foundation** closeout and **M8 hardening** remain:
 - ✅ M7 polish: per-gallery Download button, ZIP/CBZ/torrent formats, configurable downloads folder, open-downloads-folder
 - ⬜ M7 remaining: queue resume/persist, cache consumers, storage-management polish
 - ⬜ M8 remaining: accent picker, image quality, reader preload distance; installer E2E smoke now runs via CI packaging workflow on release tags
-- ✅ M9 shipped: system-locale default, installer + Settings language pickers, `en`/`ja`/`zh-Hans`/`zh-Hant` packs, English fallback, contributor guide (`wiki/Localization.md`); remaining packs deferred
+- ✅ M9 shipped: 100% drop-in hand-rolled architecture, English default, OS fallback, installer + Settings pickers, translation contributor guide; community packs open
 
 ## 🔁 Recurring themes (applies to every milestone)
 
@@ -74,7 +74,7 @@ Goal: full UI localization with language packs for every language nhentai.net ta
 - **Phase 2 — M9.2 remaining packs (planned, not started)**: the other nhentai content languages
   (`ko`, `es`, `fr`, `de`, `ru`, `pt`, `it`, `th`, `vi`, `id`, `pl`, `nl`, `tr`, `ar`). All are
   already registered and selectable with per-key English fallback. Itemised in `TODO.md`;
-  contributed opportunistically or via community pull requests. See `wiki/Localization.md`.
+  contributed opportunistically or via community pull requests. See [Localization](../../wiki/Localization).
 - **Phase 3 — M9.2 RTL (planned, not started)**: RTL layout for Arabic, date/number formatting
   per locale, extension of `en.json` to the remaining views.
 

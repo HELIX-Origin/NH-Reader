@@ -6,6 +6,10 @@ pub fn executable_name() -> String {
     format!("{PRODUCT_NAME}.app")
 }
 
+pub fn uninstaller_name() -> String {
+    format!("{PRODUCT_NAME}.app")
+}
+
 pub fn default_install_dir() -> String {
     "/Applications".to_string()
 }
@@ -17,6 +21,10 @@ pub fn installed_exe_path() -> Option<PathBuf> {
     } else {
         None
     }
+}
+
+pub fn installed_uninstaller_path() -> Option<PathBuf> {
+    None
 }
 
 fn app_bundle(target_dir: &Path) -> PathBuf {
@@ -56,6 +64,8 @@ pub fn place_executable(src: &Path, target_dir: &Path) -> Result<PathBuf, String
 	<string>{ver}</string>
 	<key>CFBundleVersion</key>
 	<string>{ver}</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2026 HELIX Origin</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.13</string>
 </dict>

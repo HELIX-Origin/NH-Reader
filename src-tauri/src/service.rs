@@ -1,14 +1,13 @@
 use crate::db::Db;
 use crate::image_cache::ImageCache;
 use crate::nh_desktop::NhDesktopClient;
-use futures_util::StreamExt;
 use serde::Serialize;
+use std::io::Write;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 use tauri::{AppHandle, Emitter};
-use tokio::io::AsyncWriteExt;
 use tokio::sync::mpsc;
 
 const EVENT_JOB: &str = "service://job";
@@ -112,12 +111,18 @@ impl BackgroundService {
             next_id: AtomicU64::new(0),
         });
 
-        let worker = Worker {
-            app: app.clone(),
-            client,
-            cache,
-            db: Db::new(db_path).expect("failed to open background db"),
-            default_downloads_dir: downloads_dir,
+        let worker = match Db::new(db_path) {
+            Ok(db) => Worker {
+                app: app.clone(),
+                client,
+                cache,
+                db,
+                default_downloads_dir: downloads_dir,
+            },
+            Err(error) => {
+                eprintln!("failed to open background db: {error}");
+                return svc;
+            }
         };
         tauri::async_runtime::spawn(worker.run(rx));
 
@@ -191,6 +196,24 @@ impl BackgroundService {
     }
 }
 
+const IMAGE_HOST: &str = "https://i.nhentai.net";
+
+fn media_image_url(path: &str) -> String {
+    if path.starts_with("http://") || path.starts_with("https://") {
+        path.to_string()
+    } else {
+        format!("{IMAGE_HOST}/{}", path.trim_start_matches('/'))
+    }
+}
+
+fn path_extension(path: &str) -> &str {
+    std::path::Path::new(path)
+        .extension()
+        .and_then(|e| e.to_str())
+        .filter(|e| !e.is_empty())
+        .unwrap_or("jpg")
+}
+
 impl Worker {
     async fn run(self, mut rx: mpsc::Receiver<(u64, Job)>) {
         while let Some((job_id, job)) = rx.recv().await {
@@ -231,56 +254,60 @@ impl Worker {
     }
 
     async fn download_gallery(&self, job_id: u64, id: u64, format: &str) -> Result<String, String> {
-        let key = self
-            .db
-            .api_key()
-            .map_err(|e| format!("failed to read api key: {e}"))?
-            .ok_or_else(|| "No nhentai API key configured. Add one in Settings.".to_string())?;
+        if format != "zip" && format != "cbz" {
+            return Err(format!("unsupported download format: {format}"));
+        }
 
-        let dl = self
+        let gallery = self
             .client
-            .download(&key, id, format)
+            .gallery(None, id, "favorite")
             .await
-            .map_err(|e| e.to_string())?;
+            .map_err(|e| format!("failed to load gallery {id}: {e}"))?;
+        let pages = gallery
+            .pages
+            .clone()
+            .ok_or_else(|| format!("gallery {id} has no page data"))?;
+        if pages.is_empty() {
+            return Err(format!("gallery {id} has no pages to download"));
+        }
 
         let downloads_dir = self.resolve_downloads_dir();
-        let ext = match format {
-            "cbz" => "cbz",
-            "torrent" => "torrent",
-            _ => "zip",
-        };
-        let tmp = downloads_dir.join(format!("gallery-{id}.{ext}.part"));
-        let dest = downloads_dir.join(format!("gallery-{id}.{ext}"));
         std::fs::create_dir_all(&downloads_dir).map_err(|e| e.to_string())?;
+        let tmp = downloads_dir.join(format!("gallery-{id}.{format}.part"));
+        let dest = downloads_dir.join(format!("gallery-{id}.{format}"));
+        let file = std::fs::File::create(&tmp).map_err(|e| e.to_string())?;
+        let options = zip::write::SimpleFileOptions::default()
+            .compression_method(zip::CompressionMethod::Deflated);
+        let mut writer = zip::ZipWriter::new(file);
 
-        let resp = self
-            .client
-            .open_bytes(&dl.url)
-            .await
-            .map_err(|e| e.to_string())?;
-        let total = resp.content_length();
-        let mut file = tokio::fs::File::create(&tmp).await.map_err(|e| e.to_string())?;
-
-        let mut stream = resp.bytes_stream();
+        let width = pages.len().to_string().len();
+        let total = pages.len() as u64;
         let mut done: u64 = 0;
-        let mut last_emit = Instant::now();
-        while let Some(chunk) = stream.next().await {
-            let chunk = chunk.map_err(|e| format!("download failed mid-stream: {e}"))?;
-            file.write_all(&chunk).await.map_err(|e| e.to_string())?;
-            done += chunk.len() as u64;
-            if last_emit.elapsed() >= Duration::from_millis(200) {
-                self.emit_progress(job_id, done, total, format!("Downloading gallery {id}")).await;
-                last_emit = Instant::now();
-            }
+        for (i, page) in pages.iter().enumerate() {
+            let url = media_image_url(&page.path);
+            let bytes = self
+                .client
+                .image_bytes(&url)
+                .await
+                .map_err(|e| format!("failed to download page {} of gallery {id}: {e}", page.number))?;
+            let entry = if format == "cbz" {
+                format!("{i:0width$}.{}", path_extension(&page.path))
+            } else {
+                format!("gallery-{id}/{i:0width$}.{}", path_extension(&page.path))
+            };
+            writer
+                .start_file(entry, options)
+                .map_err(|e| format!("failed to add page {} to archive: {e}", page.number))?;
+            writer.write_all(&bytes).map_err(|e| format!("failed to write page {} to archive: {e}", page.number))?;
+            done += 1;
+            self.emit_progress(job_id, done, Some(total), format!("Downloading gallery {id}")).await;
         }
-        file.flush().await.map_err(|e| e.to_string())?;
-        file.shutdown().await.map_err(|e| e.to_string())?;
+        writer.finish().map_err(|e| format!("failed to finalize archive: {e}"))?;
         std::fs::rename(&tmp, &dest).map_err(|e| e.to_string())?;
 
         Ok(format!(
-            "Downloaded gallery {id} to {} ({:.1} MB)",
-            dest.display(),
-            done as f64 / 1_048_576.0
+            "Downloaded gallery {id} ({done} of {total} pages) to {}",
+            dest.display()
         ))
     }
 

@@ -3,6 +3,6 @@
 	import HistoryView from '$lib/components/HistoryView.svelte';
 </script>
 
-<div class="page">
+<div class="page" data-scope="page-history">
 	<HistoryView entries={getHistory()} />
 </div>

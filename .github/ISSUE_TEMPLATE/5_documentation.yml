@@ -22,7 +22,7 @@ body:
         - "Wiki - Downloads / Background Service"
         - "Wiki - Troubleshooting & FAQ"
         - "Repository README.md"
-        - "Agent Rules (.agents/ rules, skills, templates)"
+        - "Agent ecosystem (.agents/ rules, agents, skills, templates)"
         - "Other / New Page Proposal"
     validations:
       required: true

@@ -5,7 +5,38 @@ top; the current development state lives under `Unreleased`.
 
 ## Unreleased
 
-(No unreleased changes.)
+## [v0.4.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.4.0)
+
+**Release date:** 2026-09-30
+
+### 📦 Installer & Uninstaller
+
+* **Dedicated uninstaller executable**:
+    * **Independent uninstaller binary**: On Windows, the installer deploys `uninstall.exe` alongside `NH Desktop.exe` in the application directory. Linux deploys `uninstall`.
+    * **No executable locking**: When `uninstall.exe` is invoked, it relocates to a temporary directory before execution so neither `NH Desktop.exe` nor `uninstall.exe` in the program files folder is locked, allowing `std::fs::remove_dir_all` to cleanly remove the entire installation directory.
+    * **Windows Add/Remove Programs**: The Windows registry `UninstallString` now targets `"<install_dir>\uninstall.exe"`, and the `Publisher` attribute is correctly configured as `HELIX Origin`.
+    * **Direct uninstall flow**: Launching `uninstall.exe` immediately navigates to the uninstall options view.
+
+### 🌐 Localization
+
+* **100% drop-in hand-rolled architecture**:
+    * **Zero-dependency localization**: Dropped fluent and `unic-langid` dependencies in favor of a fast, self-contained `LocaleCatalog` class using Vite dynamic glob imports.
+    * **English-only default with OS fallback**: Ships hand-rolled English (`en.json`) by default, with automatic fallback to the operating system locale and then to English.
+    * **True drop-in translation packs**: Community contributors can add new languages simply by dropping a `<locale>.json` file into `src/lib/i18n/` without modifying code or config registries.
+    * **Translation contribution guide**: Added complete instructions and JSON structural schema reference (all 78 keys + `_meta`) to `CONTRIBUTING.md`.
+
+### 🛡️ Hardening & Reliability
+
+* **Poison-recovered SQLite mutex locks**: Added `lock_conn()` poison recovery in `db.rs` to prevent database access panics if a mutex poison occurs.
+* **Author & Metadata Alignment**: Configured author/publisher to `HELIX Origin` across `package.json`, `Cargo.toml`, and platform metadata.
+
+### 📝 Docs
+
+* **Agent ecosystem rebuilt from scratch**: The previous `.agents/` tree was removed and replaced with a smaller, mechanically enforced design.
+    * **`AGENTS.md` is the authority**: every hard rule now lives in the always-loaded root file. `.agents/rules/**` holds on-demand depth with declared triggers and enforcement.
+    * **Roles restructured**: four primaries — `engineer`, `reviewer`, `planner`, `steward` — each declaring Owns/Reads/Does/Never/Hands-off-to.
+    * **Mechanical gate**: `npm run check:agents` validates ecosystem structure, rule and role contracts, broken links, branding, and no-comments / no-`any` / no-`unwrap` policies.
+    * **Documentation synchronization**: Synchronized all wiki articles and repository root guides with current architecture.
 
 ## [v0.3.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.3.0)
 
@@ -32,7 +63,7 @@ top; the current development state lives under `Unreleased`.
       keys.
     * **Validator**: `npm run i18n:check` reports missing keys, untranslated leftovers, and
       unknown keys for every pack. Fully offline and free.
-    * **Contributor documentation**: New `wiki/Localization.md` covering both improving existing
+    * **Contributor documentation**: New [Localization](../../wiki/Localization) covering both improving existing
       packs and adding new languages, including free cross-reference resources for verifying
       terminology. Linked from `Home`, `Settings & API Key`, `Installation & Maintenance`, the
       sidebar, and the wiki index.
@@ -84,7 +115,7 @@ top; the current development state lives under `Unreleased`.
     * **Installer artifacts**: Corrected Windows platform tag from `windows-x64` to `win-x64` and binary name from `nhentai` to `nh-desktop`.
     * **App data paths**: Updated privacy/troubleshooting paths to the Tauri bundle identifier `net.nh-desktop.client` (`%APPDATA%\net.nh-desktop.client`, `~/Library/Application Support/net.nh-desktop.client`, `~/.local/share/net.nh-desktop.client`).
     * **Requirements tracking**: Created `.agents/tracking/requirements/.gitkeep` so the requirements sub-agent's documented path resolves.
-* **Milestone status sync**: Updated `TODO.md`, `ROADMAP.md`, and `wiki/Roadmap.md` to mark shipped M7/M8 work (downloads UI, light theme, configurable downloads folder) and set current focus to M1 Foundation closeout plus remaining M8 polish.
+* **Milestone status sync**: Updated `TODO.md`, `ROADMAP.md`, and [Roadmap](../../wiki/Roadmap) to mark shipped M7/M8 work (downloads UI, light theme, configurable downloads folder) and set current focus to M1 Foundation closeout plus remaining M8 polish.
 * **Version bump**: Synchronized `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json` to `0.2.1`.
 
 ### 🐛 Fixed

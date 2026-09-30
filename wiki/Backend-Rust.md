@@ -21,7 +21,7 @@ flowchart TD
 | File | Responsibility |
 | --- | --- |
 | `src-tauri/src/nh_desktop.rs` | `NhDesktopClient` — typed nhentai.net API client (reqwest) + `THROTTLE` |
-| `src-tauri/src/commands.rs` | All `#[tauri::command]` handlers (43) |
+| `src-tauri/src/commands.rs` | All `#[tauri::command]` handlers (44) |
 | `src-tauri/src/db.rs` | SQLite persistence (`Db`, `nh-desktop.db`) |
 | `src-tauri/src/service.rs` | `BackgroundService` — throttled worker queue (downloads, prefetch, maintenance, sync, auto-refresh) |
 | `src-tauri/src/image_cache.rs` | `ImageCache` — disk image cache at `cache/images`, backing `proxy_image` |
@@ -45,6 +45,7 @@ All are camelCase, registered on the Tauri invoke handler.
 | `fetch_gallery` | Single gallery detail (with favorite state) |
 | `related_galleries` | Related galleries for a gallery id |
 | `fetch_tag_info` | Tag metadata by `type`/`slug` |
+| `fetch_tags_by_type` | Tag listing for a given tag type |
 | `proxy_image` | Fetch image bytes (CDN fallback) → `Vec<u8>` (served from the disk image cache first) |
 
 ### 💾 Local DB (key/value)
@@ -65,7 +66,7 @@ All are camelCase, registered on the Tauri invoke handler.
 | `fetch_account_blacklist` / `update_account_blacklist` | Account blacklist sync |
 | `download_gallery` | Legacy direct download (returns URL); prefer background-service downloads |
 
-### 🛰️ Background service
+### 🛰️ Background service & System
 
 `BackgroundService` (`service.rs`) runs a single throttled worker; jobs are enqueued as
 `service://job` events stream progress to the UI.
@@ -79,6 +80,10 @@ All are camelCase, registered on the Tauri invoke handler.
 | `service_status` | Pending job count |
 | `service_set_auto_refresh` | Enable/disable Popular auto-refresh (interval `≥15` min) |
 | `service_get_auto_refresh` | Current auto-refresh config |
+| `service_get_downloads_dir` / `service_set_downloads_dir` / `service_reset_downloads_dir` | Downloads folder config |
+| `open_downloads_folder` | Reveal downloaded files in OS file manager |
+| `get_system_locale` | Detect OS locale tag (`sys-locale`) |
+| `app_quit` | Gracefully quit application |
 
 ### 📦 Installer
 
@@ -88,6 +93,7 @@ All are camelCase, registered on the Tauri invoke handler.
 | `installer_disk_space` | Disk-space check for a target dir |
 | `installer_install` | Perform install (options → `OperationResult`) |
 | `installer_uninstall` | Perform uninstall (options → `OperationResult`) |
+| `installer_launch_app` | Launch main app after setup wizard finishes |
 | `open_maintenance_window` | Reuse/focus or build the installer window |
 
 ## 🦀 Networking rules
@@ -104,7 +110,7 @@ All are camelCase, registered on the Tauri invoke handler.
 
 - 🚨 `error.rs` provides friendly error types; commands never return `panic!`.
 - Failure to load a resource (image/CDN) is signaled with a clean `Err(String)` the UI renders
-  as a retryable notice (see [Reader & Galleries](Reader-and-Galleries.md)).
+  as a retryable notice (see [Reader & Galleries](Reader-and-Galleries)).
 - The DB is behind a `Mutex<Connection>`; all access is short-lived and unlock-and-drop.
 
 ## 📦 Platform modules
@@ -114,9 +120,9 @@ exposes the **same function surface** (enforced by the compiler): `executable_na
 `default_install_dir`, `installed_exe_path`, `place_executable`, shortcut create/remove,
 register/unregister uninstall, PATH add/remove, and `launch`. The installer engine calls only
 traits-shaped `platform::*` free functions, so all orchestration is platform-agnostic. Details:
-[Installer Engine](Installer-Engine.md).
+[Installer Engine](Installer-Engine).
 
 ## 🤝 Related
 
-- [Architecture](Architecture.md) · [Frontend (SvelteKit)](Frontend-SvelteKit.md) ·
-  [Security](Security.md)
+- [Architecture](Architecture) · [Frontend (SvelteKit)](Frontend-SvelteKit) ·
+  [Security](Security)

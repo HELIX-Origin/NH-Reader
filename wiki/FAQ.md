@@ -14,7 +14,7 @@ authenticated blacklist, downloads) via nhentai.net's API.
 
 ## 🕵️ Is my data private?
 
-Yes. See [Privacy](Privacy.md). Everything is stored on-device; the app only talks to
+Yes. See [Privacy](Privacy). Everything is stored on-device; the app only talks to
 nhentai.net and its CDNs. No telemetry, no app server.
 
 ## ⚠️ How is adult content handled?
@@ -26,7 +26,7 @@ This is a client for an adult-adjacent site; you must be 18+ to use it. See
 
 We build the installer with Tauri itself (a single binary routes between app and
 installer/uninstaller by its filename/args). It avoids outdated MSI/NSIS tooling and keeps a
-small footprint. See [Installer Engine](Installer-Engine.md).
+small footprint. See [Installer Engine](Installer-Engine).
 
 ## 💾 Where is my data stored on disk?
 
@@ -40,14 +40,14 @@ on-disk caches above.
 ## 🚫 Does the blacklist sync with my nhentai.net account?
 
 Only if you add an API key and enable it. By default the blacklist is fully local
-(`nh-desktop.db`). See [Blacklist](Blacklist.md).
+(`nh-desktop.db`). See [Blacklist](Blacklist).
 
 ## ⬜ Can I download galleries for offline reading?
 
 Yes — gallery **zip** downloads run in the background service and stream progress to the
 Settings panel. They need an API key. There's no in-app **Download** button yet (the queue and
 commands are wired; the UI is in the M7 backlog). CBZ/other formats and downloads-folder
-management are planned. See [Roadmap](Roadmap.md).
+management are planned. See [Roadmap](Roadmap).
 
 ## 📱 Is there a mobile version?
 
@@ -62,9 +62,9 @@ Use NClientV3 on Android or the nhentai.net site in a mobile browser.
 ## 🤝 I found a bug / want a feature.
 
 Open an issue at [HELIX-Origin/nhentai-desktop](https://github.com/HELIX-Origin/nhentai-desktop),
-or see [Development & Contributing](Development-and-Contributing.md).
+or see [Development & Contributing](Development-and-Contributing).
 
 ## 🔗 Related
 
-- [Getting Started](Getting-Started.md) · [Troubleshooting](Troubleshooting.md) ·
-  [Privacy](Privacy.md) · [Roadmap](Roadmap.md)
+- [Getting Started](Getting-Started) · [Troubleshooting](Troubleshooting) ·
+  [Privacy](Privacy) · [Roadmap](Roadmap)

@@ -1,51 +1,22 @@
-# Sub-Agent: Roadmap
+# planner / roadmap
 
-Parent: `planner`. Purpose: **bulk decomposition & roadmap hygiene** — the mechanical
-half of planning so the primary stays on scope decisions.
+**Owns:** `ROADMAP.md` — milestones, sequencing, and what is deliberately out of scope.
+**Reads:** `.agents/rules/doc-truthfulness.md`, `AGENTS.md` §7, `CHANGELOG.md` for what has
+actually shipped.
+**Hands off to:** `planner` for row-level work in `TODO.md`, or `engineer` when a
+milestone's tasks are scoped and unblocked.
 
-## 👤 Identity
+## Does
 
-```yaml
-name: roadmap
-role: decompose & maintain TODO/ROADMAP
-parent: planner
-reads: ROADMAP.md, TODO.md, BUGS.md, .agents/agents/project-context/README.md
-writes: TODO.md rows, .agents/tracking/todos/*, ROADMAP.md status
-```
+- Keep the roadmap honest: a milestone is *done* only when its rows are in `CHANGELOG.md`.
+- Keep a visible **out of scope** list. Deliberate exclusions (mobile, for one) stop being
+  re-litigated every session when they are written down.
+- Mark the current milestone so the next agent knows where to start.
+- Reorder freely; reordering is cheap, rewriting history is not.
+- Reference `AGENTS.md` §7 for any technical decision the roadmap encodes.
 
-## 🎯 Responsibility
+## Never
 
-- Turn a milestone or feature ask into concrete TODO items with `templates/todo.md`
-  (DoD included per item).
-- Keep ROADMAP status ↔ TODO status cross-referenced (no orphan milestones, no
-  un-traceable tasks).
-- Rebalancing act: when project-context/requirements adds a requirement, fold it into
-  the roadmap cleanly.
-
-## 🔄 Workflow
-
-```mermaid
-flowchart TD
-    M[Milestone / ask] --> R[Read requirement docs]
-    R --> S[Slice into small verified tasks]
-    S --> T[Write TODO rows + tracking files]
-    T --> X[Mark milestone status]
-    X --> Y{Done?}
-    Y -- no --> E[Open items remain]
-    Y -- yes --> Z[Close milestone]
-```
-
-## ⚠️ Rules
-
-- Every TODO item has a DoD line and a traceable milestone/backlog tag.
-- Never open a task that can't be verified; never close a milestone with open checks.
-- Small items may skip tracking files, but every effectful one links its source.
-
-## ✅ Definition of done
-
-- `TODO.md` reflects the current plan; every new item traceable to a requirement or milestone.
-
-## 💡 Notes
-
-- Reuses `skills/update-roadmap.md`, `templates/feature.md`, `templates/todo.md` — do not
-  duplicate their content here.
+- Never promise a version or a date that no one committed to.
+- Never mark progress that the changelog does not support.
+- Never expand the roadmap during a review or a bug fix.

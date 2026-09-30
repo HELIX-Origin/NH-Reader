@@ -1,80 +1,50 @@
-# Commit Message Format
+# Commit messages
 
-Follow [Conventional Commits](https://www.conventionalcommits.org/) with the
-project's scopes.
-
-## Format
+[Conventional Commits](https://www.conventionalcommits.org/). One line, imperative mood,
+no trailing period, ≤ 72 characters of subject.
 
 ```
-<type>(<scope>): <short summary in imperative mood>
+<type>(<scope>): <subject>
 
-<body: what changed and why. Keep lines ≤ 72 chars.>
+<optional body — why, not what>
 
-Refs: #<issue> | Closes #<sub-issue>
+<optional footer — BREAKING CHANGE:, Closes #123>
 ```
-
-Keep the subject ≤ ~72 chars and imperative ("add", "fix", "wire" — not
-"added", "fixes"). Body explains *why*, not just *what*.
 
 ## Types
 
-| Emoji | Type | Use |
+| Type | Use for | Emoji |
 | --- | --- | --- |
-| ✨ | feat | new user-facing capability |
-| 🐛 | fix | bug fix |
-| 📝 | docs | documentation, wiki, `.agents/` |
-| 🧪 | test | tests only |
-| ♻️ | refactor | no behavior change |
-| ⚡ | perf | performance |
-| 🔧 | chore | build, deps, tooling, CI |
-| 🔒 | security | security hardening |
-| 🏗️ | build | builds / packaging / installer |
-
-Emoji is optional but consistent with repo history; `type` is always present.
+| `feat` | new user-visible capability | ✨ |
+| `fix` | bug fix | 🐛 |
+| `perf` | performance work | ⚡ |
+| `refactor` | no behaviour change | ♻️ |
+| `style` | formatting only | 🎨 |
+| `docs` | documentation, wiki, `.agents/` | 📝 |
+| `test` | tests | 🧪 |
+| `build` | deps, build, packaging | 📦 |
+| `ci` | automation | 👷 |
+| `chore` | everything else | 🔧 |
 
 ## Scopes
 
-- `api` — nhentai API client, `nh_desktop.rs`, `api.ts`, types
-- `commands` — Tauri command layer (`commands.rs`)
-- `service` — background worker queue (`service.rs`)
-- `cache` — disk image cache (`image_cache.rs`) / `cacheInit`
-- `gallery` — gallery grid, cards, cover images
-- `reader` — gallery detail / reader views
-- `search` — query builder, filter drawer, search results
-- `blacklist` — blacklist store, `-tag:` excludes, hide/blur modes
-- `account` — sign-in, account store, key status
-- `library` — favorites, history
-- `settings` — settings store, Settings view, service panel
-- `installer` — unified installer/uninstaller, maintenance window
-- `tray` — system tray, window controls
-- `ui` — app shell, titlebar, sidebar, styling/tokens
-- `docs` — README/ROADMAP/TODO/BUGS/wiki
-- `agents` — `.agents/` rules/skills/templates
-- `release` — version bumps, changelogs
-- `ci` — workflows
+`api` · `ui` · `components` · `stores` · `i18n` · `design` · `rust` · `db` · `service` ·
+`image-cache` · `installer` · `security` · `deps` · `docs` · `agents` · `release`
 
 ## Examples
 
 ```
-✨ feat(reader): add preload for next gallery page
-
-Reader now fetches the following page while the current one is being
-viewed, so paging feels instant on slow connections.
-
-Closes #4
+feat(ui): add gallery pager with keyboard navigation
+fix(image): join API v2 relative paths without a leading slash
+fix(db): return Result instead of panicking on a corrupt cache
+perf(service): throttle periodic popular refresh to one job per hour
+docs(agents): rebuild the agent ecosystem with a mechanical gate
+chore(release): bump version to 0.3.1
 ```
 
-```
-📝 docs(agents): rewrite rule-04 for roadmap-first issues
+## Never
 
-Mirrors the issue/commit standards used in the reference launcher
-repo so both projects stay consistent.
-```
-
-## Don'ts
-
-- No "wip", "stuff", "misc", or body-less mega-commits mixing unrelated
-  concerns.
-- No secrets, no personal paths, no binary blobs.
-- A commit that moves `TODO.md` / `BUGS.md` / `ROADMAP.md` state carries that
-  doc update in the same commit (or calls it out).
+- Never past tense in the subject ("added" → "add").
+- Never a vague subject ("fixes", "update", "changes").
+- Never more than one logical change per commit.
+- Never a bare `git commit` with no `-m` — this shell has no editor.

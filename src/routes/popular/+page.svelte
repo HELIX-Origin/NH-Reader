@@ -54,7 +54,7 @@
 	}
 </script>
 
-<div class="page">
+<div class="page" data-scope="page-popular">
 	<div class="page-head">
 		<h1>Popular</h1>
 		<span class="faint">Today's most-loved galleries</span>

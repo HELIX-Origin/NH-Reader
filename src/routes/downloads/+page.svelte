@@ -9,10 +9,9 @@
 	const FORMAT_LABEL: Record<string, string> = {
 		zip: 'ZIP',
 		cbz: 'CBZ',
-		torrent: 'Torrent',
 	};
 
-	function redownload(galleryId: number, format?: 'zip' | 'cbz' | 'torrent') {
+	function redownload(galleryId: number, format?: 'zip' | 'cbz') {
 		enqueueDownload(galleryId, format ?? 'zip');
 	}
 
@@ -29,7 +28,7 @@
 	<title>Downloads — NH Desktop</title>
 </svelte:head>
 
-<div class="page">
+<div class="page" data-scope="page-downloads">
 	<div class="page-head">
 		<h2>Downloads</h2>
 		{#if downloads.length > 0}
@@ -42,8 +41,8 @@
 
 	{#if downloads.length === 0}
 		<p class="empty faint">
-			No download jobs yet. Open a gallery and use its Download button to save a ZIP, CBZ, or
-			torrent.
+			No download jobs yet. Open a gallery and use its Download button to save a ZIP or CBZ
+			archive.
 		</p>
 	{:else}
 		<ul class="dl-list">
@@ -122,138 +121,3 @@
 		</ul>
 	{/if}
 </div>
-
-<style>
-	.page-head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 10px;
-	}
-
-	.empty {
-		padding: 40px 8px;
-		text-align: center;
-	}
-
-	.dl-list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.dl-row {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		padding: 12px 14px;
-		border-radius: var(--radius);
-		border: 1px solid var(--border);
-		background: var(--bg-elevated);
-	}
-
-	.dl-row.failed {
-		border-color: color-mix(in srgb, var(--danger) 45%, var(--border));
-	}
-
-	.dl-icon {
-		flex-shrink: 0;
-		display: inline-flex;
-		color: var(--text-secondary);
-	}
-
-	.dl-icon .ok {
-		color: var(--success);
-	}
-
-	.dl-icon .err {
-		color: var(--danger);
-	}
-
-	.spin {
-		display: inline-flex;
-		animation: spin 1s linear infinite;
-	}
-
-	.dl-main {
-		flex: 1;
-		min-width: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-	}
-
-	.dl-title {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		font-weight: 600;
-	}
-
-	.dl-link {
-		color: var(--text);
-		text-decoration: none;
-	}
-
-	.dl-link:hover {
-		color: var(--accent);
-	}
-
-	.tag-fmt {
-		font-size: 11px;
-		font-weight: 600;
-		padding: 2px 7px;
-		border-radius: 999px;
-		border: 1px solid var(--border-strong);
-		color: var(--text-secondary);
-	}
-
-	.dl-note {
-		font-size: 12px;
-		color: var(--text-faint);
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		line-height: 1.4;
-	}
-
-	.dl-note.err {
-		color: var(--danger);
-	}
-
-	.bar {
-		height: 5px;
-		border-radius: 4px;
-		background: var(--surface-active);
-		overflow: hidden;
-	}
-
-	.bar-fill {
-		height: 100%;
-		border-radius: inherit;
-		background: var(--accent);
-		transition: width 0.2s ease;
-	}
-
-	.dl-actions {
-		flex-shrink: 0;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
-
-	.btn-group {
-		display: flex;
-		gap: 8px;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-</style>

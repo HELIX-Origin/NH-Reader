@@ -30,8 +30,12 @@ categories, artists, characters, parodies — and lets you slice it **locally, i
   on your device in a local SQLite database (`nh-desktop.db`) via `src/lib/cache.ts`. No
   accounts, no servers, no telemetry. An **optional** nhentai account API key unlocks account
   favorites/blacklist sync.
+- **Speaks your language.** Interface defaults to your system locale and can be chosen in
+  the installer or Settings. English is shipped out of the box with simple 100% drop-in JSON
+  files for community-contributed translations.
 - **A real installer/uninstaller.** Tauri-native unified setup wizard (no NSIS/WiX): install,
-  uninstall, repair, PATH registration, Desktop & Start Menu shortcuts — all in one binary.
+  uninstall, repair, PATH registration, Desktop & Start Menu shortcuts, and a dedicated
+  uninstaller executable (`uninstall.exe`) that executes without file locks.
 
 ## 🖥️ Platforms
 
@@ -102,14 +106,15 @@ flowchart TD
 
 ```
 src/                  # SvelteKit SPA frontend (static, adapter-static)
-  lib/api/            # typed API client + query builder (frontend)
-  lib/stores/         # settings, library, blacklist, account, service (runes + SQLite cache)
+  lib/                # flat modules: api, client, types, query, cache, image, format
+  lib/i18n/           # LocaleCatalog class, en.json default, drop-in packs
+  lib/stores/         # settings, library, blacklist, account, service, locale (runes + SQLite cache)
   lib/components/     # GalleryCard, GalleryGrid, FilterPanel, BlacklistView, ...
   routes/             # latest, popular, search, favorites, history, blacklist, settings, gallery, reader, installer
 src-tauri/            # Rust backend (Tauri 2)
   src/nh_desktop.rs   # nhentai.net API client (reqwest, throttled)
-  src/commands.rs     # Tauri commands (37)
-  src/db.rs           # local SQLite persistence
+  src/commands.rs     # Tauri commands (44)
+  src/db.rs           # local SQLite persistence with poison-recovered locks
   src/service.rs      # background worker queue (downloads, prefetch, maintenance, sync, auto-refresh)
   src/image_cache.rs  # disk image cache (cache-first proxy fallback)
   src/installer.rs    # unified installer/uninstaller engine
@@ -119,25 +124,25 @@ scripts/build-installer.mjs   # installer assembly
 
 ## 📚 Documentation
 
-Full documentation lives in the [Wiki](https://github.com/HELIX-Origin/nhentai-desktop/wiki)
-(available as [`wiki/`](wiki/) in this repository for contributions):
+Full documentation lives in the [Wiki](../../wiki)
+(available in the `wiki/` folder in this repository for contributions):
 
-- [Home](wiki/Home.md) · [Getting Started](wiki/Getting-Started.md) · [Search & Filters](wiki/Search-and-Filters.md)
-- [Blacklist](wiki/Blacklist.md) · [Reader & Galleries](wiki/Reader-and-Galleries.md) · [Settings & API Key](wiki/Settings-and-API-Key.md)
-- [Installation & Maintenance](wiki/Installation-and-Maintenance.md) · [Architecture](wiki/Architecture.md)
-- [Security](wiki/Security.md) · [Privacy](wiki/Privacy.md) · [Troubleshooting](wiki/Troubleshooting.md)
-- [FAQ](wiki/FAQ.md) · [Roadmap](wiki/Roadmap.md)
+- [Home](../../wiki/Home) · [Getting Started](../../wiki/Getting-Started) · [Search & Filters](../../wiki/Search-and-Filters)
+- [Blacklist](../../wiki/Blacklist) · [Reader & Galleries](../../wiki/Reader-and-Galleries) · [Settings & API Key](../../wiki/Settings-and-API-Key)
+- [Installation & Maintenance](../../wiki/Installation-and-Maintenance) · [Localization](../../wiki/Localization) · [Architecture](../../wiki/Architecture)
+- [Security](../../wiki/Security) · [Privacy](../../wiki/Privacy) · [Troubleshooting](../../wiki/Troubleshooting)
+- [FAQ](../../wiki/FAQ) · [Roadmap](../../wiki/Roadmap)
 
-Also see [PRIVACY.md](PRIVACY.md), [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and
-[CHANGELOG.md](CHANGELOG.md) in this repository.
+Also see [PRIVACY.md](PRIVACY.md), [TOS.md](TOS.md), [SECURITY.md](SECURITY.md),
+[CONTRIBUTING.md](CONTRIBUTING.md), and [CHANGELOG.md](CHANGELOG.md) in this repository.
 
 ## 🤝 Contributing
 
-See the [Wiki's Development section](wiki/Development-and-Contributing.md) and [SECURITY.md](SECURITY.md) for
-reporting guidance. Be respectful, keep changes scoped, and match the existing conventions.
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Wiki's Development section](../../wiki/Development-and-Contributing)
+for building, testing, and translation instructions. Be respectful, keep changes scoped, and match the existing conventions.
 
 ## 📄 License
 
-MIT (see `LICENSE` in `package.json`). NH Desktop is an independent client and is not affiliated
-with, endorsed by, or sponsored by nhentai.net. Please respect the site's
+BSD 3-Clause (see [LICENSE.md](LICENSE.md)). NH Desktop is an independent client by HELIX Origin
+and is not affiliated with, endorsed by, or sponsored by nhentai.net. Please respect the site's
 [terms of service](https://nhentai.net/info/terms/) and rate limits.

@@ -16,7 +16,7 @@ with the steps you took and the relevant log/error text.
 ### 🚨 "Setup disappears after running"
 
 The installer binary is the app binary. If the file is named `NH Desktop-Setup-*.exe`
-(any platform-tagged variant, e.g. `NH Desktop-Setup-0.2.0-win-x64.exe`), double
+(any platform-tagged variant, e.g. `NH Desktop-Setup-0.4.0-win-x64.exe`), double
 clicking it opens the wizard. If it was renamed to just `NH Desktop.exe`, it starts the main
 app instead. Re-run via a correctly-suffixed copy, or pass `--installer`.
 
@@ -62,7 +62,7 @@ flowchart TD
 
 ### 🚨 "Search returns wrong / no results"
 
-- Check the nhentai query syntax (see [Search & Filters](Search-and-Filters.md)): exclusion
+- Check the nhentai query syntax (see [Search & Filters](Search-and-Filters)): exclusion
   needs the `-` prefix (`-tag:loli`), `tag:`, `artist:`, `language:english`, etc.
 - Note the blacklist is applied **server-side** to every query. If a gallery is hidden but
   search says "no results", a matching blacklisted tag may be excluding it. Toggle the
@@ -82,5 +82,5 @@ flowchart TD
 
 ## 🔗 Related
 
-- [Getting Started](Getting-Started.md) · [FAQ](FAQ.md) ·
-  [Search & Filters](Search-and-Filters.md) · [Privacy](Privacy.md)
+- [Getting Started](Getting-Started) · [FAQ](FAQ) ·
+  [Search & Filters](Search-and-Filters) · [Privacy](Privacy)

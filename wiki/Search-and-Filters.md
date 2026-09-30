@@ -2,7 +2,7 @@
 
 The search page is the heart of NH Desktop. It compiles your structured filters and raw
 query text into **native nhentai.net search syntax** and runs it through the site's API —
-server-side filtering (plus your [blacklist](Blacklist.md) on top).
+server-side filtering (plus your [blacklist](Blacklist) on top).
 
 ## 🔍 The search box
 
@@ -49,7 +49,7 @@ exactly what was sent.
 Every search automatically appends your global blacklist tag-exclusions
 (`-tag:...`, etc.) to the query via `buildServerExcludes()`. So **Search results never show
 blacklisted tags even if the site would return them.** Your blacklist is built in
-[Blacklist](Blacklist.md).
+[Blacklist](Blacklist).
 
 Here is the whole journey of a search — from your controls to the rendered grid:
 
@@ -86,4 +86,4 @@ The exact query-string compilation lives in `src/lib/query.ts`
 
 ---
 
-- Previous: [Getting Started](Getting-Started.md) · Next: [Blacklist](Blacklist.md)
+- Previous: [Getting Started](Getting-Started) · Next: [Blacklist](Blacklist)

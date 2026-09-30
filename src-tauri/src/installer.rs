@@ -197,10 +197,18 @@ pub fn perform_uninstall(options: UninstallOptions) -> OperationResult {
         Err(e) => warnings.push(format!("Failed to stop a running instance: {e}")),
     }
 
-    let install_dir = std::env::current_exe()
-        .ok()
-        .and_then(|p| p.parent().map(|d| d.to_path_buf()))
-        .filter(|d| d.join(platform::executable_name()).exists())
+    let target_dir_arg = std::env::args()
+        .position(|a| a == "--target-dir")
+        .and_then(|idx| std::env::args().nth(idx + 1))
+        .map(PathBuf::from);
+
+    let install_dir = target_dir_arg
+        .or_else(|| {
+            std::env::current_exe()
+                .ok()
+                .and_then(|p| p.parent().map(|d| d.to_path_buf()))
+                .filter(|d| d.join(platform::executable_name()).exists())
+        })
         .unwrap_or_else(|| PathBuf::from(platform::default_install_dir()));
 
     match platform::remove_desktop_shortcut() {
@@ -301,6 +309,18 @@ mod tests {
             assert!(name.ends_with(".app"));
         } else {
             assert_eq!(name, PRODUCT_NAME);
+        }
+    }
+
+    #[test]
+    fn uninstaller_name_matches_platform() {
+        let name = platform::uninstaller_name();
+        if cfg!(target_os = "windows") {
+            assert_eq!(name, "uninstall.exe");
+        } else if cfg!(target_os = "macos") {
+            assert!(name.ends_with(".app"));
+        } else {
+            assert_eq!(name, "uninstall");
         }
     }
 }

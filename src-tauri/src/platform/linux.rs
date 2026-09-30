@@ -6,6 +6,10 @@ pub fn executable_name() -> String {
     PRODUCT_NAME.to_string()
 }
 
+pub fn uninstaller_name() -> String {
+    "uninstall".to_string()
+}
+
 pub fn default_install_dir() -> String {
     dirs::home_dir()
         .map(|h| {
@@ -27,13 +31,25 @@ pub fn installed_exe_path() -> Option<PathBuf> {
     }
 }
 
+pub fn installed_uninstaller_path() -> Option<PathBuf> {
+    let p = Path::new(&default_install_dir()).join(uninstaller_name());
+    if p.exists() {
+        Some(p)
+    } else {
+        None
+    }
+}
+
 pub fn place_executable(src: &Path, target_dir: &Path) -> Result<PathBuf, String> {
     let dest = target_dir.join(executable_name());
     std::fs::copy(src, &dest).map_err(|e| format!("copy {} -> {}: {e}", src.display(), dest.display()))?;
+    let uninst = target_dir.join(uninstaller_name());
+    std::fs::copy(src, &uninst).map_err(|e| format!("copy {} -> {}: {e}", src.display(), uninst.display()))?;
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
         let _ = std::fs::set_permissions(&dest, std::fs::Permissions::from_mode(0o755));
+        let _ = std::fs::set_permissions(&uninst, std::fs::Permissions::from_mode(0o755));
     }
     Ok(dest)
 }
@@ -77,13 +93,14 @@ pub fn remove_start_menu_shortcut() -> Result<(), String> {
     remove_desktop_shortcut()
 }
 
-pub fn register_uninstall(exe: &Path, _install_dir: &Path) -> Result<(), String> {
+pub fn register_uninstall(_exe: &Path, install_dir: &Path) -> Result<(), String> {
     let dir = applications_dir();
     std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    let uninstaller = install_dir.join(uninstaller_name());
     let entry = format!(
-        "[Desktop Entry]\nName=Uninstall {name}\nExec=\"{exe}\" --installer --maintenance\nTerminal=false\nType=Application\nCategories=Settings;\n",
+        "[Desktop Entry]\nName=Uninstall {name}\nExec=\"{uninst}\"\nTerminal=false\nType=Application\nCategories=Settings;\n",
         name = PRODUCT_NAME,
-        exe = exe.to_string_lossy()
+        uninst = uninstaller.to_string_lossy()
     );
     std::fs::write(dir.join(format!("{PRODUCT_NAME}-uninstall.desktop")), entry)
         .map_err(|e| format!("Failed to write uninstall desktop entry: {e}"))

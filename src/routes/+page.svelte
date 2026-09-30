@@ -45,7 +45,7 @@
 	}
 </script>
 
-<div class="page">
+<div class="page" data-scope="page-latest">
 	<div class="page-head">
 		<h1>Latest</h1>
 		<span class="faint">Recently uploaded galleries</span>

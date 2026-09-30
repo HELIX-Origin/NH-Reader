@@ -108,10 +108,7 @@ export interface BlacklistListResponse {
 	count: number;
 }
 
-export interface DownloadResponse {
-	url: string;
-	expires_at: number;
-}
+export type DownloadFormat = 'zip' | 'cbz';
 
 export interface ApiKeyStatus {
 	configured: boolean;
@@ -140,10 +137,7 @@ export interface HistoryEntry {
 	visitedAt: number;
 }
 
-export type ThemePreference = 'dark' | 'light' | 'system';
-
 export interface SettingsState {
-	theme: ThemePreference;
 	density: 'cozy' | 'compact';
 	blacklistEnabled: boolean;
 	blacklistMode: BlacklistMode;

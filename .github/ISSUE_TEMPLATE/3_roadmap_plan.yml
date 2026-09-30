@@ -9,7 +9,7 @@ body:
         ### Issue Protocol
         Every major plan gets **ONE roadmap issue** whose first post is the **COMPLETE LIVING ROADMAP**.
         The first post is edited in place as work progresses.
-        See [issue-protocol rule](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/.agents/rules/issue-protocol.md).
+        See [`AGENTS.md`](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/AGENTS.md) and `ROADMAP.md`.
   - type: dropdown
     id: milestone
     attributes:

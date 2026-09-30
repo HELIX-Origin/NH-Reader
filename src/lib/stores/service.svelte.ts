@@ -3,6 +3,7 @@ import type { UnlistenFn } from '@tauri-apps/api/event';
 import { backend } from '$lib/client';
 import type {
 	AutoRefreshConfig,
+	DownloadFormat,
 	ServiceEvent,
 	ServiceJobKind,
 	ServiceStatus,
@@ -17,14 +18,14 @@ export interface ServiceJobView {
 	done?: number;
 	total?: number | null;
 	label?: string;
-	format?: 'zip' | 'cbz' | 'torrent';
+	format?: DownloadFormat;
 	galleryId?: number;
 }
 
 let jobs = $state<ServiceJobView[]>([]);
 let lastRefreshAt = $state<number | null>(null);
 let autoRefresh = $state<AutoRefreshConfig>({ enabled: false, intervalMinutes: 15 });
-const downloadMeta = new Map<number, { galleryId: number; format: 'zip' | 'cbz' | 'torrent' }>();
+const downloadMeta = new Map<number, { galleryId: number; format: DownloadFormat }>();
 
 const KIND_LABELS: Record<ServiceJobKind, string> = {
 	download: 'Download',
@@ -146,7 +147,7 @@ export async function enqueueSync(): Promise<number> {
 	return backend.serviceEnqueueSync();
 }
 
-export async function enqueueDownload(id: number, format: 'zip' | 'cbz' | 'torrent' = 'zip'): Promise<number> {
+export async function enqueueDownload(id: number, format: DownloadFormat = 'zip'): Promise<number> {
 	const jobId = await backend.serviceEnqueueDownload(id, format);
 	downloadMeta.set(jobId, { galleryId: id, format });
 	upsertJob(jobId, { jobId, kind: 'download', state: 'queued' });
