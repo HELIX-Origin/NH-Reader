@@ -28,8 +28,6 @@ public API — we fetch data, we don't scrape aggressively.
 
 | # | Milestone | Status | Scope |
 | --- | --- | --- | --- |
-| # | Milestone | Status | Scope |
-| --- | --- | --- | --- |
 | M1 | Foundation | ✅ Shipped | Scaffold, green toolchain, Rust client + 45 commands, CSP, app shell, tokens, stores, all views |
 | M2 | Browse & discover | ✅ Shipped (core) | Home (new releases), popular, gallery grid/cards, pagination, lazy images with proxy fallback |
 | M3 | Search & filters | ✅ Shipped (core) | Query builder, filter drawer (text, language, category, per-type tag include/exclude, page ranges, sort), results + count |

@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { copyFileSync, mkdirSync, chmodSync, writeFileSync, existsSync, unlinkSync, readFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, chmodSync, writeFileSync, existsSync, unlinkSync, readFileSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -37,15 +37,11 @@ copyFileSync(srcBin, join(outDir, versionedName));
 console.log(`Copied -> ${join(outDir, versionedName)}`);
 
 copyFileSync(srcBin, join(outDir, genericName));
-const uninstallerName = isWindows ? 'uninstall.exe' : 'uninstall';
-copyFileSync(srcBin, join(outDir, uninstallerName));
 if (!isWindows) {
   chmodSync(join(outDir, versionedName), 0o755);
   chmodSync(join(outDir, genericName), 0o755);
-  chmodSync(join(outDir, uninstallerName), 0o755);
 }
 console.log(`Copied -> ${join(outDir, genericName)}`);
-console.log(`Copied -> ${join(outDir, uninstallerName)}`);
 
 if (isWindows) {
   const pafDir = join(outDir, 'NHDesktopPortable');
@@ -181,6 +177,10 @@ SectionEnd
     console.log(`Generated Portable Zip -> ${join(outDir, zipName)}`);
   } catch (err) {
     console.warn(`Could not create portable zip archive: ${err}`);
+  }
+
+  if (existsSync(pafDir)) {
+    rmSync(pafDir, { recursive: true, force: true });
   }
 }
 

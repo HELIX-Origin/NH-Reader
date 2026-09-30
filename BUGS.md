@@ -35,6 +35,10 @@
 
 ## 🚨 Open
 
+- **Installed App Resource Packaging & Blank Screen on Launch (Breaking)** ([#4](https://github.com/HELIX-Origin/nhentai-desktop/issues/4)): Running the application from its installed directory does not load any interface content (blank window), whereas running in development mode (`npm run dev:tauri`) functions properly. The installer currently only places `NH Desktop.exe` and `uninstall.exe` into the installation folder, omitting app resources from the build phase. Additionally, production mode exhibits CSP restrictions and window routing issues that prevent SvelteKit from bootstrapping in production.
+  - *Steps to reproduce*: Run `npm run build:installer`, install to either user or system location, and launch `NH Desktop.exe` from the installation directory.
+  - *Expected behavior*: The installed application should launch with all necessary bundled resources and display the full UI without requiring a dev server.
+  - *Potential fixes*: Fix production CSP configuration in `tauri.conf.json`, ensure all built resources/assets are packaged and deployed by the installer into the installation directory, and verify SPA route resolution in release builds.
 - **Storage Problem**: The app is eating up a massive amount of storage. Potential Fixes include: 
   - Optimize the data cache so only the necessary files are retained and old or redundant data is purged regularly.
   - Introduce a method to store the cache into compressed archives to save space.
