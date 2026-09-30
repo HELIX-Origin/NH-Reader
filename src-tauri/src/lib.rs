@@ -251,7 +251,7 @@ fn open_installer_window(app: &tauri::App, mode: &str) -> tauri::Result<()> {
         return Ok(());
     }
 
-    let url = WebviewUrl::App(format!("installer?mode={mode}").into());
+    let url = WebviewUrl::App(format!("installer.html?mode={mode}").into());
     let mut builder = WebviewWindowBuilder::new(app, "installer", url)
         .title("NH Desktop Setup")
         .inner_size(820.0, 620.0)

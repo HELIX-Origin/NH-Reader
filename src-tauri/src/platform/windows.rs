@@ -244,8 +244,11 @@ if ($p) {{
 }
 
 pub fn launch(exe: &Path) -> Result<(), String> {
-    std::process::Command::new(exe)
-        .spawn()
+    let mut cmd = std::process::Command::new(exe);
+    if let Some(parent) = exe.parent() {
+        cmd.current_dir(parent);
+    }
+    cmd.spawn()
         .map(|_| ())
         .map_err(|e| format!("Launch failed: {e}"))
 }

@@ -21,7 +21,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; img-src 'self' data: blob: https://nhentai.net https://*.nhentai.net; style-src 'self' 'unsafe-inline'; connect-src ipc: http://ipc.localhost; font-src 'self'; script-src 'self'",
+      "csp": "default-src 'self'; img-src 'self' data: blob: https://nhentai.net https://*.nhentai.net; style-src 'self' 'unsafe-inline'; connect-src ipc: http://ipc.localhost; font-src 'self'; script-src 'self' 'unsafe-inline'",
       "devCsp": "default-src 'self'; img-src 'self' data: blob: https://nhentai.net https://*.nhentai.net; style-src 'self' 'unsafe-inline'; connect-src ipc: http://ipc.localhost http://127.0.0.1:14440 ws://127.0.0.1:14440; script-src 'self' 'unsafe-inline' 'unsafe-eval'"
     }
   },
