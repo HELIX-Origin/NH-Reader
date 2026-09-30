@@ -11,8 +11,44 @@ use db::Db;
 use image_cache::ImageCache;
 use nh_desktop::NhDesktopClient;
 use service::BackgroundService;
+use std::path::PathBuf;
 use std::sync::Arc;
 use tauri::Manager;
+
+pub fn resolve_app_data_dir<M: Manager<R>, R: tauri::Runtime>(manager: &M) -> Result<PathBuf, Box<dyn std::error::Error>> {
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(parent) = exe.parent() {
+            if parent.join(".portable").exists() || parent.join("data").is_dir() {
+                let p = parent.join("data");
+                let _ = std::fs::create_dir_all(&p);
+                return Ok(p);
+            }
+        }
+    }
+    Ok(manager.path().app_data_dir()?)
+}
+
+pub fn resolve_default_downloads_dir<M: Manager<R>, R: tauri::Runtime>(manager: &M) -> PathBuf {
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(parent) = exe.parent() {
+            if parent.join(".portable").exists() || parent.join("data").is_dir() {
+                let p = parent.join("data").join("downloads");
+                let _ = std::fs::create_dir_all(&p);
+                return p;
+            }
+        }
+    }
+    let data_dir = manager
+        .path()
+        .app_data_dir()
+        .unwrap_or_else(|_| std::env::temp_dir());
+    manager
+        .path()
+        .document_dir()
+        .unwrap_or(data_dir)
+        .join("NH Desktop")
+        .join("downloads")
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -26,13 +62,8 @@ pub fn run() {
             }
         }))
         .setup(|app| {
-            let data_dir = app.path().app_data_dir()?;
-            let default_downloads_dir = app
-                .path()
-                .document_dir()
-                .unwrap_or_else(|_| data_dir.clone())
-                .join("NH Desktop")
-                .join("downloads");
+            let data_dir = resolve_app_data_dir(app)?;
+            let default_downloads_dir = resolve_default_downloads_dir(app);
 
             let client = NhDesktopClient::new()?;
             app.manage(client.clone());
@@ -163,9 +194,11 @@ pub fn run() {
             commands::app_quit,
             commands::get_system_locale,
             commands::installer_status,
+            commands::installer_pick_directory,
             commands::installer_disk_space,
             commands::installer_install,
             commands::installer_uninstall,
+            commands::installer_launch_app,
             commands::open_maintenance_window,
         ])
         .run(tauri::generate_context!());
@@ -196,6 +229,7 @@ pub fn run_installer() {
 		})
         .invoke_handler(tauri::generate_handler![
             commands::installer_status,
+            commands::installer_pick_directory,
             commands::installer_disk_space,
             commands::installer_install,
             commands::installer_uninstall,

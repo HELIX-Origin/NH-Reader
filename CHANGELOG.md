@@ -5,6 +5,20 @@ top; the current development state lives under `Unreleased`.
 
 ## Unreleased
 
+## [v0.5.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.5.0)
+
+**Release date:** 2026-09-30
+
+### 📦 Installer & Deployment Enhancements
+* **Installation scope selector**:
+    * **Three installation targets**: Users can choose between "Install for current user" (default per-user directory), "Install for all users" (system-wide Program Files), and "Custom install directory".
+    * **Native folder picker**: A native OS folder dialog (`installer_pick_directory`) allows selecting any custom installation folder across Windows, Linux, and macOS.
+* **Portable mode**:
+    * **Self-contained runtime**: Optional toggle in installer to run completely self-contained. All data (`nh-desktop.db`, `cache/images`, settings, and downloads) is stored in `<install_dir>/data`.
+    * **Zero footprint**: Skips deploying `uninstall.exe`, creating desktop/Start Menu shortcuts, and writing Windows Add/Remove Programs registry keys.
+* **PortableApps.com Format (PAF) packaging**:
+    * **Official layout & PAF installer**: Generates standard PortableApps directory structure (`App/`, `Data/`, `Other/`) and compiles `NHDesktopPortable_<version>.paf.exe` via `scripts/build-installer.mjs` and GitHub Actions.
+
 ## [v0.4.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.4.0)
 
 **Release date:** 2026-09-30

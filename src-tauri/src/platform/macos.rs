@@ -11,7 +11,29 @@ pub fn uninstaller_name() -> String {
 }
 
 pub fn default_install_dir() -> String {
+    dirs::home_dir()
+        .map(|h| h.join("Applications").to_string_lossy().into_owned())
+        .unwrap_or_else(|| "/Applications".to_string())
+}
+
+pub fn all_users_install_dir() -> String {
     "/Applications".to_string()
+}
+
+pub fn pick_directory() -> Option<String> {
+    let script = r#"tell application "System Events" to return POSIX path of (choose folder with prompt "Select NH Desktop Installation Directory")"#;
+    if let Ok(out) = std::process::Command::new("osascript")
+        .args(["-e", script])
+        .output()
+    {
+        if out.status.success() {
+            let path = String::from_utf8_lossy(&out.stdout).trim().to_string();
+            if !path.is_empty() {
+                return Some(path);
+            }
+        }
+    }
+    None
 }
 
 pub fn installed_exe_path() -> Option<PathBuf> {
@@ -31,7 +53,7 @@ fn app_bundle(target_dir: &Path) -> PathBuf {
     target_dir.join(executable_name())
 }
 
-pub fn place_executable(src: &Path, target_dir: &Path) -> Result<PathBuf, String> {
+pub fn place_executable(src: &Path, target_dir: &Path, _is_portable: bool) -> Result<PathBuf, String> {
     let bundle = app_bundle(target_dir);
     let contents = bundle.join("Contents");
     let macos = contents.join("MacOS");

@@ -74,6 +74,14 @@ jobs:
         run: npm ci
 
 
+      - name: Install NSIS for PortableApps (PAF) packaging
+        if: matrix.platform == 'windows-latest'
+        shell: pwsh
+        run: |
+          choco install nsis -y
+          "C:\Program Files (x86)\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+
       - name: Build Modern Unified Installer
         run: npm run build:installer
 

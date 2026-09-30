@@ -274,7 +274,7 @@ src/                         # Frontend SvelteKit SPA
   routes/                    # SvelteKit routes
 src-tauri/                   # Rust backend
   src/
-    commands.rs              # Tauri command layer (44 commands)
+    commands.rs              # Tauri command layer (45 commands)
     lib.rs                   # App bootstrap + window/tray/service wiring
     main.rs                  # Entry point / installer routing + uninstaller respawn
     nh_desktop.rs            # nhentai API client

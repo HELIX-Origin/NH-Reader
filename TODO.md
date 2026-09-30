@@ -7,13 +7,13 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
-## 🚧 Current focus: M1 closeout + M7/M8 polish
+## 🚧 Current focus: M7 downloads & background services + M8 polish
 
-M1 Foundation is shipped (core). M9.1 localization core is shipped (English / Japanese / Chinese).
-Active work is finishing the clean-clone verification gate and polishing the
-downloads/background-service (M7) and release-hardening (M8) milestones. **M9.2 — the remaining
-14 language packs — is planned in this file but deliberately not started.**
+M1 Foundation, M9.1 localization core, and v0.5.0 installer enhancements are completely shipped and verified.
+Active work is focused on downloads/background-service (M7) and release-hardening (M8) polish. **M9.2 — the remaining
+14 language packs — is planned in this file for community contributions.**
 
+- ✅ **v0.5.0 released 2026-09-30** (Installation scopes [Current user, All users, Custom directory with native picker], portable mode [.portable marker + data/ runtime isolation], and PortableApps PAF installer packaging) — gates green: `cargo test` 10/10, `npm run check` 0/0, `npm run i18n:check` 87/87, `npm run check:agents` whole tree clean, `npm run build`
 - ✅ **v0.4.0 released 2026-09-30** (dedicated uninstaller executable + HELIX Origin publisher attribution + drop-in localization + DB poison recovery) — gates
   green: `cargo test` 10/10, `npm run check` 0/0, `npm run i18n:check` 78/78, `npm run check:agents` whole tree clean, `npm run build`,
   `npm run build:installer` produced `NH Desktop-Setup-0.4.0-win-x64.exe` and `uninstall.exe`
@@ -107,6 +107,7 @@ Also deferred, independent of the packs above:
 - ✅ App icon wired everywhere: `static/favicon.png`, sidebar + installer brand marks, and the
   installer/maintenance window icons via `default_window_icon()`
 - ✅ Static dev port 14440 (Vite + `tauri.conf.json`); removed `scripts/dev.mjs` auto-incrementing
+- ✅ End-to-end installer verification: run `npm run build:installer` and smoke-test generated installer executables (M8)
 - ✅ Docs: this pass — TODO/ROADMAP/BUGS/CHANGELOG/README/AGENTS + wiki updated to match
 
 ## ⬜ Backlog
@@ -118,8 +119,6 @@ Also deferred, independent of the packs above:
   `nh-desktop:cache:account:*` mirrors in the Popular / account views
 - ⬜ Import/export favorites + blacklist as JSON (M5)
 - ⬜ Settings screen: theme accent, image quality, reader preload distance (M8)
-- ⬜ End-to-end installer verification: run `npm run build:installer` and smoke-test generated
-  `dist/installer/NH Desktop-Setup-{version}-win-x64.exe` (M8)
 
 ## 🔁 Recurring
 

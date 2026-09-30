@@ -113,7 +113,7 @@ src/                  # SvelteKit SPA frontend (static, adapter-static)
   routes/             # latest, popular, search, favorites, history, blacklist, settings, gallery, reader, installer
 src-tauri/            # Rust backend (Tauri 2)
   src/nh_desktop.rs   # nhentai.net API client (reqwest, throttled)
-  src/commands.rs     # Tauri commands (44)
+  src/commands.rs     # Tauri commands (45)
   src/db.rs           # local SQLite persistence with poison-recovered locks
   src/service.rs      # background worker queue (downloads, prefetch, maintenance, sync, auto-refresh)
   src/image_cache.rs  # disk image cache (cache-first proxy fallback)

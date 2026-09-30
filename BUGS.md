@@ -40,11 +40,6 @@
   - Introduce a method to store the cache into compressed archives to save space.
   - Introduce a background cleanup task to periodically purge old or redundant cache files.
   - Introduce a method for compressing the app's internal files via a suitable compression algorithm to save space. *(The app would need to be able to read from compressed files transparently. This would preferably be compressed resource packs that save space without degrading performance.)*
-- **Installation Options**: The app currently only supports installing to the user directory and does not provide options for system-wide installation. We need to implement the following options:
-  - Allow the user to choose between a user-specific installation and a system-wide installation during setup.
-  - Ensure that system-wide installation correctly sets up necessary permissions and paths.
-  - Provide a mechanism to migrate an existing user-specific installation to a system-wide installation if desired.
-  - Add option for setting a custom installation path during setup.
 - **UI Polish and Touch Up**: The app's user interface should be audited for any inconsistencies and areas that could benefit from visual refinement. Potential Fixes include:
   - Standardize spacing, margins, and padding across all screens.
   - Ensure consistent font sizes, colors, and styles throughout the app.
@@ -102,6 +97,7 @@ Entry format once filed:
 
 ## ✅ Fixed
 
+- **Installation Options (Fixed in v0.5.0)**: Added installation destination scopes during setup (Install for current user, Install for all users, Custom install directory with native folder browser dialog) dynamically tailored across Windows, Linux, and macOS, alongside an optional portable mode toggle and PortableApps PAF installer packaging.
 - **Dedicated uninstall executable missing (Fixed in v0.4.0)**: Implemented dedicated uninstaller executable (`uninstall.exe` on Windows, `uninstall` on Linux) that copies to temp on invocation to avoid locking files in the installation directory, allowing complete directory deletion.
 - **Uninstaller file locking on Windows (Fixed in v0.4.0)**: Executable lock prevented `remove_dir_all` from removing program files. Resolved via dedicated `uninstall.exe` executing from temp.
 - **Mutex poison unwrap panic in db.rs (Fixed in v0.4.0)**: Replaced 9 `.unwrap()` calls with `lock_conn()` poison recovery.

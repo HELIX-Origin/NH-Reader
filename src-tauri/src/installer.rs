@@ -11,6 +11,7 @@ pub struct InstallerStatus {
     pub installed_version: Option<String>,
     pub current_version: String,
     pub default_install_dir: String,
+    pub all_users_install_dir: String,
     pub current_exe_path: Option<String>,
     pub os: String,
 }
@@ -28,6 +29,8 @@ pub struct InstallOptions {
     pub create_desktop_shortcut: bool,
     pub create_start_menu_shortcut: bool,
     pub add_to_path: bool,
+    #[serde(default)]
+    pub is_portable: bool,
 }
 
 #[derive(Deserialize)]
@@ -53,6 +56,7 @@ pub fn detect_status() -> InstallerStatus {
         installed_version: Some(current_version()),
         current_version: current_version(),
         default_install_dir: platform::default_install_dir(),
+        all_users_install_dir: platform::all_users_install_dir(),
         current_exe_path: exe.map(|p| p.to_string_lossy().into_owned()),
         os: std::env::consts::OS.to_string(),
     }
@@ -107,7 +111,7 @@ pub fn perform_install(options: InstallOptions) -> OperationResult {
     }
     details.push(format!("Created directory: {}", target.display()));
 
-    let dest = match platform::place_executable(&exe_src, &target) {
+    let dest = match platform::place_executable(&exe_src, &target, options.is_portable) {
         Ok(d) => d,
         Err(e) => {
             return OperationResult {
@@ -119,26 +123,43 @@ pub fn perform_install(options: InstallOptions) -> OperationResult {
     };
     details.push(format!("Installed executable: {}", dest.display()));
 
-    if options.create_desktop_shortcut {
+    if options.is_portable {
+        let marker = target.join(".portable");
+        if let Err(e) = std::fs::write(&marker, "") {
+            warnings.push(format!("Failed to create .portable marker: {e}"));
+        } else {
+            details.push("Created .portable marker.".to_string());
+        }
+        let data_dir = target.join("data");
+        if let Err(e) = std::fs::create_dir_all(&data_dir) {
+            warnings.push(format!("Failed to create data directory: {e}"));
+        } else {
+            details.push("Created data directory.".to_string());
+        }
+    }
+
+    if options.create_desktop_shortcut && !options.is_portable {
         match platform::create_desktop_shortcut(&dest) {
             Ok(()) => details.push("Desktop shortcut created.".to_string()),
             Err(e) => warnings.push(format!("Desktop shortcut failed: {e}")),
         }
     }
 
-    if options.create_start_menu_shortcut {
+    if options.create_start_menu_shortcut && !options.is_portable {
         match platform::create_start_menu_shortcut(&dest) {
             Ok(()) => details.push("Start Menu shortcut created.".to_string()),
             Err(e) => warnings.push(format!("Start Menu shortcut failed: {e}")),
         }
     }
 
-    match platform::register_uninstall(&dest, &target) {
-        Ok(()) => details.push("Registered uninstall entry.".to_string()),
-        Err(e) => warnings.push(format!("Uninstall registration failed: {e}")),
+    if !options.is_portable {
+        match platform::register_uninstall(&dest, &target) {
+            Ok(()) => details.push("Registered uninstall entry.".to_string()),
+            Err(e) => warnings.push(format!("Uninstall registration failed: {e}")),
+        }
     }
 
-    if options.add_to_path {
+    if options.add_to_path && !options.is_portable {
         match platform::add_to_path(&target) {
             Ok(()) => details.push("Added install directory to PATH.".to_string()),
             Err(e) => warnings.push(format!("PATH update failed: {e}")),

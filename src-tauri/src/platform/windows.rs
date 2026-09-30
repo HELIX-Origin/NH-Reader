@@ -23,6 +23,38 @@ pub fn default_install_dir() -> String {
     format!(r"C:\Program Files\{PRODUCT_NAME}")
 }
 
+pub fn all_users_install_dir() -> String {
+    if let Ok(pf) = std::env::var("ProgramFiles") {
+        return PathBuf::from(pf).join(PRODUCT_NAME).to_string_lossy().into_owned();
+    }
+    format!(r"C:\Program Files\{PRODUCT_NAME}")
+}
+
+pub fn pick_directory() -> Option<String> {
+    let script = r#"
+Add-Type -AssemblyName System.Windows.Forms
+$dialog = New-Object System.Windows.Forms.FolderBrowserDialog
+$dialog.Description = 'Select NH Desktop Installation Directory'
+$dialog.ShowNewFolderButton = $true
+if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+    Write-Output $dialog.SelectedPath
+}
+"#;
+    const CREATE_NO_WINDOW: u32 = 0x08000000;
+    let out = std::process::Command::new("powershell.exe")
+        .args(["-NoProfile", "-NonInteractive", "-Command", script])
+        .creation_flags(CREATE_NO_WINDOW)
+        .output()
+        .ok()?;
+    if out.status.success() {
+        let path = String::from_utf8_lossy(&out.stdout).trim().to_string();
+        if !path.is_empty() {
+            return Some(path);
+        }
+    }
+    None
+}
+
 pub fn installed_exe_path() -> Option<PathBuf> {
     let p = Path::new(&default_install_dir()).join(executable_name());
     if p.exists() {
@@ -41,11 +73,13 @@ pub fn installed_uninstaller_path() -> Option<PathBuf> {
     }
 }
 
-pub fn place_executable(src: &Path, target_dir: &Path) -> Result<PathBuf, String> {
+pub fn place_executable(src: &Path, target_dir: &Path, is_portable: bool) -> Result<PathBuf, String> {
     let dest = target_dir.join(executable_name());
     std::fs::copy(src, &dest).map_err(|e| format!("copy {} -> {}: {e}", src.display(), dest.display()))?;
-    let uninst = target_dir.join(uninstaller_name());
-    std::fs::copy(src, &uninst).map_err(|e| format!("copy {} -> {}: {e}", src.display(), uninst.display()))?;
+    if !is_portable {
+        let uninst = target_dir.join(uninstaller_name());
+        std::fs::copy(src, &uninst).map_err(|e| format!("copy {} -> {}: {e}", src.display(), uninst.display()))?;
+    }
     Ok(dest)
 }
 

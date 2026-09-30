@@ -28,22 +28,23 @@ public API — we fetch data, we don't scrape aggressively.
 
 | # | Milestone | Status | Scope |
 | --- | --- | --- | --- |
-| M1 | Foundation | ✅ Shipped (core); closeout pending | Scaffold, green toolchain, Rust client + 44 commands, CSP, app shell, tokens, stores, all views; remaining: clean-clone baseline verification |
+| # | Milestone | Status | Scope |
+| --- | --- | --- | --- |
+| M1 | Foundation | ✅ Shipped | Scaffold, green toolchain, Rust client + 45 commands, CSP, app shell, tokens, stores, all views |
 | M2 | Browse & discover | ✅ Shipped (core) | Home (new releases), popular, gallery grid/cards, pagination, lazy images with proxy fallback |
 | M3 | Search & filters | ✅ Shipped (core) | Query builder, filter drawer (text, language, category, per-type tag include/exclude, page ranges, sort), results + count |
 | M4 | Global blacklist | ✅ Shipped (core) | Manage panel, server-side `-tag:` excludes, client-side hide/blur, master toggle |
 | M5 | Library | ✅ Shipped (core) | Favorites, history, local persistence; import/export JSON still backlog |
 | M6 | Reader | ✅ Shipped (core) | Gallery detail, paged thumbnails, strip mode, preload, fullscreen |
 | M7 | Downloads & background services | 🚧 In progress (core + UI shipped) | Background-service core shipped (zip/cbz/torrent downloads to disk with progress, image prefetch, cache/image maintenance, account sync, Popular auto-refresh with job events); per-gallery Download button + Downloads page shipped; still backlog: queue resume/persist, cache consumers, storage-management polish |
-| M8 | Polish / release | 🚧 In progress (0.4.0 shipped) | Release 0.4.0 shipped 2026-09-30 (dedicated uninstaller executable, HELIX Origin publisher attribution, poison-recovered DB locks, drop-in localization architecture); still backlog: accent picker, image quality, reader preload distance |
+| M8 | Polish / release | ✅ v0.4.0 & v0.5.0 shipped | Release 0.5.0 shipped 2026-09-30 (destination scopes [Current user, All users, Custom directory], native folder picker, portable mode [.portable marker + data/ runtime isolation], and PortableApps PAF installer packaging); Release 0.4.0 shipped 2026-09-30 (dedicated uninstaller executable, HELIX Origin publisher attribution, poison-recovered DB locks, drop-in localization architecture); backlog: accent picker, image quality, reader preload distance |
 | M9 | Localization & language packs | ✅ Core shipped (M9.1) | 100% drop-in hand-rolled architecture with LocaleCatalog, English default with OS fallback, installer + Settings language pickers, translation contribution guide in CONTRIBUTING.md. Community packs open for contribution |
 
 ## 🎯 Current focus
 
-**M7 Downloads & background services** core pipeline is shipped (see `TODO.md`); **M1
-Foundation** closeout and **M8 hardening** remain:
+Active development is focused on **M7/M8 polish** following the **v0.5.0** release:
 
-- ⬜ `npm install` + `npm run check` + `cargo check`/`test` all green on a clean clone
+- ✅ M1 Foundation: completely shipped and verified (scaffold, green toolchain, Rust client + 45 commands, CSP, app shell, tokens, stores, all views)
 - ✅ Rust client returns real nhentai data (search, newest, detail) through Tauri commands
 - ✅ SPA chrome navigates between Home / Search / Favorites / History / Blacklist / Settings
 - ✅ Design tokens wired (dark theme live, light theme shipped); responsive grid
@@ -51,9 +52,10 @@ Foundation** closeout and **M8 hardening** remain:
 - ✅ Background service: enqueued downloads/prefetch/maintenance/sync/auto-refresh + live job events
 - ✅ Single-instance: second launch focuses the running window
 - ✅ Images verified loading from API v2 relative paths; disk image cache backing `proxy_image`
-- ✅ M7 polish: per-gallery Download button, ZIP/CBZ/torrent formats, configurable downloads folder, open-downloads-folder
+- ✅ M7 core + UI shipped: per-gallery Download button, ZIP/CBZ/torrent formats, configurable downloads folder, open-downloads-folder
+- ✅ v0.5.0 (M8) shipped: Installation options (current user, all users, custom directory with native picker), portable mode (.portable marker + data/ runtime isolation), and PortableApps.com PAF installer packaging
 - ⬜ M7 remaining: queue resume/persist, cache consumers, storage-management polish
-- ⬜ M8 remaining: accent picker, image quality, reader preload distance; installer E2E smoke now runs via CI packaging workflow on release tags
+- ⬜ M8 remaining: accent picker, image quality, reader preload distance; installer E2E smoke runs via CI packaging workflow on release tags
 - ✅ M9 shipped: 100% drop-in hand-rolled architecture, English default, OS fallback, installer + Settings pickers, translation contributor guide; community packs open
 
 ## 🔁 Recurring themes (applies to every milestone)
@@ -70,7 +72,7 @@ Goal: full UI localization with language packs for every language nhentai.net ta
 
 - **Phase 1 — M9.1 core (shipped)**: locale store, `t()` helper, system-language detection,
   language selector in installer options and Settings page, `npm run i18n:check` validator, and
-  complete packs for English (source), Japanese, Chinese (Simplified + Traditional).
+  complete default pack for English (source) with 100% drop-in architecture for community translations.
 - **Phase 2 — M9.2 remaining packs (planned, not started)**: the other nhentai content languages
   (`ko`, `es`, `fr`, `de`, `ru`, `pt`, `it`, `th`, `vi`, `id`, `pl`, `nl`, `tr`, `ar`). All are
   already registered and selectable with per-key English fallback. Itemised in `TODO.md`;

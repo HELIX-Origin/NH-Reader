@@ -15,6 +15,7 @@
 		installed_version: string | null;
 		current_version: string;
 		default_install_dir: string;
+		all_users_install_dir: string;
 		current_exe_path: string | null;
 		os: string;
 	}
@@ -34,6 +35,7 @@
 	type WizardMode = 'install' | 'maintenance';
 	type InstallTab = 'welcome' | 'destination' | 'options' | 'installing' | 'complete';
 	type MaintenanceTab = 'manage' | 'uninstall_options' | 'removing' | 'finished';
+	type InstallScope = 'current_user' | 'all_users' | 'custom';
 
 	let statusLoading = $state(true);
 	let info = $state<InstallerStatus | null>(null);
@@ -41,6 +43,11 @@
 
 	let installTab = $state<InstallTab>('welcome');
 	let maintenanceTab = $state<MaintenanceTab>('manage');
+
+	let installScope = $state<InstallScope>('current_user');
+	let customDir = $state('');
+	let isPortable = $state(false);
+	let diskInfo = $state<DiskSpaceInfo | null>(null);
 
 	let targetDir = $state('');
 	let createDesktop = $state(true);
@@ -56,6 +63,38 @@
 	let result = $state<OperationResult | null>(null);
 	let logDetails = $state<string[]>([]);
 	let showLogs = $state(false);
+
+	async function updateDiskSpace(dir: string) {
+		if (!dir) return;
+		try {
+			diskInfo = await invoke<DiskSpaceInfo>('installer_disk_space', { target_dir: dir });
+		} catch {
+			diskInfo = null;
+		}
+	}
+
+	function setScope(scope: InstallScope) {
+		installScope = scope;
+		if (scope === 'current_user') {
+			targetDir = info?.default_install_dir ?? '';
+		} else if (scope === 'all_users') {
+			targetDir = info?.all_users_install_dir ?? '';
+		} else if (scope === 'custom') {
+			targetDir = customDir || (info?.default_install_dir ?? '');
+		}
+		updateDiskSpace(targetDir);
+	}
+
+	async function browseCustomDir() {
+		try {
+			const picked = await invoke<string | null>('installer_pick_directory');
+			if (picked) {
+				customDir = picked;
+				targetDir = picked;
+				updateDiskSpace(picked);
+			}
+		} catch {}
+	}
 
 	const closeWindow = () => getCurrentWindow().close();
 	const minimizeWindow = () => getCurrentWindow().minimize();
@@ -90,6 +129,7 @@
 			const detected = await invoke<InstallerStatus>('installer_status');
 			info = detected;
 			targetDir = detected.default_install_dir;
+			await updateDiskSpace(targetDir);
 
 			const requestedMode = page.url.searchParams.get('mode');
 			if (requestedMode === 'uninstall') {
@@ -124,9 +164,10 @@
 			const res = await invoke<OperationResult>('installer_install', {
 				options: {
 					target_dir: targetDir,
-					create_desktop_shortcut: createDesktop,
-					create_start_menu_shortcut: createStartMenu,
-					add_to_path: addToPath,
+					create_desktop_shortcut: isPortable ? false : createDesktop,
+					create_start_menu_shortcut: isPortable ? false : createStartMenu,
+					add_to_path: isPortable ? false : addToPath,
+					is_portable: isPortable,
 				},
 			});
 
@@ -301,9 +342,83 @@
 						<h3>{locale.t('installer.destinationTitle')}</h3>
 						<p class="section-desc">{locale.t('installer.destinationDescription')}</p>
 
-						<div class="path-card">
-							<label class="path-label" for="target-path">{locale.t('installer.destinationFolder')}</label>
-							<input id="target-path" type="text" class="path-input" bind:value={targetDir} />
+						<div class="scope-options">
+							<label class="scope-card" class:selected={installScope === 'current_user'}>
+								<div class="scope-radio-row">
+									<input
+										type="radio"
+										name="installScope"
+										value="current_user"
+										checked={installScope === 'current_user'}
+										onchange={() => setScope('current_user')}
+									/>
+									<div class="scope-text">
+										<strong>{locale.t('installer.scopeCurrentUser')}</strong>
+										<span>{locale.t('installer.scopeCurrentUserDesc')}</span>
+										<code class="scope-path">{info?.default_install_dir ?? ''}</code>
+									</div>
+								</div>
+							</label>
+
+							<label class="scope-card" class:selected={installScope === 'all_users'}>
+								<div class="scope-radio-row">
+									<input
+										type="radio"
+										name="installScope"
+										value="all_users"
+										checked={installScope === 'all_users'}
+										onchange={() => setScope('all_users')}
+									/>
+									<div class="scope-text">
+										<strong>{locale.t('installer.scopeAllUsers')}</strong>
+										<span>{locale.t('installer.scopeAllUsersDesc')}</span>
+										<code class="scope-path">{info?.all_users_install_dir ?? ''}</code>
+									</div>
+								</div>
+							</label>
+
+							<label class="scope-card" class:selected={installScope === 'custom'}>
+								<div class="scope-radio-row">
+									<input
+										type="radio"
+										name="installScope"
+										value="custom"
+										checked={installScope === 'custom'}
+										onchange={() => setScope('custom')}
+									/>
+									<div class="scope-text">
+										<strong>{locale.t('installer.scopeCustom')}</strong>
+										<span>{locale.t('installer.scopeCustomDesc')}</span>
+									</div>
+								</div>
+								{#if installScope === 'custom'}
+									<div class="custom-path-row">
+										<input
+											type="text"
+											class="path-input"
+											bind:value={targetDir}
+											oninput={(e) => {
+												customDir = e.currentTarget.value;
+												updateDiskSpace(e.currentTarget.value);
+											}}
+											placeholder={info?.default_install_dir ?? ''}
+										/>
+										<button class="btn secondary browse-btn" onclick={browseCustomDir}>
+											{locale.t('installer.browseBtn')}
+										</button>
+									</div>
+								{/if}
+							</label>
+						</div>
+
+						<div class="portable-section">
+							<label class="check-option portable-card">
+								<input type="checkbox" bind:checked={isPortable} />
+								<div class="opt-desc">
+									<strong>{locale.t('installer.portableToggle')}</strong>
+									<span>{locale.t('installer.portableToggleDesc')}</span>
+								</div>
+							</label>
 						</div>
 
 						<div class="space-info">
@@ -313,7 +428,13 @@
 							</div>
 							<div class="space-row">
 								<span>{locale.t('installer.spaceAvailable')}</span>
-								<strong class="space-ok">Plenty available</strong>
+								{#if diskInfo}
+									<strong class={diskInfo.has_sufficient_space ? 'space-ok' : 'space-warn'}>
+										{formatBytes(diskInfo.available_bytes)}
+									</strong>
+								{:else}
+									<strong class="space-ok">Plenty available</strong>
+								{/if}
 							</div>
 						</div>
 					</div>
@@ -341,27 +462,27 @@
 								</select>
 							</label>
 
-							<label class="check-option">
-								<input type="checkbox" bind:checked={createDesktop} />
+							<label class="check-option" class:disabled-option={isPortable}>
+								<input type="checkbox" bind:checked={createDesktop} disabled={isPortable} />
 								<div class="opt-desc">
 									<strong>{locale.t('installer.desktopShortcut')}</strong>
-									<span>Place a quick-launch shortcut on your desktop</span>
+									<span>{isPortable ? '(Disabled in portable mode)' : 'Place a quick-launch shortcut on your desktop'}</span>
 								</div>
 							</label>
 
-							<label class="check-option">
-								<input type="checkbox" bind:checked={createStartMenu} />
+							<label class="check-option" class:disabled-option={isPortable}>
+								<input type="checkbox" bind:checked={createStartMenu} disabled={isPortable} />
 								<div class="opt-desc">
 									<strong>{locale.t('installer.startMenuShortcut')}</strong>
-									<span>Register in your application menu for quick search</span>
+									<span>{isPortable ? '(Disabled in portable mode)' : 'Register in your application menu for quick search'}</span>
 								</div>
 							</label>
 
-							<label class="check-option">
-								<input type="checkbox" bind:checked={addToPath} />
+							<label class="check-option" class:disabled-option={isPortable}>
+								<input type="checkbox" bind:checked={addToPath} disabled={isPortable} />
 								<div class="opt-desc">
 									<strong>{locale.t('installer.addToPath')}</strong>
-									<span>Allows running the <code>NH Desktop</code> command in terminal</span>
+									<span>{isPortable ? '(Disabled in portable mode)' : 'Allows running the NH Desktop command in terminal'}</span>
 								</div>
 							</label>
 
@@ -760,20 +881,90 @@
 		color: var(--accent);
 	}
 
-	.path-card {
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius);
-		padding: 14px;
-		margin-bottom: 16px;
+	.scope-options {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin-bottom: 14px;
 	}
 
-	.path-label {
-		display: block;
-		font-size: 12px;
-		font-weight: 600;
+	.scope-card {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 10px 14px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		cursor: pointer;
+		transition: border-color 0.15s ease, background 0.15s ease;
+	}
+
+	.scope-card.selected {
+		border-color: var(--accent);
+		background: var(--surface-hover, var(--surface));
+	}
+
+	.scope-radio-row {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	.scope-radio-row input {
+		margin-top: 3px;
+		accent-color: var(--accent);
+	}
+
+	.scope-text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		font-size: 13px;
+	}
+
+	.scope-text span {
+		font-size: 11px;
 		color: var(--text-secondary);
-		margin-bottom: 6px;
+	}
+
+	.scope-path {
+		display: inline-block;
+		margin-top: 4px;
+		font-size: 11px;
+		color: var(--text-muted, var(--text-secondary));
+		word-break: break-all;
+	}
+
+	.custom-path-row {
+		display: flex;
+		gap: 8px;
+		margin-top: 4px;
+		padding-left: 26px;
+	}
+
+	.custom-path-row .path-input {
+		flex: 1;
+	}
+
+	.browse-btn {
+		flex-shrink: 0;
+		padding: 6px 14px;
+		font-size: 12px;
+	}
+
+	.portable-section {
+		margin-bottom: 14px;
+	}
+
+	.portable-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+	}
+
+	.disabled-option {
+		opacity: 0.55;
+		cursor: not-allowed;
 	}
 
 	.path-input {
@@ -808,6 +999,10 @@
 
 	.space-ok {
 		color: var(--success);
+	}
+
+	.space-warn {
+		color: var(--danger);
 	}
 
 	.options-group {

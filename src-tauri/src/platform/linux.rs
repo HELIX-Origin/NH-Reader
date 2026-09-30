@@ -22,6 +22,36 @@ pub fn default_install_dir() -> String {
         .unwrap_or_else(|| format!(".local/share/{PRODUCT_NAME}"))
 }
 
+pub fn all_users_install_dir() -> String {
+    format!("/opt/{PRODUCT_NAME}")
+}
+
+pub fn pick_directory() -> Option<String> {
+    if let Ok(out) = std::process::Command::new("zenity")
+        .args(["--file-selection", "--directory", "--title=Select NH Desktop Installation Directory"])
+        .output()
+    {
+        if out.status.success() {
+            let path = String::from_utf8_lossy(&out.stdout).trim().to_string();
+            if !path.is_empty() {
+                return Some(path);
+            }
+        }
+    }
+    if let Ok(out) = std::process::Command::new("kdialog")
+        .args(["--getexistingdirectory"])
+        .output()
+    {
+        if out.status.success() {
+            let path = String::from_utf8_lossy(&out.stdout).trim().to_string();
+            if !path.is_empty() {
+                return Some(path);
+            }
+        }
+    }
+    None
+}
+
 pub fn installed_exe_path() -> Option<PathBuf> {
     let p = Path::new(&default_install_dir()).join(executable_name());
     if p.exists() {
@@ -40,16 +70,22 @@ pub fn installed_uninstaller_path() -> Option<PathBuf> {
     }
 }
 
-pub fn place_executable(src: &Path, target_dir: &Path) -> Result<PathBuf, String> {
+pub fn place_executable(src: &Path, target_dir: &Path, is_portable: bool) -> Result<PathBuf, String> {
     let dest = target_dir.join(executable_name());
     std::fs::copy(src, &dest).map_err(|e| format!("copy {} -> {}: {e}", src.display(), dest.display()))?;
-    let uninst = target_dir.join(uninstaller_name());
-    std::fs::copy(src, &uninst).map_err(|e| format!("copy {} -> {}: {e}", src.display(), uninst.display()))?;
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
         let _ = std::fs::set_permissions(&dest, std::fs::Permissions::from_mode(0o755));
-        let _ = std::fs::set_permissions(&uninst, std::fs::Permissions::from_mode(0o755));
+    }
+    if !is_portable {
+        let uninst = target_dir.join(uninstaller_name());
+        std::fs::copy(src, &uninst).map_err(|e| format!("copy {} -> {}: {e}", src.display(), uninst.display()))?;
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            let _ = std::fs::set_permissions(&uninst, std::fs::Permissions::from_mode(0o755));
+        }
     }
     Ok(dest)
 }
