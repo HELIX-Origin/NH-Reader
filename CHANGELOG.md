@@ -25,6 +25,17 @@ top; the current development state lives under `Unreleased`.
     * **True drop-in translation packs**: Community contributors can add new languages simply by dropping a `<locale>.json` file into `src/lib/i18n/` without modifying code or config registries.
     * **Translation contribution guide**: Added complete instructions and JSON structural schema reference (all 78 keys + `_meta`) to `CONTRIBUTING.md`.
 
+### 📥 Downloads & Background Service
+
+* **Direct page download pipeline**:
+    * **No API key required for downloads**: Replaced external API-key download dependency with in-app page fetching that downloads images directly from allowlisted hosts and bundles them into cleanly formatted `.zip` or `.cbz` archives locally.
+    * **Real-time per-page progress**: Background download jobs report incremental page-by-page progress to the Downloads view and system notifications.
+
+### 💖 Favorites & Library
+
+* **Favorites button synchronization**:
+    * **Instant reactive updates**: Fixed the favorite toggle button on gallery detail pages so clicking immediately flips between "Favorite" and "Saved" with matching visual states, maintaining exact consistency with local SQLite storage.
+
 ### 🛡️ Hardening & Reliability
 
 * **Poison-recovered SQLite mutex locks**: Added `lock_conn()` poison recovery in `db.rs` to prevent database access panics if a mutex poison occurs.

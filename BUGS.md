@@ -45,10 +45,6 @@
   - Ensure that system-wide installation correctly sets up necessary permissions and paths.
   - Provide a mechanism to migrate an existing user-specific installation to a system-wide installation if desired.
   - Add option for setting a custom installation path during setup.
-- **Favorites Button**: The favorites button currently does not reflect the actual favorite status of a gallery. Potential Fixes include:
-  - Ensure the button correctly toggles the favorite status when clicked. *(Right now I have confirmed it does in fact add the gallery to favorites, but the button state does not update.)*
-  - Update the button state immediately after a change to reflect the current status.
-  - Synchronize the favorite status with the backend to maintain consistency across devices.
 - **UI Polish and Touch Up**: The app's user interface should be audited for any inconsistencies and areas that could benefit from visual refinement. Potential Fixes include:
   - Standardize spacing, margins, and padding across all screens.
   - Ensure consistent font sizes, colors, and styles throughout the app.
@@ -95,7 +91,6 @@ Entry format once filed:
 | Severity | Description |
 | :---: | :---: |
 | 🚨 | The app is eating up a massive amount of storage |
-| 🚨 | Favorites Button does not reflect actual favorite status |
 | 🚨 | Theme Engine does not apply correctly to all UI components |
 | ⚠️ | Navigation Buttons do not match the applied theme |
 | ⚠️ | Title Bar Menu Backgrounds are inconsistent with the theme |
@@ -110,3 +105,5 @@ Entry format once filed:
 - **Dedicated uninstall executable missing (Fixed in v0.4.0)**: Implemented dedicated uninstaller executable (`uninstall.exe` on Windows, `uninstall` on Linux) that copies to temp on invocation to avoid locking files in the installation directory, allowing complete directory deletion.
 - **Uninstaller file locking on Windows (Fixed in v0.4.0)**: Executable lock prevented `remove_dir_all` from removing program files. Resolved via dedicated `uninstall.exe` executing from temp.
 - **Mutex poison unwrap panic in db.rs (Fixed in v0.4.0)**: Replaced 9 `.unwrap()` calls with `lock_conn()` poison recovery.
+- **Favorites button state reflection (Fixed in v0.4.0)**: Fixed the favorite button so it immediately toggles and updates its reactive state between "Favorite" and "Saved", accurately reflecting the current gallery favorite status.
+- **Gallery download pipeline failure (Fixed in v0.4.0)**: Fixed background downloads by fetching and archiving pages directly into clean `.zip` and `.cbz` packages without requiring an external API key.
