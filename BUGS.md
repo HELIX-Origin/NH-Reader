@@ -48,6 +48,7 @@
 - The installer fails to to uninstall the previous version when selecting the option to uninstall the previous version before installing the new version. 
 - The workflow updates forgot to add the Windows, macOS, and Linux installers to the release asset uploads steps. *(Currently it uploads the android apk files and the per os portable archives)*
 - The signing works correctly when done locally *(no untrusted developer warning)*, but last time i tested it from the release installer, i still got the untrusted developer warning. We will need to investigate this further to see if the issue is actually fixed or not *(I'm assuming it's probably due to the private key(s) not being published. If so, adding the private key(s) to our repo secrets should fix this issue.)*.
+- The translate dropdown button in the repo md files is displaying as a list of languages instead of an actual dropdown language selector.
 
 ***Note***: *Since some of these issues affect the app code, this update will warrant a version bump.*
 
