@@ -70,33 +70,6 @@ jobs:
                 zip -r src-tauri/target/release/bundle/NHReaderPortable_macOS.zip "$APP_PATH"
               fi
 
-          - platform: ubuntu-22.04
-            target: android
-            artifact-name: android-apk
-            rust-targets: 'aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android'
-            package-files: |
-              src-tauri/gen/android/app/build/outputs/apk/**/*.apk
-            build-command: |
-              if [ ! -d "src-tauri/gen/android" ]; then
-                npm run mobile:android:init
-              fi
-              if [ ! -f "src-tauri/gen/android/release.keystore" ]; then
-                keytool -genkey -v -keystore src-tauri/gen/android/release.keystore -alias nh-reader -keyalg RSA -keysize 2048 -validity 10000 -storepass nhreader -keypass nhreader -dname "CN=HELIX Origin, OU=NH Reader, O=HELIX Origin, L=Tokyo, ST=Tokyo, C=JP"
-              fi
-              cat <<EOF > src-tauri/gen/android/keystore.properties
-              password=nhreader
-              keyPassword=nhreader
-              keyAlias=nh-reader
-              storeFile=release.keystore
-              EOF
-              npm run mobile:android:build -- --ci
-              APKSIGNER=$(find $ANDROID_HOME/build-tools -name "apksigner" | sort -V | tail -n 1)
-              if [ -n "$APKSIGNER" ]; then
-                for apk in $(find src-tauri/gen/android/app/build/outputs/apk -name "*.apk" -type f); do
-                  $APKSIGNER sign --ks src-tauri/gen/android/release.keystore --ks-pass pass:nhreader --key-pass pass:nhreader "$apk" || true
-                done
-              fi
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -106,19 +79,6 @@ jobs:
         with:
           node-version: lts/*
           cache: 'npm'
-
-      - name: Setup Java JDK 17 (Android)
-        if: matrix.target == 'android'
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Install Android NDK (Android)
-        if: matrix.target == 'android'
-        run: |
-          sdkmanager --install "ndk;27.2.12479018"
-          echo "NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> $GITHUB_ENV
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable

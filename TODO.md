@@ -7,17 +7,30 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
-## 🎯 Planned: Restore Full Mobile Support (Android & iOS — Excluded from CI Workflow)
+## 🎯 Planned: Universal Portable Package Integration (v0.6.1)
 
-- ⬜ **Restore Full Mobile Toolchain (Android & iOS)**:
-  - Restore iOS scripts (`mobile:ios:init`, `mobile:ios:build`) in `package.json` alongside Android tooling (`mobile:android:*`) to support building mobile packages locally via Tauri CLI.
-  - Restore mobile settings section, documentation, and community sideloading instructions (APK for Android, sideloading/AltStore for iOS).
-  - Exclude mobile targets from the automated GitHub Actions release workflow (`package.yml`), keeping CI strictly dedicated to desktop targets (Windows, Linux, macOS) while mobile builds remain locally operated.
-  - **Note on CI Exclusion**: The sole reason automated mobile builds are not included in the CI workflow is because the AI is a piece of shit and can't figure out how to handle workflow files properly.
+- ⬜ **Universal Portable Package Workflow Integration (`NHReaderPortable_Universal.zip`)**:
+  - Combine desktop portable distributions into a single unified cross-platform portable archive rather than separate per-platform archives.
+  - Structure:
+    - `NH Reader.exe` (Windows 64-bit) + `launch-windows.bat`
+    - `nh-reader-linux` executable + `launch-linux.sh` shell script (Linux x86_64)
+    - `NH Reader.app` bundle + `launch-macos.command` shell script (macOS)
+    - Root `.portable` marker and shared `./data/` folder for cross-platform SQLite database (`database.sqlite`), cache, and offline download portability.
+  - Wire workflow aggregation job in `package.yml` to package and attach `NHReaderPortable_Universal.zip` on release.
 
 ## 🎯 Current Milestone Progress: v0.6.1 (Multi-Platform Portable, NSIS Dark Theme & Asset Branding)
 
 ### 📌 Completed Tasks (v0.6.1):
+- ✅ **Restore Full Mobile Toolchain (Android & iOS — Excluded from CI Workflow)**:
+  - Restored iOS scripts (`mobile:ios:init`, `mobile:ios:build`) in `package.json` alongside Android tooling (`mobile:android:*`) to support building mobile packages locally via Tauri CLI.
+  - Restored mobile settings section and jailbreak disclaimer in `SettingsView.svelte` and `en.json`.
+  - Added comprehensive step-by-step manual build instructions for Android (APK) and iOS (Xcode/sideloading) in `wiki/Installation-and-Maintenance.md` and `wiki/Development-and-Contributing.md`.
+  - Excluded mobile targets from the automated GitHub Actions release workflow (`package.yml`), keeping CI strictly dedicated to desktop targets (Windows, Linux, macOS) while mobile builds remain locally operated.
+  - **Note on CI Exclusion**: The sole reason automated mobile builds are not included in the CI workflow is because the AI is a piece of shit and can't figure out how to handle workflow files properly.
+- ✅ **NSIS Coordinated Color & Text Contrast Alignment**:
+  - Configured `MUI_BGCOLOR "18181B"`, `MUI_TEXTCOLOR "F4F4F5"`, `MUI_HEADER_BGCOLOR "0D0D0D"`, `MUI_HEADER_TEXTCOLOR "FFFFFF"`, `MUI_HEADER_TRANSPARENT_TEXT`, and `MUI_INSTFILESPAGE_COLORS "F4F4F5 18181B"` in `src-tauri/windows/hooks.nsh` to eliminate black-on-dark unreadable text while aligning text contrast cleanly for both light and dark page sections.
+- ✅ **Universal Portable Launcher Scripts**:
+  - Added standalone launcher scripts `scripts/launch-linux.sh`, `scripts/launch-macos.command`, and `scripts/launch-windows.bat` for unified portable execution sharing the root `.portable` marker and `./data/` folder.
 - ✅ **Multi-Platform Portable Packages (Windows, macOS, Linux)**:
   - Added portable archive packaging for all desktop targets in the release pipeline (`.github/workflows/package.yml`):
     - **Windows**: `NHReaderPortable_Windows_x64.zip` (standalone `NH Reader.exe` with `.portable` runtime marker and data directory support).
@@ -32,6 +45,8 @@
   - Configured `if-no-files-found: error` in `upload-artifact` and `fail_on_unmatched_files: true` in `action-gh-release` to prevent silent packaging failures.
   - Added an explicit pinned Android NDK (`27.2.12479018`) install step via `sdkmanager` exporting `NDK_HOME` into `$GITHUB_ENV`.
   - Dropped iOS packaging runner from CI matrix until manual Apple Developer team signing is configured.
+- ✅ **Publisher & Attribution Configuration**:
+  - Added explicit `"publisher": "HELIX Origin"` and `"copyright": "Copyright © 2026 HELIX Origin"` to `bundle` in `src-tauri/tauri.conf.json`, replacing the fallback identifier slug (`nh-reader`) with official publisher attribution across Windows Installer metadata, Add/Remove Programs, and Debian package maintainer fields.
 - ✅ **Clean up tauri.conf.json**:
   - Removed leftover `"iOS"` block from `src-tauri/tauri.conf.json`.
 

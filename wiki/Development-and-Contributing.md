@@ -40,6 +40,10 @@ then `.agents/ROLES.md`. `npm run check:agents` mechanically gates it.
 | Rust tests | `cargo test` (in `src-tauri/`) |
 | App release bundle | `npm run build:app` |
 | App debug bundle | `npm run build:app:debug` |
+| Android init | `npm run mobile:android:init` |
+| Android build APK | `npm run mobile:android:build` |
+| iOS init | `npm run mobile:ios:init` |
+| iOS build archive | `npm run mobile:ios:build` |
 
 **Always** run `npm run check` for frontend changes and `cargo check` (+ `cargo test` when
 relevant) for Rust changes before calling a task done. For translation contributions, run `npm run i18n:check`.

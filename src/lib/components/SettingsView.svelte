@@ -489,6 +489,13 @@
 			<h3>{locale.t('settings.mobileSupport')}</h3>
 		</div>
 		<p class="faint">{locale.t('settings.mobileSupportDesc')}</p>
+		<div class="disclaimer-box">
+			<div class="disclaimer-header">
+				<Icon name="alert" size={16} />
+				<b>{locale.t('settings.iosDisclaimerTitle')}</b>
+			</div>
+			<p class="disclaimer-text">{locale.t('settings.iosDisclaimerText')}</p>
+		</div>
 	</section>
 
 </div>

@@ -28,6 +28,8 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "publisher": "HELIX Origin",
+    "copyright": "Copyright © 2026 HELIX Origin",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

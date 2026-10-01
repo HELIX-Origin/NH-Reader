@@ -1,16 +1,16 @@
 # Installation & Maintenance
 
-NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-solid platform-native installers across Windows, macOS, and Linux with full dependency and resource bundling, alongside an Android mobile target.
+NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-solid platform-native installers across Windows, macOS, and Linux with full dependency and resource bundling, alongside manual build tooling for Android and iOS.
 
 ## 📦 Distribution Formats
 
-| Platform | Formats | Package Type | Default Install Target |
+| Platform | Formats | Package Type | Distribution / Build Method |
 | --- | --- | --- | --- |
-| **Windows** | NSIS (`.exe`), WiX (`.msi`), Portable (`.zip`) | Installer / MSI / Standalone | `%LOCALAPPDATA%\Programs\NH Reader` (per-user) or `C:\Program Files\NH Reader` (all-users) |
-| **macOS** | DMG (`.dmg`), App bundle (`.app`) | Disk Image / Bundle | `/Applications` |
-| **Linux** | Debian (`.deb`), AppImage (`.AppImage`) | Native package / Self-contained | `/usr/bin` (deb) or user directory |
-| **Android** | APK (`.apk`) | Sideloadable Android Package | Device storage / App drawer |
-| **iOS** | — | Not supported | — |
+| **Windows** | NSIS (`.exe`), WiX (`.msi`), Portable (`.zip`) | Installer / MSI / Standalone | Automated Release Asset (or optional manual build) |
+| **macOS** | DMG (`.dmg`), App bundle (`.app`), Portable (`.zip`) | Disk Image / Bundle / Standalone | Automated Release Asset (or optional manual build) |
+| **Linux** | Debian (`.deb`), AppImage (`.AppImage`), Portable (`.tar.gz`) | Native package / Self-contained / Archive | Automated Release Asset (or optional manual build) |
+| **Android** | APK (`.apk`) | Sideloadable Android Package | **Mandatory manual build** via local CLI |
+| **iOS** | IPA (`.ipa`), Xcode archive | Sideloadable iOS / Apple Silicon | **Mandatory manual build** via local CLI / Xcode |
 
 ---
 
@@ -42,23 +42,105 @@ NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-s
    chmod +x nh-reader_<version>_amd64.AppImage
    ./nh-reader_<version>_amd64.AppImage
    ```
+### 🔨 Building Desktop from Source (Optional)
+
+If you prefer building your own desktop packages from source:
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+2. **Build commands**:
+   ```bash
+   # Windows (generates NSIS .exe and WiX .msi in src-tauri/target/release/bundle/)
+   npm run build:app
+
+   # macOS (generates .dmg and .app in src-tauri/target/release/bundle/)
+   npm run build:app
+
+   # Linux (generates .deb and .AppImage in src-tauri/target/release/bundle/)
+   npm run build:app
+   ```
 
 ---
 
-## 📱 Mobile Platforms — Android
+## 📱 Mobile Platforms — Android & iOS (Manual Build Mandatory)
 
-NH Reader leverages Tauri 2's Android mobile toolchain to provide full-featured reading on Android devices. iOS is not supported.
+> [!NOTE]
+> Automated CI releases exclusively package desktop targets (Windows, macOS, Linux). **Mobile packages (Android & iOS) are not built by CI workflows and must be built manually from source.**
 
 > [!IMPORTANT]
-> **Hardware Testing Notice**: The project maintainer does not possess a physical Android test device. While the Android toolchain is configured and outputs valid packages, **Android builds are currently community-supported and untested by the maintainer**. Feedback and community testing are welcomed.
+> **Hardware Testing Notice**: The maintainer does not possess physical Android or macOS/iOS test hardware. Mobile toolchains are fully supported through Tauri 2, but builds are community-supported and untested by the maintainer.
 
-### 🤖 Android (APK Sideloading)
+### 🤖 Android (APK Manual Build & Sideloading)
 
-1. Download the release `.apk` (e.g. `nh-reader_<version>_universal.apk`) to your Android device.
-2. Open the downloaded file using your device's file manager or browser download manager.
-3. If prompted, grant permission to "Install unknown apps" for that application in system settings.
-4. Complete installation and open NH Reader from your home screen or app drawer.
-5. *Developer Note*: To build from source, run `npm run mobile:android:init` followed by `npm run mobile:android:build`. Android keystores can be generated completely free using Android SDK's `keytool`.
+To compile and install your own Android APK:
+
+1. **Prerequisites**:
+   - Android Studio with Android SDK Platform 34 and NDK installed.
+   - Java JDK 17 (e.g. Temurin or OpenJDK).
+   - Rust Android targets:
+     ```bash
+     rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+     ```
+2. **Initialize Android Project**:
+   ```bash
+   npm run mobile:android:init
+   ```
+3. **Generate a Free Release Signing Keystore**:
+   ```bash
+   keytool -genkey -v -keystore src-tauri/gen/android/release.keystore -alias nh-reader -keyalg RSA -keysize 2048 -validity 10000 -storepass nhreader -keypass nhreader -dname "CN=HELIX Origin, OU=NH Reader, O=HELIX Origin, L=Tokyo, ST=Tokyo, C=JP"
+   ```
+4. **Compile the APK**:
+   ```bash
+   npm run mobile:android:build
+   ```
+   The output APK will be generated at:
+   `src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk`
+5. **Install on Device**:
+   - Transfer the `.apk` file to your device and tap to install (grant "Install unknown apps" permission if prompted).
+   - Or install directly via ADB:
+     ```bash
+     adb install src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+     ```
+
+---
+
+### 🍎 iOS & Apple Silicon macOS (Manual Build & Sideloading)
+
+To compile for iOS or Apple Silicon macOS:
+
+1. **Prerequisites**:
+   - macOS computer with Xcode 15+ installed.
+   - Rust iOS targets:
+     ```bash
+     rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
+     ```
+   - CocoaPods (`sudo gem install cocoapods`) or modern SPM.
+2. **Initialize iOS Project**:
+   ```bash
+   npm run mobile:ios:init
+   ```
+3. **Build via CLI or Xcode**:
+   - Via CLI:
+     ```bash
+     npm run mobile:ios:build
+     ```
+   - Or open the generated Xcode project:
+     ```bash
+     open src-tauri/gen/ios/nh-reader.xcodeproj
+     ```
+4. **Configure Personal Signing (Free)**:
+   - In Xcode, go to **Signing & Capabilities**.
+   - Under **Team**, select your free Personal Apple ID (no paid developer subscription required).
+5. **Deploy & Run**:
+   - **Apple Silicon Mac**: Run directly as a native desktop application without needing jailbreaks or developer certificates.
+   - **Physical iPhone / iPad**: Select your connected iOS device in Xcode and click **Run**, or export the unsigned archive and sideload via AltStore, SideStore, Sideloadly, or TrollStore.
+
+> [!CAUTION]
+> **Mandatory Jailbreak Disclaimer**
+> 
+> NH Reader provides native iOS packaging capabilities for Apple Silicon macOS usage and personal ad-hoc sideloading. **No technical support, customer assistance, or warranty is provided for users who brick, damage, crash, or compromise their devices by attempting to jailbreak their phones.** Sideloading or jailbreaking is undertaken entirely at your own risk.
 
 ---
 

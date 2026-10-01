@@ -117,7 +117,9 @@
 		"entries": "entries",
 		"files": "files",
 		"mobileSupport": "Mobile & Sideloading",
-		"mobileSupportDesc": "NH Reader supports Android (APK sideloading).",
+		"mobileSupportDesc": "NH Reader supports Android (APK sideloading) and iOS (Apple Silicon macOS & personal provisioning sideloading). Mobile builds are community-supported and built locally via the Tauri CLI.",
+		"iosDisclaimerTitle": "Jailbreak & Sideloading Notice",
+		"iosDisclaimerText": "No technical support or warranty is provided for users who attempt to jailbreak their devices. Jailbreaking or sideloading is performed solely at your own risk.",
 		"about": "About"
 	},
 	"downloads": {
