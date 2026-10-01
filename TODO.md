@@ -121,6 +121,7 @@
   - Issue #9 (Track 5: Mobile Support) closed.
 
 ### Completed Milestone Releases:
+- ✅ **[v0.6.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.1) released 2026-10-01** (Multi-platform portable archives for Windows/macOS/Linux, official app icon bitmaps, NSIS text legibility fix, CI matrix platform isolation & pinned Android NDK)
 - ✅ **[v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) released 2026-10-01** (Dedicated Library tab, offline archive reader, official archive API downloads, Login modal, native system title bar, Mihon floating bottom bar, squircle design) — gates green: `cargo test` 7/7, `npm run check` 0/0, `npm run i18n:check` 258/258, `npm run check:agents` 51/51 files clean.
 - ✅ **Native installer customization & free code signing (v0.5.0 follow-up)**: Tauri native packaging with custom NSIS template (`hooks.nsh`), self-signed code signing certificate (`nh-desktop-codesign.pfx`), `npm run sign:windows`, and installer docs.
 - ✅ **[v0.5.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.5.0) released 2026-09-30** (Native Tauri packaging [NSIS both/per-user/per-machine and WiX MSI], portable mode [.portable marker + data/ runtime isolation]) — gates green: `cargo test` 6/6, `npm run check` 0/0, `npm run i18n:check` 31/31, `npm run check:agents` whole tree clean, `npm run build`

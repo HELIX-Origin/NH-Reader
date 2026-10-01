@@ -5,6 +5,11 @@ top; the current development state lives under `Unreleased`.
 
 ## Unreleased
 
+## [v0.6.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.1)
+
+**Release date:** 2026-10-01
+
+
 ### 📦 Multi-Platform Portable Packages & NSIS Dark Theme / Branding (v0.6.1)
 * **Multi-platform portable packaging**: Added standalone portable packages to the release workflow (`.github/workflows/package.yml`) across all desktop platforms: Windows (`NHReaderPortable_Windows_x64.zip`), Linux (`nh-reader_portable_linux_x86_64.tar.gz`), and macOS (`NHReaderPortable_macOS.zip`), each pre-configured with the `.portable` runtime marker for instant zero-install execution.
 * **Official app icon installer bitmaps**: Replaced glowing placeholder circle bitmaps with high-resolution assets (`header.bmp` [150×57] and `sidebar.bmp` [164×314]) generated directly from `src-tauri/icons/icon.png` matching the `#0d0d0d` background.
