@@ -1,12 +1,13 @@
 :root {
   color-scheme: dark;
   font-family: "Poppins", "Segoe UI", sans-serif;
-  --surface: #1e1e1f;
-  --background: #121212;
-  --border: #383838;
-  --text: #fafafa;
-  --muted: #c7c7c7;
-  --accent: #ffdb70;
+  --surface: #18181b;
+  --surface-raised: #242428;
+  --background: #0d0d0d;
+  --border: #323238;
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --accent: #ed2553;
 }
 
 * {
@@ -128,7 +129,7 @@ h1 {
   padding: 18px 30px;
   border-bottom: 1px solid var(--border);
   border-radius: 20px 20px 0 0;
-  background: #282829;
+  background: var(--surface-raised);
 }
 
 .topbar a {
@@ -295,7 +296,7 @@ section > p + p {
   padding: 22px;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: linear-gradient(145deg, #2b2b2c, #222223);
+  background: linear-gradient(145deg, #2c2c31, var(--surface-raised));
 }
 
 h3 {

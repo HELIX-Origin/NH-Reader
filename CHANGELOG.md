@@ -6,6 +6,7 @@ top; the current development state lives under `Unreleased`.
 ## Unreleased
 
 ### 🌐 Project website
+* Updated the GitHub Pages palette to match HELIX Origin's black, magenta, and white branding.
 * Replaced the project and documentation sidebar's placeholder avatar with the repository icon, sized for desktop and mobile, and added the same icon as the site favicon.
 * Removed unpublished generated root Markdown copies and their broken translation links. Documentation continues to translate in place through Google Translate without language-specific pages.
 * Made the Pages site navigation a full-width top bar with the language selector aligned at the end. Removed translation widgets from all GitHub-rendered Markdown pages; translation is available on the Pages site without shifting article content.
