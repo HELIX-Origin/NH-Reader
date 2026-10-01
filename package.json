@@ -1,6 +1,6 @@
 {
   "name": "nh-reader",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A fast, privacy-focused cross-platform client for nhentai.net",
   "type": "module",
   "scripts": {

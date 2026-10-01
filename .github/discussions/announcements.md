@@ -6,6 +6,7 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 
 ## 📑 Release Index
 
+- **[v0.7.1 — Android CI Packaging Patch & Verification Hardening](#v071--2026-10-01)** *(2026-10-01)*
 - **[v0.7.0 — Custom Title Bar, Reader Ergonomics, Arabic RTL Polish & Multi-Platform Portability](#v070--2026-10-01)** *(2026-10-01)*
 - **[v0.6.0 — Dedicated Library Tab, Offline Archive Reader, API v2 Downloads & Product Rebrand](#v060--2026-10-01)** *(2026-10-01)*
 - **[v0.5.0 — Native Tauri Packaging (NSIS & WiX MSI), Portable Mode & Data Isolation](#v050--2026-09-30)** *(2026-09-30)*
@@ -14,6 +15,15 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 - **[v0.2.1 — Storage Architecture Hardening & Docs Synchronization](#v021--2026-09-22)** *(2026-09-22)*
 - **[v0.2.0 — Custom UI Shell, Background Service Queue & Disk Image Cache](#v020--2026-09-20)** *(2026-09-20)*
 - **[v0.1.0 — Initial Foundation Release](#v010--2026-09-15)** *(2026-09-15)*
+
+---
+
+## [v0.7.1] — 2026-10-01
+### 🔧 Android CI Packaging Patch & Verification Hardening
+
+**Release Announcement Discussion:** [announcements/v0.7.1.md](announcements/v0.7.1.md)
+
+v0.7.1 is a dedicated CI infrastructure patch resolving the Android split APK packaging failure in GitHub Actions, removing unused variable warnings across non-desktop targets, introducing manual release recovery dispatch inputs, and hardening the agent verification requirements.
 
 ---
 

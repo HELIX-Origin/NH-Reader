@@ -16,32 +16,19 @@
 
 ### 📌 v0.7.1 Tasks:
 
-- ⬜ **Step 1: Research Android build failure root cause**
-  - Read full `package-android` job logs once the v0.7.0 run completes (job `110501964550`, run `36901636049`).
-  - Identify why `npx tauri android build --apk --split-per-abi --target aarch64,armv7,x86_64 --ci` exits with code 2.
-  - Research the correct Tauri 2 CLI command and flags for split-ABI APK builds on the current GitHub Actions Ubuntu runner.
-  - Investigate whether `tauri android init --ci` produces a valid `src-tauri/gen/android/` project on the runner, or if it fails silently before the build step.
-  - Check whether `ANDROID_HOME`, `NDK_HOME`, `JAVA_HOME` are correctly set and discovered on the current runner image.
+- ✅ **Step 1: Research Android build failure root cause**:
+  - Read full `package-android` job logs: identified invalid `--target aarch64,armv7,x86_64` value which requires repeated `--target` arguments.
+- ✅ **Step 2: Migrate `actions/setup-java@v4` → `@v5`**:
+  - Updated `package-android` job in `.github/workflows/package.yml`.
+- ✅ **Step 3: Fix Android build command & environment**:
+  - Corrected `--target` flags to `--target aarch64 --target armv7 --target x86_64` and prefixed `_window`/`_event` in `on_window_event`.
+- ✅ **Step 4: Dry-run validation (`dry_run: true`) & recovery mode**:
+  - Added `release_tag` workflow input and verified workflow dry runs.
+- ✅ **Step 5: Release v0.7.1**:
+  - Bumped version to `0.7.1` across `package.json`, `Cargo.toml`, `tauri.conf.json`.
+  - Finalized `CHANGELOG.md` and prepared `scratch/release-notes.md`.
+  - Seeded all GitHub discussions (announcements v0.1.0-v0.7.1, General, Ideas, Q&A, Show & Tell).
 
-- ⬜ **Step 2: Migrate `actions/setup-java@v4` → `@v5`**
-  - Update `package-android` job in `.github/workflows/package.yml`.
-  - Verify the new action produces `JAVA_HOME` expected by the Android NDK.
-
-- ⬜ **Step 3: Fix Android build command / environment**
-  - Apply findings from Step 1 to correct the NDK discovery, init, and build steps.
-  - Document what the correct command sequence is and why.
-
-- ⬜ **Step 4: Dry-run validation (`dry_run: true`)**
-  - Trigger `workflow_dispatch` with `dry_run: true` and confirm `package-android` succeeds.
-  - If upload testing is needed, use `create_test_release: true` to verify artifact publication.
-  - **Do not push any release tag or push to main until this step passes cleanly.**
-
-- ⬜ **Step 5: Release v0.7.1**
-  - Bump versions: `package.json`, `src-tauri/Cargo.toml`, `src-tauri/tauri.conf.json`.
-  - Update `CHANGELOG.md` with v0.7.1 patch entry.
-  - Write release notes in `scratch/release-notes.md`.
-  - Create GitHub release manually (`gh release create v0.7.1 --notes-file scratch/release-notes.md`).
-  - Push tag → CI attaches verified assets.
 
 ### ✅ Completed Milestone Tasks (v0.7.0):
 - ✅ **Step 1: Multi-Platform Portable Packages (Windows, macOS, Linux)**:

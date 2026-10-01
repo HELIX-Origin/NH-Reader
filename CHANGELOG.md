@@ -3,12 +3,18 @@
 Historical record of every change to the NH Reader client. Newer releases are added at the
 top; the current development state lives under `Unreleased`.
 
-## Unreleased (Upcoming v0.7.1)
+## [v0.7.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.1)
+
+**Release date:** 2026-10-01
 
 ### 🔧 CI Workflow Fixes
-* **Android CI patch**: Research and fix the `package-android` job failure (exit code 2 in `tauri android build`) introduced in v0.7.0. Pending investigation of NDK discovery, runner environment, and correct Tauri 2 CLI invocation.
-* **Migrate `actions/setup-java@v4` → `@v5`**: Update the Android packaging job to use the supported Java setup action version.
-* **Enforce dry-run verification gate**: CI workflow changes must be verified via `dry_run: true` workflow dispatch before any release tag is pushed.
+* **Android CI patch**: Fixed `package-android` job failure caused by incorrect comma-separated `--target` flag syntax. `tauri android build` requires repeated flags (`--target aarch64 --target armv7 --target x86_64`).
+* **Suppress unused variable warnings**: Prefixed `_window` and `_event` in `on_window_event` closure so Android builds (where `#[cfg(desktop)]` compiles away the body) no longer emit `unused_variables` warnings that previously blocked the build.
+* **Migrate `actions/setup-java@v4` → `@v5`**: Removes the deprecated action warning from the Android runner.
+* **Manual `release_tag` dispatch input**: Added `workflow_dispatch` input to manually re-attach build assets to any pre-existing release tag without pushing a new tag — useful for recovery if the publish step fails.
+* **Harden verification rules**: Extended `AGENTS.md §2.4`, `verification.md`, and `git-workflow.md` with an explicit mandate: never push unverified or broken code to remote; CI workflow changes require end-to-end dry-run validation before push.
+
+---
 
 
 ---
