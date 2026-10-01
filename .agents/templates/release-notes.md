@@ -1,44 +1,66 @@
-# Release notes
+# Release Notes Template
 
-The human-facing version of the changelog, for someone deciding whether to upgrade.
-Written for a person, not a log parser. See `.agents/skills/cut-release.md`.
+The canonical human-facing release notes format for NH Reader.
+Written for users and release publishing. See `.agents/skills/cut-release.md`.
 
 ```markdown
-# NH Reader 0.5.0
+# NH Reader v<version>
 
-<One or two sentences: what this release is, in plain language.>
+**Release date:** YYYY-MM-DD
 
-## Highlights
+## ✨ Highlights
 
-- **<Big change>** — one or two sentences on what a user gets.
-- **<Big change>** —
+<One or two paragraphs: what this release is, key themes, and what users get in plain language.>
 
-## New
+## 🚀 Key Improvements & Features
 
-- Feature — what it does, in one line.
+- **<Feature name>** — <Description of feature, user benefits, and how it works>.
+- **<Feature name>** — <Description of feature, user benefits, and how it works>.
 
-## Improved
+## ✅ Changed
 
-- Change — what is better, from the user's side.
+- Bumped project version to `<version>` across `package.json`, `Cargo.toml`, `tauri.conf.json`, `Cargo.lock`, and documentation.
+- <Behavioral, architectural, or documentation change>.
 
-## Fixed
+## 🐛 Fixed
 
-- Bug — what was wrong and what happens now.
+- **<Bug summary>** — <What was broken and how it behaves now>.
 
-## Breaking
+## 📦 Install & Upgrading
 
-- Anything a user must change, or data that must be migrated. Omit if there is none.
+Download the installer or package for your platform from the Assets section below:
 
-## Upgrade
+- Windows (NSIS Setup): `NH Reader_<version>_x64-setup.exe`
+- Windows (WiX MSI): `NH Reader_<version>_x64_en-US.msi`
+- Windows (Portable ZIP): `NHReaderPortable_<version>.zip`
+- macOS (DMG): `NH Reader_<version>_x64.dmg` (or `aarch64` for Apple Silicon)
+- Linux (Debian): `nh-reader_<version>_amd64.deb`
+- Linux (AppImage): `nh-reader_<version>_amd64.AppImage`
+- Android (APK): `nh-reader_<version>_universal.apk` *(community-supported / untested)*
+- iOS (IPA): `nh-reader_<version>.ipa` *(Apple Silicon macOS sideloading & iOS; community-supported / untested)*
 
-- Download the installer and run it over your existing install. Your library, settings, and
-  history carry over.
+Upgrade in place: run the new installer over your existing installation. Your SQLite database (`database.sqlite`), favorites, reading history, downloaded archives, and settings carry over automatically.
+
+## Verification
+
+- `cargo check` + `cargo test` (src-tauri) — passed (<passed>/<total>)
+- `npm run check` (svelte-check) — 0 errors, 0 warnings
+- `npm run i18n:check` — <keys>/<keys> keys validated
+- `npm run check:agents` — <files>/<files> files compliant, 0 violations
+
+## 📄 Changes & Commits
+
+- `<short-sha>` `<commit message>`
+- `<short-sha>` `<commit message>`
+
+Full commit history: `git log --oneline v<previous-version>..v<version>`
 ```
 
 ## Rules
 
-- Lead with what a user would notice. Not with commit subjects.
-- No internal file paths, no refactor chatter, no emoji in headings.
-- No secrets, tokens, or personal paths.
-- If nothing is breaking, omit the section rather than writing "None".
-- "Your data carries over" is a claim — only write it if it is true this release.
+- Always follow this exact structure and section headings.
+- Lead with what a user would notice.
+- List all platforms and installers clearly under Install & Upgrading.
+- Include verification test results and git commit references for transparency.
+- "Your data carries over" is a claim — only write it if it is true for this release.
+- No secrets, tokens, or personal local paths.
