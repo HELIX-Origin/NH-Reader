@@ -15,7 +15,6 @@
 > in dry-run mode (`dry_run: true`).** This is a hard requirement from the user.
 
 ### 📌 Documentation site deployment
-- ⬜ **Choose a translation destination for root Markdown outside the docs-folder Pages site**: Root copies must remain in `assets/translations/root-pages/`, so `/repo/*.html?lang=...` links are not live under the selected Pages source.
 - ⬜ **Retire or adapt the redundant `GitHub Pages` Actions workflow**: Pages was enabled manually from `docs/`; the workflow still expects an Actions deployment source and cannot switch it without admin permissions.
 
 ### 📌 v0.7.1 Tasks:
@@ -102,6 +101,7 @@
 
 ## ✅ Done — Completed Milestones & Historical Releases
 
+- ✅ **Remove unpublished root translation pages and broken links**: Deleted generated root copies and their Markdown dropdowns; Pages documentation keeps the in-page Google Translate script without extra published root pages.
 - ✅ **Pages navigation polish**: Made the Pages navigation a full-width top bar and removed the Markdown translation menu promptly when the Pages language selector initializes, avoiding content displacement on the site. GitHub-rendered Markdown retains its fallback menu.
 - ✅ **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/`, published from the `docs/` folder at `https://helix-origin.github.io/NH-Reader/`. The desktop application's SPA is not deployed as a website.
 - ✅ **Pages documentation navigation & working translate dropdowns**: Data-driven sidebar, previous/next links and project-page directory (`docs/_data/navigation.yml`); every Markdown page now ships a GitHub-renderable `<details>` language dropdown, and Pages pages get a real in-place Google Translate `<select>` (`docs/translate.js`).

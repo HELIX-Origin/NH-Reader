@@ -106,7 +106,7 @@ The `docs/` folder is published as the GitHub Pages site from the repository's P
 2. Register it in `docs/_data/navigation.yml`, which drives the site sidebar, previous/next links, and the project page's documentation directory.
 3. Link to other pages with relative `.md` paths so the links work both on GitHub and on the Pages site.
 
-Root Markdown files are separate from the Pages documentation. Their generated copies live in `assets/translations/root-pages/`, not in `docs/`, and are **not** published by the current docs-folder Pages source. When changing a root file, run `node scripts/build-pages.mjs /tmp/nh-reader-pages` and copy its updated file from `/tmp/nh-reader-pages/repo/` into `assets/translations/root-pages/`. The root files' existing `/repo/*.html?lang=...` links need a different hosting or translation approach before they can work.
+Root Markdown files are separate from the Pages documentation. GitHub does not run `docs/translate.js` in Markdown, so those files link to the documentation rather than embedding a translation control. The Pages site translates its documentation in place without generating language-specific pages.
 
 ## 📜 License
 
