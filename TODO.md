@@ -71,7 +71,7 @@
   - Enhanced `src/lib/format.ts` (`formatCount`, `formatDate`, `relativeDate`, `formatBytes`) to use standard browser `Intl.NumberFormat`, `Intl.DateTimeFormat`, and `Intl.RelativeTimeFormat`, reactively linked to `locale.value`.
 - ✅ **Step 11: Migration from GitHub Wiki to In-Repo `docs/` with Live Translation**:
   - Moved all documentation from `wiki/` into repository `docs/` folder, converting `Home.md` into `docs/README.md`.
-  - Added interactive Google Translate widget and button with custom JS script (`docs/translate.js`) at the top-right of all markdown files (later replaced by a GitHub-safe `<details>` dropdown plus an in-place `<select>` on GitHub Pages).
+  - Added interactive Google Translate support to the documentation site (`docs/translate.js`); translation widgets in GitHub-rendered Markdown were later removed.
   - Replaced `_Sidebar.md` and `_Footer.md` with responsive in-page navigation breadcrumbs, documentation index, and footer.
   - Updated all internal and cross-document links to use concrete relative paths and explicit `.md` file extensions.
   - Removed obsolete `.github/workflows/wiki.yml` sync workflow.
@@ -102,9 +102,9 @@
 ## ✅ Done — Completed Milestones & Historical Releases
 
 - ✅ **Remove unpublished root translation pages and broken links**: Deleted generated root copies and their Markdown dropdowns; Pages documentation keeps the in-page Google Translate script without extra published root pages.
-- ✅ **Pages navigation polish**: Made the Pages navigation a full-width top bar and removed the Markdown translation menu promptly when the Pages language selector initializes, avoiding content displacement on the site. GitHub-rendered Markdown retains its fallback menu.
+- ✅ **Pages navigation polish**: Made the Pages navigation a full-width top bar with a language selector; GitHub-rendered Markdown no longer includes fallback translation menus.
 - ✅ **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/`, published from the `docs/` folder at `https://helix-origin.github.io/NH-Reader/`. The desktop application's SPA is not deployed as a website.
-- ✅ **Pages documentation navigation & working translate dropdowns**: Data-driven sidebar, previous/next links and project-page directory (`docs/_data/navigation.yml`); every Markdown page now ships a GitHub-renderable `<details>` language dropdown, and Pages pages get a real in-place Google Translate `<select>` (`docs/translate.js`).
+- ✅ **Pages documentation navigation & translation**: Data-driven sidebar, previous/next links and project-page directory (`docs/_data/navigation.yml`); the Pages layout supplies an in-place Google Translate `<select>` (`docs/translate.js`) without per-page menus.
 
 ### [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) — Upstream Alignment, Dedicated Library Hub & Rebuilt Native Installer (2026-10-01)
 - ✅ **Rebuilt Native Packaging with Custom NSIS Hook Template**:

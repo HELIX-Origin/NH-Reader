@@ -66,8 +66,8 @@
 - **Status**: ✅ resolved (Unreleased)
 - **Root Cause**: Every Markdown page embedded a `<select>` with inline styles, an `onchange` handler and a `<script src="./docs/translate.js">`. GitHub's Markdown sanitizer strips `<select>`, `<label>`, `<script>`, `style` and event handlers, so only the bare option text survived and no script ever ran.
 - **Fix**:
-  1. Replaced the widget in documentation Markdown pages with a GitHub-safe collapsible `<details>` "🌐 Translate this page" dropdown. Each language opens the GitHub Pages copy of the page with `?lang=<code>`. Root-file menus were later removed because their Pages targets were not published.
-  2. The GitHub Pages layout and project page render a real `<select>` (`docs/_includes/translate-control.html`, languages from `docs/_data/languages.yml`). The rewritten `docs/translate.js` removes the static fallback menu, honours `?lang=`, and translates the page in place through the Google Translate element without leaving the page.
+  1. Removed the widget from all GitHub-rendered Markdown files; Github does not execute the translation script there.
+  2. The GitHub Pages layout and project page render a real `<select>` (`docs/_includes/translate-control.html`, languages from `docs/_data/languages.yml`). `docs/translate.js` honours `?lang=` and translates the page in place through the Google Translate element without leaving the page.
 
 ### 2026-10-01 — NSIS installer dark mode text illegibility, placeholder branding & missing macOS/Linux portable packages (Resolved in v0.6.1)
 - **Severity**: ⚠️ High (Usability / Packaging)

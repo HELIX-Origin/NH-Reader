@@ -1,30 +1,6 @@
 ---
 title: Documentation Home
 ---
-<div align="right">
-<details id="translate-menu">
-<summary>🌐 Translate this page</summary>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=en" lang="en">English</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=ja" lang="ja">日本語 (Japanese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=zh-CN" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=zh-TW" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=ko" lang="ko">한국어 (Korean)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=es" lang="es">Español (Spanish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=fr" lang="fr">Français (French)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=de" lang="de">Deutsch (German)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=ru" lang="ru">Русский (Russian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=pt" lang="pt">Português (Portuguese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=it" lang="it">Italiano (Italian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=th" lang="th">ไทย (Thai)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=vi" lang="vi">Tiếng Việt (Vietnamese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=id" lang="id">Bahasa Indonesia (Indonesian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=pl" lang="pl">Polski (Polish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=nl" lang="nl">Nederlands (Dutch)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=tr" lang="tr">Türkçe (Turkish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/README.html?lang=ar" lang="ar">العربية (Arabic)</a><br>
-</details>
-</div>
-
 # What is NH Reader?
 
 **NH Reader** is a lightweight, modern, cross-platform client for the adult manga archive nhentai.net. It is not a website clone: it ships a custom UI, Mihon-inspired thumb-friendly navigation, **Dynamic UI Scaling**, and a materially better **search/filter** and **global blacklist** experience than the site can offer, backed by the site's own public API and imported metadata (galleries, tags, languages, categories, artists, characters, parodies).

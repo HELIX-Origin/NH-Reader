@@ -120,7 +120,7 @@ Full documentation lives in the [`docs/`](docs/README.md) folder:
 Also see [ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), [BUGS.md](BUGS.md), [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
-The site at `https://helix-origin.github.io/NH-Reader/` is published from the `docs/` folder through repository **Settings → Pages**. Documentation pages use `docs/translate.js` for in-page Google Translate; GitHub-rendered root files cannot run that script, so they link to the documentation instead of offering broken translation controls. The old [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds a staged site for a GitHub Actions Pages source, but it cannot deploy to the currently selected `docs/` source. The Tauri application is never deployed as a website.
+The site at `https://helix-origin.github.io/NH-Reader/` is published from the `docs/` folder through repository **Settings → Pages**. Pages uses `docs/translate.js` for in-page Google Translate; GitHub-rendered Markdown cannot run that script and does not offer translation controls. The old [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds a staged site for a GitHub Actions Pages source, but it cannot deploy to the currently selected `docs/` source. The Tauri application is never deployed as a website.
 
 ## 🤝 Contributing
 
