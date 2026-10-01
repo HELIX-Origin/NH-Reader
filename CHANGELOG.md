@@ -3,6 +3,11 @@
 Historical record of every change to the NH Reader client. Newer releases are added at the
 top; the current development state lives under `Unreleased`.
 
+## Unreleased
+
+### 🌐 Project website
+* Added a standalone GitHub Pages landing page for NH Reader under `docs/`, matching the HELIX Origin portfolio's vCard-inspired design and linking to releases, documentation, and source. Publishing requires enabling Pages from the branch's `/docs` folder.
+
 ## [v0.7.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.1)
 
 **Release date:** 2026-10-01

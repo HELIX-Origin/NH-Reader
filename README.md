@@ -136,6 +136,7 @@ src-tauri/            # Rust backend (Tauri 2)
 
 Full documentation lives in the [`docs/`](docs/README.md) folder:
 
+- [Project page](https://helix-origin.github.io/NH-Reader/) — static GitHub Pages landing page (available after Pages is enabled for this repository).
 - [Documentation Home](docs/README.md) · [Getting Started](docs/Getting-Started.md) · [Search & Filters](docs/Search-and-Filters.md)
 - [Blacklist](docs/Blacklist.md) · [Reader & Galleries](docs/Reader-and-Galleries.md) · [Settings & API Key](docs/Settings-and-API-Key.md)
 - [Installation & Maintenance](docs/Installation-and-Maintenance.md) · [Localization](docs/Localization.md) · [Architecture](docs/Architecture.md)
@@ -144,6 +145,8 @@ Full documentation lives in the [`docs/`](docs/README.md) folder:
 
 Also see [ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), [BUGS.md](BUGS.md), [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
+
+To publish the project page at `https://helix-origin.github.io/NH-Reader/`, select **Deploy from a branch** in this repository's **Settings → Pages** and choose the default branch and **`/docs`** folder. The static `docs/index.html` is the entry point; it does not deploy the Tauri application. Preview it locally from `docs/` with `python3 -m http.server 8000` and open `http://localhost:8000/`.
 
 ## 🤝 Contributing
 
