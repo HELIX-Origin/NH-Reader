@@ -83,15 +83,11 @@ section p,
 }
 
 .avatar {
-  display: grid;
-  place-items: center;
+  display: block;
   width: 100px;
   height: 100px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #343434, #242424);
-  color: var(--accent);
-  font-size: 36px;
-  font-weight: 600;
+  object-fit: cover;
 }
 
 h1,
@@ -125,17 +121,13 @@ h1 {
 .topbar {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 26px;
-  margin: 0 -30px 32px 0;
+  margin: 0 -30px 32px;
   padding: 18px 30px;
-  width: fit-content;
-  margin-left: auto;
-  border: 1px solid var(--border);
-  border-top: 0;
-  border-right: 0;
-  border-radius: 0 20px 0 20px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
   background: #282829;
 }
 
@@ -147,6 +139,7 @@ h1 {
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-left: auto;
 }
 
 .translate-control select {
@@ -436,7 +429,6 @@ h3 {
   .avatar {
     width: 70px;
     height: 70px;
-    font-size: 26px;
   }
 }
 
@@ -453,6 +445,7 @@ h3 {
   .topbar {
     justify-content: flex-start;
     gap: 16px;
+    margin-left: -20px;
     margin-right: -20px;
     padding: 16px 20px;
   }

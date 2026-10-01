@@ -1,27 +1,3 @@
-<div align="right">
-<details id="translate-menu">
-<summary>🌐 Translate this page</summary>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=en" lang="en">English</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=ja" lang="ja">日本語 (Japanese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=zh-CN" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=zh-TW" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=ko" lang="ko">한국어 (Korean)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=es" lang="es">Español (Spanish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=fr" lang="fr">Français (French)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=de" lang="de">Deutsch (German)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=ru" lang="ru">Русский (Russian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=pt" lang="pt">Português (Portuguese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=it" lang="it">Italiano (Italian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=th" lang="th">ไทย (Thai)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=vi" lang="vi">Tiếng Việt (Vietnamese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=id" lang="id">Bahasa Indonesia (Indonesian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=pl" lang="pl">Polski (Polish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=nl" lang="nl">Nederlands (Dutch)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=tr" lang="tr">Türkçe (Turkish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=ar" lang="ar">العربية (Arabic)</a><br>
-</details>
-</div>
-
 # NH Reader
 
 **A lightweight, modern, cross-platform client for [nhentai.net](https://nhentai.net).**
@@ -134,7 +110,7 @@ src-tauri/            # Rust backend (Tauri 2)
 
 Full documentation lives in the [`docs/`](docs/README.md) folder:
 
-- [Project page](https://helix-origin.github.io/NH-Reader/) — GitHub Pages site with the landing page, every documentation page, and translatable copies of this README, CONTRIBUTING, SECURITY, PRIVACY and TOS.
+- [Project page](https://helix-origin.github.io/NH-Reader/) — GitHub Pages site with the landing page and documentation pages.
 - [Documentation Home](docs/README.md) · [Getting Started](docs/Getting-Started.md) · [Search & Filters](docs/Search-and-Filters.md)
 - [Blacklist](docs/Blacklist.md) · [Reader & Galleries](docs/Reader-and-Galleries.md) · [Settings & API Key](docs/Settings-and-API-Key.md)
 - [Installation & Maintenance](docs/Installation-and-Maintenance.md) · [Localization](docs/Localization.md) · [Architecture](docs/Architecture.md)
@@ -144,7 +120,7 @@ Full documentation lives in the [`docs/`](docs/README.md) folder:
 Also see [ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), [BUGS.md](BUGS.md), [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
-The site at `https://helix-origin.github.io/NH-Reader/` is published automatically by [`.github/workflows/pages.yml`](.github/workflows/pages.yml) on every push to `main` that touches `docs/` or the root pages. `scripts/build-pages.mjs` stages `docs/` together with every root Markdown file that has a translate menu (under `repo/`), Jekyll builds it with `docs/_config.yml` and the shared layout, and the result is deployed with GitHub Actions. The workflow also enables Pages and sets its source to **GitHub Actions** by itself. GitHub only lets an admin token do that, so the repository needs a one-time `PAGES_ADMIN_TOKEN` secret (a fine-grained token for this repository with **Administration: write** and **Pages: write**). Once Pages is on GitHub Actions the secret is no longer used. Other branches build the site without deploying, and a manual run can set `dry_run` to only build. The Tauri application is never deployed as a website. To preview locally, run `node scripts/build-pages.mjs .pages` and build `.pages/` with the `github-pages` Jekyll gem.
+The site at `https://helix-origin.github.io/NH-Reader/` is published from the `docs/` folder through repository **Settings → Pages**. Pages uses `docs/translate.js` for in-page Google Translate; GitHub-rendered Markdown cannot run that script and does not offer translation controls. The old [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds a staged site for a GitHub Actions Pages source, but it cannot deploy to the currently selected `docs/` source. The Tauri application is never deployed as a website.
 
 ## 🤝 Contributing
 

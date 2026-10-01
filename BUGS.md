@@ -34,6 +34,8 @@
 
 ## 🚨 Open
 
+- **Pages workflow cannot deploy to the selected source:** Pages is now enabled manually from `docs/`. The `GitHub Pages` workflow still tries to switch its source to GitHub Actions and deploy a staged artifact; it requires admin permissions to switch sources and does not publish under the current `docs/` setting. The `docs/` branch build works independently of that workflow.
+
 - The following errors have been discovered when running `npm run build:app` *(Note: I replaced my hard coded local app data path with the Windows variable to not expose my system path in the error code below)*:
   
   ```powershell
@@ -54,13 +56,18 @@
 
 ## ✅ Closed
 
+### 2026-10-01 — Root-file translation links led to unpublished Pages paths
+- **Severity**: ⚠️ Medium (Documentation usability)
+- **Status**: ✅ resolved (Unreleased)
+- **Root Cause & Fix**: The root Markdown menus linked to `/repo/*.html` copies that the docs-folder Pages source does not publish. Removed the broken root menus and unnecessary generated copies. The documentation site continues to translate in place with `docs/translate.js`.
+
 ### 2026-10-01 — Markdown translate "dropdown" rendered as a flat list of language names
 - **Severity**: ⚠️ Medium (Documentation usability)
 - **Status**: ✅ resolved (Unreleased)
 - **Root Cause**: Every Markdown page embedded a `<select>` with inline styles, an `onchange` handler and a `<script src="./docs/translate.js">`. GitHub's Markdown sanitizer strips `<select>`, `<label>`, `<script>`, `style` and event handlers, so only the bare option text survived and no script ever ran.
 - **Fix**:
-  1. Replaced the widget in all 23 Markdown pages (root `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `PRIVACY.md`, `TOS.md` and every `docs/*.md`) with a GitHub-safe collapsible `<details>` "🌐 Translate this page" dropdown. Each language opens the GitHub Pages copy of the page with `?lang=<code>`. Root pages are published on the site under `repo/` by `scripts/build-pages.mjs`.
-  2. The GitHub Pages layout and project page render a real `<select>` (`docs/_includes/translate-control.html`, languages from `docs/_data/languages.yml`). The rewritten `docs/translate.js` removes the static fallback menu, honours `?lang=`, and translates the page in place through the Google Translate element without leaving the page.
+  1. Removed the widget from all GitHub-rendered Markdown files; Github does not execute the translation script there.
+  2. The GitHub Pages layout and project page render a real `<select>` (`docs/_includes/translate-control.html`, languages from `docs/_data/languages.yml`). `docs/translate.js` honours `?lang=` and translates the page in place through the Google Translate element without leaving the page.
 
 ### 2026-10-01 — NSIS installer dark mode text illegibility, placeholder branding & missing macOS/Linux portable packages (Resolved in v0.6.1)
 - **Severity**: ⚠️ High (Usability / Packaging)

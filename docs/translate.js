@@ -49,17 +49,6 @@
 		window.history.replaceState(null, '', url.toString());
 	}
 
-	function removeStaticFallbackMenus() {
-		document.querySelectorAll('#translate-menu, #user-content-translate-menu').forEach((menu) => {
-			const wrapper = menu.parentElement;
-			if (wrapper && wrapper.tagName === 'DIV' && wrapper.children.length === 1) {
-				wrapper.remove();
-			} else {
-				menu.remove();
-			}
-		});
-	}
-
 	function googleCombo() {
 		return document.querySelector('select.goog-te-combo');
 	}
@@ -109,7 +98,6 @@
 	}
 
 	function init() {
-		removeStaticFallbackMenus();
 		const select = getSelect();
 		if (!select) return;
 		consumeLanguageParameter();
@@ -120,9 +108,5 @@
 		loadGoogleTranslate();
 	}
 
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', init);
-	} else {
-		init();
-	}
+	init();
 })();

@@ -1,27 +1,3 @@
-<div align="right">
-<details id="translate-menu">
-<summary>🌐 Translate this page</summary>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=en" lang="en">English</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=ja" lang="ja">日本語 (Japanese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=zh-CN" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=zh-TW" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=ko" lang="ko">한국어 (Korean)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=es" lang="es">Español (Spanish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=fr" lang="fr">Français (French)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=de" lang="de">Deutsch (German)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=ru" lang="ru">Русский (Russian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=pt" lang="pt">Português (Portuguese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=it" lang="it">Italiano (Italian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=th" lang="th">ไทย (Thai)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=vi" lang="vi">Tiếng Việt (Vietnamese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=id" lang="id">Bahasa Indonesia (Indonesian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=pl" lang="pl">Polski (Polish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=nl" lang="nl">Nederlands (Dutch)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=tr" lang="tr">Türkçe (Turkish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/repo/PRIVACY.html?lang=ar" lang="ar">العربية (Arabic)</a><br>
-</details>
-</div>
-
 # Privacy Policy
 
 **Last updated:** 2026-10-01 · **Version 0.6.1**

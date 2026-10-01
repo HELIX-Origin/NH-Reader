@@ -1,27 +1,3 @@
-<div align="right">
-<details id="translate-menu">
-<summary>🌐 Translate this page</summary>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=en" lang="en">English</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=ja" lang="ja">日本語 (Japanese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=zh-CN" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=zh-TW" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=ko" lang="ko">한국어 (Korean)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=es" lang="es">Español (Spanish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=fr" lang="fr">Français (French)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=de" lang="de">Deutsch (German)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=ru" lang="ru">Русский (Russian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=pt" lang="pt">Português (Portuguese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=it" lang="it">Italiano (Italian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=th" lang="th">ไทย (Thai)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=vi" lang="vi">Tiếng Việt (Vietnamese)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=id" lang="id">Bahasa Indonesia (Indonesian)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=pl" lang="pl">Polski (Polish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=nl" lang="nl">Nederlands (Dutch)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=tr" lang="tr">Türkçe (Turkish)</a><br>
-<a href="https://helix-origin.github.io/NH-Reader/Development-and-Contributing.html?lang=ar" lang="ar">العربية (Arabic)</a><br>
-</details>
-</div>
-
 ---
 
 > **[Documentation](README.md)** / **Development & Contributing**
@@ -100,13 +76,13 @@ To contribute translations, see [Contributing Translations](https://github.com/H
 
 ### 📚 Adding a documentation page
 
-The `docs/` folder is published as the GitHub Pages site by the `GitHub Pages` workflow on every push to `main`. To add a page:
+The `docs/` folder is published as the GitHub Pages site from the repository's Pages settings. To add a page:
 
-1. Create `docs/<Page-Name>.md` and copy the `<details id="translate-menu">` language dropdown from an existing page, changing the page name in each link.
+1. Create `docs/<Page-Name>.md`; the Pages layout supplies the language selector, so no Markdown translation widget is needed.
 2. Register it in `docs/_data/navigation.yml`, which drives the site sidebar, previous/next links, and the project page's documentation directory.
 3. Link to other pages with relative `.md` paths so the links work both on GitHub and on the Pages site.
 
-Root Markdown files with a `<details id="translate-menu">` dropdown (`README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `PRIVACY.md`, `TOS.md`) are also published, under `repo/`, by `scripts/build-pages.mjs`. Their dropdown links point at `https://helix-origin.github.io/NH-Reader/repo/<FILE>.html?lang=<code>`. To publish another root file, add the same dropdown to it and list it under "Project files" in `docs/_data/navigation.yml`.
+Root Markdown files are separate from the Pages documentation. GitHub does not run `docs/translate.js` in Markdown, so no Markdown page embeds a translation control. The Pages site translates its documentation in place without generating language-specific pages.
 
 ## 📜 License
 
