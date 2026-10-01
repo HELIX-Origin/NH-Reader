@@ -70,6 +70,9 @@ Upgrade in place: run the new installer over your existing installation. Your SQ
 
 ## 📄 Changes & Commits
 
+- `e86642f` `ci(workflow): add Android and iOS runners to packaging matrix`
+- `7e13fad` `docs(templates): restore canonical release notes template format`
+- `e384975` `docs(release): format release notes to standard`
 - `454a8dd` `chore(release): bump version to 0.6.0`
 - `1fb18c0` `docs(plan): add research for native installer visual customization to BUGS.md and TODO.md`
 - `791e641` `docs(plan): record decision to revert to native tauri packaging in BUGS.md and TODO.md`
