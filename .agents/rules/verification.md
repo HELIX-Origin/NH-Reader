@@ -25,6 +25,13 @@ Run the checks that match what you touched, in this session, and read the output
 - Never report a failure as a success. If a check is red, say so and name the output.
 - Never skip a check because the change looks trivial.
 - Never let a check failure be silently absorbed — surface it to the user.
+- **Never push to remote until all relevant checks have been run in this session and
+  passed.** Pushing unverified or broken code to remote is forbidden without exception.
+  If a check cannot be run (missing toolchain, offline, etc.), stop and report — do not
+  proceed with the push.
+- **Never push CI workflow changes until they have been validated end-to-end in dry-run
+  mode** (`dry_run: true`) confirming no failures. A workflow that has not been dry-run
+  tested is unverified code.
 
 ## Reporting
 

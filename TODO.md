@@ -7,11 +7,43 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
-## 🎯 Active Milestone: Milestone M12 — Upcoming Release (v0.7.0)
+## 🎯 Active Milestone: v0.7.1 — CI Workflow Patch
 
-> **Note on Versioning**: `v0.6.1` was never released; all changes made post-v0.6.0 (full mobile toolchain restore for Android/iOS, hand-rolled multi-language packs, universal portable archives, per-platform Tauri configurations, reader preload & quality controls, and custom titlebar with tray restore) are consolidated directly into the upcoming `v0.7.0` release.
+> Patch release to fix the broken Android CI packaging job pushed in v0.7.0.
+> This is a CI-infrastructure-only patch — no app code changes.
+> **Nothing in this milestone may be pushed until it has been verified end-to-end
+> in dry-run mode (`dry_run: true`).** This is a hard requirement from the user.
 
-### 📌 Active Milestone Tasks (v0.7.0):
+### 📌 v0.7.1 Tasks:
+
+- ⬜ **Step 1: Research Android build failure root cause**
+  - Read full `package-android` job logs once the v0.7.0 run completes (job `110501964550`, run `36901636049`).
+  - Identify why `npx tauri android build --apk --split-per-abi --target aarch64,armv7,x86_64 --ci` exits with code 2.
+  - Research the correct Tauri 2 CLI command and flags for split-ABI APK builds on the current GitHub Actions Ubuntu runner.
+  - Investigate whether `tauri android init --ci` produces a valid `src-tauri/gen/android/` project on the runner, or if it fails silently before the build step.
+  - Check whether `ANDROID_HOME`, `NDK_HOME`, `JAVA_HOME` are correctly set and discovered on the current runner image.
+
+- ⬜ **Step 2: Migrate `actions/setup-java@v4` → `@v5`**
+  - Update `package-android` job in `.github/workflows/package.yml`.
+  - Verify the new action produces `JAVA_HOME` expected by the Android NDK.
+
+- ⬜ **Step 3: Fix Android build command / environment**
+  - Apply findings from Step 1 to correct the NDK discovery, init, and build steps.
+  - Document what the correct command sequence is and why.
+
+- ⬜ **Step 4: Dry-run validation (`dry_run: true`)**
+  - Trigger `workflow_dispatch` with `dry_run: true` and confirm `package-android` succeeds.
+  - If upload testing is needed, use `create_test_release: true` to verify artifact publication.
+  - **Do not push any release tag or push to main until this step passes cleanly.**
+
+- ⬜ **Step 5: Release v0.7.1**
+  - Bump versions: `package.json`, `src-tauri/Cargo.toml`, `src-tauri/tauri.conf.json`.
+  - Update `CHANGELOG.md` with v0.7.1 patch entry.
+  - Write release notes in `scratch/release-notes.md`.
+  - Create GitHub release manually (`gh release create v0.7.1 --notes-file scratch/release-notes.md`).
+  - Push tag → CI attaches verified assets.
+
+### ✅ Completed Milestone Tasks (v0.7.0):
 - ✅ **Step 1: Multi-Platform Portable Packages (Windows, macOS, Linux)**:
   - Added standalone platform-native portable archives (`NHReaderPortable_Windows_x64.zip`, `nh-reader_portable_linux_x86_64.tar.gz`, `NHReaderPortable_macOS.zip`) sharing root `.portable` marker and isolated `./data/` folder.
   - Added ancestor traversal in `src-tauri/src/lib.rs` (`detect_portable_dir`) so `.portable` and `./data/` are resolved inside or outside `.app` bundles and desktop folders.

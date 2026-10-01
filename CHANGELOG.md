@@ -3,6 +3,16 @@
 Historical record of every change to the NH Reader client. Newer releases are added at the
 top; the current development state lives under `Unreleased`.
 
+## Unreleased (Upcoming v0.7.1)
+
+### 🔧 CI Workflow Fixes
+* **Android CI patch**: Research and fix the `package-android` job failure (exit code 2 in `tauri android build`) introduced in v0.7.0. Pending investigation of NDK discovery, runner environment, and correct Tauri 2 CLI invocation.
+* **Migrate `actions/setup-java@v4` → `@v5`**: Update the Android packaging job to use the supported Java setup action version.
+* **Enforce dry-run verification gate**: CI workflow changes must be verified via `dry_run: true` workflow dispatch before any release tag is pushed.
+
+
+---
+
 ## [v0.7.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.0)
 
 **Release date:** 2026-10-01

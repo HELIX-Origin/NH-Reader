@@ -22,6 +22,9 @@
   history, unless explicitly asked.
 - Never change git config, never skip hooks, never use `-i` interactive flags.
 - Never create empty commits.
+- **Never push code that has not passed all relevant checks** (`npm run check`, `cargo
+  check`, `cargo test`, `npm run check:agents` as applicable). See `verification.md`.
+- **Never push CI workflow changes that have not been verified end-to-end via dry-run.**
 
 ## Inspect before acting
 

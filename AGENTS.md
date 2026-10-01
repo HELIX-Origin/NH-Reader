@@ -51,9 +51,12 @@ commit. `git add` of unrelated pre-existing modifications is forbidden — stage
 files belonging to the requested work.
 → `.agents/rules/git-workflow.md`
 
-### 2.4 Verify before declaring done
+### 2.4 Verify before declaring done — and before pushing
 Never report a task complete without having actually run the relevant check in §4 in
 this session, and read its output. "Should compile" is not verification.
+**Never push to remote until all relevant checks pass in this session.** Unverified or
+broken code must never reach the remote. CI workflow changes require end-to-end
+dry-run validation (`dry_run: true`) before being pushed.
 → `.agents/rules/verification.md` · **enforced** by `npm run check:agents`
 
 ### 2.5 Tracking docs stay true
