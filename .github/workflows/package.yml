@@ -218,13 +218,15 @@ jobs:
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EFFECTIVE_TAG: ${{ inputs.release_tag != '' && inputs.release_tag || github.ref_name }}
         with:
-          tag_name: ${{ inputs.release_tag != '' && inputs.release_tag || github.ref_name }}
-          name: 'NH Reader ${{ inputs.release_tag != '' && inputs.release_tag || github.ref_name }}'
+          tag_name: ${{ env.EFFECTIVE_TAG }}
+          name: NH Reader ${{ env.EFFECTIVE_TAG }}
           draft: false
           prerelease: false
           files: release-artifacts/*
           fail_on_unmatched_files: true
+
 
   publish-test-prerelease:
     name: Publish Test Pre-Release (Dry Run)
