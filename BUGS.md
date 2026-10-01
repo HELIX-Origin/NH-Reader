@@ -55,7 +55,10 @@
   <script type="text/javascript" src="./docs/translate.js"></script>
   ```
 
-***Note***: *Since some of these issues affect the app code, this update will warrant a version bump.*
+***Notes***:
+
+- *Since some of these issues affect the app code, this update will warrant a version bump.*
+- *This repository has a variation of the in-page google translate feature we want to implement across all markdown files. [github.com/ciddwd/overlay-translator](https://github.com/ciddwd/overlay-translator). however this one doesn't use the dropdown button we want. So it is mainly just a reference for how ours will need to work.*
 
 ## ✅ Closed
 
