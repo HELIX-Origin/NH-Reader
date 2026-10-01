@@ -58,7 +58,8 @@
 ***Notes***:
 
 - *Since some of these issues affect the app code, this update will warrant a version bump.*
-- *This repository has a variation of the in-page google translate feature we want to implement across all markdown files. [github.com/ciddwd/overlay-translator](https://github.com/ciddwd/overlay-translator). however this one doesn't use the dropdown button we want. So it is mainly just a reference for how ours will need to work.*
+- *This repository has a variation of the in-page google translate feature we want to implement across all markdown files. [ciddwd/overlay-translator](https://github.com/ciddwd/overlay-translator). however this one doesn't use the dropdown button we want. So it is mainly just a reference for how ours will need to work.*
+- *not a bug, but worth mentioning here. One of the reasons we need to ensure the Translate button is coded corectly, is because I am planing to add GitHub pages support to the repository using this GitHub Pages theme: [codewithsadee/vcard-personal-portfolio](https://github.com/codewithsadee/vcard-personal-portfolio).*
 
 ## ✅ Closed
 
