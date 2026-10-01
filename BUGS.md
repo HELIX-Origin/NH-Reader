@@ -50,6 +50,11 @@
 - The signing works correctly when done locally *(no untrusted developer warning)*, but last time i tested it from the release installer, i still got the untrusted developer warning. We will need to investigate this further to see if the issue is actually fixed or not *(I'm assuming it's probably due to the private key(s) not being published. If so, adding the private key(s) to our repo secrets should fix this issue.)*.
 - The translate dropdown button in the repo md files is displaying as a list of languages instead of an actual dropdown language selector.
 
+  ```markdown
+  🌐 Language: English 日本語 (Japanese) 简体中文 (Simplified Chinese) 繁體中文 (Traditional Chinese) 한국어 (Korean) Español (Spanish) Français (French) Deutsch (German) Русский (Russian) Português (Portuguese) Italiano (Italian) ไทย (Thai) Tiếng Việt (Vietnamese) Bahasa Indonesia (Indonesian) Polski (Polish) Nederlands (Dutch) Türkçe (Turkish) العربية (Arabic)
+  <script type="text/javascript" src="./docs/translate.js"></script>
+  ```
+
 ***Note***: *Since some of these issues affect the app code, this update will warrant a version bump.*
 
 ## ✅ Closed
