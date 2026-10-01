@@ -31,6 +31,10 @@
   - Bumped version to `0.7.1` across `package.json`, `Cargo.toml`, `tauri.conf.json`.
   - Finalized `CHANGELOG.md` and prepared `scratch/release-notes.md`.
   - Seeded all GitHub discussions (announcements v0.1.0-v0.7.1, General, Ideas, Q&A, Show & Tell).
+- ✅ **Step 6: Fix release workflow installer uploads & align Pages color palette**:
+  - Added artifact directory flattening in `package.yml` (`publish-release`, `publish-test-prerelease`, `dry-run-summary`) so desktop installers (`.exe`, `.msi`, `.deb`, `.AppImage`, `.dmg`) are uploaded to releases alongside portable archives and APKs.
+  - Aligned GitHub Pages palette with HELIX Origin main site (`helix-origin.github.io`) using navy blue, cyan, and teal styling in `docs/assets/site.css`.
+
 
 
 ### ✅ Completed Milestone Tasks (v0.7.0):

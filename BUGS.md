@@ -48,13 +48,18 @@
 
 - The installer still displays dark text on a dark background in the final page. 
 - The installer fails to to uninstall the previous version when selecting the option to uninstall the previous version before installing the new version. 
-- The workflow updates forgot to add the Windows, macOS, and Linux installers to the release asset uploads steps. *(Currently it uploads the android apk files and the per os portable archives)*
 - The signing works correctly when done locally *(no untrusted developer warning)*, but last time i tested it from the release installer, i still got the untrusted developer warning. We will need to investigate this further to see if the issue is actually fixed or not *(I'm assuming it's probably due to the private key(s) not being published. If so, adding the private key(s) to our repo secrets should fix this issue.)*.
 ***Notes***:
 
 - *Since some of these issues affect the app code, this update will warrant a version bump.*
 
 ## ✅ Closed
+
+### 2026-10-01 — Release workflow failed to publish desktop installers (.exe, .msi, .deb, .AppImage, .dmg)
+- **Severity**: 🚨 High (Packaging & Distribution)
+- **Status**: ✅ resolved (Unreleased)
+- **Root Cause**: `actions/upload-artifact@v4` preserved subdirectories (`nsis/`, `msi/`, `deb/`, `appimage/`, `dmg/`) when uploading artifacts from `src-tauri/target/release/bundle/`. When `actions/download-artifact@v4` merged all artifacts into `release-artifacts`, the installers remained inside nested subdirectories. The `action-gh-release@v2` job used `files: release-artifacts/*` which only matched top-level files (`.zip`, `.apk`, `.tar.gz`) and ignored directories.
+- **Fix**: Added a flattening step in `publish-release`, `publish-test-prerelease`, and `dry-run-summary` (`find release-artifacts -mindepth 2 -type f -exec mv {} release-artifacts/ \;`) before publishing, ensuring all platform installers sit directly in `release-artifacts/` and are attached to GitHub releases.
 
 ### 2026-10-01 — Root-file translation links led to unpublished Pages paths
 - **Severity**: ⚠️ Medium (Documentation usability)

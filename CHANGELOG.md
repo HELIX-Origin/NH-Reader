@@ -5,8 +5,11 @@ top; the current development state lives under `Unreleased`.
 
 ## Unreleased
 
+### 🔧 CI Workflow
+* Flattened nested package artifacts before publishing so Windows (`.exe`, `.msi`), macOS (`.dmg`), and Linux (`.deb`, `.AppImage`) installers are uploaded to GitHub Releases alongside portable archives and Android APKs.
+
 ### 🌐 Project website
-* Updated the GitHub Pages palette to match HELIX Origin's black, magenta, and white branding.
+* Updated the GitHub Pages palette to match the HELIX Origin organization site (`helix-origin.github.io`) with blue, cyan, and teal styling.
 * Replaced the project and documentation sidebar's placeholder avatar with the repository icon, sized for desktop and mobile, and added the same icon as the site favicon.
 * Removed unpublished generated root Markdown copies and their broken translation links. Documentation continues to translate in place through Google Translate without language-specific pages.
 * Made the Pages site navigation a full-width top bar with the language selector aligned at the end. Removed translation widgets from all GitHub-rendered Markdown pages; translation is available on the Pages site without shifting article content.

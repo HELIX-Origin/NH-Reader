@@ -209,8 +209,10 @@ jobs:
           path: release-artifacts
           merge-multiple: true
 
-      - name: Display release artifacts
+      - name: Flatten release artifacts
         run: |
+          find release-artifacts -mindepth 2 -type f -exec mv {} release-artifacts/ \;
+          find release-artifacts -mindepth 1 -type d -empty -delete
           echo "Release artifacts to publish:"
           ls -la release-artifacts
 
@@ -227,7 +229,6 @@ jobs:
           files: release-artifacts/*
           fail_on_unmatched_files: true
 
-
   publish-test-prerelease:
     name: Publish Test Pre-Release (Dry Run)
     runs-on: ubuntu-latest
@@ -243,8 +244,10 @@ jobs:
           path: release-artifacts
           merge-multiple: true
 
-      - name: Display release artifacts
+      - name: Flatten test pre-release artifacts
         run: |
+          find release-artifacts -mindepth 2 -type f -exec mv {} release-artifacts/ \;
+          find release-artifacts -mindepth 1 -type d -empty -delete
           echo "Test pre-release artifacts to publish:"
           ls -la release-artifacts
 
@@ -275,6 +278,8 @@ jobs:
 
       - name: Validate built package artifacts
         run: |
+          find verified-artifacts -mindepth 2 -type f -exec mv {} verified-artifacts/ \;
+          find verified-artifacts -mindepth 1 -type d -empty -delete
           echo "========================================================"
           echo " NH Reader Packaging - TRUE DRY RUN VERIFICATION"
           echo "========================================================"

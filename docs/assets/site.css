@@ -1,14 +1,15 @@
 :root {
   color-scheme: dark;
   font-family: "Poppins", "Segoe UI", sans-serif;
-  --surface: #18181b;
-  --surface-raised: #242428;
-  --background: #0d0d0d;
-  --border: #323238;
-  --text: #f4f4f5;
-  --muted: #a1a1aa;
-  --accent: #ed2553;
+  --surface: #10273c;
+  --surface-raised: #203b52;
+  --background: #071629;
+  --border: #36556b;
+  --text: #f1f8fc;
+  --muted: #c5d8e3;
+  --accent: #80d0f5;
 }
+
 
 * {
   box-sizing: border-box;
@@ -296,8 +297,9 @@ section > p + p {
   padding: 22px;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: linear-gradient(145deg, #2c2c31, var(--surface-raised));
+  background: linear-gradient(145deg, #1b3e56, var(--surface-raised));
 }
+
 
 h3 {
   font-size: 1rem;
