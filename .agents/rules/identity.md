@@ -6,23 +6,23 @@
 
 ## Must
 
-- The product is **NH Desktop**. The workspace folder `lewd-clips-app` is a misnomer. Never
+- The product is **NH Reader**. The workspace folder `lewd-clips-app` is a misnomer. Never
   derive a name, title, or identifier from the folder.
-- User-facing strings are exactly `NH Desktop` — window title, `productName` in
-  `tauri.conf.json`, exe, install dir `Programs\NH Desktop`, shortcut and registry
+- User-facing strings are exactly `NH Reader` — window title, `productName` in
+  `tauri.conf.json`, exe, install dir `Programs\NH Reader`, shortcut and registry
   `DisplayName`. Publisher/author is `HELIX Origin`.
-- Identifiers are lowercase-hyphen `nh-desktop`, except where the language forces
-  underscores:
+- Identifiers are lowercase-hyphen `nh-reader`, except where the language forces
+  underscores, and the database file uses an ambiguous name `database.sqlite` to decouple storage from future branding changes:
 
   | Where | Form |
   | --- | --- |
-  | cargo package | `nh-desktop` |
-  | Rust lib crate | `nh_desktop_lib` |
+  | cargo package | `nh-reader` |
+  | Rust lib crate | `nh_reader_lib` |
   | Rust module / type | `nh_desktop` / `NhDesktopClient` |
-  | npm package | `nh-desktop` |
-  | bundle ID | `net.nh-desktop.client` |
-  | cache key prefix | `nh-desktop:` |
-  | database file | `nh-desktop.db` |
+  | npm package | `nh-reader` |
+  | bundle ID | `net.nh-reader.client` |
+  | cache key prefix | `nh-reader:` |
+  | database file | `database.sqlite` |
 
 - `nhentai` and `nhentai.net` name the **website**, not the app. They are correct in API
   URLs, image-host allowlists, user agent strings, and citations. They are wrong in the

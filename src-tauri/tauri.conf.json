@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "NH Desktop",
-  "version": "0.5.0",
-  "identifier": "net.nh-desktop.client",
+  "productName": "NH Reader",
+  "version": "0.6.0",
+  "identifier": "net.nh-reader.client",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://127.0.0.1:14440",
@@ -12,12 +12,12 @@
   "app": {
     "windows": [
       {
-        "title": "NH Desktop",
+        "title": "NH Reader",
         "width": 1100,
         "height": 720,
         "minWidth": 720,
         "minHeight": 540,
-        "decorations": false
+        "decorations": true
       }
     ],
     "security": {
@@ -34,6 +34,44 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "nsis": {
+        "installMode": "both",
+        "installerIcon": "icons/icon.ico",
+        "headerImage": "windows/header.bmp",
+        "sidebarImage": "windows/sidebar.bmp",
+        "installerHooks": "windows/hooks.nsh",
+        "languages": [
+          "English"
+        ],
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "language": "en-US"
+      }
+    },
+    "macOS": {
+      "dmg": {
+        "windowSize": {
+          "width": 660,
+          "height": 400
+        },
+        "appPosition": {
+          "x": 180,
+          "y": 170
+        },
+        "applicationFolderPosition": {
+          "x": 480,
+          "y": 170
+        }
+      }
+    },
+    "android": {
+      "minSdkVersion": 24
+    },
+    "iOS": {
+      "developmentTeam": ""
+    }
   }
 }

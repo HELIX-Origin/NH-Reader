@@ -1,6 +1,7 @@
 import { backend } from '$lib/client';
 
-const PREFIX = 'nh-desktop:';
+const PREFIX = 'nh-reader:';
+const LEGACY_PREFIX = 'nh-desktop:';
 
 const memory = new Map<string, string>();
 
@@ -41,11 +42,19 @@ export async function cacheInit(): Promise<void> {
 	for (const [key, value] of rows) {
 		if (key.startsWith(PREFIX) || !key.includes(':')) {
 			memory.set(key, value);
+		} else if (key.startsWith(LEGACY_PREFIX)) {
+			const migrated = PREFIX + key.slice(LEGACY_PREFIX.length);
+			memory.set(migrated, value);
+			backend.dbSet(migrated, value).catch(() => undefined);
 		}
 	}
 }
 
 export async function cacheFlush(): Promise<void> {
-	memory.clear();
-	await backend.dbClear().catch(() => undefined);
+	for (const key of [...memory.keys()]) {
+		if (key.startsWith(PREFIX + 'cache:') || key.startsWith(LEGACY_PREFIX + 'cache:')) {
+			memory.delete(key);
+		}
+	}
+	await backend.clearQueryCache().catch(() => undefined);
 }

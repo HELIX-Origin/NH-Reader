@@ -1,8 +1,12 @@
 <script lang="ts">
-	import { getServiceJobs, removeJobs } from '$lib/stores/service.svelte';
-	import { enqueueDownload } from '$lib/stores/service.svelte';
-	import DownloadButton from '$lib/components/DownloadButton.svelte';
+	import {
+		getServiceJobs,
+		removeJobs,
+		enqueueDownload,
+		openDownloadsFolder,
+	} from '$lib/stores/service.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 
 	const downloads = $derived(getServiceJobs().filter((j) => j.kind === 'download'));
 
@@ -22,27 +26,36 @@
 	function clearAll() {
 		removeJobs((j) => j.kind === 'download');
 	}
+
+	async function onOpenFolder() {
+		try {
+			await openDownloadsFolder();
+		} catch {}
+	}
 </script>
 
 <svelte:head>
-	<title>Downloads — NH Desktop</title>
+	<title>{locale.t('downloads.title')} — {locale.t('app.name')}</title>
 </svelte:head>
 
 <div class="page" data-scope="page-downloads">
 	<div class="page-head">
-		<h2>Downloads</h2>
-		{#if downloads.length > 0}
-			<div class="btn-group">
-				<button class="btn" onclick={clearFinished}>Clear finished</button>
-				<button class="btn" onclick={clearAll}>Clear all</button>
-			</div>
-		{/if}
+		<h2>{locale.t('downloads.title')}</h2>
+		<div class="btn-group">
+			<button class="btn" onclick={onOpenFolder} title={locale.t('settings.openFolder')}>
+				<Icon name="folder" size={15} />
+				<span>{locale.t('settings.openFolder')}</span>
+			</button>
+			{#if downloads.length > 0}
+				<button class="btn" onclick={clearFinished}>{locale.t('downloads.clearFinished')}</button>
+				<button class="btn" onclick={clearAll}>{locale.t('downloads.clearAll')}</button>
+			{/if}
+		</div>
 	</div>
 
 	{#if downloads.length === 0}
 		<p class="empty faint">
-			No download jobs yet. Open a gallery and use its Download button to save a ZIP or CBZ
-			archive.
+			{locale.t('downloads.empty')}
 		</p>
 	{:else}
 		<ul class="dl-list">
@@ -63,11 +76,11 @@
 					<span class="dl-main">
 						<span class="dl-title">
 							{#if job.galleryId}
-								<a class="dl-link" href={`/gallery/${job.galleryId}`}>Gallery #{job.galleryId}</a>
+								<a class="dl-link" href={`/gallery/${job.galleryId}`}>{locale.t('downloads.galleryPrefix')}{job.galleryId}</a>
 							{:else}
-								<span>{job.label ?? 'Download'}</span>
+								<span>{job.label ?? locale.t('downloads.download')}</span>
 							{/if}
-							{#if job.format}<span class="tag-fmt">{FORMAT_LABEL[job.format]} file</span>{/if}
+							{#if job.format}<span class="tag-fmt">{FORMAT_LABEL[job.format]} {locale.t('downloads.file')}</span>{/if}
 						</span>
 
 						{#if job.state === 'running' && job.total}
@@ -78,20 +91,23 @@
 								></div>
 							</div>
 						{:else if job.state === 'finished'}
-							<span class="dl-note" title={job.message}>{job.message ?? 'Finished'}</span>
+							<span class="dl-note" title={job.message}>{job.message ?? locale.t('downloads.finished')}</span>
 						{:else if job.state === 'failed'}
-							<span class="dl-note err" title={job.error}>{job.error ?? 'Failed'}</span>
+							<span class="dl-note err" title={job.error}>{job.error ?? locale.t('downloads.failed')}</span>
 						{:else}
-							<span class="dl-note">Queued…</span>
+							<span class="dl-note">{locale.t('downloads.queued')}</span>
 						{/if}
 					</span>
 
 					<span class="dl-actions">
 						{#if job.state === 'finished'}
 							{#if job.galleryId}
-								<DownloadButton galleryId={job.galleryId} />
+								<a class="btn" href={`/gallery/${job.galleryId}`} title={locale.t('reader.title')}>
+									<Icon name="book" size={14} />
+									<span>{locale.t('reader.title')}</span>
+								</a>
 							{/if}
-							<button class="icon-btn" onclick={() => removeJobs((j) => j.jobId === job.jobId)} aria-label="Remove">
+							<button class="icon-btn" onclick={() => removeJobs((j) => j.jobId === job.jobId)} aria-label={locale.t('downloads.remove')}>
 								<Icon name="close" size={15} />
 							</button>
 						{:else if job.state === 'failed'}
@@ -103,15 +119,15 @@
 										redownload(job.galleryId!, job.format);
 									}}
 								>
-									Retry
+									{locale.t('downloads.retry')}
 								</button>
 							{:else}
-								<button class="icon-btn" onclick={() => removeJobs((j) => j.jobId === job.jobId)} aria-label="Remove">
+								<button class="icon-btn" onclick={() => removeJobs((j) => j.jobId === job.jobId)} aria-label={locale.t('downloads.remove')}>
 									<Icon name="close" size={15} />
 								</button>
 							{/if}
 						{:else}
-							<button class="icon-btn" onclick={() => removeJobs((j) => j.jobId === job.jobId)} aria-label="Remove">
+							<button class="icon-btn" onclick={() => removeJobs((j) => j.jobId === job.jobId)} aria-label={locale.t('downloads.remove')}>
 								<Icon name="close" size={15} />
 							</button>
 						{/if}

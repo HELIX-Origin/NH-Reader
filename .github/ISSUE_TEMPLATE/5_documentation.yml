@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Accurate, high-quality documentation is a priority for NH Desktop.
-        Before filing, please review our [Wiki](https://github.com/HELIX-Origin/nhentai-desktop/wiki).
+        Before filing, please review our [Wiki](https://github.com/HELIX-Origin/NH-Reader/wiki).
   - type: dropdown
     id: doc_target
     attributes:

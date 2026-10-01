@@ -1,65 +1,43 @@
-# NH Desktop v0.4.0
+# NH Reader 0.6.0
 
-**Release date:** 2026-09-30
+NH Reader 0.6.0 is a major milestone delivering a completely rebuilt native installer engine, an all-new Library tab with offline archive reading, official API archive downloads, an account authentication modal, Mihon-style floating navigation, squircle design, and seamless process lifecycle handling.
 
-## ✨ Highlights
+## Highlights
 
-NH Desktop v0.4.0 introduces a dedicated uninstaller executable (`uninstall.exe` on Windows) that eliminates file-locking issues during uninstallation, aligns publisher attribution to **HELIX Origin** in system settings, and debuts a streamlined 100% drop-in hand-rolled localization architecture. This release also resolves gallery download failures with a direct in-app archive pipeline and fixes favorite button state synchronization so gallery detail views update immediately.
+- **Rebuilt Native Installer Engine** — Replaced custom installer routes and bespoke scripts with native Tauri packaging (`tauri build`) using a custom NSIS template (`hooks.nsh`). Delivers a custom NSIS setup with per-user and per-machine installation scopes, enterprise WiX MSI packages, and automatic registration in standard Windows Apps & Features uninstallation.
+- **Dedicated Library & Offline Doujin Reading** — Browse and read your downloaded `.zip` and `.cbz` archives directly from the new Library tab, 100% offline without network requests.
+- **Official API Archive Downloads** — Downloads now adopt nhentai API v2's dedicated archive endpoint (`POST /api/v2/galleries/{id}/download`), fetching pre-packaged zip/cbz archives directly with real-time streaming progress.
+- **Dedicated Account Sign-In Modal** — Log in with official API keys (bypassing Cloudflare CAPTCHAs) or credentials, with live profile/avatar rendering and decoupled tag blacklist synchronization.
+- **Mihon-Style Floating Navigation & Squircle Corners** — Modern floating bottom bar with rounded squircle corners (8px - 10px), elevated backdrop blur, and native OS window chrome with an in-app drag header.
+- **Decoupled Architecture & Rebrand** — Transitioned identity and storage to NH Reader (`NH Reader.exe`, `net.nh-reader.client`) with decoupled database persistence (`database.sqlite`).
 
-## 🚀 Key Improvements & Features
+## New
 
-- **Dedicated uninstaller executable** — Deploys an independent `uninstall.exe` (Windows) and `uninstall` (Linux) alongside `NH Desktop.exe`. When launched, the uninstaller relocates to a temporary directory before execution so neither binary holds a file lock on the installation directory, allowing `remove_dir_all` to cleanly remove all application files without permission or sharing errors.
-- **Reliable in-app gallery downloads** — Replaced the external API-key download requirement with a direct in-app pipeline that streams gallery pages and packages them locally into clean `.zip` or `.cbz` archives with live per-page progress reporting.
-- **Instant favorites synchronization** — Fixed the favorites button on gallery detail pages to reactively reflect and update its state ("Favorite" vs "Saved") immediately upon clicking.
-- **Publisher attribution to HELIX Origin** — Windows Add/Remove Programs (installed apps) now displays the correct publisher, `HELIX Origin`, matching the GitHub organization owning the repository.
-- **100% drop-in localization architecture** — Replaced the fluent dependency tree with a zero-dependency, high-performance `LocaleCatalog` class using Vite dynamic glob imports. Hand-rolled English (`en.json`) is the default source of truth, with automatic fallback to your operating system locale.
-- **Effortless community translations** — Adding a language requires no code modifications or registry edits. Simply drop `<locale>.json` into `src/lib/i18n/` and validate with `npm run i18n:check`.
-- **Comprehensive translation contribution guide** — Added full documentation and complete 78-key JSON schema reference with field explanations in `CONTRIBUTING.md`.
-- **Hardened SQLite concurrency** — Added mutex poison recovery to database connection handling in `db.rs` (`lock_conn()`), preventing application panics if a mutex lock is poisoned.
+- Rebuilt installer using Tauri's native packaging toolchain with custom NSIS template scripting (`hooks.nsh`) for Windows installation.
+- Full uninstaller integration into Windows Settings ("Installed apps" / "Add or remove programs").
+- Self-contained portable mode via `.portable` marker or `data/` directory, isolating the database, image cache, and downloads beside the executable.
+- Dedicated `/library` tab organizing downloaded doujins, downloaded favorites, and reading history.
+- Direct-from-archive page reader streaming pages from `.zip` and `.cbz` archives without network access.
+- Account sign-in dialog supporting both API Key and username/password authentication with real-time profile rendering.
+- Library favorites filter that strictly isolates downloaded favorites from global favorites.
+- Configurable dynamic UI scaling that automatically fills rows to eliminate empty card gaps.
+- Standalone Windows code-signing pipeline (`scripts/sign.ps1`, `npm run sign:windows`).
 
-## ✅ Changed
+## Improved
 
-- Bumped project version to `0.4.0` across `package.json`, `Cargo.toml`, `tauri.conf.json`, `Cargo.lock`, and sidebar UI.
-- Updated Windows registry uninstaller registration to point `UninstallString` directly to `uninstall.exe` with publisher `HELIX Origin`.
-- Aligned documentation across `README.md`, `CONTRIBUTING.md`, `ROADMAP.md`, `TODO.md`, and all `wiki/` pages.
+- Corner radiuses modernized to small squircle corners (8px - 10px) across cards, navigation pills, and tabs.
+- Solid opaque dark backgrounds across account modals and views, removing transparency and clipping.
+- Download progress event emissions throttled to prevent UI freezing during high-speed downloads.
+- Full-width settings layouts that naturally expand across wide screens.
+- Comprehensive platform documentation noting that Android and iOS builds are currently community-supported and untested by the maintainer.
 
-## 🐛 Fixed
+## Fixed
 
-- **Uninstaller file locking on Windows** — Previously, running the uninstaller from `NH Desktop.exe --installer --maintenance` caused Windows to lock the running executable, preventing `std::fs::remove_dir_all` from deleting program files. The new dedicated `uninstall.exe` executes from temp and cleanly removes the install directory.
-- **Gallery download failures** — Fixed background download failures by fetching pages directly from image hosts and compiling `.zip`/`.cbz` archives locally without requiring an API key.
-- **Favorites button state desync** — Fixed the favorite button so toggling immediately updates its visual state and label between "Favorite" and "Saved".
+- Resolved WebView2 `Chrome_WidgetWin_0` class unregister error (1411) and process hangs on window exit.
+- Fixed avatar image URL resolution for protocol-relative paths (`//static.nhentai.net/...`).
+- Fixed file locking collisions when completing downloads on Windows.
+- Resolved tag ID formatting issues when synchronizing account blacklists.
 
-## 📦 Install & Upgrading
+## Upgrade
 
-Download the installer for your platform from the Assets section below:
-
-- Windows: `NH Desktop-Setup-0.4.0-win-x64.exe`
-- macOS: `NH Desktop-Setup-0.4.0-macos-arm64` (or `macos-x64` if available)
-- Linux: `NH Desktop-Setup-0.4.0-linux-x64`
-
-Upgrade in place: run the new installer over your existing installation. The unified installer will replace files, place the dedicated `uninstall.exe`, and update shortcuts and registry entries.
-
-## Verification
-
-- `cargo check` + `cargo test` (src-tauri) — passed (10/10)
-- `npm run check` (svelte-check) — 0 errors, 0 warnings
-- `npm run build` — adapter-static site generated successfully
-- `npm run i18n:check` — 78/78 keys validated
-- `node scripts/check-agents.mjs --all` — whole tree compliant (61 source files)
-- `npm run build:installer` — produces `NH Desktop-Setup-0.4.0-win-x64.exe` and `uninstall.exe`
-
-## 📄 Changes & Commits
-
-- `chore(release): bump version to 0.3.0 and prepare release notes`
-- `feat(i18n): add localization, language packs, and system-locale default (M9)`
-- `fix(installer): defer launch until Finish click; feat(ui): context-aware titlebar search`
-- `docs: remove Status column from CHANGELOG.md summary table`
-- `docs: expand CHANGELOG.md with detailed sub-bullets`
-- `docs: update CHANGELOG.md bullet format to match template`
-- `docs: update CHANGELOG.md to latest template format`
-- `docs: update CHANGELOG.md commit-link format to match template`
-- `docs(templates): update changelog template to match actual CHANGELOG.md format`
-- `docs: add CHANGELOG.md following project template`
-- `docs(templates): fix changelog template to custom format`
-
-Full commit history: `git log --oneline v0.2.1..v0.3.0`
+- Download the installer or package for your platform and install it over your existing version. Your SQLite database (`database.sqlite`), favorites, reading history, downloaded archives, and settings carry over automatically.

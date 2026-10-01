@@ -35,25 +35,24 @@ returns.
 
 ## 🛠️ Managing the blocklist
 
-**Blacklist** in the sidebar opens the management view:
+**Blacklist** in the bottom navigation bar opens the management view:
 
+- **Top-bar quick toggle** — the top bar displays a quick blacklist badge with status indicator and active count, enabling instant 1-click toggling.
 - **Add a tag** — from any gallery (quick-add in the detail page) or manually by name/type
   (artist, character, parody, group, language, category, tag).
 - **Add text patterns** — e.g. a series name you're tired of. Text entries are matched against
   gallery text fields client-side.
 - **Remove / edit entries** — inline in the list.
-- **Import/export** — JSON export/import of the whole list (planned — see
-  [Roadmap](Roadmap)).
+- **Import/export** — 1-click JSON export/import of your entire blacklist, accessible directly from the view and Settings Data management.
 
 ## 🕵️ Privacy & where it lives
 
-- Blacklist entries persist in `nh-desktop.db` via the SQLite-backed cache. They **never leave
+- Blacklist entries persist in `database.sqlite` via the SQLite-backed cache. They **never leave
   your device** except as tag-excludes rewritten into a query sent to nhentai.net — the site
   never sees a "blacklist", only normal exclude tokens.
-- There is no server-side "blacklist account" unless you also use the **optional API key**
-  account-sync feature (`fetch_account_blacklist` /
-  `update_account_blacklist`), which syncs with *your* nhentai.net account's own blacklist —
-  your choice.
+- There is no server-side "blacklist account" unless you also use the **optional account / API key**
+  account-sync feature (`fetch_account_blacklist` / `update_account_blacklist`).
+- When syncing with nhentai.net, the app sends resolved numeric tag IDs directly to `POST /api/v2/blacklist`, keeping the blacklist strictly isolated from profile metadata, usernames, and favorite tags.
 
 ## 🖼️ Behavior in grids
 

@@ -7,6 +7,7 @@
 	import Loader from '$lib/components/Loader.svelte';
 	import ErrorNotice from '$lib/components/ErrorNotice.svelte';
 	import Pager from '$lib/components/Pager.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 
 	const current = $derived(Number(page.url.searchParams.get('page')) || 1);
 
@@ -47,12 +48,12 @@
 
 <div class="page" data-scope="page-latest">
 	<div class="page-head">
-		<h1>Latest</h1>
-		<span class="faint">Recently uploaded galleries</span>
+		<h1>{locale.t('latest.title')}</h1>
+		<span class="faint">{locale.t('latest.subtitle')}</span>
 	</div>
 
 	{#if loading && !data}
-		<Loader label="Loading latest galleries…" />
+		<Loader label={locale.t('latest.loading')} />
 	{:else if error && !data}
 		<ErrorNotice message={error} onretry={retry} />
 	{:else if data}

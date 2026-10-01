@@ -1,39 +1,22 @@
 # Rule: Installer and packaging
 
-**Status:** CONDITIONAL
-**Triggers:** editing `src-tauri/src/installer.rs`, `src-tauri/src/platform/**`,
-`scripts/build-installer.mjs`, `tauri.conf.json` bundling, or anything about install /
-uninstall / update
-**Enforced by:** `cargo check` + review
+**Status:** MANDATORY
+**Triggers:** editing `tauri.conf.json` bundling, or anything about packaging / installers
+**Enforced by:** `npm run check:agents` + `npm run build:app`
 
 ## Must
 
-- **One binary is both app and installer.** No NSIS, no WiX, no MSI, no external
-  installer framework. Maintenance mode is the same Rust code path, keyed off a flag
-  passed by the build script.
-- **Dedicated uninstaller executable.** Deploys `uninstall.exe` on Windows (`uninstall` on
-  Linux) alongside the app binary, executing from temp on invocation to avoid locking
-  files so the installation directory can be completely deleted.
-- **Platform differences go in `src-tauri/src/platform/{windows,macos,linux}.rs`**, behind
-  the shared surface in `platform/mod.rs`. `installer.rs` holds the shared flow only.
-- **The single-instance plugin does not cover installer/maintenance mode.** That mode
-  builds and runs its own app instance on purpose. Do not "fix" this by registering the
-  plugin there.
-- **Path handling is per-platform.** Use the platform module, never a hardcoded
-  `C:\`/`/Users` assumption in shared code.
-- **Never remove a downloaded payload before the new one is in place.** Write to a temp
-  path, then rename atomically.
-- **Uninstall is total.** Leaving cache, settings, or the SQLite db behind after an
-  explicit uninstall is a bug unless the user kept their library deliberately.
+- **Use Tauri native packaging for desktop installers.** Native NSIS (`.exe`) and WiX MSI (`.msi`) on Windows, DMG on macOS, and deb/AppImage on Linux.
+- **Support both release and debug native builds.** `npm run build:app` (`tauri build`) and `npm run build:app:debug` (`tauri build --debug`), as well as cargo equivalents (`cargo tauri build`).
+- **Portable mode runtime isolation.** When `.portable` marker or `data/` directory exists adjacent to the executable, application database, cache, and downloads stay self-contained inside that folder.
+- **Clean system uninstaller.** Native installers manage registration with Windows "Apps & features" / system uninstallation mechanisms.
 
 ## Never
 
-- Never introduce an external installer dependency.
-- Never shell out to `msiexec`, `makensis`, or `dmg` from Rust.
-- Never assume Windows for a step that runs on macOS or Linux.
-- Never block the UI thread on a long copy or delete.
+- Never fetch nhentai from webview or bypass Rust IPC.
+- Never hardcode user paths; use Tauri's path resolution APIs.
+- Never ship installers that omit production webview assets.
 
 ## Verify
 
-`cargo check` and `cargo test` in `src-tauri/`, plus a manual pass of install → launch →
-update → uninstall on the platform you touched.
+`npm run check:agents`, `cargo check` and `cargo test` in `src-tauri/`, plus `npm run build:app`.

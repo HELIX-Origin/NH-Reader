@@ -1,26 +1,26 @@
 # Privacy
 
-What NH Desktop stores, what it sends, and what it never does.
+What NH Reader stores, what it sends, and what it never does.
 
-> Full policy: [PRIVACY.md](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/PRIVACY.md)
+> Full policy: [PRIVACY.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/PRIVACY.md)
 > (repo root). This wiki page is the short version.
 
 ## 💾 What stays on your device
 
 | Data | Storage |
 | --- | --- |
-| Favorites, history, blacklist, settings | SQLite `kv` table in `nh-desktop.db` |
-| API key + cache mirror (`nh-desktop:…` entries) | `nh-desktop.db` (SQLite in app data dir) |
+| Favorites, history, blacklist, settings | SQLite `kv` table in `database.sqlite` |
+| API key / Token + cache mirror (`nh-reader:…` entries) | `database.sqlite` (SQLite in app data dir) |
+| Downloaded archives & image cache | `downloads/` and `cache/images/` |
 
 All of it is local. There is no app server; you are never "logged in" to anything except
-nhentai.net itself (optional, via API key).
+nhentai.net itself (optional, via API key or direct credentials).
 
 ## 🌐 What goes over the network
 
 - Requests to **nhentai.net** (API) and its image **CDNs** (`t.nhentai.net`,
-  `i.nhentai.net`) — only what you trigger by browsing, searching, or loading an image.
-- If you supply an API key, authenticated requests go to nhentai.net so it can return your
-  favorites/blacklist/settings. The key is used by nhentai.net's service, not by us.
+  `i.nhentai.net`, `static.nhentai.net`) — only what you trigger by browsing, searching, or loading an image.
+- If you supply an API key or log in with credentials, authenticated requests go directly to nhentai.net over HTTPS to synchronize favorites/blacklist or fetch official archives. Your credentials/keys are never sent to any third party.
 
 ## 🚫 What it does **not** do
 
@@ -31,10 +31,9 @@ nhentai.net itself (optional, via API key).
 
 ## 🗑️ Deleting your data
 
-- Clear the cache from **Settings → Cache**.
-- Clear favorites/history/blacklist from the corresponding views (or clear site data).
-- Full removal: uninstall with **Remove user data** checked — wipes `nh-desktop.db` and the
-  on-disk image cache.
+- Clear the image cache or query cache from **Settings → Storage & Cache**.
+- Clear favorites/history/blacklist from the corresponding views or export them to JSON for backups.
+- Full removal: delete the `%LOCALAPPDATA%\net.nh-reader.client` folder (or local `data/` folder in portable mode) to wipe `database.sqlite` and all cached files.
 
 ## 🧩 Third-party
 
@@ -44,7 +43,7 @@ The app is built on Tauri (Rust), SvelteKit, and reuses only standard dependenci
 ## 📮 Contact
 
 Questions/requests → GitHub issues on
-[HELIX-Origin/nhentai-desktop](https://github.com/HELIX-Origin/nhentai-desktop) or the
+[HELIX-Origin/NH-Reader](https://github.com/HELIX-Origin/NH-Reader) or the
 maintainer contact in PRIVACY.md.
 
 ## 🔗 Related

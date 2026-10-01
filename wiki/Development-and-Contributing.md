@@ -1,6 +1,6 @@
 # Development & Contributing
 
-How to build, test, and contribute to NH Desktop.
+How to build, test, and contribute to NH Reader.
 
 ## 🏗️ Project layout
 
@@ -12,10 +12,9 @@ BUGS.md          known issues
 wiki/            GitHub wiki source (copy to .wiki.git to publish)
 src/             SvelteKit static SPA
 src-tauri/       Rust backend (Tauri 2)
-  src/nh_desktop.rs (API client), commands.rs (45 commands),
+  src/nh_desktop.rs (API client), commands.rs (Tauri commands),
       service.rs (background queue), image_cache.rs (disk cache),
-      db.rs (SQLite), installer.rs, platform/{mod,windows,macos,linux}.rs
-scripts/         build-installer.mjs
+      db.rs (SQLite)
 ```
 
 The `.agents/` ecosystem holds rules, agent roles, and workflows used alongside AI-assisted
@@ -33,20 +32,21 @@ then `.agents/ROLES.md`. `npm run check:agents` mechanically gates it.
 | Task | Command |
 | --- | --- |
 | Install deps | `npm install` |
-| Dev app | `npm run dev:tauri` (Tauri dev; Vite serves on the fixed port **14440**) |
+| Dev app | `npm run dev:app` (Tauri dev; Vite serves on the fixed port **14440**) |
 | Frontend type/lint | `npm run check` |
 | Frontend build | `npm run build` |
 | i18n completeness | `npm run i18n:check` |
 | Rust check | `cargo check` (in `src-tauri/`) |
 | Rust tests | `cargo test` (in `src-tauri/`) |
-| Installer binary | `npm run build:installer` |
+| App release bundle | `npm run build:app` |
+| App debug bundle | `npm run build:app:debug` |
 
 **Always** run `npm run check` for frontend changes and `cargo check` (+ `cargo test` when
 relevant) for Rust changes before calling a task done. For translation contributions, run `npm run i18n:check`.
 
 ## ⚠️ Working rules
 
-- Product identity is **NH Desktop** (the folder name is a misnomer, not the product
+- Product identity is **NH Reader** (the folder name is a misnomer, not the product
   name; see `.agents/rules/identity.md`).
 - Respect nhentai.net: throttle, no scraping, no hammering — it's a public API, be polite.
 - No panics across the command boundary (return `Result<_, String>`).
@@ -60,15 +60,15 @@ relevant) for Rust changes before calling a task done. For translation contribut
 3. Open a PR to `main` referencing the issue.
 4. Link the PR/commit in `TODO.md` when a task lands.
 
-To contribute translations, see [Contributing Translations](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/CONTRIBUTING.md#contributing-translations) and [Localization](Localization). Language packs are 100% drop-in JSON files.
+To contribute translations, see [Contributing Translations](https://github.com/HELIX-Origin/NH-Reader/blob/main/CONTRIBUTING.md#contributing-translations) and [Localization](Localization). Language packs are 100% drop-in JSON files.
 
 ## 📜 License
 
-BSD 3-Clause — see the repo root [LICENSE.md](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/LICENSE.md) (or [README.md](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/README.md)) for details. Note the project policy in
-[PRIVACY.md](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/PRIVACY.md) and
-[TOS.md](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/TOS.md).
+BSD 3-Clause — see the repo root [LICENSE.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/LICENSE.md) (or [README.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/README.md)) for details. Note the project policy in
+[PRIVACY.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/PRIVACY.md) and
+[TOS.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/TOS.md).
 
 ## 🔗 Related
 
-- [Roadmap](Roadmap) · [Backend (Rust)](Backend-Rust) ·
+- [ROADMAP.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md) · [Backend (Rust)](Backend-Rust) ·
   [Frontend (SvelteKit)](Frontend-SvelteKit) · [Architecture](Architecture)

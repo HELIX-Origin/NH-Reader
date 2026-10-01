@@ -27,7 +27,7 @@ Preparing files is fine; tagging, pushing, and publishing are not.
    Read every output. A red build does not get tagged.
 7. **Stage only release files** — never `git add .`. Confirm nothing unrelated rides along.
 8. **Commit** with the release message, using `-m` (no editor).
-9. **Tag annotated:** `git tag -a v<version> -m "NH Desktop v<version>"`.
+9. **Tag annotated:** `git tag -a v<version> -m "NH Reader v<version>"`.
 10. **Stop.** Report the commit and tag. Do not push unless asked.
 
 ## Never

@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { api } from '$lib/api';
+	import { backend } from '$lib/client';
 	import { getSettings, updateSettings } from '$lib/stores/settings.svelte';
 	import { addToHistory } from '$lib/stores/library.svelte';
 	import type { GalleryDetail } from '$lib/types';
@@ -10,6 +11,7 @@
 	import Loader from '$lib/components/Loader.svelte';
 	import ErrorNotice from '$lib/components/ErrorNotice.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 	import { thumbPath } from '$lib/image';
 
 	const id = $derived(Number(page.params.id));
@@ -93,10 +95,43 @@
 					visitedAt: Date.now(),
 				});
 			})
-			.catch((e) => {
-				if (!cancelled) {
-					error = String(e);
+			.catch(async (e) => {
+				if (cancelled) return;
+				try {
+					const dl = await backend.getDownloadedGalleryInfo(id);
+					if (cancelled) return;
+					gallery = {
+						id: dl.id,
+						media_id: String(dl.id),
+						title: { english: dl.title, japanese: null, pretty: dl.title },
+						cover: { path: '', width: 300, height: 400 },
+						thumbnail: { path: '', width: 250, height: 350 },
+						tags: [],
+						num_pages: dl.total_pages,
+						pages: dl.pages.map((p, idx) => ({
+							number: idx + 1,
+							path: p,
+							width: 1200,
+							height: 1600,
+							thumbnail: p,
+							thumbnail_width: 250,
+							thumbnail_height: 350,
+						})),
+					};
 					loading = false;
+					addToHistory({
+						galleryId: dl.id,
+						mediaId: String(dl.id),
+						englishTitle: dl.title,
+						thumbnail: '',
+						numPages: dl.total_pages,
+						visitedAt: Date.now(),
+					});
+				} catch {
+					if (!cancelled) {
+						error = String(e);
+						loading = false;
+					}
 				}
 			});
 		return () => {
@@ -115,17 +150,17 @@
 </script>
 
 <svelte:head>
-	<title>{gallery?.title.english ?? 'Reader'} — NH Desktop</title>
+	<title>{gallery?.title.english ?? locale.t('reader.title')} — {locale.t('app.name')}</title>
 </svelte:head>
 
 {#if loading && !gallery}
-	<div class="page" data-scope="page-reader"><Loader label="Loading reader…" /></div>
+	<div class="page" data-scope="page-reader"><Loader label={locale.t('reader.loading')} /></div>
 {:else if error && !gallery}
 	<div class="page" data-scope="page-reader"><ErrorNotice message={error} onretry={() => (loading = true)} /></div>
 {:else if gallery}
 	<div class="reader" data-scope="page-reader" role="group">
 		<header class="bar">
-			<button class="btn btn-ghost icon-now" onclick={bounce} aria-label="Back to gallery">
+			<button class="btn btn-ghost icon-now" onclick={bounce} aria-label={locale.t('reader.backToGallery')}>
 				<Icon name="arrow-left" size={16} />
 			</button>
 
@@ -135,13 +170,13 @@
 
 			<div class="controls">
 				<span class="pos">{orderedPages.length ? currentIdx + 1 : 0} / {orderedPages.length}</span>
-				<button class="btn btn-ghost" onclick={() => updateSettings({ readerRtl: !settings.readerRtl })} title="Toggle reading order">
+				<button class="btn btn-ghost" onclick={() => updateSettings({ readerRtl: !settings.readerRtl })} title={locale.t('reader.toggleReadingOrder')}>
 					<Icon name="book" size={14} />
-					{settings.readerRtl ? 'RTL' : 'LTR'}
+					{settings.readerRtl ? locale.t('reader.readingOrderRtl') : locale.t('reader.readingOrderLtr')}
 				</button>
-				<button class="btn btn-ghost" onclick={cycleFit} title="Cycle fit mode">
+				<button class="btn btn-ghost" onclick={cycleFit} title={locale.t('reader.cycleFitMode')}>
 					<Icon name="eye" size={14} />
-					{FIT_LABEL[settings.readerFit]}
+					{settings.readerFit === 'width' ? locale.t('reader.fitWidth') : settings.readerFit === 'height' ? locale.t('reader.fitHeight') : locale.t('reader.fitPage')}
 				</button>
 				<a class="icon-now btn btn-ghost" href={`https://nhentai.net/g/${id}`}>
 					<Icon name="external" size={14} />
@@ -164,11 +199,11 @@
 			}}
 		>
 			{#if pages.length === 0}
-				<p class="faint">No page data available for this gallery.</p>
+				<p class="faint">{locale.t('reader.noPageData')}</p>
 			{:else}
 				{#each shown as p, i}
 					<div class="layer" class:visible={p.number === current?.number}>
-						<ReaderImage page={p} fit={settings.readerFit} visible={p.number === current?.number} />
+						<ReaderImage page={p} galleryId={id} fit={settings.readerFit} visible={p.number === current?.number} />
 					</div>
 				{/each}
 			{/if}
@@ -179,7 +214,7 @@
 				class="edge-btn"
 				disabled={settings.readerRtl ? isLast : currentIdx <= 0}
 				onclick={() => (settings.readerRtl ? forward() : back())}
-				aria-label="Previous page"
+				aria-label={locale.t('reader.prevPage')}
 			>
 				<Icon name="chevron-left" size={22} />
 			</button>
@@ -187,7 +222,7 @@
 				class="edge-btn"
 				disabled={!settings.readerRtl ? isLast : currentIdx <= 0}
 				onclick={() => (!settings.readerRtl ? forward() : back())}
-				aria-label="Next page"
+				aria-label={locale.t('reader.nextPage')}
 			>
 				<Icon name="chevron-right" size={22} />
 			</button>

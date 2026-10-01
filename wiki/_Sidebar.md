@@ -1,4 +1,4 @@
-# NH Desktop — Wiki
+# NH Reader — Wiki
 
 - **[Home](Home)**
 - **[Getting Started](Getting-Started)**
@@ -18,7 +18,7 @@
 - [Architecture](Architecture)
 - [Backend (Rust)](Backend-Rust)
 - [Frontend (SvelteKit)](Frontend-SvelteKit)
-- [Installer Engine](Installer-Engine)
+- [Packaging & Bundling](Installer-Engine)
 
 ## 📚 Reference
 
@@ -26,5 +26,4 @@
 - [Privacy](Privacy)
 - [Troubleshooting](Troubleshooting)
 - [FAQ](FAQ)
-- [Roadmap](Roadmap)
 - [Development & Contributing](Development-and-Contributing)

@@ -12,6 +12,7 @@
 	import FilterPanel from '$lib/components/FilterPanel.svelte';
 	import Drawer from '$lib/components/Drawer.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 
 	function freshModel(): FilterModel {
 		return {
@@ -97,14 +98,14 @@
 
 <div class="page" data-scope="page-search">
 	<div class="page-head">
-		<h1>Search</h1>
+		<h1>{locale.t('search.title')}</h1>
 		{#if appliedQuery}
 			<span class="query-pill truncate secondary" title={appliedQuery}>{appliedQuery}</span>
 		{/if}
 		<span class="spacer"></span>
 		<button class="btn" class:active={filterCount > 0} onclick={() => (drawerOpen = true)}>
 			<Icon name="filter" size={15} />
-			Filters
+			{locale.t('search.filters')}
 			{#if filterCount > 0}
 				<span class="count">{filterCount}</span>
 			{/if}
@@ -115,33 +116,33 @@
 		<Icon name="search" size={17} />
 		<input
 			class="search-input"
-			placeholder="Search titles, tags, artists, parodies…  e.g. blue archive, -tag:loli, language:english"
+			placeholder={locale.t('search.placeholder')}
 			bind:value={model.query}
-			aria-label="Search query"
+			aria-label={locale.t('search.title')}
 		/>
 		<button class="btn btn-primary" type="submit" disabled={!model.query.trim() && filterCount === 0}>
-			Search
+			{locale.t('search.submit')}
 		</button>
 	</form>
 
 	{#if loading && !results}
-		<Loader label="Searching…" />
+		<Loader label={locale.t('search.searching')} />
 	{:else if error && !results}
 		<ErrorNotice message={error} onretry={() => tick++} />
 	{:else if !appliedQuery}
 		<EmptyState
 			icon="search"
-			title="Refine instead of scrolling"
-			description="Use tags, language, category and page-count filters to cut the haystack down to exactly what you want."
+			title={locale.t('search.refineTitle')}
+			description={locale.t('search.refineDesc')}
 		/>
 	{:else if results && results.result.length === 0}
-		<EmptyState icon="search" title="No results" description="Try fewer or broader filters." />
+		<EmptyState icon="search" title={locale.t('search.noResultsTitle')} description={locale.t('search.noResultsDesc')} />
 	{:else if results}
 		<GalleryGrid galleries={results.result} />
 		<Pager page={pageNum} numPages={results.num_pages} ongoto={(n) => ((pageNum = n), (tick++))} />
 	{/if}
 </div>
 
-<Drawer title="Search filters" open={drawerOpen} width={400} onclose={() => (drawerOpen = false)}>
+<Drawer title={locale.t('search.filterDrawerTitle')} open={drawerOpen} width={400} onclose={() => (drawerOpen = false)}>
 	<FilterPanel model={model} onupdate={updateModel} />
 </Drawer>

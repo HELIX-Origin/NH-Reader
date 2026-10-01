@@ -21,8 +21,7 @@
   despite valid metadata (CDN re-encoding, `webp` shifts). Proxy fallback (cache-backed
   `proxy_image`) + graceful placeholder required.
 - **Single-instance is app-wide:** running the app again focuses the existing window — by
-  design. The installer/maintenance mode builds its own Tauri app and is intentionally outside
-  the single-instance plugin.
+  design.
 - **Search semantics are the site's:** query syntax is nhentai's (`-`, `,`, `:`, ranges).
   Our UI builds it, but edge semantics (e.g. OR-within-type) are inherited, not invented.
 - **Upload-date "popular" ordering:** the site exposes no stable *popularity* sort in search;
@@ -35,31 +34,7 @@
 
 ## 🚨 Open
 
-- **Installed App Resource Packaging & Blank Screen on Launch (Breaking)** ([#4](https://github.com/HELIX-Origin/nhentai-desktop/issues/4)): Running the application from its installed directory does not load any interface content (blank window), whereas running in development mode (`npm run dev:tauri`) functions properly. The installer currently only places `NH Desktop.exe` and `uninstall.exe` into the installation folder, omitting app resources from the build phase. Additionally, production mode exhibits CSP restrictions and window routing issues that prevent SvelteKit from bootstrapping in production.
-  - *Steps to reproduce*: Run `npm run build:installer`, install to either user or system location, and launch `NH Desktop.exe` from the installation directory.
-  - *Expected behavior*: The installed application should launch with all necessary bundled resources and display the full UI without requiring a dev server.
-  - *Decided resolution plan*: Revert from the custom installer back to Tauri's native packaging (NSIS and MSI on Windows, deb/AppImage on Linux, dmg/app on macOS) to ensure complete resource bundling, proper dependency packaging, and rock-solid installation out-of-the-box. Research native installer customization options (custom NSIS template, header/sidebar graphics, dark styling, and DMG backgrounds) to match the intended visual aesthetic closely. Retain PortableApps format (`.paf.exe`) and portable `.zip` archives. Remove custom `/installer` routes and update CI/documentation accordingly. Scheduled for execution upon resume.
-- **Storage Problem**: The app is eating up a massive amount of storage. Potential Fixes include: 
-  - Optimize the data cache so only the necessary files are retained and old or redundant data is purged regularly.
-  - Introduce a method to store the cache into compressed archives to save space.
-  - Introduce a background cleanup task to periodically purge old or redundant cache files.
-  - Introduce a method for compressing the app's internal files via a suitable compression algorithm to save space. *(The app would need to be able to read from compressed files transparently. This would preferably be compressed resource packs that save space without degrading performance.)*
-- **UI Polish and Touch Up**: The app's user interface should be audited for any inconsistencies and areas that could benefit from visual refinement. Potential Fixes include:
-  - Standardize spacing, margins, and padding across all screens.
-  - Ensure consistent font sizes, colors, and styles throughout the app.
-  - Improve the responsiveness of UI elements to different screen sizes and orientations.
-  - Address any visual glitches or misalignments observed during usage.
-- **Theme Engine**: The app currently lacks a comprehensive theme engine, limiting customization options for users. Potential Fixes include:
-  - Implement a theme engine that allows users to switch between light, dark, and custom themes.
-  - Ensure that all UI components respond correctly to theme changes.
-  - Provide an option to save and load custom themes.
-  - Create multiple themes to have packaged into the app. We want modern themes with a unique visual identity for each. The themes should cover a range of aesthetics and provide a visually appealing experience for users. Each theme should have both light and dark modes that can be set via our theme toggle *(Light | Dark | System)*. Here are two themes I would like to include, but we should add more:
-    - **Compact**: A theme designed for efficiency and minimal screen real estate usage, with a focus on compact layouts and streamlined visuals.
-    - **Glassmorphism**: A theme featuring translucent elements, frosted glass effects, and a modern, layered aesthetic.
-    - **Acrylic**: A theme featuring semi-transparent elements, layered visuals, and a modern aesthetic, inspired by the Acrylic design language.
-    - **Liquid Glass**: A theme featuring translucent elements, frosted glass effects, and a modern, layered aesthetic. Inspired by the Liquid Glass effects in macOS 26.
-- **Navigation Buttons (Close | Minimize | Maximize)**: The macOS traffic light design we use is actually more due to the fact that the default ones on Windows and Linux are severely outdated and visually unappealing. We need to adjust them to incorporate the style of whatever theme is applied.
-- **Title Bar Menu Backgrounds**: When creating the theme engine, we need to ensure that the title bar menus have a consistent background that matches the overall theme and provides a visually appealing experience. A transparent background in the menus makes them illegible and detracts from the user experience.
+*No open bugs currently reported.*
 
 ## 📝 Filing a bug
 
@@ -90,10 +65,6 @@ Entry format once filed:
 | Severity | Description |
 | :---: | :---: |
 | 🚨 | The app is eating up a massive amount of storage |
-| 🚨 | Theme Engine does not apply correctly to all UI components |
-| ⚠️ | Navigation Buttons do not match the applied theme |
-| ⚠️ | Title Bar Menu Backgrounds are inconsistent with the theme |
-| ⚠️ | Navigation buttons need to be redesigned |
 | 🟡 | Some UI elements have minor visual inconsistencies |
 | 🟢 | Minor text alignment issues in certain UI components |
 
@@ -101,7 +72,10 @@ Entry format once filed:
 
 ## ✅ Fixed
 
-- **Installation Options (Fixed in v0.5.0)**: Added installation destination scopes during setup (Install for current user, Install for all users, Custom install directory with native folder browser dialog) dynamically tailored across Windows, Linux, and macOS, alongside an optional portable mode toggle and PortableApps PAF installer packaging.
+- **Window Close Interception & Chrome_WidgetWin_0 Error 1411 (Fixed in Track 8)**: Resolved issue where clicking the native window title bar close ("X") button intercepted close with `api.prevent_close()` and hid the window without exiting, creating a zombie background process that required forced SIGINT (`0xc000013a`) and caused WebView2 class unregister Error 1411. Removed premature Win32 `window.destroy()` calls and allowed `CloseRequested` to cleanly trigger `app.exit(0)`, enabling graceful shutdown of WebView2 and Tauri.
+- **Excessive Storage & Cache Problem (Fixed in Track 3)** ([#7](https://github.com/HELIX-Origin/NH-Reader/issues/7)): Implemented configurable cache storage budgets (500 MB to Unlimited), automatic background LRU cache pruning in `image_cache.rs` and `service.rs`, physical database compaction via SQLite `VACUUM`, and isolated cache clearance that protects user favorites and blacklist data.
+- **Installed App Resource Packaging & Blank Screen on Launch (Fixed in v0.5.0)** ([#4](https://github.com/HELIX-Origin/NH-Reader/issues/4)): Reverted from the custom installer to Tauri's native packaging (NSIS with per-user/per-machine scope and WiX MSI on Windows, DMG on macOS, deb/AppImage on Linux). Ensured all assets, frontend resources, and dependencies are bundled directly into the installer, resolving the blank launch window.
+- **Installation Options (Fixed in v0.5.0)**: Added installation destination scopes during setup (Install for current user, Install for all users, Custom install directory with native folder browser dialog) via native NSIS and WiX packaging.
 - **Dedicated uninstall executable missing (Fixed in v0.4.0)**: Implemented dedicated uninstaller executable (`uninstall.exe` on Windows, `uninstall` on Linux) that copies to temp on invocation to avoid locking files in the installation directory, allowing complete directory deletion.
 - **Uninstaller file locking on Windows (Fixed in v0.4.0)**: Executable lock prevented `remove_dir_all` from removing program files. Resolved via dedicated `uninstall.exe` executing from temp.
 - **Mutex poison unwrap panic in db.rs (Fixed in v0.4.0)**: Replaced 9 `.unwrap()` calls with `lock_conn()` poison recovery.

@@ -27,6 +27,7 @@
 	import TagChip from '$lib/components/TagChip.svelte';
 	import DownloadButton from '$lib/components/DownloadButton.svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 	import { thumbPath } from '$lib/image';
 
 	const id = $derived(Number(page.params.id));
@@ -123,7 +124,7 @@
 
 <div class="page" data-scope="page-gallery">
 	{#if loading && !gallery}
-		<Loader label="Loading gallery…" />
+		<Loader label={locale.t('gallery.loading')} />
 	{:else if error && !gallery}
 		<ErrorNotice message={error} onretry={() => tick++} />
 	{:else if gallery}
@@ -138,7 +139,7 @@
 				{#if isBlocked}
 					<div class="blocked-note">
 						<Icon name="shield" size={14} />
-						This gallery matches your blacklist.
+						{locale.t('gallery.blockedWarning')}
 					</div>
 				{/if}
 			</div>
@@ -152,11 +153,11 @@
 				<div class="stats">
 					<div class="stat">
 						<b>{gallery.num_pages ?? 0}</b>
-						<span class="faint">pages</span>
+						<span class="faint">{locale.t('gallery.pages')}</span>
 					</div>
 					<div class="stat">
 						<b>{formatCount(gallery.num_favorites ?? 0)}</b>
-						<span class="faint">favorites</span>
+						<span class="faint">{locale.t('gallery.favorites')}</span>
 					</div>
 					<div class="stat">
 						<b>{relativeDate(gallery.upload_date ?? 0)}</b>
@@ -164,33 +165,33 @@
 					</div>
 					<div class="stat">
 						<b>#{gallery.id}</b>
-						<span class="faint">id</span>
+						<span class="faint">{locale.t('gallery.id')}</span>
 					</div>
 				</div>
 
 				<div class="actions">
 					<a class="btn btn-primary" href={`/gallery/${id}/reader`}>
 						<Icon name="book" size={15} />
-						Open reader
+						{locale.t('gallery.openReader')}
 					</a>
 					<DownloadButton galleryId={id} />
-					<button class="btn" class:on={localFav} onclick={onLocalFav} title="Save locally">
+					<button class="btn" class:on={localFav} onclick={onLocalFav} title={locale.t('gallery.saveLocally')}>
 						<Icon name="heart" size={15} />
-						{localFav ? 'Saved' : 'Favorite'}
+						{localFav ? locale.t('gallery.saved') : locale.t('gallery.favorite')}
 					</button>
 					{#if account.keyStatus.configured}
-						<button class="btn" class:on={accountFav} onclick={onAccountFav} title="Favorite on nhentai">
+						<button class="btn" class:on={accountFav} onclick={onAccountFav} title={locale.t('gallery.favoriteOnNhentai')}>
 							<Icon name="external" size={14} />
-							{accountFav ? 'On nhentai' : 'Synced fav'}
+							{accountFav ? locale.t('gallery.onNhentai') : locale.t('gallery.syncedFav')}
 						</button>
 					{/if}
-					<button class="btn btn-ghost" onclick={openExternal} title="Open in browser">
+					<button class="btn btn-ghost" onclick={openExternal} title={locale.t('gallery.openInBrowser')}>
 						<Icon name="external" size={14} />
 					</button>
 				</div>
 
 				{#if gallery.scanlator}
-					<p class="faint">Scanlator: {gallery.scanlator}</p>
+					<p class="faint">{locale.t('gallery.scanlator')} {gallery.scanlator}</p>
 				{/if}
 
 				{#if grouped.length > 0}
@@ -216,7 +217,7 @@
 
 				{#if plainTags.length > 0}
 					<div class="tag-group">
-						<h2>tags</h2>
+						<h2>{locale.t('gallery.tags')}</h2>
 						<div class="chips">
 							{#each plainTags as t}
 								<TagChip
@@ -235,7 +236,7 @@
 
 		{#if related.length > 0}
 			<section class="related">
-				<h2>Related</h2>
+				<h2>{locale.t('gallery.related')}</h2>
 				<GalleryGrid galleries={related} />
 			</section>
 		{/if}

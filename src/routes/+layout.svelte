@@ -3,7 +3,6 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
-	import { getCurrentWindow } from '@tauri-apps/api/window';
 	import Icon from '$lib/components/Icon.svelte';
 	import { avatarUrl } from '$lib/image';
 	import { loadSettings, getSettings } from '$lib/stores/settings.svelte';
@@ -14,17 +13,17 @@
 	import { cacheInit } from '$lib/cache';
 	import { setTitlebarQuery } from '$lib/stores/titlebarSearch.svelte';
 	import { locale } from '$lib/stores/locale.svelte';
+	import { getCurrentWindow } from '@tauri-apps/api/window';
+	import LoginModal from '$lib/components/LoginModal.svelte';
 	import '../lib/design/app.css';
 
 	let { children } = $props();
 
-	const isChildWindow = $derived(
-		page.url.pathname.startsWith('/installer')
-	);
 
 	const nav = $derived([
 		{ href: '/', label: locale.t('nav.latest'), icon: 'grid' },
 		{ href: '/popular', label: locale.t('nav.popular'), icon: 'flame' },
+		{ href: '/library', label: locale.t('nav.library'), icon: 'book' },
 		{ href: '/favorites', label: locale.t('nav.favorites'), icon: 'heart' },
 		{ href: '/history', label: locale.t('nav.history'), icon: 'clock' },
 		{ href: '/downloads', label: locale.t('nav.downloads'), icon: 'download' },
@@ -39,6 +38,7 @@
 	let quickQuery = $state('');
 	let ready = $state(false);
 	let avatarBroken = $state(false);
+	let loginModalOpen = $state(false);
 
 	$effect(() => {
 		account.user;
@@ -60,35 +60,17 @@
 		}
 	}
 
-	const compact = () => getCurrentWindow().minimize();
-	const zoom = () => getCurrentWindow().toggleMaximize();
-	const quit = () => getCurrentWindow().close();
-
-	const isMac = $derived(
-		typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.userAgent),
-	);
-
-	function onBarPointerDown(e: PointerEvent) {
-		if (e.button !== 0) return;
-		const t = e.target as HTMLElement | null;
-		if (t?.closest('button, select, input, a, [role="menuitem"]')) return;
-		e.preventDefault();
-		getCurrentWindow().startDragging();
-	}
-
-	function onBarDoubleClick(e: MouseEvent) {
-		const t = e.target as HTMLElement | null;
-		if (t?.closest('button, select, input, a')) return;
-		getCurrentWindow().toggleMaximize();
-	}
+	let topBarEl = $state<HTMLElement | null>(null);
 
 	onMount(() => {
-		if (isChildWindow) {
-			locale.init().finally(() => {
-				ready = true;
-			});
-			return;
+		function onTopBarMouseDown(e: MouseEvent) {
+			if (e.buttons === 1 && !(e.target as HTMLElement)?.closest('input, button, a, kbd, [role="button"]')) {
+				getCurrentWindow().startDragging().catch(() => {});
+			}
 		}
+
+		topBarEl?.addEventListener('mousedown', onTopBarMouseDown);
+
 		cacheInit()
 			.then(() =>
 				Promise.all([
@@ -103,31 +85,28 @@
 			.finally(() => {
 				ready = true;
 			});
+
+		return () => {
+			topBarEl?.removeEventListener('mousedown', onTopBarMouseDown);
+		};
 	});
 </script>
 
 <svelte:head>
-	<title>NH Desktop</title>
+	<title>{locale.t('app.name')}</title>
 	<meta name="color-scheme" content="dark" />
 </svelte:head>
 
-{#if isChildWindow}
-	{@render children()}
-{:else}
 <div class="app">
 	<header
-		class="titlebar"
-		class:mac={isMac}
-		role="presentation"
-		onpointerdown={onBarPointerDown}
-		ondblclick={onBarDoubleClick}
+		class="top-bar"
+		bind:this={topBarEl}
+		data-tauri-drag-region
 	>
-		<div class="traffic" aria-label={locale.t('titlebar.closeTooltip')}>
-			<button class="dot close" aria-label={locale.t('titlebar.closeTooltip')} onclick={quit}></button>
-			<button class="dot min" aria-label={locale.t('titlebar.minimizeTooltip')} onclick={compact}></button>
-			<button class="dot max" aria-label={locale.t('titlebar.maximizeTooltip')} onclick={zoom}></button>
+		<div class="tb-brand" data-tauri-drag-region>
+			<img class="tb-mark" src={`${base}/favicon.png`} alt="" data-tauri-drag-region />
+			<span class="tb-title" data-tauri-drag-region>{locale.t('app.name')}</span>
 		</div>
-		<span class="tb-title">NH Desktop</span>
 		<form class="quick-search" onsubmit={onQuickSearch} role="search">
 			<Icon name="search" size={16} />
 			<input
@@ -148,16 +127,20 @@
 				{/if}
 			</a>
 
-			<a class="account-chip" href="/settings" title={locale.t('account.accountSettings')}>
+			<button
+				class="account-chip"
+				onclick={() => (loginModalOpen = true)}
+				title={account.keyStatus.configured ? locale.t('account.accountSettings') : locale.t('account.signIn')}
+			>
 				{#if account.keyStatus.configured}
-					{#if account.user && !avatarBroken}
+					{#if account.user?.avatar_url && !avatarBroken}
 						<img
 							class="avatar"
 							src={avatarUrl(account.user.avatar_url)}
 							alt=""
 							onerror={() => (avatarBroken = true)}
 						/>
-					{:else if account.user}
+					{:else if account.user?.username}
 						<span class="avatar">{account.user.username[0]?.toUpperCase()}</span>
 					{:else}
 						<Icon name="user" size={16} />
@@ -167,36 +150,11 @@
 					<Icon name="user" size={16} />
 					<span class="account-name">{locale.t('account.signIn')}</span>
 				{/if}
-			</a>
+			</button>
 		</div>
 	</header>
 
 	<div class="shell">
-	<aside class="sidebar">
-		<div class="brand">
-			<img class="brand-mark" src={`${base}/favicon.png`} alt="NH Desktop logo" />
-			<span class="brand-name">NH Desktop</span>
-		</div>
-
-		<nav class="nav" aria-label="Primary">
-			{#each nav as item}
-				<a
-					class="nav-item"
-					class:active={page.url.pathname === item.href}
-					href={item.href}
-				>
-					<Icon name={item.icon} size={18} />
-					<span class="nav-label">{item.label}</span>
-				</a>
-			{/each}
-		</nav>
-
-		<div class="sidebar-foot">
-			<span class="faint">v0.4.0</span>
-		</div>
-	</aside>
-
-	<div class="main">
 		<main class="content">
 			{#if ready}
 				{@render children()}
@@ -207,6 +165,23 @@
 			{/if}
 		</main>
 	</div>
+
+	<nav class="bottom-nav" aria-label="Primary">
+		<div class="bottom-nav-inner">
+			{#each nav as item}
+				<a
+					class="bottom-nav-item"
+					class:active={page.url.pathname === item.href}
+					href={item.href}
+				>
+					<div class="nav-icon-wrapper">
+						<Icon name={item.icon} size={20} />
+					</div>
+					<span class="nav-label">{item.label}</span>
+				</a>
+			{/each}
+		</div>
+	</nav>
+
+	<LoginModal bind:open={loginModalOpen} />
 </div>
-</div>
-{/if}

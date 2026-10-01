@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Have an idea to make **NH Desktop** even better? We welcome feature proposals!
-        Please review our [Roadmap](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/ROADMAP.md) and [Wiki](https://github.com/HELIX-Origin/nhentai-desktop/wiki) first.
+        Please review our [Roadmap](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md) and [Wiki](https://github.com/HELIX-Origin/NH-Reader/wiki) first.
   - type: dropdown
     id: scope
     attributes:

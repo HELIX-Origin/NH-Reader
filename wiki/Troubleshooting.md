@@ -3,38 +3,34 @@
 Common problems and fixes. If the same issue persists after these steps, open a GitHub issue
 with the steps you took and the relevant log/error text.
 
-## 📦 Installation
+## 📦 Installation & Startup
 
-### 🚨 "The app won't install / shows nothing"
+### 🚨 "The app won't install or launch"
 
-- On Windows, run the uninstall/repair from **Settings → Apps → NH Desktop → Modify** (or the
-  maintenance window in-app via the sidebar → **Modify installation**).
-- On macOS, drag the `.app` into `/Applications`, then double-click.
-- On Linux, make sure `~/.local/share/NH Desktop` is writable and the `.desktop` entry was
-  created.
+- On Windows, install the latest NSIS (`NH Reader_<version>_x64-setup.exe`) or WiX MSI package. If upgrading, ensure any running instance of NH Reader is closed first.
+- On macOS, drag `NH Reader.app` into `/Applications`. If Gatekeeper blocks the app because of ad-hoc signing, control-click the app in Finder and choose **Open**.
+- On Linux, install the `.deb` package via `sudo dpkg -i nh-reader_<version>_amd64.deb` or ensure the AppImage has execute permissions (`chmod +x nh-reader_*.AppImage`).
+- For portable mode, ensure the `.portable` file or `data/` folder is present in the executable's folder.
 
-### 🚨 "Setup disappears after running"
+## 🔑 Account & Authentication
 
-The installer binary is the app binary. If the file is named `NH Desktop-Setup-*.exe`
-(any platform-tagged variant, e.g. `NH Desktop-Setup-0.4.0-win-x64.exe`), double
-clicking it opens the wizard. If it was renamed to just `NH Desktop.exe`, it starts the main
-app instead. Re-run via a correctly-suffixed copy, or pass `--installer`.
+### 🚨 "Login failed with username and password"
 
-## 🖼️ Loading / images
+- Cloudflare bot protection on nhentai.net frequently challenges direct credential POST requests (`POST /api/v2/auth/login`).
+- **Solution:** Use an **Official API Key** instead. Head to nhentai.net → *Settings → API Key*, copy the key, open the NH Reader Login Modal (via top bar or Settings), and paste it into the **API Key** tab. API keys are officially supported and completely bypass Cloudflare CAPTCHAs.
+
+### 🚨 "Account favorites or blacklist not syncing"
+
+- Verify your API key or token by clicking **Verify** in Settings.
+- Check network connectivity to `https://nhentai.net`.
+
+## 🖼️ Loading & Images
 
 ### 🚨 Galleries load but images are blank
 
-- Older builds joined the API's relative image paths onto the CDN host incorrectly, so nothing
-  loaded. That bug is fixed — URLs are now derived from the API's path fragments via
-  `image.ts` (`pagePath` / `thumbPath` / `avatarUrl`). If you still see blanks, the fixes below
-  apply.
-- Check the network: nhentai.net's CDN hosts (`t.` / `i.` / `static.`) must be reachable (CSP
-  already allows `https://*.nhentai.net`).
-- Some legacy galleries 404 on the CDN. The app auto-falls back to its image proxy
-  (`proxy_image` → `blob:`, served from the on-disk image cache `cache/images`); if that still
-  fails you'll see an error notice with a retry.
-- **Settings → Cache** clears the in-memory/mirror cache; the on-disk image cache is pruned
-  automatically by *Background services → Run maintenance* (images older than 30 days).
+- Check your network: nhentai.net's CDN hosts (`t.nhentai.net`, `i.nhentai.net`, `static.nhentai.net`) must be reachable.
+- Some legacy galleries 404 on the CDN. The app auto-falls back to its image proxy (`proxy_image` → `blob:`, served from the on-disk image cache `cache/images`). If that still fails, the UI shows a retry button.
+- **Settings → Storage & Cache**: Use **Clear image cache** or **Optimize storage** to refresh corrupted images.
 
 Stuck on blank images? Follow this decision tree:
 
@@ -54,31 +50,21 @@ flowchart TD
 
 ### 🚨 "Network error" or timeouts
 
-- nhentai.net rate-limits. The app throttles requests, but rapid pagination can still hit a
-  wall — wait a moment and retry (the UI shows a retry button on notices).
-- Restart the app; the client rebuilds its connection.
+- nhentai.net rate-limits aggressive traffic. The app throttles requests, but rapid pagination or bulk downloading can temporarily trigger upstream limits. Wait a moment and retry.
 
-## 🔍 Search & filters
+## 🔍 Search & Filters
 
 ### 🚨 "Search returns wrong / no results"
 
-- Check the nhentai query syntax (see [Search & Filters](Search-and-Filters)): exclusion
-  needs the `-` prefix (`-tag:loli`), `tag:`, `artist:`, `language:english`, etc.
-- Note the blacklist is applied **server-side** to every query. If a gallery is hidden but
-  search says "no results", a matching blacklisted tag may be excluding it. Toggle the
-  blacklist master switch off to confirm.
-- Sorts other than date fetch from specific popular lists; a "popular" result page may differ
-  from a free-text search.
+- Check query syntax (see [Search & Filters](Search-and-Filters)): exclusions require the `-` prefix (`-tag:loli`, `tag:female`, `artist:hana`, `language:english`, `pages:>50`).
+- The blacklist is applied **server-side** to search queries. If search returns no results, a matching blacklisted tag may be filtering out all candidates. Toggle the top-bar blacklist badge off to test.
 
-## ⭐ Favorites / history / blacklist
+## ⭐ Favorites, History & Blacklist
 
-### 🚨 "My favorites disappeared"
+### 🚨 "My favorites or blacklist disappeared"
 
-- Favorites are stored in the SQLite-backed cache (`nh-desktop.db`). App reinstalls with
-  "Remove user data", or manually deleting the app data directory, can wipe them. Export is
-  planned; for now back up early.
-- If you use an API key, **in-app favorites** and **account favorites on nhentai.net** are
-  separate — in-app favorites are local-only.
+- Favorites, history, and blacklist are stored in `database.sqlite`. If you perform a clean wipe of `%LOCALAPPDATA%\NH Reader` (or local `data/` in portable mode), local storage will reset.
+- **Backup & Restore:** Use the 1-click **Export Favorites** and **Export Blacklist** buttons in Settings / Library / Blacklist views to save your data to JSON. You can import your JSON backup at any time.
 
 ## 🔗 Related
 

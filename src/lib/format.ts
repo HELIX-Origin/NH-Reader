@@ -35,3 +35,12 @@ export function relativeDate(unixSeconds: number | null | undefined): string {
 	if (diff < day * 365) return `${Math.floor(diff / month)}mo ago`;
 	return `${Math.floor(diff / (day * 365))}y ago`;
 }
+
+export function formatBytes(bytes: number | null | undefined): string {
+	if (!bytes || bytes <= 0) return '0 B';
+	const k = 1024;
+	const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+	const i = Math.floor(Math.log(bytes) / Math.log(k));
+	const idx = Math.min(i, sizes.length - 1);
+	return `${parseFloat((bytes / Math.pow(k, idx)).toFixed(idx > 1 ? 1 : 0))} ${sizes[idx]}`;
+}

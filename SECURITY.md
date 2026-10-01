@@ -12,7 +12,7 @@ seriously — both for the app itself and for the privacy of your local data.
 | < 0.3 | ❌ No longer supported |
 
 Only the latest release receives security fixes. Check the
-[Releases page](https://github.com/HELIX-Origin/nhentai-desktop/releases) for the current
+[Releases page](https://github.com/HELIX-Origin/NH-Reader/releases) for the current
 version.
 
 ## 🚨 Reporting a vulnerability
@@ -23,7 +23,7 @@ Report privately:
 
 - **GitHub:** use the repository's **private vulnerability reporting** feature
   (Repository → `Security` → `Report a vulnerability`) at
-  `https://github.com/HELIX-Origin/nhentai-desktop/security`.
+  `https://github.com/HELIX-Origin/NH-Reader/security`.
 - **Email:** if needed, reach a maintainer via the discussion board or a maintainer's public
   profile — we will respond as soon as possible.
 

@@ -3,66 +3,86 @@
 **Route:** Settings · component `src/lib/components/SettingsView.svelte`
 
 Settings are kept deliberately small and local. All settings persist via the SQLite-backed
-KV cache (`src/lib/cache.ts` → `nh-desktop.db`; dark theme active; a light theme is reserved
-behind `[data-theme='light']`).
+KV cache (`src/lib/cache.ts` → `database.sqlite`), standardizing on nhentai's native dark palette (`#141414` / `#1f1f1f` / `#ed2553`).
 
 ## ⚙️ Appearance
 
-- 🎨 **Theme:** light, dark, or system (follows the OS). Cycle with the button, or set it in the
-  store directly.
+- 🎨 **Palette:** Locked to nhentai.net's dark color scheme (`#141414` / `#1f1f1f` / `#ed2553`). Custom theme engines are dropped in favor of visual authenticity and lightweight performance.
 - 📐 **Grid density:** `Cozy` or `Compact`.
-- 🌍 **Language:** pick the interface language from the dropdown. Defaults to your system locale
-  on first launch; changes apply immediately and are shared with the installer. English is
-  provided by default — see [Localization](Localization) and
-  [Contributing Translations](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/CONTRIBUTING.md#contributing-translations) to drop in another language.
-- Accent color and image-quality/reader-preference options are planned (Settings backlog).
+- 📐 **Dynamic UI scaling:** Toggle automatic column calculation and full-row fitting. When active, cards fluidly expand to window width and visible items are fitted to complete rows so there is never an empty card space.
+- 🌍 **Language:** Pick the interface language from the dropdown. Defaults to your system locale
+  on first launch. English is provided by default — see [Localization](Localization) and
+  [Contributing Translations](https://github.com/HELIX-Origin/NH-Reader/blob/main/CONTRIBUTING.md#contributing-translations) to drop in another language.
 
-## 🔑 API key (optional)
+## 🗄️ Cache & Storage Management
 
-The only "online" setting. Get a key from nhentai.net → *Settings → API Key*.
+The Storage & Cache panel provides live telemetry and automated maintenance:
+- **Telemetry display**: Real-time stats on image cache disk footprint (megabytes and file count), query cache rows, and SQLite database file size.
+- **Maximum storage budget**: Select disk budget caps (500 MB, 1 GB, 2 GB, 5 GB, or Unlimited). The background service automatically evicts the oldest LRU images down to 85% of budget.
+- **Clear image cache**: Wipes cached cover and page images from disk.
+- **Clear cached responses**: Flushes cached API search/gallery payloads from `database.sqlite` without touching favorites, blacklist, history, or settings.
+- **Optimize storage**: Reclaims unused disk space by running SQLite `VACUUM`.
+
+## 📥 Downloads Configuration
+
+- **Download directory**: Configure custom destination folder for ZIP and CBZ archives, or restore the system default (`Documents/NH Reader/downloads`).
+- **Open folder**: 1-click button to reveal downloads in the native OS file explorer.
+- **Queue persistence**: Download jobs persist across app restarts and system shutdowns (`downloads:jobs` in `database.sqlite`).
+
+## 🔑 nhentai Account (Authentication & API Key)
+
+The app provides a dedicated **Sign In / Account** modal accessible directly from the top bar or Settings. Connecting an account is optional.
+
+### Authentication Options
+
+1. **Official API Key** *(Recommended)*:
+   - Obtain an API key from nhentai.net → *Settings → API Key*.
+   - Authenticates requests with `Authorization: Key <key>`.
+   - **Bypasses Cloudflare CAPTCHAs completely** and avoids credential expiration.
+2. **Account Credentials**:
+   - Direct login using username and password via `POST /api/v2/auth/login`.
+   - Obtains an authentication token (`Authorization: User <token>`).
+   - If Cloudflare blocks the request or requests a captcha, the UI prompts you to use an API Key instead.
 
 | Control | Behavior |
 | --- | --- |
-| **Add API key** | Stores the key locally in `nh-desktop.db` (the `api_key` table). The UI shows only a 4-character prefix after saving. |
-| **Verify** | Calls nhentai.net's `/api/v2/user` with the stored key (`Authorization: Key <key>`) and shows your username if valid. |
-| **Clear** | Removes the stored key from the local DB immediately. |
+| **Sign In / Connect** | Opens `LoginModal.svelte` with tabs for API Key and Credentials. |
+| **Verify / Status** | Calls nhentai.net's `/api/v2/user` (`UserMeResponse`), rendering your username, avatar, and account status in real-time. |
+| **Disconnect** | Clears the stored key/token from `database.sqlite` immediately and resets account state. |
 
-The **Verify** control's decision tree:
+The authentication flow:
 
 ```mermaid
 flowchart TD
-    A[Verify clicked] --> B{Key stored?}
-    B -->|"no"| C[Friendly no-key error]
-    B -->|"yes"| D[Call /api/v2/user]
-    D -->|"valid"| E[Show username]
-    D -->|"invalid"| F[Show error]
+    A[Open Login Modal] --> B{Authentication Mode}
+    B -->|API Key| C[Save Key to database.sqlite]
+    B -->|Credentials| D[POST /api/v2/auth/login]
+    D -->|Success| E[Save Bearer Token]
+    D -->|Cloudflare Block / Error| F[Prompt to use API Key]
+    C --> G[Fetch /api/v2/user]
+    E --> G
+    G --> H[Render Username & Avatar in Top Bar]
 ```
 
-### 🔑 What the key enables
+### 🔑 What authentication enables
 
-- 🔑 Account favorites sync (`check_favorite`, `add_favorite`, `remove_favorite`,
-  `fetch_favorites`).
-- Account blacklist sync (`fetch_account_blacklist`, `update_account_blacklist`).
-- Background gallery downloads (`service_enqueue_download` — zip to disk via the background
-  service; key required).
+- Account favorites sync (`check_favorite`, `add_favorite`, `remove_favorite`, `fetch_favorites`).
+- Account blacklist sync (`fetch_account_blacklist`, `update_account_blacklist` via `POST /api/v2/blacklist`).
+- Live account status and avatar display in the top bar. *(Note: Gallery downloads and browsing do NOT require an account).*
 
 ### 🔒 Security notes
 
-- 🔒 Keys are stored **only locally** (SQLite), never logged, never sent anywhere except
-  nhentai.net over HTTPS (as the `Authorization` header — the user endpoint uses
-  `Key <key>`).
-- The Rust commands `require_key`/`optional_key` (`commands.rs`) ensure commands that need a
-  key fail with a friendly error when missing — the UI never silently passes an empty key.
-- Clearing the key is immediate; future command calls then fall back to anonymous mode or
-  return "no API key configured".
+- Keys and tokens are stored **strictly locally** (`database.sqlite`), never logged, and sent only to `nhentai.net` over HTTPS.
+- Disconnecting is immediate; future requests cleanly revert to anonymous mode.
 
-## 💾 Cache
+## 📱 Mobile & Sideloading
 
-- 💾 **Clear cache** — flushes the in-memory Redis-style cache and the mirrored SQLite table
-  (`cacheFlush()` → `clear_db`). Safe: it only drops cached lists/images, never favorites,
-  history, blacklist, settings, or the API key.
-- The cache stores recent gallery/list payloads under the `nh-desktop:` prefix and rehydrates on
-  launch (`cacheInit()`), keeping repeat navigation instant and reducing load on the site.
+NH Reader produces native Android APKs and iOS packages via Tauri 2.
+
+> [!CAUTION]
+> **Mandatory Jailbreak Disclaimer**
+> 
+> NH Reader provides iOS packages primarily for Apple Silicon macOS sideloading (no jailbreak required) and personal iOS provisioning. **No technical support or warranty is provided for users who brick, damage, or compromise their devices by attempting to jailbreak their phones.** Sideloading or jailbreaking is undertaken entirely at the user's own risk.
 
 ## 🔄 Background services
 

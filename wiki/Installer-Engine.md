@@ -1,108 +1,106 @@
-# Installer Engine
+# Packaging & Installer Architecture
 
-NH Desktop ships as a **single native binary** that is the app AND the installer/uninstaller.
-No NSIS, no WiX MSI. The pattern: the same executable routes on argv.
+NH Reader utilizes **Tauri v2 Native Packaging** (`tauri build`) to produce reliable, signed, and fully bundled distributions for Windows, macOS, Linux, Android, and iOS.
 
-## 📦 Entry point routing
+## 🧭 Why Native Packaging Over Custom Installers
 
-`src-tauri/src/main.rs`:
+In earlier versions, a custom embedded installer was evaluated. However, custom installers in Tauri v2 present significant architectural challenges:
+1. **Asset & Webview Bundling**: Native packaging automatically links and bundles frontend static assets, webview loaders, and platform runtime dependencies into the output binary package.
+2. **Elevation & UAC**: Windows User Account Control (UAC) handling during custom installs often causes file-locking collisions and permission errors when updating program files.
+3. **Uninstallation & System Registry**: Native installers (NSIS and WiX) manage system uninstaller registrations, start menu entries, and desktop shortcuts cleanly through standard OS facilities.
+4. **Mobile & Cross-Platform Alignment**: Tauri's native packaging toolchain cleanly supports mobile APK and iOS packaging alongside desktop installers.
 
-| Condition | Action |
-| --- | --- |
-| exe filename contains `uninstall` | relocate to temp on Windows, run uninstaller wizard |
-| exe filename contains `installer` / `setup` | run installer wizard |
-| any arg `--installer` / `--setup` / `--uninstall` / `--maintenance` | run installer wizard |
-| otherwise (no special flag) | run the app |
+---
 
-The same decision as a small tree:
+## 📦 Bundling Pipeline
 
 ```mermaid
 flowchart TD
-    Start([Launch the binary])
-    Start --> A{Exe named uninstall?}
-    A -->|"yes"| U[Relocate to temp and run uninstaller]
-    A -->|"no"| B{Exe named installer or setup?}
-    B -->|"yes"| C[Run installer wizard]
-    B -->|"no"| D{Installer flag passed?}
-    D -->|"yes"| C
-    D -->|"no"| E[Run the app]
+    A[npm run build:app / tauri build] --> B[SvelteKit build static]
+    B --> C[Rust cargo build release]
+    C --> D{Platform Bundler}
+    D -->|Windows| E[NSIS setup.exe]
+    D -->|Windows| F[WiX .msi]
+    D -->|macOS| G[DMG & .app bundle]
+    D -->|Linux| H[deb & AppImage]
+    D -->|Android| I[APK & AAB]
+    D -->|iOS| J[IPA bundle]
 ```
 
-On Windows release the `windows_subsystem = "windows"` attribute hides the console. The
-installer deploys a dedicated `uninstall.exe` and registers an HKCU uninstall entry whose
-`UninstallString` is `"<install_dir>\uninstall.exe"` and `Publisher` is `HELIX Origin`.
-When `uninstall.exe` runs, it executes from temp so no file locks exist on the installation
-directory, allowing complete directory removal.
+### Build Commands
 
-`main.rs` → `run_installer()` (lib.rs) builds a Tauri app with only the installer commands;
-it opens a frameless `installer` window (`NH Desktop Setup`, 820×620, min 720×560, centered,
-`installer?mode=install|maintenance`). Both the installer and the maintenance window
-(`open_maintenance_window`) are given the app's default icon via
-`app.default_window_icon()` → `WebviewWindowBuilder::icon()`. `run_installer()` manages only
-the API client and the local DB — no background service or image cache.
+```bash
+# Desktop release build (bundles NSIS, WiX MSI, DMG, or deb/AppImage)
+npm run build:app
 
-## 📦 Engine (`src-tauri/src/installer.rs`)
+# Debug desktop build (unoptimized, useful for rapid testing)
+npm run build:app:debug
 
-- 🧩 `InstallerStatus` — `is_installed`, `installed_version`, `current_version`,
-  `default_install_dir`, `current_exe_path`, `os`.
-- `DiskSpaceInfo` — `available_bytes`, `required_bytes`, `has_sufficient_space`
-  (required ≈ 128 MB).
-- `InstallOptions` — `target_dir`, `create_desktop_shortcut`, `create_start_menu_shortcut`,
-  `add_to_path`, `launch_after`.
-- `UninstallOptions` — `remove_user_data`.
-- `OperationResult` — `success`, `message`, `details[]` (logged by the wizard).
-
-`current_version()` reads `CARGO_PKG_VERSION`; `detect_status()` and `check_disk_space()`
-inspect the target OS.
-
-## 📦 Platform layer (`src-tauri/src/platform/`)
-
-`mod.rs` selects `windows` / `macos` / `linux` at compile time. Each implements the **same
-surface** (compiler-enforced): `executable_name`, `default_install_dir`, `installed_exe_path`,
-`place_executable`, shortcut create/remove, uninstall register/unregister, PATH add/remove,
-`launch`.
-
-| Platform | Default install dir | Highlights |
-| --- | --- | --- |
-| **Windows** | `%LOCALAPPDATA%\Programs\NH Desktop` (fallback `C:\Program Files\NH Desktop`) | `.lnk` shortcuts (PowerShell WScript.Shell), HKCU uninstall key, user-PATH entry, `NH Desktop.exe` |
-| **macOS** | `/Applications` | real `.app` bundle (Contents/MacOS/NH Desktop + Info.plist), desktop alias via osascript, `open` launch |
-| **Linux** | `~/.local/share/NH Desktop` | `.desktop` entries (+ uninstall entry), `~/.local/bin` symlink on PATH |
-
-Install flow (`perform_install`): create target → `place_executable` → shortcuts → register
-uninstall → PATH (+ launch after). Uninstall (`perform_uninstall`): reverse, then optionally
-remove user data under `dirs::data_dir`/`data_local_dir`.
-
-The full lifecycle at a glance:
-
-```mermaid
-flowchart TD
-    Start([Install])
-    Start --> A[Create target dir]
-    A --> B[Place executable]
-    B --> C[Create shortcuts]
-    C --> D[Register uninstall]
-    D --> E[Add to PATH]
-    E --> F[Launch app]
-    F --> G{Uninstall later?}
-    G -->|"keep data"| H[Leaves local data]
-    G -->|"factory reset"| I[Deletes user data]
+# Mobile build pipelines
+npm run mobile:android:init    # initialize Android studio project
+npm run mobile:android:build   # compile standalone APK
+npm run mobile:ios:init        # initialize Xcode project
+npm run mobile:ios:build       # compile iOS archive / sideload bundle
 ```
 
-## ⚡ Commands
+---
 
-`installer_status`, `installer_disk_space`, `installer_install`, `installer_uninstall`,
-`installer_launch_app`, `open_maintenance_window`. See [Backend (Rust)](Backend-Rust).
+## ⚙️ Configuration (`src-tauri/tauri.conf.json`)
 
-## 🛠️ Building the installer binary
+Packaging is configured under the `bundle` key in `src-tauri/tauri.conf.json`:
 
-`scripts/build-installer.mjs` (`npm run build:installer`): runs `tauri build --no-bundle`,
-then copies `src-tauri/target/release/nh-desktop(.exe)` to `dist/installer/` as
-`NH Desktop-Setup-{version}-{platform}-{arch}(.exe)` (e.g. `NH Desktop-Setup-0.4.0-win-x64.exe`)
-with a non-versioned `NH Desktop-Setup-{platform}-{arch}(.exe)` alias. Because the binary
-routes on its own filename, the "Setup" name triggers the install wizard. See
-[Installation and Maintenance](Installation-and-Maintenance).
+```json
+"bundle": {
+  "active": true,
+  "targets": "all",
+  "icon": [
+    "icons/32x32.png",
+    "icons/128x128.png",
+    "icons/128x128@2x.png",
+    "icons/icon.icns",
+    "icons/icon.ico"
+  ],
+  "windows": {
+    "certificateThumbprint": null,
+    "digestAlgorithm": "sha256",
+    "timestampUrl": "",
+    "nsis": {
+      "installMode": "both",
+      "installerIcon": "icons/icon.ico",
+      "headerImage": null,
+      "sidebarImage": null,
+      "languages": ["English"]
+    },
+    "wix": {
+      "language": "en-US"
+    }
+  },
+  "macOS": {
+    "dmg": {
+      "windowSize": { "width": 600, "height": 400 },
+      "appPosition": { "x": 180, "y": 170 },
+      "applicationFolderPosition": { "x": 420, "y": 170 }
+    }
+  }
+}
+```
 
-## 🤝 Related
+---
 
-- [Installation and Maintenance](Installation-and-Maintenance) ·
-  [Architecture](Architecture) · [Security](Security)
+## 🎨 Customizing NSIS & WiX Installers
+
+Tauri v2 allows deep customization of Windows installers without breaking native stability:
+
+1. **NSIS Installation Mode (`installMode: "both"`)**:
+   - Gives the user a choice between "Install for anyone who uses this computer (all users)" or "Install just for me (current user)".
+2. **Visual Assets**:
+   - `headerImage`: 150x57 BMP header graphic displayed during installation.
+   - `sidebarImage`: 164x314 BMP graphic displayed on the Welcome and Finish wizard pages.
+3. **Custom NSIS Hooks (`customLanguageFiles`, custom `.nsh` includes)**:
+   - For custom registry entries, environment variables, or custom styling.
+4. **WiX Templates**:
+   - For corporate deployment, custom `.wxs` fragments can be injected into the WiX MSI compilation.
+
+---
+
+- Related: [Installation & Maintenance](Installation-and-Maintenance) · [Architecture](Architecture) · [Security](Security)

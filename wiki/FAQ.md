@@ -20,51 +20,52 @@ nhentai.net and its CDNs. No telemetry, no app server.
 ## ⚠️ How is adult content handled?
 
 This is a client for an adult-adjacent site; you must be 18+ to use it. See
-[TOS](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/TOS.md).
+[TOS](https://github.com/HELIX-Origin/NH-Reader/blob/main/TOS.md).
 
-## 📦 Why is the app one binary and not an MSI?
+## 📦 What installation packages are available?
 
-We build the installer with Tauri itself (a single binary routes between app and
-installer/uninstaller by its filename/args). It avoids outdated MSI/NSIS tooling and keeps a
-small footprint. See [Installer Engine](Installer-Engine).
+NH Reader is distributed using Tauri v2's native packaging toolchain:
+- **Windows**: Modern NSIS installer (`.exe`) with dual-scope support (per-user or all-users) and enterprise WiX MSI (`.msi`). A portable standalone `.zip` is also provided.
+- **macOS**: DMG disk image (`.dmg`) and `.app` bundle.
+- **Linux**: Debian package (`.deb`) and self-contained AppImage (`.AppImage`).
+- **Android**: Sideloadable APK (`.apk`).
+- **iOS**: Sideloadable IPA (`.ipa`) bundle, targeted primarily for Apple Silicon macOS sideloading.
 
 ## 💾 Where is my data stored on disk?
 
-- Windows: `%APPDATA%\net.nh-desktop.client` (database/cache), `%LOCALAPPDATA%\Programs\NH Desktop` (install dir).
-- macOS: `~/Library/Application Support/net.nh-desktop.client`.
-- Linux: `~/.local/share/net.nh-desktop.client`.
+- **Windows**: `%LOCALAPPDATA%\net.nh-reader.client` (or `%APPDATA%\net.nh-reader.client`).
+- **macOS**: `~/Library/Application Support/net.nh-reader.client`.
+- **Linux**: `~/.local/share/net.nh-reader.client`.
+- **Portable Mode**: In the `./data/` folder immediately beside the executable when a `.portable` marker exists.
 
-The app does not use browser `localStorage`; all persistent data is in the SQLite database or
-on-disk caches above.
+All persistent data (favorites, history, blacklist, settings, and cache) is stored locally in `database.sqlite`.
 
 ## 🚫 Does the blacklist sync with my nhentai.net account?
 
-Only if you add an API key and enable it. By default the blacklist is fully local
-(`nh-desktop.db`). See [Blacklist](Blacklist).
+Yes, if you sign in with your account or API key. Blacklist changes synchronize via `POST /api/v2/blacklist` with resolved numeric tag IDs, completely decoupled from profile attributes. Local-only blacklist without sync is fully supported by default.
 
-## ⬜ Can I download galleries for offline reading?
+## 📥 Can I download galleries for offline reading?
 
-Yes — gallery **zip** downloads run in the background service and stream progress to the
-Settings panel. They need an API key. There's no in-app **Download** button yet (the queue and
-commands are wired; the UI is in the M7 backlog). CBZ/other formats and downloads-folder
-management are planned. See [Roadmap](Roadmap).
+Yes. NH Reader includes a full-featured background download service:
+- Dedicated **Download** button on every gallery page (ZIP or CBZ).
+- Adopts the official nhentai API v2 dedicated archive endpoint (`POST /api/v2/galleries/{id}/download`) to fetch pre-built archives directly with live byte streaming progress.
+- Dedicated **Downloads** management page accessible in the bottom navigation bar.
+- Queues persist across app restarts (`database.sqlite`).
 
 ## 📱 Is there a mobile version?
 
-No. NH Desktop is desktop-only (Windows, macOS, Linux), **by design**:
-
-- **Android** already has a good third-party client: [`NClientV3`](https://github.com/maxwai/NClientV3).
-- **iOS** rejects adult/NSFW apps, and an Apple developer license is prohibitively expensive
-  for an app that wouldn't be allowed anyway.
-
-Use NClientV3 on Android or the nhentai.net site in a mobile browser.
+Yes. NH Reader supports mobile devices via Tauri 2:
+- **Android**: Direct APK distribution and sideloading without third-party store dependencies.
+- **iOS**: Sideloadable IPA bundle, targeted primarily for Apple Silicon macOS sideloading (no jailbreak required) and personal iOS provisioning.
+- *Notice*: Because the maintainer does not possess physical Android or macOS/iOS test hardware, mobile builds are currently community-supported and untested by the maintainer.
+- *Disclaimer*: No technical support or warranty is provided for users who attempt to jailbreak their devices.
 
 ## 🤝 I found a bug / want a feature.
 
-Open an issue at [HELIX-Origin/nhentai-desktop](https://github.com/HELIX-Origin/nhentai-desktop),
+Open an issue at [HELIX-Origin/NH-Reader](https://github.com/HELIX-Origin/NH-Reader),
 or see [Development & Contributing](Development-and-Contributing).
 
 ## 🔗 Related
 
 - [Getting Started](Getting-Started) · [Troubleshooting](Troubleshooting) ·
-  [Privacy](Privacy) · [Roadmap](Roadmap)
+  [Privacy](Privacy) · [ROADMAP.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md)

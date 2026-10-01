@@ -105,14 +105,47 @@ pub struct FavoriteResponse {
 pub struct UserMeResponse {
     pub id: u64,
     pub username: String,
-    pub slug: String,
-    pub avatar_url: String,
+    #[serde(default)]
+    pub slug: Option<String>,
+    #[serde(default)]
+    pub avatar_url: Option<String>,
+    #[serde(default)]
     pub theme: Option<String>,
+    #[serde(default)]
     pub is_staff: Option<bool>,
+    #[serde(default)]
     pub is_superuser: Option<bool>,
+    #[serde(default)]
     pub about: Option<String>,
+    #[serde(default)]
     pub favorite_tags: Option<String>,
+    #[serde(default)]
     pub email: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DownloadResponse {
+    pub url: String,
+    pub expires_at: u64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LoginRequest {
+    pub username: String,
+    pub password: String,
+    #[serde(default)]
+    pub pow_challenge: String,
+    #[serde(default)]
+    pub pow_nonce: String,
+    #[serde(default)]
+    pub captcha_response: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TokenResponse {
+    pub access_token: String,
+    pub refresh_token: String,
+    pub user: UserMeResponse,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -140,7 +173,7 @@ pub struct NhDesktopClient {
 impl NhDesktopClient {
     pub fn new() -> Result<Self, reqwest::Error> {
         let http = reqwest::Client::builder()
-            .user_agent(format!("NH Desktop/{}", env!("CARGO_PKG_VERSION")))
+            .user_agent(format!("NH Reader/{}", env!("CARGO_PKG_VERSION")))
             .timeout(Duration::from_secs(30))
             .build()?;
         Ok(Self {
@@ -171,7 +204,14 @@ impl NhDesktopClient {
         self.pace().await;
         let mut req = self.http.request(method, url);
         if let Some(key) = key {
-            req = req.header("Authorization", format!("Key {key}"));
+            let header_val = if key.starts_with("User ") || key.starts_with("Key ") {
+                key.to_string()
+            } else if key.contains('.') || key.len() > 64 {
+                format!("User {key}")
+            } else {
+                format!("Key {key}")
+            };
+            req = req.header("Authorization", header_val);
         }
         if let Some(body) = body {
             req = req.json(&body);
@@ -280,6 +320,15 @@ impl NhDesktopClient {
     pub async fn update_blacklist(&self, key: &str, added: &[u64], removed: &[u64]) -> Result<serde_json::Value, AppError> {
         let body = serde_json::json!({ "added": added, "removed": removed });
         self.request(Some(key), reqwest::Method::POST, "/blacklist", &[], Some(body)).await
+    }
+
+    pub async fn download_url(&self, key: Option<&str>, id: u64, format: &str) -> Result<DownloadResponse, AppError> {
+        self.request(key, reqwest::Method::POST, &format!("/galleries/{id}/download"), &[("format", format.to_string())], None).await
+    }
+
+    pub async fn login(&self, req: &LoginRequest) -> Result<TokenResponse, AppError> {
+        let body = serde_json::to_value(req).map_err(|e| AppError::InvalidInput(e.to_string()))?;
+        self.request(None, reqwest::Method::POST, "/auth/login", &[], Some(body)).await
     }
 
     pub async fn image_bytes(&self, url: &str) -> Result<Vec<u8>, AppError> {

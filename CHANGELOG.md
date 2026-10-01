@@ -1,11 +1,91 @@
-# 📜 NH Desktop Changelog
+# 📜 NH Reader Changelog
 
-Historical record of every change to the NH Desktop client. Newer releases are added at the
+Historical record of every change to the NH Reader client. Newer releases are added at the
 top; the current development state lives under `Unreleased`.
 
 ## Unreleased
 
-## [v0.5.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.5.0)
+## [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0)
+
+**Release date:** 2026-10-01
+
+### 📦 Rebuilt Native Installer Engine & Custom NSIS Template
+* **Tauri Native Packaging with NSIS template**: Rebuilt the installer to use Tauri 2's native packaging toolchain (`tauri build`) augmented with a custom NSIS hook template (`src-tauri/windows/hooks.nsh`), providing a custom NSIS installer setup.
+* **Dual installation scopes**: Added support for both per-user (local AppData without elevation) and per-machine (administrative Program Files) installation targets, custom directory selection, and Start Menu/Desktop shortcuts.
+* **Standard Windows Uninstaller**: Automatically registers uninstaller in Windows "Installed apps" / "Add or remove programs", ensuring a clean uninstall that removes binaries and shortcuts while offering to preserve local user data.
+* **Enterprise WiX MSI & Portable Mode**: Built WiX `.msi` installers and clean standalone portable `.zip` archives with isolated `./data` runtime directories, fully retiring legacy custom webview installer routes (`src/routes/installer/`) and manual installer builder scripts.
+* **Free Code Signing Pipeline**: Added PowerShell code signing script (`scripts/sign.ps1`) and npm command (`npm run sign:windows`) utilizing local self-signed code-signing certificates.
+
+### 💖 Library Downloaded Favorites Isolation (Track 9)
+* **Scoped Library Favorites tab**: Configured the Library's "Favorites" tab (`FavoritesView.svelte` with `downloadedOnly={true}`) to strictly display downloaded favorites (`isDownloaded(id)`), isolating it from the primary standalone `/favorites` tab which continues to show all favorites.
+* **Dedicated counter and empty state**: Wired a dedicated downloaded favorites counter to the Library tab badge and added distinct empty state messaging (`No downloaded favorites`) explaining that favorited galleries appear here once downloaded.
+
+### 🪟 Clean Window Exit & Refined Rounded Square Radiuses (Track 8)
+* **Orderly window close & exit lifecycle**: Removed `api.prevent_close()` on the native system titlebar close ("X") button in `lib.rs` and replaced premature Win32 `window.destroy()` calls with clean `app.exit(0)`, preventing background zombie processes, avoiding forced SIGINT (`0xc000013a`) terminations, and eliminating WebView2 `Chrome_WidgetWin_0` class unregister Error 1411.
+* **Refined small rounded square corner radiuses**: Softened the overly sharp 4px radius limit to modern rounded square corners (`8px` - `10px` squircle styling) across the floating bottom bar (`10px`), bottom navigation item pills and active icon wrappers (`8px`), downloaded doujin cards (`8px`), badges and action buttons (`6px`), and category tabs (`8px`).
+
+### 📚 Dedicated Library Tab & Offline Archive Reading (Track 7)
+* **Primary Library navigation tab**: Added `/library` as a core bottom navigation tab with an open book icon (`book`), providing direct access to local doujins, downloads, favorites, and history.
+* **Downloaded doujins shelf (`DownloadedView.svelte`)**: Interactive shelf scanning `.zip` and `.cbz` archives in the downloads folder, displaying cover thumbnails, titles, page counts, file sizes, format badges, and direct "Read" and "Delete" actions.
+* **Direct reading from downloaded archives**: Implemented backend Tauri commands (`get_downloaded_galleries`, `get_downloaded_gallery_page`, `get_downloaded_gallery_info`, `has_downloaded_gallery`, `delete_downloaded_gallery`) to parse, sort, and stream page bytes directly from local archives.
+* **100% offline reader support**: Enhanced `ReaderImage.svelte` and `gallery/[id]/reader` to stream and decode pages directly from downloaded `.zip`/`.cbz` archives without requiring network access.
+* **Unified library categories**: Multi-tab switcher in `/library` allowing quick navigation between Downloaded doujins, Favorites, and Reading History.
+
+### ⚡ Upstream API Alignment, Authentication & UI Refinement (Track 6)
+* **Official archive downloads via API**: Replaced page-by-page CDN walking and archive reconstruction with direct calls to `POST /api/v2/galleries/{id}/download?format={format}`, complying with official API docs. Includes streaming download and byte progress.
+* **Dedicated Account Login Modal (`LoginModal.svelte`)**: Added a modal dialog with dual tabs: official API Key sign-in (recommended, bypasses Cloudflare CAPTCHAs) and direct credentials authentication (`POST /api/v2/auth/login`).
+* **Reactive account state & live username display**: Converted `getAccountState()` properties in `account.svelte.ts` to Svelte 5 reactive getters, fixing real-time username and avatar rendering upon connection.
+* **Account profile and blacklist isolation**: Ensured numeric tag IDs are resolved for `POST /api/v2/blacklist` and strictly isolated from user account settings and `favorite_tags`.
+* **Native window titlebar & in-app top bar**: Restored native system window decorations (`decorations: true` in `tauri.conf.json`) and converted custom window chrome into a clean in-app top bar with brand, quick search, and account controls.
+* **Floating Mihon-style bottom navigation**: Elevated bottom navigation into a floating pill with a 4px corner radius, backdrop blur (`rgba(31,31,31,0.92)`), elevation shadow, and safe bottom content padding.
+* **Full-width settings layout**: Expanded settings view panels to span 100% of container width, eliminating left-aligned layout constriction.
+* **Login modal visual polish & opaque styling**: Fixed avatar URL parsing for protocol-relative (`//static.nhentai.net/...`) paths, added `onerror` fallback to user initial placeholder, eliminated transparent layout sections by establishing solid dark-surface backgrounds (`#1f1f1f` / `#252525`), and resolved all clipping and mangling in the account dialog.
+* **Complete wiki and documentation synchronization**: Rewrote and aligned all 19 wiki pages, `README.md`, `ROADMAP.md`, `TODO.md`, and `.agents/` guidelines to match the current NH Reader architecture, native packaging, and upstream API v2 integration.
+
+### 🏷️ Product Rebrand & Decoupling
+* **Rebranded to NH Reader**: Product renamed to **NH Reader** across desktop and mobile platforms, updating Tauri configs, window titles, and package definitions.
+* **Storage decoupling with `database.sqlite`**: SQLite storage migrated from hardcoded brand names to ambiguous `database.sqlite` with automated migration from legacy `nh-desktop.db` and key prefix rewrites (`nh-reader:`).
+
+### 📱 UI Overhaul: Mihon-Style Bottom Navigation
+* **Mobile-friendly navigation**: Replaced the desktop fixed sidebar with a sleek, responsive Mihon-inspired bottom navigation bar (`<nav class="bottom-nav">`) utilizing nhentai's dark palette (`#1f1f1f` / `#ed2553` accent).
+* **Increased horizontal canvas**: Reclaimed 220px of desktop sidebar width for gallery cards and reader displays.
+
+### 🌐 Localization (Track 1 Complete)
+* **Comprehensive UI string coverage**: Wrapped remaining hardcoded UI strings across all views into single-quoted `locale.t()` calls (`SettingsView`, `DownloadsView`, `BlacklistView`, `GalleryDetailView`, `ReaderView`, `FilterPanel`, `SearchView`, `FavoritesView`, `HistoryView`, `GalleryCard`).
+* **English dictionary expansion**: Expanded `en.json` to 217 keys covering 206 references with 0 missing or untranslated keys.
+
+### 📥 Downloads & Library Polish (Track 2 Complete)
+* **Download queue persistence**: Active, completed, and failed download jobs are stored persistently in `database.sqlite` via `downloads:jobs`. Unfinished or interrupted downloads upon app exit cleanly resume as failed with a 1-click retry option.
+* **Auto-refresh cache consumers**: Fixed legacy `nh-desktop:` cache keys in `service.rs`. Configured `service://refresh` to invalidate in-memory caches and dispatch real-time events (`nh-reader:refresh:popular`, `nh-reader:refresh:account`), enabling the Popular view and Account data to seamlessly re-render.
+* **JSON export and import**: Added zero-dependency universal export and import utilities for Favorites and Blacklist (`downloadJson` and `pickAndReadJson`), accessible directly from `FavoritesView`, `BlacklistView`, and the Settings Data management panel.
+* **Portability validation & cache maintenance**: Verified `.portable` and `./data` execution isolation and updated the cache pruner in `db.rs` to clean both `nh-reader:cache:%` and legacy cache rows.
+
+### 🗄️ Cache Management & Storage Optimization (Track 3 Complete)
+* **Configurable cache storage budgets**: Users can select maximum disk storage caps (500 MB, 1 GB, 2 GB, 5 GB, or Unlimited) from Settings to constrain disk footprint.
+* **LRU image cache eviction**: Background service checks image cache usage and evicts oldest accessed files down to 85% of budget when the limit is exceeded or during maintenance.
+* **Database compaction & isolated cache clearing**: Fixed cache flushing to selectively purge API response rows without touching user favorites, blacklist, history, or settings. Added SQLite `VACUUM` support to physically reclaim disk space.
+* **Real-time storage telemetry**: Settings UI displays live disk consumption for image cache (bytes + file count), response cache entries, and total SQLite database footprint.
+
+### 📱 Mobile Support & Sideloading (Track 5 Complete)
+* **Cross-platform mobile toolchain**: Configured Tauri 2 mobile project capabilities for Android (`minSdkVersion: 24`, APK packaging) and iOS targets via `npm run mobile:android:*` and `npm run mobile:ios:*`.
+* **Platform boundary isolation**: Guarded desktop-specific single-instance plugins, system tray menus, and window close-to-tray listeners behind `#[cfg(desktop)]` in `src-tauri/src/lib.rs` for pristine compilation on mobile targets.
+* **Apple Silicon macOS & sideloading focus**: Optimized iOS distribution format for macOS Apple Silicon sideloading (no jailbreak required) and personal provisioning sideloading on iPhones.
+* **Jailbreak warning & disclaimer**: Integrated clear user-facing warnings in both the UI (`SettingsView.svelte`) and documentation that no technical support or warranty is provided for users who brick or damage devices by jailbreaking.
+* **Untested mobile hardware status**: Documented that because the maintainer lacks physical Android, macOS, and iOS testing hardware, Android and iOS builds are currently community-supported and untested.
+
+### 🎨 UI Consistency & Polish Audit (Track 4 Complete)
+* **Design system token normalization**: Fixed missing CSS variable declarations in `tokens.css` (`--text-soft`, `--text-sm`, `--text-xs`, `--radius-md`) and harmonized color definitions with nhentai.net's dark palette (`#141414` / `#1f1f1f` / `#ed2553`).
+* **High-contrast text tokens**: Elevated `--text-faint` to `#858585` and `--text-secondary` to `#a8a8a8`, satisfying WCAG AA contrast against `#1f1f1f` surfaces.
+* **Mihon bottom navigation polish**: Fine-tuned active pill indicator geometry (52×28px with 14px radius) and safe-area inset ergonomics (`max(4px, env(safe-area-inset-bottom))`).
+* **Mobile & touch ergonomics**: Implemented 2-column mobile gallery grid scaling on viewports under 600px and enabled always-accessible favorite hearts on touch pointers (`@media (pointer: coarse)`).
+
+### 📐 Dynamic UI Scaling & Zero-Empty-Card Layout
+* **Automatic window column fitting**: Added dynamic container measuring in `GalleryGrid.svelte` that continuously calculates the optimal column count (`cols`) based on window width.
+* **Zero empty card slots**: Fitted the visible cards per page to complete rows (`Math.floor(visible.length / cols) * cols`), eliminating trailing gaps or orphaned cards at the bottom of the grid.
+* **Proportional card expansion**: Added `.grid.dynamic` in `app.css` using `repeat(var(--grid-cols, 5), minmax(0, 1fr))`, ensuring cards fluidly scale to fill 100% of the window width without distortion.
+* **User toggle**: Added a master "Dynamic UI scaling" switch in Settings with localized labels and descriptions.
+
+## [v0.5.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.5.0)
 
 **Release date:** 2026-09-30
 
@@ -19,7 +99,7 @@ top; the current development state lives under `Unreleased`.
 * **PortableApps.com Format (PAF) packaging**:
     * **Official layout & PAF installer**: Generates standard PortableApps directory structure (`App/`, `Data/`, `Other/`) and compiles `NHDesktopPortable_<version>.paf.exe` via `scripts/build-installer.mjs` and GitHub Actions.
 
-## [v0.4.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.4.0)
+## [v0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0)
 
 **Release date:** 2026-09-30
 
@@ -63,7 +143,7 @@ top; the current development state lives under `Unreleased`.
     * **Mechanical gate**: `npm run check:agents` validates ecosystem structure, rule and role contracts, broken links, branding, and no-comments / no-`any` / no-`unwrap` policies.
     * **Documentation synchronization**: Synchronized all wiki articles and repository root guides with current architecture.
 
-## [v0.3.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.3.0)
+## [v0.3.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.3.0)
 
 **Release date:** 2026-09-25
 
@@ -122,7 +202,7 @@ top; the current development state lives under `Unreleased`.
       clicks **Finish** with "Launch after finish" checked. A launch failure is non-fatal — the
       wizard still closes cleanly.
 
-## [v0.2.1](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.2.1)
+## [v0.2.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.1)
 
 ### ✨ Added
 
@@ -150,7 +230,7 @@ top; the current development state lives under `Unreleased`.
     * **Draggable header**: Kept drag-to-move via `startDragging()` on the custom header; removed stale `data-tauri-drag-region` and the installer-specific `app_quit` fallback.
     * **No duplicated chrome**: Confirmed the installer window uses `.decorations(false)` so only the custom HTML titlebar renders.
 
-## [v0.2.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.2.0)
+## [v0.2.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.0)
 
 ### ✨ Added
 
@@ -195,7 +275,7 @@ top; the current development state lives under `Unreleased`.
 
 * **(none)**: No explicit fixes in this milestone release.
 
-## [v0.1.1](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.1.1)
+## [v0.1.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.1.1)
 
 ### ✨ Added
 
@@ -209,7 +289,7 @@ top; the current development state lives under `Unreleased`.
 
 * **Installer download names**: Added platform and architecture tags to installer filenames (e.g. `NH Desktop-Setup-v0.1.1-win-x64.exe`, `-macos-arm64`, `-linux-x64`) so users can identify the correct download and CI assets do not collide across platforms.
 
-## [v0.1.0](https://github.com/HELIX-Origin/nhentai-desktop/releases/tag/v0.1.0)
+## [v0.1.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.1.0)
 
 ### ✨ Added
 

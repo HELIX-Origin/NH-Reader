@@ -6,7 +6,9 @@ export const AVATAR_HOST = 'https://static.nhentai.net';
 
 function joinUrl(host: string, href: string | null | undefined): string {
 	if (!href) return '';
-	return /^https?:\/\//i.test(href) ? href : `${host}/${href.replace(/^\/+/, '')}`;
+	if (href.startsWith('//')) return `https:${href}`;
+	if (/^https?:\/\//i.test(href)) return href;
+	return `${host.replace(/\/+$/, '')}/${href.replace(/^\/+/, '')}`;
 }
 
 export function pagePath(path: string): string {

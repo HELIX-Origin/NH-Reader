@@ -1,4 +1,4 @@
-# AGENTS.md — NH Desktop
+# AGENTS.md — NH Reader
 
 **This file is auto-injected into every agent session. Everything under `MANDATORY` below
 applies without anyone remembering to read a file. If you are an agent: you are already
@@ -8,7 +8,7 @@ bound by it. Do not go looking for permission to skip a line here.**
 
 ## 1. What this project is
 
-**NH Desktop** — a lightweight, cross-platform desktop client for **nhentai.net** with its
+**NH Reader** — a lightweight, cross-platform client for **nhentai.net** with its
 own custom UI, built to beat the site at search/filtering and global blacklisting.
 
 | Concern | Choice (locked) |
@@ -17,22 +17,22 @@ own custom UI, built to beat the site at search/filtering and global blacklistin
 | Frontend | SvelteKit static SPA (`adapter-static`), Svelte 5 runes, TypeScript `strict` |
 | Styling | Plain modern CSS + design tokens — **no** CSS framework |
 | Networking | Rust `reqwest` behind Tauri commands — **never** fetch nhentai from the webview |
-| Persistence | SQLite-backed KV cache (`src/lib/cache.ts` → `db.rs` → `nh-desktop.db`) |
-| Packaging | Tauri-native unified installer with dedicated uninstaller — **no** NSIS/WiX/MSI |
+| Persistence | SQLite-backed KV cache (`src/lib/cache.ts` → `db.rs` → `database.sqlite`) |
+| Packaging | Tauri native bundler (NSIS/MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android, IPA on iOS) + portable zip |
 | Package manager | npm |
 
-Desktop only (Windows/macOS/Linux). No mobile, deliberately.
+Cross-platform: Desktop (Windows/macOS/Linux) and Mobile (Android/iOS via Tauri 2 native mobile support). Note: Because the maintainer lacks physical macOS and Android devices, iOS and Android (as well as macOS) builds are currently community-supported and untested by the maintainer. iOS support is provided primarily for Apple Silicon macOS sideloading without jailbreak; native iOS builds are included via Tauri's iOS support (compatible with sideloaded or jailbroken iPhones), with an explicit disclaimer that no support is provided for users who brick or damage their devices by jailbreaking.
 
 ## 2. ⛔ MANDATORY — these are not negotiable
 
 ### 2.1 Identity trap
-- The product is **NH Desktop**. The workspace folder is named `lewd-clips-app` and that
+- The product is **NH Reader**. The workspace folder is named `lewd-clips-app` and that
   is a **misnomer** — never derive naming, branding, titles, or package names from it.
-- **User-facing name:** `NH Desktop` (exe `NH Desktop.exe`, window title `NH Desktop`).
+- **User-facing name:** `NH Reader` (exe `NH Reader.exe`, window title `NH Reader`).
 - **Publisher / Author:** `HELIX Origin` (GitHub organization owning the project repository).
-- **All identifiers use lowercase-hyphen `nh-desktop`** — cargo `nh-desktop`, lib crate
-  `nh_desktop_lib`, npm `nh-desktop`, bundle ID `net.nh-desktop.client`, cache prefix
-  `nh-desktop:`, db file `nh-desktop.db`.
+- **All identifiers use lowercase-hyphen `nh-reader`** — cargo `nh-reader`, lib crate
+  `nh_reader_lib`, npm `nh-reader`, bundle ID `net.nh-reader.client`, cache prefix
+  `nh-reader:`, db file `database.sqlite` (ambiguous name to isolate persistence from rebranding).
 - `nhentai` / `nhentai.net` names the **website** this app talks to. It is fine in API
   URLs, host allowlists, and citations. **Never** brand the app itself as "nhentai".
   → `.agents/rules/identity.md`
@@ -57,9 +57,7 @@ this session, and read its output. "Should compile" is not verification.
 → `.agents/rules/verification.md` · **enforced** by `npm run check:agents`
 
 ### 2.5 Tracking docs stay true
-If behaviour changes, `CHANGELOG.md` gets an entry. If a task is done, its `TODO.md` row is
-updated in the same change. `BUGS.md` gains or loses rows when bugs are found or fixed. A
-stale ledger is a bug.
+Update tracking files (`ROADMAP.md`, `TODO.md`) **first** or in lockstep before finishing code changes so they are never forgotten. If behaviour changes, `CHANGELOG.md` gets an entry. If a task is done, its `TODO.md` row is updated in the same change. `BUGS.md` gains or loses rows when bugs are found or fixed. A stale ledger is a bug. Tracking ledgers live at repo root; do not duplicate them (e.g. separate Roadmap) in `wiki/`.
 → `.agents/rules/doc-truthfulness.md`
 
 ### 2.6 Respect the upstream API
@@ -81,7 +79,7 @@ a password or a human choice, **stop and report** — never pipe credentials
 | --- | --- |
 | Touching `src/**`, `.svelte`, `.css` | `.agents/rules/frontend.md` |
 | Touching `src-tauri/**`, `.rs`, `Cargo.toml` | `.agents/rules/backend.md` |
-| Touching `installer.rs`, `scripts/build-installer.mjs`, packaging | `.agents/rules/installer.md` |
+| Touching packaging, `tauri.conf.json`, bundles | `.agents/rules/installer.md` |
 | Adding user-visible strings, `src/lib/i18n/**` | `.agents/rules/i18n.md` |
 | Any new HTTP call, CSP, API key, image host | `.agents/rules/security.md` |
 | Naming, branding, product/window/exe strings | `.agents/rules/identity.md` |
@@ -107,7 +105,7 @@ Commands:
 | Action | Command |
 | --- | --- |
 | Install deps | `npm install` |
-| Run app | `npm run dev:tauri` (Vite on fixed port **14440**, HMR 14441, `strictPort`) |
+| Run app | `npm run dev:app` (Vite on fixed port **14440**, HMR 14441, `strictPort`) |
 | Frontend check | `npm run check` |
 | Frontend build | `npm run build` |
 | Rust check / test | `cargo check` / `cargo test` (in `src-tauri/`) |
@@ -136,7 +134,7 @@ src/lib/stores/            *.svelte.ts runes stores
 src/lib/i18n/              drop-in language packs (en default)
 src/lib/design/            tokens.css, base.css
 src-tauri/src/             main, lib, nh_desktop, commands, error, db, service,
-                           image_cache, installer, platform/
+                           image_cache
 ```
 
 ## 6. Headless agent workflows
@@ -157,7 +155,7 @@ Load on demand — each is a short, ordered procedure:
 Decisions that are settled. Changing one means updating this log **and** the rule it
 came from in the same change.
 
-- **Product name** `NH Desktop`; identifiers `nh-desktop`. Folder name is a misnomer (§2.1).
+- **Product name** `NH Reader`; identifiers `nh-reader`, db file `database.sqlite`. Folder name is a misnomer (§2.1).
 - **Stack** Tauri 2 + SvelteKit SPA + Svelte 5 runes. Locked.
 - **Styling** plain CSS with custom-property tokens. Chosen for full control over the
   custom UI and zero dependencies. Revisit only with a strong argument.
@@ -178,9 +176,9 @@ came from in the same change.
   prefetch, cache maintenance, account sync, periodic Popular refresh), surfaced through
   `service_*` commands and `service://job` / `service://refresh` events.
 - **Single instance** via `tauri-plugin-single-instance`; a second launch focuses the
-  existing `main` window. Installer/maintenance mode builds its own app and is deliberately
-  outside that plugin.
-- **Packaging & uninstaller** Tauri-native unified installer deploys a dedicated uninstaller binary (`uninstall.exe` on Windows, `uninstall` on Linux) that executes from temp to avoid locking files, enabling complete deletion of the install directory.
+  existing `main` window.
+- **Packaging & uninstaller** Tauri native packaging generates native NSIS (`.exe`) and WiX MSI (`.msi`) installers on Windows (DMG on macOS, deb/AppImage on Linux), with clean uninstaller support registered in system uninstallation mechanisms, alongside portable zip packages. PAF is dropped in favor of native Tauri packaging.
+- **Mobile support (Android & iOS)** Native mobile support is planned using Tauri 2's mobile toolchain (`tauri android`, `tauri ios`). Android targets APK sideloading. iOS support is provided primarily for macOS Apple Silicon sideloading (no jailbreak required) and sideloaded/jailbroken iOS devices; no support is provided for users who brick their devices by jailbreaking. Because the maintainer lacks physical Android and macOS test devices, mobile builds are currently untested.
 - **i18n** drop-in packs with `en` default; system-locale fallback; community contributions; completeness is
   gated by `npm run i18n:check`.
 - **Context management** DCP (`@tarquinen/opencode-dcp`) is **agent tooling, not a product

@@ -7,7 +7,7 @@ use crate::nh_desktop::{
 use crate::service::{get_auto_refresh, set_auto_refresh, AutoRefreshConfig, BackgroundService, ServiceStatus};
 use serde::Serialize;
 use std::sync::Arc;
-use tauri::{Manager, State};
+use tauri::State;
 
 #[derive(Serialize)]
 pub struct ApiKeyStatus {
@@ -27,9 +27,6 @@ fn require_key(db: &Db) -> Result<String, String> {
 
 #[tauri::command]
 pub fn app_quit(app: tauri::AppHandle) {
-    if let Some(window) = app.get_webview_window("main") {
-        let _ = window.destroy();
-    }
     app.exit(0);
 }
 
@@ -183,6 +180,17 @@ pub async fn get_current_user(client: State<'_, NhDesktopClient>, db: State<'_, 
 }
 
 #[tauri::command]
+pub async fn login_account(
+    client: State<'_, NhDesktopClient>,
+    db: State<'_, Db>,
+    req: crate::nh_desktop::LoginRequest,
+) -> Result<crate::nh_desktop::UserMeResponse, String> {
+    let resp = client.login(&req).await.map_err(|e| e.to_string())?;
+    db.set_api_key(&resp.access_token).map_err(|e| e.to_string())?;
+    Ok(resp.user)
+}
+
+#[tauri::command]
 pub async fn check_favorite(client: State<'_, NhDesktopClient>, db: State<'_, Db>, id: u64) -> Result<FavoriteResponse, String> {
     let key = require_key(&db)?;
     client.check_favorite(&key, id).await.map_err(|e| e.to_string())
@@ -288,48 +296,318 @@ pub fn open_downloads_folder(app: tauri::AppHandle, db: State<'_, Db>) -> Result
         .map_err(|e| e.to_string())
 }
 
-#[tauri::command]
-pub fn installer_status() -> Result<crate::installer::InstallerStatus, String> {
-    Ok(crate::installer::detect_status())
+#[derive(Serialize)]
+pub struct StorageStats {
+    pub image_cache_bytes: u64,
+    pub image_cache_files: usize,
+    pub db_size_bytes: u64,
+    pub db_cache_entries: usize,
+    pub cache_budget_mb: u64,
 }
 
 #[tauri::command]
-pub fn installer_pick_directory() -> Result<Option<String>, String> {
-    Ok(crate::platform::pick_directory())
+pub fn get_storage_stats(
+    cache: State<'_, Arc<ImageCache>>,
+    db: State<'_, Db>,
+) -> Result<StorageStats, String> {
+    let image_cache_bytes = cache.size_bytes();
+    let image_cache_files = cache.file_count();
+    let db_size_bytes = db.file_size_bytes();
+    let db_cache_entries = db.cache_count().unwrap_or(0);
+    let cache_budget_mb = crate::service::get_cache_budget(&db);
+    Ok(StorageStats {
+        image_cache_bytes,
+        image_cache_files,
+        db_size_bytes,
+        db_cache_entries,
+        cache_budget_mb,
+    })
 }
 
 #[tauri::command]
-pub fn installer_disk_space(target_dir: String) -> Result<crate::installer::DiskSpaceInfo, String> {
-    Ok(crate::installer::check_disk_space(&target_dir))
+pub fn set_cache_budget(db: State<'_, Db>, mb: u64) -> Result<(), String> {
+    crate::service::set_cache_budget(&db, mb)
 }
 
 #[tauri::command]
-pub fn installer_install(options: crate::installer::InstallOptions) -> Result<crate::installer::OperationResult, String> {
-    Ok(crate::installer::perform_install(options))
+pub fn clear_image_cache(cache: State<'_, Arc<ImageCache>>) -> usize {
+    cache.clear()
 }
 
 #[tauri::command]
-pub fn installer_uninstall(options: crate::installer::UninstallOptions) -> Result<crate::installer::OperationResult, String> {
-    Ok(crate::installer::perform_uninstall(options))
+pub fn clear_query_cache(db: State<'_, Db>) -> Result<usize, String> {
+    db.clear_cache().map_err(|e| e.to_string())
 }
 
 #[tauri::command]
-pub fn installer_launch_app(target_dir: Option<String>) -> Result<crate::installer::OperationResult, String> {
-    Ok(crate::installer::launch_installed_app(target_dir))
+pub fn optimize_storage(cache: State<'_, Arc<ImageCache>>, db: State<'_, Db>) -> Result<String, String> {
+    let budget_mb = crate::service::get_cache_budget(&db);
+    let removed_images = if budget_mb > 0 {
+        cache.prune_lru(budget_mb * 1024 * 1024)
+    } else {
+        0
+    };
+    db.vacuum().map_err(|e| e.to_string())?;
+    Ok(format!("Optimized: pruned {removed_images} images, compacted database"))
+}
+
+#[derive(Serialize, serde::Deserialize, Clone, Debug)]
+pub struct DownloadedGalleryItem {
+    pub id: u64,
+    pub title: String,
+    pub format: String,
+    pub file_size: u64,
+    pub total_pages: usize,
+    pub file_path: String,
+}
+
+#[derive(Serialize, serde::Deserialize, Clone, Debug)]
+pub struct DownloadedGalleryDetail {
+    pub id: u64,
+    pub title: String,
+    pub format: String,
+    pub file_size: u64,
+    pub total_pages: usize,
+    pub pages: Vec<String>,
+}
+
+fn is_archive_image_entry(name: &str) -> bool {
+    let lower = name.to_lowercase();
+    if lower.starts_with('.') || lower.contains("__macosx") {
+        return false;
+    }
+    let p = std::path::Path::new(name);
+    let ext = p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+    matches!(ext.as_str(), "jpg" | "jpeg" | "png" | "webp" | "gif" | "avif")
+}
+
+fn entry_natural_key(name: &str) -> (u32, String) {
+    let filename = std::path::Path::new(name)
+        .file_name()
+        .and_then(|n| n.to_str())
+        .unwrap_or(name);
+    let stem = std::path::Path::new(filename)
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or(filename);
+    let digits = stem.chars().filter(|c| c.is_ascii_digit()).collect::<String>();
+    let num = digits.parse::<u32>().unwrap_or(u32::MAX);
+    (num, filename.to_lowercase())
+}
+
+fn get_archive_path_for_id(downloads_dir: &std::path::Path, id: u64) -> Option<(std::path::PathBuf, String)> {
+    let zip_path = downloads_dir.join(format!("gallery-{id}.zip"));
+    if zip_path.is_file() {
+        return Some((zip_path, "zip".to_string()));
+    }
+    let cbz_path = downloads_dir.join(format!("gallery-{id}.cbz"));
+    if cbz_path.is_file() {
+        return Some((cbz_path, "cbz".to_string()));
+    }
+    None
 }
 
 #[tauri::command]
-pub fn open_maintenance_window(app: tauri::AppHandle) -> Result<(), String> {
-	let is_uninstall = std::env::args().any(|a| a == "--uninstall");
-	let flag = if is_uninstall { "--uninstall" } else { "--maintenance" };
-	let exe = crate::platform::installed_uninstaller_path()
-		.filter(|p| p.exists())
-		.or_else(|| std::env::current_exe().ok())
-		.ok_or_else(|| "Could not locate uninstaller executable".to_string())?;
-	std::process::Command::new(exe)
-		.arg(flag)
-		.spawn()
-		.map_err(|e| e.to_string())?;
-	app.exit(0);
-	Ok(())
+pub fn get_downloaded_galleries(app: tauri::AppHandle, db: State<'_, Db>) -> Result<Vec<DownloadedGalleryItem>, String> {
+    let dir = crate::service::get_downloads_dir(&db)
+        .unwrap_or_else(|| crate::resolve_default_downloads_dir(&app));
+    if !dir.is_dir() {
+        return Ok(Vec::new());
+    }
+
+    let read_dir = std::fs::read_dir(&dir).map_err(|e| e.to_string())?;
+    let mut items = Vec::new();
+
+    for entry in read_dir.flatten() {
+        let path = entry.path();
+        if !path.is_file() {
+            continue;
+        }
+        let file_name = match path.file_name().and_then(|n| n.to_str()) {
+            Some(n) => n,
+            None => continue,
+        };
+
+        let (id_str, format) = if let Some(rest) = file_name.strip_prefix("gallery-") {
+            if let Some(id_part) = rest.strip_suffix(".zip") {
+                (id_part, "zip")
+            } else if let Some(id_part) = rest.strip_suffix(".cbz") {
+                (id_part, "cbz")
+            } else {
+                continue;
+            }
+        } else {
+            continue;
+        };
+
+        let id: u64 = match id_str.parse() {
+            Ok(val) => val,
+            Err(_) => continue,
+        };
+
+        let metadata = match entry.metadata() {
+            Ok(m) => m,
+            Err(_) => continue,
+        };
+
+        let file_size = metadata.len();
+
+        let title = if let Ok(Some(cached_json)) = db.get(&format!("cache:gallery:{id}:favorite")) {
+            if let Ok(detail) = serde_json::from_str::<serde_json::Value>(&cached_json) {
+                detail.get("title")
+                    .and_then(|t| t.get("english").or_else(|| t.get("japanese")).or_else(|| t.get("pretty")))
+                    .and_then(|v| v.as_str())
+                    .unwrap_or(&format!("Gallery #{id}"))
+                    .to_string()
+            } else {
+                format!("Gallery #{id}")
+            }
+        } else {
+            format!("Gallery #{id}")
+        };
+
+        let total_pages = if let Ok(file) = std::fs::File::open(&path) {
+            if let Ok(mut archive) = zip::ZipArchive::new(file) {
+                let mut count = 0;
+                for i in 0..archive.len() {
+                    if let Ok(f) = archive.by_index(i) {
+                        if is_archive_image_entry(f.name()) {
+                            count += 1;
+                        }
+                    }
+                }
+                count
+            } else {
+                0
+            }
+        } else {
+            0
+        };
+
+        items.push(DownloadedGalleryItem {
+            id,
+            title,
+            format: format.to_string(),
+            file_size,
+            total_pages,
+            file_path: path.to_string_lossy().into_owned(),
+        });
+    }
+
+    items.sort_by(|a, b| b.id.cmp(&a.id));
+    Ok(items)
+}
+
+#[tauri::command]
+pub fn get_downloaded_gallery_page(
+    app: tauri::AppHandle,
+    db: State<'_, Db>,
+    id: u64,
+    page_index: usize,
+) -> Result<Vec<u8>, String> {
+    use std::io::Read;
+
+    let dir = crate::service::get_downloads_dir(&db)
+        .unwrap_or_else(|| crate::resolve_default_downloads_dir(&app));
+    let (archive_path, _) = get_archive_path_for_id(&dir, id)
+        .ok_or_else(|| format!("Archive for gallery {id} not found"))?;
+
+    let file = std::fs::File::open(&archive_path).map_err(|e| e.to_string())?;
+    let mut archive = zip::ZipArchive::new(file).map_err(|e| e.to_string())?;
+
+    let mut image_entries: Vec<String> = Vec::new();
+    for i in 0..archive.len() {
+        if let Ok(entry) = archive.by_index(i) {
+            if is_archive_image_entry(entry.name()) {
+                image_entries.push(entry.name().to_string());
+            }
+        }
+    }
+
+    image_entries.sort_by_cached_key(|name| entry_natural_key(name));
+
+    let entry_name = image_entries
+        .get(page_index)
+        .ok_or_else(|| format!("Page {page_index} not found in archive for gallery {id}"))?;
+
+    let mut entry_file = archive.by_name(entry_name).map_err(|e| e.to_string())?;
+    let mut bytes = Vec::with_capacity(entry_file.size() as usize);
+    entry_file.read_to_end(&mut bytes).map_err(|e| e.to_string())?;
+
+    Ok(bytes)
+}
+
+#[tauri::command]
+pub fn get_downloaded_gallery_info(
+    app: tauri::AppHandle,
+    db: State<'_, Db>,
+    id: u64,
+) -> Result<DownloadedGalleryDetail, String> {
+    let dir = crate::service::get_downloads_dir(&db)
+        .unwrap_or_else(|| crate::resolve_default_downloads_dir(&app));
+    let (archive_path, format) = get_archive_path_for_id(&dir, id)
+        .ok_or_else(|| format!("Archive for gallery {id} not found"))?;
+
+    let metadata = std::fs::metadata(&archive_path).map_err(|e| e.to_string())?;
+    let file = std::fs::File::open(&archive_path).map_err(|e| e.to_string())?;
+    let mut archive = zip::ZipArchive::new(file).map_err(|e| e.to_string())?;
+
+    let mut image_entries: Vec<String> = Vec::new();
+    for i in 0..archive.len() {
+        if let Ok(entry) = archive.by_index(i) {
+            if is_archive_image_entry(entry.name()) {
+                image_entries.push(entry.name().to_string());
+            }
+        }
+    }
+
+    image_entries.sort_by_cached_key(|name| entry_natural_key(name));
+
+    let title = if let Ok(Some(cached_json)) = db.get(&format!("cache:gallery:{id}:favorite")) {
+        if let Ok(detail) = serde_json::from_str::<serde_json::Value>(&cached_json) {
+            detail.get("title")
+                .and_then(|t| t.get("english").or_else(|| t.get("japanese")).or_else(|| t.get("pretty")))
+                .and_then(|v| v.as_str())
+                .unwrap_or(&format!("Gallery #{id}"))
+                .to_string()
+        } else {
+            format!("Gallery #{id}")
+        }
+    } else {
+        format!("Gallery #{id}")
+    };
+
+    Ok(DownloadedGalleryDetail {
+        id,
+        title,
+        format,
+        file_size: metadata.len(),
+        total_pages: image_entries.len(),
+        pages: image_entries,
+    })
+}
+
+#[tauri::command]
+pub fn has_downloaded_gallery(
+    app: tauri::AppHandle,
+    db: State<'_, Db>,
+    id: u64,
+) -> bool {
+    let dir = crate::service::get_downloads_dir(&db)
+        .unwrap_or_else(|| crate::resolve_default_downloads_dir(&app));
+    get_archive_path_for_id(&dir, id).is_some()
+}
+
+#[tauri::command]
+pub fn delete_downloaded_gallery(
+    app: tauri::AppHandle,
+    db: State<'_, Db>,
+    id: u64,
+) -> Result<(), String> {
+    let dir = crate::service::get_downloads_dir(&db)
+        .unwrap_or_else(|| crate::resolve_default_downloads_dir(&app));
+    if let Some((archive_path, _)) = get_archive_path_for_id(&dir, id) {
+        std::fs::remove_file(archive_path).map_err(|e| e.to_string())?;
+    }
+    Ok(())
 }

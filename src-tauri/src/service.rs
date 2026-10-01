@@ -14,6 +14,8 @@ const EVENT_JOB: &str = "service://job";
 const EVENT_REFRESH: &str = "service://refresh";
 const REFRESH_SETTINGS_KEY: &str = "settings:auto-refresh";
 pub const DOWNLOADS_DIR_KEY: &str = "settings:downloads-dir";
+pub const CACHE_BUDGET_KEY: &str = "settings:cache-budget-mb";
+pub const DEFAULT_CACHE_BUDGET_MB: u64 = 1024;
 const MIN_REFRESH_INTERVAL: u32 = 15;
 const MAINTENANCE_IMAGE_AGE_DAYS: u64 = 30;
 const MAINTENANCE_CACHE_AGE_DAYS: u64 = 7;
@@ -263,6 +265,9 @@ impl Worker {
             .gallery(None, id, "favorite")
             .await
             .map_err(|e| format!("failed to load gallery {id}: {e}"))?;
+        if let Ok(json) = serde_json::to_string(&gallery) {
+            let _ = self.db.set(&format!("cache:gallery:{id}:favorite"), &json);
+        }
         let pages = gallery
             .pages
             .clone()
@@ -275,6 +280,41 @@ impl Worker {
         std::fs::create_dir_all(&downloads_dir).map_err(|e| e.to_string())?;
         let tmp = downloads_dir.join(format!("gallery-{id}.{format}.part"));
         let dest = downloads_dir.join(format!("gallery-{id}.{format}"));
+
+        let key = self.db.api_key().ok().flatten();
+        if let Ok(dl) = self.client.download_url(key.as_deref(), id, format).await {
+            if let Ok(mut resp) = reqwest::get(&dl.url).await {
+                if resp.status().is_success() {
+                    let total_bytes = resp.content_length();
+                    let mut file = std::fs::File::create(&tmp).map_err(|e| e.to_string())?;
+                    let mut downloaded = 0u64;
+                    let mut stream_ok = true;
+                    let mut last_emit = Instant::now();
+                    while let Ok(Some(chunk)) = resp.chunk().await {
+                        if file.write_all(&chunk).is_err() {
+                            stream_ok = false;
+                            break;
+                        }
+                        downloaded += chunk.len() as u64;
+                        if last_emit.elapsed().as_millis() >= 200 {
+                            self.emit_progress(job_id, downloaded, total_bytes, format!("Downloading gallery {id}")).await;
+                            last_emit = Instant::now();
+                        }
+                    }
+                    if stream_ok {
+                        self.emit_progress(job_id, downloaded, total_bytes, format!("Downloading gallery {id}")).await;
+                        file.flush().map_err(|e| e.to_string())?;
+                        drop(file);
+                        std::fs::rename(&tmp, &dest).map_err(|e| e.to_string())?;
+                        return Ok(format!("Downloaded gallery {id} archive to {}", dest.display()));
+                    } else {
+                        drop(file);
+                        let _ = std::fs::remove_file(&tmp);
+                    }
+                }
+            }
+        }
+
         let file = std::fs::File::create(&tmp).map_err(|e| e.to_string())?;
         let options = zip::write::SimpleFileOptions::default()
             .compression_method(zip::CompressionMethod::Deflated);
@@ -346,9 +386,15 @@ impl Worker {
     }
 
     async fn maintenance(&self) -> Result<String, String> {
-        let removed_images = self
+        let age_pruned_images = self
             .cache
             .prune(Duration::from_secs(MAINTENANCE_IMAGE_AGE_DAYS * 24 * 3600));
+        let budget_mb = get_cache_budget(&self.db);
+        let lru_pruned_images = if budget_mb > 0 {
+            self.cache.prune_lru(budget_mb * 1024 * 1024)
+        } else {
+            0
+        };
         let before = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .map(|d| d.as_secs() as i64)
@@ -358,8 +404,10 @@ impl Worker {
             .db
             .prune_cache(before)
             .map_err(|e| format!("failed to prune cache: {e}"))?;
+        let _ = self.db.vacuum();
+        let total_images = age_pruned_images + lru_pruned_images;
         Ok(format!(
-            "Maintenance: pruned {removed_entries} cache entries, {removed_images} image files"
+            "Maintenance: pruned {removed_entries} cache entries, {total_images} image files, optimized database"
         ))
     }
 
@@ -371,7 +419,7 @@ impl Worker {
             .map_err(|e| e.to_string())?;
         let json = serde_json::to_string(&list).map_err(|e| e.to_string())?;
         self.db
-            .set("nh-desktop:cache:popular", &json)
+            .set("nh-reader:cache:popular", &json)
             .map_err(|e| e.to_string())?;
         Ok(format!("Refreshed popular ({})", list.len()))
     }
@@ -395,10 +443,10 @@ impl Worker {
         let fav_json = serde_json::to_string(&favs).map_err(|e| e.to_string())?;
         let bl_json = serde_json::to_string(&blacklist).map_err(|e| e.to_string())?;
         self.db
-            .set("nh-desktop:cache:account:favorites:v1", &fav_json)
+            .set("nh-reader:cache:account:favorites:v1", &fav_json)
             .map_err(|e| e.to_string())?;
         self.db
-            .set("nh-desktop:cache:account:blacklist:v1", &bl_json)
+            .set("nh-reader:cache:account:blacklist:v1", &bl_json)
             .map_err(|e| e.to_string())?;
         Ok(format!(
             "Synced account: {} favorites, {} blacklist tags",
@@ -450,4 +498,17 @@ pub fn get_downloads_dir(db: &Db) -> Option<PathBuf> {
         .map(|s| s.trim().to_string())
         .filter(|s| !s.is_empty())
         .map(PathBuf::from)
+}
+
+pub fn get_cache_budget(db: &Db) -> u64 {
+    db.get(CACHE_BUDGET_KEY)
+        .ok()
+        .flatten()
+        .and_then(|s| s.parse::<u64>().ok())
+        .unwrap_or(DEFAULT_CACHE_BUDGET_MB)
+}
+
+pub fn set_cache_budget(db: &Db, mb: u64) -> Result<(), String> {
+    db.set(CACHE_BUDGET_KEY, &mb.to_string())
+        .map_err(|e| e.to_string())
 }

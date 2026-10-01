@@ -13,7 +13,7 @@
 4. Get the real shape of the code, not the one in the docs:
    - `src/lib/` — flat modules, `components/`, `stores/`, `i18n/`, `design/`
    - `src-tauri/src/` — `nh_desktop.rs` (API), `commands.rs` (Tauri surface), `error.rs`,
-     `db.rs`, `service.rs`, `image_cache.rs`, `installer.rs`, `platform/`
+     `db.rs`, `service.rs`, `image_cache.rs`
 5. Read **one** real file end to end for the area you are about to touch, and match its
    style. That is faster and more reliable than any summary.
 
@@ -22,7 +22,7 @@
 These are the ones that actually cost time:
 
 - The folder is `lewd-clips-app`, a misnomer — it is not the product name. The product is
-  **NH Desktop**; identifiers are `nh-desktop`. See `.agents/rules/identity.md`.
+  **NH Reader**; identifiers are `nh-reader`. See `.agents/rules/identity.md`.
 - API v2 image paths have **no leading slash**. `joinUrl` in `src/lib/image.ts` exists for
   a reason.
 - The webview never fetches nhentai. All traffic is Rust.

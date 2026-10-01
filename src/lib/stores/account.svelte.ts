@@ -2,6 +2,7 @@ import { backend } from '$lib/client';
 import type {
 	ApiKeyStatus,
 	BlacklistedTagResponse,
+	LoginRequest,
 	UserMeResponse,
 } from '$lib/types';
 
@@ -14,12 +15,12 @@ let error = $state<string | null>(null);
 
 export function getAccountState() {
 	return {
-		keyStatus,
-		user,
-		accountFavorites,
-		accountBlacklist,
-		busy,
-		error,
+		get keyStatus() { return keyStatus; },
+		get user() { return user; },
+		get accountFavorites() { return accountFavorites; },
+		get accountBlacklist() { return accountBlacklist; },
+		get busy() { return busy; },
+		get error() { return error; },
 	};
 }
 
@@ -47,6 +48,23 @@ export async function setApiKey(key: string): Promise<void> {
 		keyStatus = await backend.getApiKeyStatus();
 		user = await backend.verifyApiKey();
 		await syncAccountBlacklist();
+	} catch (e) {
+		error = String(e);
+		throw e;
+	} finally {
+		busy = false;
+	}
+}
+
+export async function loginWithCredentials(req: LoginRequest): Promise<UserMeResponse> {
+	busy = true;
+	error = null;
+	try {
+		const usr = await backend.loginAccount(req);
+		keyStatus = await backend.getApiKeyStatus();
+		user = usr;
+		await syncAccountBlacklist();
+		return usr;
 	} catch (e) {
 		error = String(e);
 		throw e;

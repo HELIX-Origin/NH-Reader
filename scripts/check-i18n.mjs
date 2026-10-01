@@ -37,7 +37,6 @@ console.log(`en.json: ${enEntries.size} translation keys`);
 
 const used = new Set();
 for (const file of await walk(srcDir)) {
-	if (file.replaceAll('\\', '/').includes('/installer/')) continue;
 	const content = await readFile(file, 'utf8');
 	for (const match of content.matchAll(/locale\.t\('([^']+)'\)/g)) {
 		used.add(match[1]);

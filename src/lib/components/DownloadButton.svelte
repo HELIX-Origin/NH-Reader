@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enqueueDownload, getServiceJobs } from '$lib/stores/service.svelte';
 	import Icon from './Icon.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 
 	let { galleryId }: { galleryId: number } = $props();
 
@@ -68,7 +69,7 @@
 	{#if failed}
 		<button class="btn btn-danger" class:open={open} onclick={() => (failed = false)} title={message}>
 			<Icon name="alert" size={15} />
-			Retry
+			{locale.t('gallery.downloadRetry')}
 		</button>
 		<span class="note err" title={message}>{message}</span>
 	{:else if done}
@@ -76,21 +77,21 @@
 			class="btn"
 			class:open={open}
 			onclick={onMenuClick}
-			title="Download another format"
-			aria-label="Download"
+			title={locale.t('gallery.downloadAnother')}
+			aria-label={locale.t('gallery.download')}
 		>
 			<Icon name="check" size={15} />
-			Downloaded
+			{locale.t('gallery.downloaded')}
 		</button>
 	{:else if started}
-		<button class="btn" disabled title="Downloading…">
+		<button class="btn" disabled title={locale.t('gallery.downloading')}>
 			<span class="spin"><Icon name="download" size={15} /></span>
-			{progress !== null ? `${progress}%` : 'Queued'}
+			{progress !== null ? `${progress}%` : locale.t('downloads.queued')}
 		</button>
 	{:else}
-		<button class="btn" class:open={open} onclick={onMenuClick} aria-label="Download" aria-haspopup="menu">
+		<button class="btn" class:open={open} onclick={onMenuClick} aria-label={locale.t('gallery.download')} aria-haspopup="menu">
 			<Icon name="download" size={15} />
-			Download
+			{locale.t('gallery.download')}
 		</button>
 	{/if}
 	<span class="note faint">
@@ -103,7 +104,7 @@
 				<button class="item" role="menuitem" onclick={() => start(fmt)}>
 					<span class="name">{fmt.toUpperCase()}</span>
 					<span class="desc">
-						{fmt === 'zip' ? 'Zip archive' : 'Comic book archive'}
+						{fmt === 'zip' ? locale.t('gallery.zipArchive') : locale.t('gallery.comicBookArchive')}
 					</span>
 				</button>
 			{/each}

@@ -11,6 +11,7 @@ Rust backend for metadata and direct image loading with a Rust-side fallback.
   category, page count, upload age, score.
 - **Actions:**
   - **Open reader** — start paging through the gallery.
+  - **Download (ZIP / CBZ)** — enqueues an archive download to the background worker. Prioritizes the official dedicated archive endpoint (`POST /api/v2/galleries/{id}/download?format={format}`) per API v2 documentation, with live progress and automatic fallback to page assembly.
   - **Favorite / Unfavorite** — see [Favorites & History](Favorites-and-History).
   - **Open on nhentai.net** — external browser (system opener).
   - **Quick-add blacklist** — blacklist a tag or the artist right from the page
@@ -52,7 +53,7 @@ Other reader features:
   like `galleries/<id>/thumb.webp` *without* a leading slash, and `image.ts` joins them onto
   the right host (`https://i.nhentai.net` pages, `https://t.nhentai.net` thumbs,
   `https://static.nhentai.net` avatars).
-- Hosts are always loadable because of the [CSP](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/README.md) allow-list
+- Hosts are always loadable because of the [CSP](https://github.com/HELIX-Origin/NH-Reader/blob/main/README.md) allow-list
   (`img-src 'self' data: blob: https://nhentai.net https://*.nhentai.net`).
 
 ## 🖼️ Image loading pipeline

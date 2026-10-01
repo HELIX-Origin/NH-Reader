@@ -9,6 +9,7 @@ const DEFAULT_SETTINGS: SettingsState = {
 	blacklistMode: 'hide',
 	readerFit: 'width',
 	readerRtl: false,
+	dynamicScaling: true,
 };
 
 let state = $state<SettingsState>({ ...DEFAULT_SETTINGS });

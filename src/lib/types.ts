@@ -85,14 +85,22 @@ export interface FavoriteResponse {
 export interface UserMeResponse {
 	id: number;
 	username: string;
-	slug: string;
-	avatar_url: string;
+	slug?: string | null;
+	avatar_url?: string | null;
 	theme?: string | null;
 	is_staff?: boolean | null;
 	is_superuser?: boolean | null;
 	about?: string | null;
 	favorite_tags?: string | null;
 	email?: string | null;
+}
+
+export interface LoginRequest {
+	username: string;
+	password: string;
+	pow_challenge?: string;
+	pow_nonce?: string;
+	captcha_response?: string;
 }
 
 export interface BlacklistedTagResponse {
@@ -143,6 +151,7 @@ export interface SettingsState {
 	blacklistMode: BlacklistMode;
 	readerFit: 'width' | 'height' | 'contain';
 	readerRtl: boolean;
+	dynamicScaling: boolean;
 }
 
 export interface TagRef {
@@ -186,4 +195,30 @@ export interface ServiceStatus {
 export interface AutoRefreshConfig {
 	enabled: boolean;
 	intervalMinutes: number;
+}
+
+export interface StorageStats {
+	image_cache_bytes: number;
+	image_cache_files: number;
+	db_size_bytes: number;
+	db_cache_entries: number;
+	cache_budget_mb: number;
+}
+
+export interface DownloadedGalleryItem {
+	id: number;
+	title: string;
+	format: DownloadFormat;
+	file_size: number;
+	total_pages: number;
+	file_path: string;
+}
+
+export interface DownloadedGalleryDetail {
+	id: number;
+	title: string;
+	format: DownloadFormat;
+	file_size: number;
+	total_pages: number;
+	pages: string[];
 }

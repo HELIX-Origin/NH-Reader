@@ -1,7 +1,7 @@
 # Backend (Rust)
 
 The Tauri 2 Rust backend lives in `src-tauri/`. It owns **all networking**, **local
-persistence**, the **installer engine**, and keeps the WebView sandboxed. No panic crosses
+persistence**, **background tasks**, and keeps the WebView sandboxed. No panic crosses
 the command boundary: every command returns `Result<_, String>`.
 
 Here's the lifecycle of a request, from UI to nhentai.net and back:
@@ -21,18 +21,16 @@ flowchart TD
 | File | Responsibility |
 | --- | --- |
 | `src-tauri/src/nh_desktop.rs` | `NhDesktopClient` — typed nhentai.net API client (reqwest) + `THROTTLE` |
-| `src-tauri/src/commands.rs` | All `#[tauri::command]` handlers (45) |
-| `src-tauri/src/db.rs` | SQLite persistence (`Db`, `nh-desktop.db`) |
+| `src-tauri/src/commands.rs` | All `#[tauri::command]` handlers |
+| `src-tauri/src/db.rs` | SQLite persistence (`Db`, `database.sqlite`), compaction, and cache pruning |
 | `src-tauri/src/service.rs` | `BackgroundService` — throttled worker queue (downloads, prefetch, maintenance, sync, auto-refresh) |
-| `src-tauri/src/image_cache.rs` | `ImageCache` — disk image cache at `cache/images`, backing `proxy_image` |
-| `src-tauri/src/installer.rs` | Unified installer/uninstaller engine |
-| `src-tauri/src/platform/{mod,windows,macos,linux}.rs` | Per-OS implementations |
+| `src-tauri/src/image_cache.rs` | `ImageCache` — disk image cache at `cache/images`, LRU budget pruning, backing `proxy_image` |
 | `src-tauri/src/error.rs` | Friendly error type |
-| `src-tauri/src/main.rs` | Entry point + arg routing (app vs installer) |
+| `src-tauri/src/main.rs` | Application entry point |
 
 ## ⚡ Commands (the full surface)
 
-All are camelCase, registered on the Tauri invoke handler.
+All commands are snake_case, registered on the Tauri invoke handler.
 
 ### 🔍 Display & discovery
 
@@ -52,19 +50,30 @@ All are camelCase, registered on the Tauri invoke handler.
 
 | Command | What it does |
 | --- | --- |
-| `db_get` / `db_set` / `db_del` | Single key operations |
-| `db_dump` / `db_clear` | Full-table dump / clear (cache mirror) |
+| `db_get` / `db_set` / `db_del` | Single key operations in `database.sqlite` |
+| `db_dump` / `db_clear` | Full-table dump / clear |
 
-### 🔑 Account / API key
+### 🗄️ Storage & Cache Management
+
+| Command | What it does |
+| --- | --- |
+| `get_storage_stats` | Return disk usage telemetry (image cache bytes + count, query cache rows, database file size) |
+| `set_cache_budget` | Configure maximum storage budget (bytes) for background LRU pruning |
+| `clear_image_cache` | Wipe cached disk images |
+| `clear_query_cache` | Clear cached API response rows in `database.sqlite` without touching user favorites/blacklist/settings |
+| `optimize_storage` | Reclaim physical disk space via SQLite `VACUUM` |
+
+### 🔑 Account & Authentication
 
 | Command | What it does |
 | --- | --- |
 | `set_api_key` / `get_api_key_status` / `clear_api_key` | Store/query/clear the local API key |
-| `verify_api_key` / `get_current_user` | Validate key; fetch `/api/v2/user` (`Authorization: Key <key>`) |
+| `login_account` | Authenticate with username and password (`POST /api/v2/auth/login`) and store token |
+| `verify_api_key` / `get_current_user` | Validate key or token; fetch `/api/v2/user` (`UserMeResponse`) |
 | `check_favorite` / `add_favorite` / `remove_favorite` | Account favorite state |
 | `fetch_favorites` | Remote favorites list |
-| `fetch_account_blacklist` / `update_account_blacklist` | Account blacklist sync |
-| `download_gallery` | Legacy direct download (returns URL); prefer background-service downloads |
+| `fetch_account_blacklist` / `update_account_blacklist` | Account blacklist sync via `POST /api/v2/blacklist` |
+| `download_gallery` | Fetch official archive URL via `POST /api/v2/galleries/{id}/download` or direct URL |
 
 ### 🛰️ Background service & System
 
@@ -73,9 +82,9 @@ All are camelCase, registered on the Tauri invoke handler.
 
 | Command | What it does |
 | --- | --- |
-| `service_enqueue_download` | Download gallery zip → disk (progress events); returns job id |
+| `service_enqueue_download` | Download gallery ZIP/CBZ → disk (progress events); returns job id |
 | `service_enqueue_prefetch` | Prefetch a list of image URLs into the image cache |
-| `service_enqueue_maintenance` | Prune image cache (30d) + cached lists (7d) |
+| `service_enqueue_maintenance` | Prune image cache (LRU budget) + cached lists (7d) |
 | `service_enqueue_sync` | Account favorites + blacklist sync into cached mirrors |
 | `service_status` | Pending job count |
 | `service_set_auto_refresh` | Enable/disable Popular auto-refresh (interval `≥15` min) |
@@ -84,17 +93,6 @@ All are camelCase, registered on the Tauri invoke handler.
 | `open_downloads_folder` | Reveal downloaded files in OS file manager |
 | `get_system_locale` | Detect OS locale tag (`sys-locale`) |
 | `app_quit` | Gracefully quit application |
-
-### 📦 Installer
-
-| Command | What it does |
-| --- | --- |
-| `installer_status` | Installed? version, install dir, OS |
-| `installer_disk_space` | Disk-space check for a target dir |
-| `installer_install` | Perform install (options → `OperationResult`) |
-| `installer_uninstall` | Perform uninstall (options → `OperationResult`) |
-| `installer_launch_app` | Launch main app after setup wizard finishes |
-| `open_maintenance_window` | Reuse/focus or build the installer window |
 
 ## 🦀 Networking rules
 
@@ -112,15 +110,6 @@ All are camelCase, registered on the Tauri invoke handler.
 - Failure to load a resource (image/CDN) is signaled with a clean `Err(String)` the UI renders
   as a retryable notice (see [Reader & Galleries](Reader-and-Galleries)).
 - The DB is behind a `Mutex<Connection>`; all access is short-lived and unlock-and-drop.
-
-## 📦 Platform modules
-
-`platform/mod.rs` selects `windows`/`macos`/`linux` at compile time. Each platform module
-exposes the **same function surface** (enforced by the compiler): `executable_name`,
-`default_install_dir`, `installed_exe_path`, `place_executable`, shortcut create/remove,
-register/unregister uninstall, PATH add/remove, and `launch`. The installer engine calls only
-traits-shaped `platform::*` free functions, so all orchestration is platform-agnostic. Details:
-[Installer Engine](Installer-Engine).
 
 ## 🤝 Related
 

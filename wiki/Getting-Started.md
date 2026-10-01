@@ -1,40 +1,40 @@
 # Getting Started
 
-This page walks you through your first minutes with **NH Desktop**. Everything is local-first:
+This page walks you through your first minutes with **NH Reader**. Everything is local-first:
 no account required, nothing to sign up for.
 
 ## 📦 1. Install
 
-Download the installer for your OS from
-[Releases](https://github.com/HELIX-Origin/nhentai-desktop/releases) and run the wizard. See
-[Installation & Maintenance](Installation-and-Maintenance) for the full walkthrough,
-including uninstall and repair options.
+Download the installer or package for your OS/device from
+[Releases](https://github.com/HELIX-Origin/NH-Reader/releases) and run the installer. See
+[Installation & Maintenance](Installation-and-Maintenance) for the full walkthrough across
+Windows, macOS, Linux, Android, and iOS sideloading.
 
 ## 🏁 2. First launch
 
-The app opens on the **New** (home) feed — recently published galleries, paginated. The
-sidebar on the left navigates everywhere:
+The app opens on the **New** (home) feed — recently published galleries, paginated and dynamically scaled. The
+floating Mihon-inspired bottom navigation bar navigates everywhere:
 
 - **New** — latest galleries
 - **Popular** — the site's popular list
-- **Search** — the [filter engine](Search-and-Filters)
 - **Favorites** / **History** — your local library
+- **Downloads** — background download manager
 - **Blacklist** — global [blacklist](Blacklist) management
-- **Settings** — appearance, optional [API key](Settings-and-API-Key), and background
-  services (auto-refresh, sync, maintenance, recent jobs)
+- **Settings** — appearance, Dynamic UI Scaling, optional [API key / Login](Settings-and-API-Key), storage management, and background services
 
-## 🔑 3. Do you need an API key?
+## 🔑 3. Do you need an account or API key?
 
-**No.** Browsing, searching, the reader, favorites, history, and blacklist all work without
-one. An nhentai.net API key is **optional** and only unlocks account-backed features:
+**No.** Browsing, searching, the reader, favorites, history, downloads, and blacklist all work without
+one. Connecting an nhentai.net account is **optional** and unlocks account-backed features:
 
-- **Account sync:** view/manage your nhentai.net account *favorites* and *blacklist* from
+- **Account sync:** view and manage your nhentai.net account *favorites* and *blacklist* from
   within the app (see [Favorites & History](Favorites-and-History)).
-- **Background downloads:** download galleries (zip) to disk through the background service
-  (see [Settings & API Key](Settings-and-API-Key)).
+- **Account status:** display your connected username and avatar in the top bar.
+- **Dedicated Login Modal:** Sign in via the account button in the top bar or via **Settings → nhentai account**. You can authenticate using either:
+  1. **Official API Key** *(Recommended)*: Generated from nhentai.net → *Settings → API Key*. Bypasses Cloudflare CAPTCHAs completely.
+  2. **Account Credentials**: Direct username and password authentication (`POST /api/v2/auth/login`).
 
-Get one from nhentai.net → *Settings → API Key*. Add it in the app under **Settings → API
-Key**. It is stored locally in `nh-desktop.db` and sent only to nhentai.net over HTTPS — see
+Credentials and tokens are stored locally in `database.sqlite` and sent only to nhentai.net over HTTPS — see
 [Privacy](Privacy).
 
 ## 🔍 4. Search something real
@@ -67,7 +67,7 @@ preload, and fullscreen are all supported — see [Reader & Galleries](Reader-an
 ## ❓ 7. Unsure about something?
 
 Check [Troubleshooting](Troubleshooting) and the [FAQ](FAQ). For behavior/errors you
-still can't resolve, open an issue at the [repository](https://github.com/HELIX-Origin/nhentai-desktop).
+still can't resolve, open an issue at the [repository](https://github.com/HELIX-Origin/NH-Reader).
 
 ---
 

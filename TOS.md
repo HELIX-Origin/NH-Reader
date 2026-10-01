@@ -92,4 +92,4 @@ remain in full force and effect.
 ## 📬 11. Contact
 
 For questions about these Terms, open an issue or discussion on the
-[GitHub repository](https://github.com/HELIX-Origin/nhentai-desktop).
+[GitHub repository](https://github.com/HELIX-Origin/NH-Reader).

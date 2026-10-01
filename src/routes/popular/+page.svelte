@@ -10,6 +10,7 @@
 	import ErrorNotice from '$lib/components/ErrorNotice.svelte';
 	import EmptyState from '$lib/components/EmptyState.svelte';
 	import Pager from '$lib/components/Pager.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 
 	const current = $derived(Number(page.url.searchParams.get('page')) || 1);
 	const settings = getSettings();
@@ -49,6 +50,16 @@
 		};
 	});
 
+	$effect(() => {
+		const onRefresh = () => {
+			tick++;
+		};
+		window.addEventListener('nh-reader:refresh:popular', onRefresh);
+		return () => {
+			window.removeEventListener('nh-reader:refresh:popular', onRefresh);
+		};
+	});
+
 	function gotoPage(n: number) {
 		goto(n <= 1 ? '/popular' : `/popular/?page=${n}`, { noScroll: true });
 	}
@@ -56,16 +67,16 @@
 
 <div class="page" data-scope="page-popular">
 	<div class="page-head">
-		<h1>Popular</h1>
-		<span class="faint">Today's most-loved galleries</span>
+		<h1>{locale.t('popular.title')}</h1>
+		<span class="faint">{locale.t('popular.subtitle')}</span>
 	</div>
 
 	{#if loading && all.length === 0}
-		<Loader label="Fetching today's popular galleries…" />
+		<Loader label={locale.t('popular.loading')} />
 	{:else if error && all.length === 0}
 		<ErrorNotice message={error} onretry={() => tick++} />
 	{:else if filtered.length === 0}
-		<EmptyState icon="flame" title="Nothing trending right now" description="Check back soon." />
+		<EmptyState icon="flame" title={locale.t('popular.emptyTitle')} description={locale.t('popular.emptyDesc')} />
 	{:else}
 		<GalleryGrid galleries={items} />
 		<Pager page={current} numPages={numPages} ongoto={gotoPage} />

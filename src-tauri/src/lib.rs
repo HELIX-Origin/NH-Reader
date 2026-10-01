@@ -2,9 +2,7 @@ mod commands;
 mod db;
 mod error;
 mod image_cache;
-mod installer;
 mod nh_desktop;
-mod platform;
 mod service;
 
 use db::Db;
@@ -46,28 +44,35 @@ pub fn resolve_default_downloads_dir<M: Manager<R>, R: tauri::Runtime>(manager: 
         .path()
         .document_dir()
         .unwrap_or(data_dir)
-        .join("NH Desktop")
+        .join("NH Reader")
         .join("downloads")
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let result = tauri::Builder::default()
-        .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+    #[allow(unused_mut)]
+    let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init());
+
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             if let Some(window) = app.get_webview_window("main") {
                 let _ = window.show();
                 let _ = window.unminimize();
                 let _ = window.set_focus();
             }
-        }))
+        }));
+    }
+
+    let result = builder
         .setup(|app| {
             let data_dir = resolve_app_data_dir(app)?;
             let default_downloads_dir = resolve_default_downloads_dir(app);
 
             let client = NhDesktopClient::new()?;
             app.manage(client.clone());
-            app.manage(Db::new(&data_dir.join("nh-desktop.db"))?);
+            app.manage(Db::new(&data_dir.join("database.sqlite"))?);
 
             let cache = Arc::new(ImageCache::new(data_dir.join("cache/images")));
             app.manage(cache.clone());
@@ -76,81 +81,82 @@ pub fn run() {
                 app.handle().clone(),
                 client,
                 cache,
-                &data_dir.join("nh-desktop.db"),
+                &data_dir.join("database.sqlite"),
                 default_downloads_dir,
             );
             app.manage(service);
 
-            use tauri::menu::{Menu, MenuItem, PredefinedMenuItem};
-            use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
+            #[cfg(desktop)]
+            {
+                use tauri::menu::{Menu, MenuItem, PredefinedMenuItem};
+                use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 
-            let show_i = MenuItem::with_id(app, "show", "Show NH Desktop", true, None::<&str>)?;
-            let min_i = MenuItem::with_id(app, "minimize", "Minimize to Tray", true, None::<&str>)?;
-            let sep = PredefinedMenuItem::separator(app)?;
-            let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+                let show_i = MenuItem::with_id(app, "show", "Show NH Reader", true, None::<&str>)?;
+                let min_i = MenuItem::with_id(app, "minimize", "Minimize to Tray", true, None::<&str>)?;
+                let sep = PredefinedMenuItem::separator(app)?;
+                let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
 
-            let menu = Menu::with_items(app, &[&show_i, &min_i, &sep, &quit_i])?;
+                let menu = Menu::with_items(app, &[&show_i, &min_i, &sep, &quit_i])?;
 
-            let mut tray_builder = TrayIconBuilder::new()
-                .menu(&menu)
-                .show_menu_on_left_click(false)
-                .tooltip("NH Desktop")
-                .on_menu_event(|app, event| match event.id().as_ref() {
-                    "show" => {
-                        if let Some(window) = app.get_webview_window("main") {
-                            let _ = window.show();
-                            let _ = window.unminimize();
-                            let _ = window.set_focus();
-                        }
-                    }
-                    "minimize" => {
-                        if let Some(window) = app.get_webview_window("main") {
-                            let _ = window.hide();
-                        }
-                    }
-                    "quit" => {
-                        if let Some(window) = app.get_webview_window("main") {
-                            let _ = window.destroy();
-                        }
-                        app.exit(0);
-                    }
-                    _ => {}
-                })
-                .on_tray_icon_event(|tray, event| {
-                    if let TrayIconEvent::Click {
-                        button: MouseButton::Left,
-                        button_state: MouseButtonState::Up,
-                        ..
-                    } = event
-                    {
-                        let app = tray.app_handle();
-                        if let Some(window) = app.get_webview_window("main") {
-                            if window.is_visible().unwrap_or(false) {
-                                let _ = window.hide();
-                            } else {
+                let mut tray_builder = TrayIconBuilder::new()
+                    .menu(&menu)
+                    .show_menu_on_left_click(false)
+                    .tooltip("NH Reader")
+                    .on_menu_event(|app, event| match event.id().as_ref() {
+                        "show" => {
+                            if let Some(window) = app.get_webview_window("main") {
                                 let _ = window.show();
                                 let _ = window.unminimize();
                                 let _ = window.set_focus();
                             }
                         }
-                    }
-                });
+                        "minimize" => {
+                            if let Some(window) = app.get_webview_window("main") {
+                                let _ = window.hide();
+                            }
+                        }
+                        "quit" => {
+                            app.exit(0);
+                        }
+                        _ => {}
+                    })
+                    .on_tray_icon_event(|tray, event| {
+                        if let TrayIconEvent::Click {
+                            button: MouseButton::Left,
+                            button_state: MouseButtonState::Up,
+                            ..
+                        } = event
+                        {
+                            let app = tray.app_handle();
+                            if let Some(window) = app.get_webview_window("main") {
+                                if window.is_visible().unwrap_or(false) {
+                                    let _ = window.hide();
+                                } else {
+                                    let _ = window.show();
+                                    let _ = window.unminimize();
+                                    let _ = window.set_focus();
+                                }
+                            }
+                        }
+                    });
 
-            let tray_icon =
-                tauri::image::Image::from_bytes(include_bytes!("../icons/tray-icon.png")).ok();
-            if let Some(icon) = tray_icon.or_else(|| app.default_window_icon().cloned()) {
-                tray_builder = tray_builder.icon(icon);
+                let tray_icon =
+                    tauri::image::Image::from_bytes(include_bytes!("../icons/tray-icon.png")).ok();
+                if let Some(icon) = tray_icon.or_else(|| app.default_window_icon().cloned()) {
+                    tray_builder = tray_builder.icon(icon);
+                }
+
+                tray_builder.build(app)?;
             }
-
-            tray_builder.build(app)?;
 
             Ok(())
         })
         .on_window_event(|window, event| {
-            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+            #[cfg(desktop)]
+            if let tauri::WindowEvent::CloseRequested { .. } = event {
                 if window.label() == "main" {
-                    api.prevent_close();
-                    let _ = window.hide();
+                    let app = window.app_handle().clone();
+                    app.exit(0);
                 }
             }
         })
@@ -174,6 +180,7 @@ pub fn run() {
             commands::clear_api_key,
             commands::verify_api_key,
             commands::get_current_user,
+            commands::login_account,
             commands::check_favorite,
             commands::add_favorite,
             commands::remove_favorite,
@@ -191,77 +198,21 @@ pub fn run() {
             commands::service_set_downloads_dir,
             commands::service_reset_downloads_dir,
             commands::open_downloads_folder,
+            commands::get_downloaded_galleries,
+            commands::get_downloaded_gallery_page,
+            commands::get_downloaded_gallery_info,
+            commands::has_downloaded_gallery,
+            commands::delete_downloaded_gallery,
+            commands::get_storage_stats,
+            commands::set_cache_budget,
+            commands::clear_image_cache,
+            commands::clear_query_cache,
+            commands::optimize_storage,
             commands::app_quit,
             commands::get_system_locale,
-            commands::installer_status,
-            commands::installer_pick_directory,
-            commands::installer_disk_space,
-            commands::installer_install,
-            commands::installer_uninstall,
-            commands::installer_launch_app,
-            commands::open_maintenance_window,
         ])
         .run(tauri::generate_context!());
         if result.is_err() {
             std::process::exit(1);
         }
-}
-
-pub fn run_installer() {
-	let _ = crate::platform::quit_running_app();
-	let exe_name = std::env::current_exe()
-		.ok()
-		.and_then(|p| p.file_name().map(|n| n.to_string_lossy().to_lowercase()))
-		.unwrap_or_default();
-	let is_uninstall = exe_name.contains("uninstall") || std::env::args().any(|a| a == "--uninstall" || a == "--maintenance");
-	let mode = if is_uninstall { "uninstall" } else { "install" };
-	let result = tauri::Builder::default()
-		.plugin(tauri_plugin_opener::init())
-		.setup(move |app| {
-			let data_dir = app.path().app_data_dir()?;
-			app.manage(NhDesktopClient::new()?);
-			app.manage(Db::new(&data_dir.join("nh-desktop.db"))?);
-			if let Some(main) = app.get_webview_window("main") {
-				let _ = main.destroy();
-			}
-			open_installer_window(app, mode)?;
-			Ok(())
-		})
-        .invoke_handler(tauri::generate_handler![
-            commands::installer_status,
-            commands::installer_pick_directory,
-            commands::installer_disk_space,
-            commands::installer_install,
-            commands::installer_uninstall,
-            commands::installer_launch_app,
-            commands::get_system_locale,
-        ])
-        .run(tauri::generate_context!());
-        if result.is_err() {
-            std::process::exit(1);
-        }
-}
-
-fn open_installer_window(app: &tauri::App, mode: &str) -> tauri::Result<()> {
-    use tauri::WebviewUrl;
-    use tauri::WebviewWindowBuilder;
-
-    if let Some(window) = app.get_webview_window("installer") {
-        let _ = window.set_focus();
-        return Ok(());
-    }
-
-    let url = WebviewUrl::App(format!("installer.html?mode={mode}").into());
-    let mut builder = WebviewWindowBuilder::new(app, "installer", url)
-        .title("NH Desktop Setup")
-        .inner_size(820.0, 620.0)
-        .min_inner_size(720.0, 560.0)
-        .resizable(true)
-        .decorations(false)
-        .center();
-    if let Some(icon) = app.default_window_icon() {
-        builder = builder.icon(icon.clone())?;
-    }
-    builder.build()?;
-    Ok(())
 }

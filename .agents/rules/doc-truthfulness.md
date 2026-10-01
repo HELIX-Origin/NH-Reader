@@ -10,6 +10,9 @@ what to do.
 
 ## Must
 
+- **Update tracking files first.** Always update `ROADMAP.md`, `TODO.md`, and tracking files
+  first or in lockstep before finishing code changes. They are the easiest files to forget, so
+  updating them proactively ensures the source-of-truth is always accurate.
 - **Behaviour change → `CHANGELOG.md` entry**, in the same change. Under the current
   version heading, in the appropriate section.
 - **Task completed → its `TODO.md` row is updated in the same change.** Not "I'll do it
@@ -27,8 +30,11 @@ what to do.
 - Never document an aspiration as a shipped feature. Mark unreleased work as such.
 - Never invent a version, a date, a contributor, or a command output.
 - Never contradict a rule file from a root doc. `AGENTS.md` wins.
+- Never duplicate repo-level tracking ledgers (e.g. `Roadmap.md`) inside `wiki/`.
 
-## Wiki
+## Wiki vs Tracking
 
-`wiki/` holds user-facing explanation (how to use, how it works). If a page describes
-behaviour that changed, fix the page in the same change.
+- Repo root holds **tracking ledgers** (`ROADMAP.md`, `TODO.md`, `BUGS.md`, `CHANGELOG.md`).
+- `wiki/` holds **user & developer documentation** (how to use, architecture, troubleshooting).
+  If behaviour changes, update the wiki pages to explain the new behavior. Do not put tracking
+  or roadmap ledgers in the wiki.

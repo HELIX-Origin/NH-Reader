@@ -1,20 +1,26 @@
 :root {
-	--bg: hsl(0, 0%, 5%);
-	--bg-elevated: hsl(0, 0%, 12%);
-	--surface: hsl(0, 0%, 10%);
-	--surface-hover: hsl(0, 0%, 15%);
-	--surface-active: hsl(0, 0%, 22%);
+	--bg: #141414;
+	--bg-elevated: #1f1f1f;
+	--surface: #1f1f1f;
+	--surface-panel: #1f1f1f;
+	--surface-hover: #2a2a2a;
+	--surface-active: #363636;
 
-	--border: hsl(0, 0%, 20%);
-	--border-strong: hsl(0, 0%, 25%);
+	--border: #2a2a2a;
+	--border-subtle: #2a2a2a;
+	--border-strong: #383838;
 
-	--text: #d9d9d9;
-	--text-secondary: hsl(0, 0%, 60%);
-	--text-faint: hsl(0, 0%, 50%);
+	--text: #f0f0f0;
+	--text-soft: #d9d9d9;
+	--text-secondary: #a8a8a8;
+	--text-faint: #858585;
+
+	--text-sm: 13px;
+	--text-xs: 11px;
 
 	--accent: #ed2553;
 	--accent-hover: #ee4972;
-	--accent-soft: rgba(237, 37, 83, 0.13);
+	--accent-soft: rgba(237, 37, 83, 0.14);
 	--accent-border: rgba(237, 37, 83, 0.45);
 	--accent-glow: rgba(237, 37, 83, 0.35);
 
@@ -24,14 +30,16 @@
 	--success-soft: rgba(74, 222, 128, 0.14);
 	--warning: #facc15;
 
+	--radius-xs: 4px;
 	--radius-sm: 6px;
-	--radius: 10px;
-	--radius-lg: 14px;
+	--radius: 8px;
+	--radius-md: 10px;
+	--radius-lg: 12px;
 
 	--scrollbar-thumb: hsl(0, 0%, 30%);
 	--scrollbar-thumb-hover: hsl(0, 0%, 38%);
 
-	--reader-bg: hsl(0, 0%, 10%);
+	--reader-bg: #141414;
 
 	--switch-track: hsl(0, 0%, 30%);
 

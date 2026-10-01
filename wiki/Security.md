@@ -1,22 +1,22 @@
 # Security
 
-Security posture, reporting, and hardening notes for NH Desktop.
+Security posture, reporting, and hardening notes for NH Reader.
 
 > The full project policy lives at
-> [SECURITY.md](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/SECURITY.md) in the
+> [SECURITY.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/SECURITY.md) in the
 > repo root — this page is the wiki summary.
 
 ## 🏗️ Design principles
 
 - **Local-first.** Favorites, history, blacklist, settings and the cache live on-device in
-  SQLite (`nh-desktop.db`). No app server, no telemetry.
+  SQLite (`database.sqlite`). No app server, no telemetry.
 - **No remote code paths.** The WebView never executes remote scripts; CSP restricts
   connections to nhentai.net + its CDNs.
 - **One network path.** All API traffic goes through `NhDesktopClient` (reqwest), throttled
   (`THROTTLE`) to respect nhentai.net and avoid hammering the service.
-- **API key stays local.** The nhentai.net API key is stored in `nh-desktop.db` only and is used
-  solely to authenticate requests you trigger; it is not uploaded anywhere else. The UI shows
-  only a 4-character prefix.
+- **Credentials & API keys stay local.** The nhentai.net API key or bearer token is stored in `database.sqlite` only and is used
+  solely to authenticate requests you trigger; it is never uploaded anywhere else. The UI shows
+  only masked prefixes.
 
 ## 🛡️ Hardenings in place
 
@@ -26,21 +26,16 @@ Security posture, reporting, and hardening notes for NH Desktop.
 | Dev CSP (Vite HMR) isolated from production | `security.devCsp` in the same config |
 | Result-based errors (no panics across the bridge) | `src-tauri/src/error.rs` |
 | Request throttle | `nh_desktop.rs` |
-| Single unsigned binary signature | installer engine (see below) |
+| Zero-cost Windows Code Signing | Local self-signed PFX script (`npm run sign:windows`) |
+| Native sandboxed installers | NSIS & WiX MSI with verified cleanup |
 
 ## 🚨 Supported versions / reporting
 
-- Supported: current 0.2.x.
+- Supported: latest release (0.5.x+).
 - Report vulnerabilities via **GitHub private vulnerability reporting** on the repository, or
   to the maintainer directly (contacts in SECURITY.md).
 - Scope: the app code, installer, and build scripts. Out of scope: nhentai.net itself and
   its CDNs.
-
-## ⬜ Hardening wishlist (future)
-
-- Code signing (Windows) / notarization (macOS).
-- Optional verify-on-first-run of the downloaded installer.
-- Per-host network policy beyond CSP (e.g. platform-level connect-restr).
 
 ## 🔗 Related
 

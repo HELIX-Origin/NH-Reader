@@ -1,7 +1,7 @@
 {
-  "name": "nh-desktop",
-  "version": "0.5.0",
-  "description": "A modern desktop client for nhentai.net",
+  "name": "nh-reader",
+  "version": "0.6.0",
+  "description": "A fast, privacy-focused cross-platform client for nhentai.net",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -11,9 +11,14 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "tauri": "tauri",
-    "dev:tauri": "tauri dev",
-    "build:installer": "node scripts/build-installer.mjs",
-    "installer:build": "npm run build:installer",
+    "dev:app": "tauri dev",
+    "build:app": "tauri build",
+    "build:app:debug": "tauri build --debug",
+    "sign:windows": "powershell -ExecutionPolicy Bypass -File scripts/sign.ps1",
+    "mobile:android:init": "tauri android init",
+    "mobile:android:build": "tauri android build --apk",
+    "mobile:ios:init": "tauri ios init",
+    "mobile:ios:build": "tauri ios build",
     "i18n:check": "node scripts/check-i18n.mjs",
     "check:agents": "node scripts/check-agents.mjs"
   },

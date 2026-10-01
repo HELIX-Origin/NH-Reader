@@ -1,7 +1,7 @@
 # 🌍 Localization & Language Support
 
-NH Desktop speaks your language. The interface defaults to your operating system language, and
-you can pick a different one at any time — in the installer or in **Settings**.
+NH Reader speaks your language. The interface defaults to your operating system language, and
+you can pick a different one at any time in **Settings**.
 
 > Only the **app interface** is translated. Gallery titles, tags, and artwork come from
 > nhentai.net in whatever language they were published in — those are never machine-translated
@@ -11,16 +11,12 @@ you can pick a different one at any time — in the installer or in **Settings**
 
 ## 🎯 Choosing a language
 
-**During installation** — the installer has a **Language** dropdown on the *Options* step. The
-installer itself is already in your language at this point, so you can read the options before
-you choose.
-
-**After installation** — open **Settings → Appearance → Language** and pick from the list. The
+**In the app** — open **Settings → Appearance → Language** and pick from the list. The
 change applies immediately; no restart needed.
 
-**Automatic selection** — on first launch, NH Desktop asks the operating system for its locale
+**Automatic selection** — on first launch, NH Reader asks the operating system for its locale
 (`en-US` → English, `ja-JP` → Japanese, `zh-CN` → Simplified Chinese, and so on). If your
-system language has no pack yet, NH Desktop falls back to English until you choose one.
+system language has no pack yet, NH Reader falls back to English until you choose one.
 
 ---
 
@@ -64,8 +60,7 @@ Localization files are entirely drop-in. Contributors never have to edit multipl
 - **Be concise.** These are short interface labels in a dense UI. Prefer the shortest form a
   native speaker would actually use — long sentences shrink the window and look wrong.
 - **Keep placeholders intact.** Strings like `~128 MB` or `Enter` may embed literal text.
-- **Use the app's own vocabulary.** The installer calls its steps *Welcome / Location / Options /
-  Install*; the sidebar calls them *Latest / Popular / Favorites / History / Downloads /
+- **Use the app's own vocabulary.** The bottom navigation bar calls views *Latest / Popular / Favorites / History / Downloads /
   Blacklist / Settings*. Translate the concept, not word-for-word, and stay consistent within a
   language.
 - **Mind the UI language.** `zh-Hans` and `zh-Hant` are genuinely different files. Arabic is
@@ -84,7 +79,7 @@ If you want to be certain a phrase reads naturally, cross-check against these fr
 - Your own OS: many desktop apps are already localized into your language. Inconsistent machine
   translation is easy to spot once you have seen how a competent app words the same button.
 
-For the full list of translation keys and their JSON structural schema, see [CONTRIBUTING.md](https://github.com/HELIX-Origin/nhentai-desktop/blob/main/CONTRIBUTING.md#contributing-translations).
+For the full list of translation keys and their JSON structural schema, see [CONTRIBUTING.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/CONTRIBUTING.md#contributing-translations).
 
 ---
 

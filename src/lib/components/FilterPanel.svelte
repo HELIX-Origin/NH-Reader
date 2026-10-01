@@ -3,6 +3,7 @@
 	import type { FilterModel, TagRef } from '$lib/types';
 	import Icon from './Icon.svelte';
 	import TagChip from './TagChip.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 
 	let {
 		model,
@@ -80,7 +81,7 @@
 
 <div class="filters" data-scope="filter-panel">
 	<section class="group">
-		<h4>Sort</h4>
+		<h4>{locale.t('filter.sort')}</h4>
 		<div class="seg">
 			{#each SORT_OPTIONS as opt}
 				<button class:on={model.sort === opt.value} onclick={() => update({ ...model, sort: opt.value })}>
@@ -92,7 +93,7 @@
 
 	{#if model.included.length > 0}
 		<section class="group">
-			<h4>Included tags</h4>
+			<h4>{locale.t('filter.includedTags')}</h4>
 			<div class="chips">
 				{#each model.included as t}
 					<TagChip name={t.name} type={t.type} active onclick={() => update({ ...model, included: removeTag(model.included, t) })} />
@@ -103,7 +104,7 @@
 
 	{#if model.excluded.length > 0}
 		<section class="group">
-			<h4>Excluded tags</h4>
+			<h4>{locale.t('filter.excludedTags')}</h4>
 			<div class="chips">
 				{#each model.excluded as t}
 					<TagChip name={t.name} type={t.type} onclick={() => update({ ...model, excluded: removeTag(model.excluded, t) })} />
@@ -113,10 +114,10 @@
 	{/if}
 
 	<section class="group">
-		<h4>Add tag filter</h4>
+		<h4>{locale.t('filter.addTagFilter')}</h4>
 		<div class="add-row">
-			<input class="input" placeholder="Tag name…" bind:value={newTagName} aria-label="Tag name to filter" />
-			<select class="select type" bind:value={newTagType} aria-label="Tag type">
+			<input class="input" placeholder={locale.t('filter.tagNamePlaceholder')} bind:value={newTagName} aria-label={locale.t('filter.addTagFilter')} />
+			<select class="select type" bind:value={newTagType} aria-label={locale.t('filter.tagType')}>
 				<option value="tag">Tag</option>
 				<option value="artist">Artist</option>
 				<option value="character">Character</option>
@@ -129,19 +130,19 @@
 		<div class="add-actions">
 			<button class="btn" onclick={() => addTag(false)} disabled={!newTagName.trim()}>
 				<Icon name="plus" size={14} />
-				Include
+				{locale.t('filter.include')}
 			</button>
 			<button class="btn" onclick={() => addTag(true)} disabled={!newTagName.trim()}>
 				<Icon name="minus" size={14} />
-				Exclude
+				{locale.t('filter.exclude')}
 			</button>
 		</div>
 	</section>
 
 	<section class="group">
-		<h4>Language</h4>
+		<h4>{locale.t('filter.language')}</h4>
 		<select class="select" value={model.language ?? ''} onchange={(e) => update({ ...model, language: e.currentTarget.value || undefined })}>
-			<option value="">Any</option>
+			<option value="">{locale.t('filter.any')}</option>
 			{#each LANGUAGES as lang}
 				<option value={lang} selected={model.language === lang}>{lang}</option>
 			{/each}
@@ -149,9 +150,9 @@
 	</section>
 
 	<section class="group">
-		<h4>Category</h4>
+		<h4>{locale.t('filter.category')}</h4>
 		<select class="select" value={model.category ?? ''} onchange={(e) => update({ ...model, category: e.currentTarget.value || undefined })}>
-			<option value="">Any</option>
+			<option value="">{locale.t('filter.any')}</option>
 			{#each CATEGORIES as cat}
 				<option value={cat} selected={model.category === cat}>{cat}</option>
 			{/each}
@@ -159,31 +160,31 @@
 	</section>
 
 	<section class="group row-group">
-		<h4>Page count</h4>
+		<h4>{locale.t('filter.pageCount')}</h4>
 		<div class="range-row">
 			<input
 				class="input"
 				type="number"
-				placeholder="Min"
+				placeholder={locale.t('filter.min')}
 				min="1"
 				value={model.minPages ?? ''}
 				oninput={(e) => update({ ...model, minPages: e.currentTarget.value ? Number(e.currentTarget.value) : undefined })}
-				aria-label="Minimum pages"
+				aria-label={locale.t('filter.min')}
 			/>
-			<span class="faint">to</span>
+			<span class="faint">{locale.t('filter.to')}</span>
 			<input
 				class="input"
 				type="number"
-				placeholder="Max"
+				placeholder={locale.t('filter.max')}
 				min="1"
 				value={model.maxPages ?? ''}
 				oninput={(e) => update({ ...model, maxPages: e.currentTarget.value ? Number(e.currentTarget.value) : undefined })}
-				aria-label="Maximum pages"
+				aria-label={locale.t('filter.max')}
 			/>
 		</div>
 	</section>
 
 	<div class="foot">
-		<button class="btn btn-ghost faint" onclick={reset}>Reset filters</button>
+		<button class="btn btn-ghost faint" onclick={reset}>{locale.t('filter.reset')}</button>
 	</div>
 </div>

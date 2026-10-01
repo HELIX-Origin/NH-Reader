@@ -21,7 +21,7 @@ What happens instead. Include the exact error text.
 
 ## Environment
 
-- NH Desktop version:
+- NH Reader version:
 - OS and version:
 - Locale:
 - Account state: signed in / signed out

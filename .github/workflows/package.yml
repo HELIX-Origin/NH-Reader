@@ -74,24 +74,21 @@ jobs:
         run: npm ci
 
 
-      - name: Install NSIS for PortableApps (PAF) packaging
-        if: matrix.platform == 'windows-latest'
-        shell: pwsh
-        run: |
-          choco install nsis -y
-          "C:\Program Files (x86)\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Append
-
-
-      - name: Build Modern Unified Installer
-        run: npm run build:installer
+      - name: Build Desktop Application and Bundles
+        run: npm run build:app
 
 
       - name: Upload installer artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
-          path: dist/installer/*
-          if-no-files-found: error
+          path: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/dmg/*.dmg
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/appimage/*.AppImage
+          if-no-files-found: warn
 
 
       - name: Attach installer to GitHub Release
@@ -103,4 +100,9 @@ jobs:
           name: 'NH Desktop ${{ github.ref_name }}'
           draft: false
           prerelease: false
-          files: dist/installer/*
+          files: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/dmg/*.dmg
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/appimage/*.AppImage

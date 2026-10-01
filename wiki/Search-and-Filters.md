@@ -1,8 +1,8 @@
 # Search & Filters
 
-The search page is the heart of NH Desktop. It compiles your structured filters and raw
+The search page is the heart of NH Reader. It compiles your structured filters and raw
 query text into **native nhentai.net search syntax** and runs it through the site's API —
-server-side filtering (plus your [blacklist](Blacklist) on top).
+server-side filtering (plus your [blacklist](Blacklist) on top). Quick search can also be launched directly from the in-app top bar.
 
 ## 🔍 The search box
 

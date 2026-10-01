@@ -6,7 +6,10 @@
 		removeEntry,
 		removeByRef,
 		clearBlacklist,
+		exportBlacklistData,
+		importBlacklistData,
 	} from '$lib/stores/blacklist.svelte';
+	import { downloadJson, pickAndReadJson } from '$lib/exportImport';
 	import {
 		getAccountState,
 		addAccountBlacklist,
@@ -15,6 +18,7 @@
 	import { api } from '$lib/api';
 	import Icon from './Icon.svelte';
 	import EmptyState from './EmptyState.svelte';
+	import { locale } from '$lib/stores/locale.svelte';
 	import type { Paginated, Tag } from '$lib/types';
 
 	const s = getSettings();
@@ -103,19 +107,31 @@
 			}
 		}
 	}
+
+	function onExport() {
+		downloadJson('nh-reader-blacklist.json', exportBlacklistData());
+	}
+
+	async function onImport() {
+		try {
+			const data = await pickAndReadJson<unknown>();
+			importBlacklistData(data);
+		} catch {
+		}
+	}
 </script>
 
 <div class="blacklist" data-scope="blacklist-view">
 	<div class="head">
-		<h2>Blacklist</h2>
-		<span class="count faint">{entries.length} blocked</span>
+		<h2>{locale.t('blacklist.title')}</h2>
+		<span class="count faint">{entries.length} {locale.t('blacklist.blockedCount')}</span>
 	</div>
 
 	<section class="panel">
 		<div class="panel-row">
 			<div>
-				<div class="row-title">Master switch</div>
-				<p class="faint">Applies blacklisted tags everywhere — searches and browse views.</p>
+				<div class="row-title">{locale.t('blacklist.masterSwitch')}</div>
+				<p class="faint">{locale.t('blacklist.masterSwitchDesc')}</p>
 			</div>
 			<button
 				class="switch"
@@ -123,7 +139,7 @@
 				onclick={() => updateSettings({ blacklistEnabled: !s.blacklistEnabled })}
 				role="switch"
 				aria-checked={s.blacklistEnabled}
-				aria-label="Toggle blacklist"
+				aria-label={locale.t('blacklist.toggleBlacklist')}
 			>
 				<span class="knob"></span>
 			</button>
@@ -131,21 +147,21 @@
 
 		<div class="panel-row">
 			<div>
-				<div class="row-title">Treatment</div>
-				<p class="faint">Hide blocked galleries entirely, or keep the grid intact and blur them.</p>
+				<div class="row-title">{locale.t('blacklist.treatment')}</div>
+				<p class="faint">{locale.t('blacklist.treatmentDesc')}</p>
 			</div>
 			<select class="select" value={s.blacklistMode} onchange={(e) => updateSettings({ blacklistMode: e.currentTarget.value as 'hide' | 'blur' })}>
-				<option value="hide">Hide</option>
-				<option value="blur">Blur</option>
+				<option value="hide">{locale.t('blacklist.hide')}</option>
+				<option value="blur">{locale.t('blacklist.blur')}</option>
 			</select>
 		</div>
 	</section>
 
 	<section class="panel">
-		<div class="row-title">Pick tags to block</div>
-		<p class="faint">Choose from popular {pickerType}s — tap + to add, − to remove.</p>
+		<div class="row-title">{locale.t('blacklist.pickTags')}</div>
+		<p class="faint">{locale.t('blacklist.pickTagsDesc')}</p>
 
-		<div class="type-tabs" role="tablist" aria-label="Tag type">
+		<div class="type-tabs" role="tablist" aria-label={locale.t('blacklist.tagType')}>
 			{#each TYPES as t (t.value)}
 				<button
 					class="type-tab"
@@ -162,7 +178,7 @@
 		{#if pickerError}
 			<p class="picker-error">{pickerError}</p>
 		{:else if pickerLoading}
-			<p class="faint picker-loading">Loading options…</p>
+			<p class="faint picker-loading">{locale.t('blacklist.loadingOptions')}</p>
 		{:else if options}
 			<ul class="options">
 				{#each options.result as tag (tag.id)}
@@ -189,11 +205,11 @@
 			<div class="pager">
 				<button class="btn" onclick={() => (pickerPage -= 1)} disabled={pickerPage <= 1}>
 					<Icon name="chevron-left" size={14} />
-					Prev
+					{locale.t('blacklist.prev')}
 				</button>
-				<span class="faint">Page {pickerPage} of {options.num_pages}</span>
+				<span class="faint">{locale.t('common.page')} {pickerPage} {locale.t('common.of')} {options.num_pages}</span>
 				<button class="btn" onclick={() => (pickerPage += 1)} disabled={pickerPage >= options.num_pages}>
-					Next
+					{locale.t('blacklist.next')}
 					<Icon name="chevron-right" size={14} />
 				</button>
 			</div>
@@ -201,12 +217,12 @@
 	</section>
 
 	<section class="panel">
-		<div class="row-title">Blocked</div>
+		<div class="row-title">{locale.t('blacklist.blocked')}</div>
 		{#if entries.length === 0}
 			<EmptyState
 				icon="shield"
-				title="Nothing blocked yet"
-				description="Pick tags above — they'll be excluded from results and hidden or blurred in grids."
+				title={locale.t('blacklist.emptyTitle')}
+				description={locale.t('blacklist.emptyDesc')}
 			/>
 		{:else}
 			<ul class="list">
@@ -219,7 +235,7 @@
 								<span class="count-chip faint">{e.count}</span>
 							{/if}
 						</span>
-						<button class="icon-btn" onclick={() => onRemove(i)} aria-label={`Unblock ${e.name}`}>
+						<button class="icon-btn" onclick={() => onRemove(i)} aria-label={`${locale.t('blacklist.unblock')} ${e.name}`}>
 							<Icon name="close" size={14} />
 						</button>
 					</li>
@@ -232,10 +248,9 @@
 		<section class="panel account">
 			<div class="panel-row">
 				<div>
-					<div class="row-title">Sync with nhentai account</div>
+					<div class="row-title">{locale.t('blacklist.syncAccount')}</div>
 					<p class="faint">
-						Push your local blacklist to <b>{account.user?.username ?? 'your account'}</b> so
-						searches on the site respect it too.
+						{locale.t('blacklist.syncAccountDesc')}
 					</p>
 					{#if syncMessage}
 						<p class="sync" class:error={syncMessage.startsWith('Sync failed')}>{syncMessage}</p>
@@ -244,17 +259,27 @@
 			</div>
 			<button class="btn" onclick={onSyncToAccount} disabled={syncing || entries.length === 0}>
 				<Icon name="user" size={14} />
-				{syncing ? 'Syncing…' : `Sync ${entries.filter((e) => e.id > 0).length} to account`}
+				{syncing ? locale.t('blacklist.syncing') : `${locale.t('blacklist.syncButton')} (${entries.filter((e) => e.id > 0).length})`}
 			</button>
 		</section>
 	{/if}
 
-	{#if entries.length > 0}
-		<div class="foot">
-			<button class="btn btn-danger" onclick={clearBlacklist}>
-				<Icon name="close" size={14} />
-				Clear all blocked tags
+	<div class="foot">
+		<div class="btn-group">
+			<button class="btn btn-ghost" onclick={onExport} title={locale.t('blacklist.export')}>
+				<Icon name="download" size={14} />
+				{locale.t('blacklist.export')}
 			</button>
+			<button class="btn btn-ghost" onclick={onImport} title={locale.t('blacklist.import')}>
+				<Icon name="upload" size={14} />
+				{locale.t('blacklist.import')}
+			</button>
+			{#if entries.length > 0}
+				<button class="btn btn-danger" onclick={clearBlacklist}>
+					<Icon name="close" size={14} />
+					{locale.t('blacklist.clearAll')}
+				</button>
+			{/if}
 		</div>
-	{/if}
+	</div>
 </div>

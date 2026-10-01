@@ -67,6 +67,30 @@ export function clearBlacklist(): void {
 	persist();
 }
 
+export function exportBlacklistData(): { version: number; blacklist: BlacklistEntry[] } {
+	return {
+		version: 1,
+		blacklist: entries,
+	};
+}
+
+export function importBlacklistData(data: unknown): number {
+	const list: BlacklistEntry[] = Array.isArray(data)
+		? data
+		: data && typeof data === 'object' && 'blacklist' in data && Array.isArray((data as { blacklist: unknown[] }).blacklist)
+			? (data as { blacklist: BlacklistEntry[] }).blacklist
+			: [];
+	let count = 0;
+	for (const item of list) {
+		if (item && item.name && !entries.some((e) => e.name === item.name && e.type === item.type)) {
+			entries = [item, ...entries];
+			count++;
+		}
+	}
+	if (count > 0) persist();
+	return count;
+}
+
 export function matchesBlacklist(item: GalleryListItem): boolean {
 	if (entries.length === 0) return false;
 	const ids = item.tag_ids ?? [];

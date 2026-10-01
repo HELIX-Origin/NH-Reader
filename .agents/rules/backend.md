@@ -8,7 +8,7 @@
 
 - **snake_case** for modules, functions, fields. Types are `CamelCase`.
 - **Small focused modules.** `nh_desktop.rs` (API client), `commands.rs` (Tauri surface),
-  `error.rs`, `db.rs`, `service.rs`, `image_cache.rs`, `installer.rs`, `platform/`.
+  `error.rs`, `db.rs`, `service.rs`, `image_cache.rs`.
   If a module passes ~600 lines, split it.
 - **Every Tauri command returns `Result<T, AppError>`.** No panics, no `unwrap`, no
   `expect` across the command boundary. A webview caller must always get a typed error.

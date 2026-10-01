@@ -65,5 +65,5 @@ on GitHub). The installer itself respects the same local-only principles; uninst
 ## 📬 7. Contact
 
 Questions? Open an issue or discussion on the
-[GitHub repository](https://github.com/HELIX-Origin/nhentai-desktop). We have no data to hand
+[GitHub repository](https://github.com/HELIX-Origin/NH-Reader). We have no data to hand
 over, but we're happy to answer.

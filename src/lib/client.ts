@@ -3,14 +3,18 @@ import type {
 	ApiKeyStatus,
 	AutoRefreshConfig,
 	BlacklistListResponse,
+	DownloadedGalleryDetail,
+	DownloadedGalleryItem,
 	DownloadFormat,
 	FavoriteResponse,
 	GalleryDetail,
 	GalleryList,
 	GalleryListItem,
+	LoginRequest,
 	Paginated,
 	RelatedGalleries,
 	ServiceStatus,
+	StorageStats,
 	Tag,
 	UserMeResponse,
 } from '$lib/types';
@@ -48,6 +52,7 @@ export const backend = {
 	clearApiKey: () => call<void>('clear_api_key'),
 	verifyApiKey: () => call<UserMeResponse>('verify_api_key'),
 	getCurrentUser: () => call<UserMeResponse>('get_current_user'),
+	loginAccount: (req: LoginRequest) => call<UserMeResponse>('login_account', { req }),
 
 	checkFavorite: (id: number) => call<FavoriteResponse>('check_favorite', { id }),
 	addFavorite: (id: number) => call<FavoriteResponse>('add_favorite', { id }),
@@ -74,4 +79,17 @@ export const backend = {
 		call<void>('service_set_downloads_dir', { dir }),
 	serviceResetDownloadsDir: () => call<void>('service_reset_downloads_dir'),
 	openDownloadsFolder: () => call<void>('open_downloads_folder'),
+	getDownloadedGalleries: () => call<DownloadedGalleryItem[]>('get_downloaded_galleries'),
+	getDownloadedGalleryPage: (id: number, pageIndex: number) =>
+		call<number[]>('get_downloaded_gallery_page', { id, pageIndex }),
+	getDownloadedGalleryInfo: (id: number) =>
+		call<DownloadedGalleryDetail>('get_downloaded_gallery_info', { id }),
+	hasDownloadedGallery: (id: number) => call<boolean>('has_downloaded_gallery', { id }),
+	deleteDownloadedGallery: (id: number) =>
+		call<void>('delete_downloaded_gallery', { id }),
+	getStorageStats: () => call<StorageStats>('get_storage_stats'),
+	setCacheBudget: (mb: number) => call<void>('set_cache_budget', { mb }),
+	clearImageCache: () => call<number>('clear_image_cache'),
+	clearQueryCache: () => call<number>('clear_query_cache'),
+	optimizeStorage: () => call<string>('optimize_storage'),
 };

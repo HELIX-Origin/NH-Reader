@@ -34,8 +34,8 @@ If you have not read it yet, start with [`AGENTS.md`](./AGENTS.md) for the high-
 
 ## Ways to Contribute
 
-- **Report bugs** via [GitHub Issues](https://github.com/HELIX-Origin/nhentai-desktop/issues) using the bug-report template.
-- **Propose features** via [GitHub Issues](https://github.com/HELIX-Origin/nhentai-desktop/issues) using the feature-proposal template.
+- **Report bugs** via [GitHub Issues](https://github.com/HELIX-Origin/NH-Reader/issues) using the bug-report template.
+- **Propose features** via [GitHub Issues](https://github.com/HELIX-Origin/NH-Reader/issues) using the feature-proposal template.
 - **Contribute translations** for your language (100% drop-in, see [Contributing Translations](#contributing-translations)).
 - **Improve documentation** in `README.md`, `wiki/`, or `.agents/`.
 - **Submit code changes** via pull request.
@@ -228,7 +228,7 @@ npm install
 ### Run the app in development mode
 
 ```bash
-npm run dev:tauri
+npm run dev:app
 ```
 
 This starts Vite on the fixed port `14440` (HMR on `14441`) and launches the Tauri window.
@@ -442,7 +442,7 @@ Only maintainers cut releases.
 ## Getting Help
 
 - Read [`AGENTS.md`](./AGENTS.md) and `.agents/ROLES.md`.
-- Check `wiki/` and existing [Discussions](https://github.com/HELIX-Origin/nhentai-desktop/discussions).
-- Open a [GitHub Issue](https://github.com/HELIX-Origin/nhentai-desktop/issues) if something is unclear or broken.
+- Check `wiki/` and existing [Discussions](https://github.com/HELIX-Origin/NH-Reader/discussions).
+- Open a [GitHub Issue](https://github.com/HELIX-Origin/NH-Reader/issues) if something is unclear or broken.
 
 Thank you for contributing.

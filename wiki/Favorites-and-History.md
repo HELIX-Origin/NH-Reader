@@ -1,7 +1,7 @@
 # Favorites & History
 
 The client keeps two personal libraries locally: **Favorites** and **History**. Both persist
-via the SQLite-backed KV cache (`src/lib/cache.ts` → `nh-desktop.db`), so they survive restarts
+via the SQLite-backed KV cache (`src/lib/cache.ts` → `database.sqlite`), so they survive restarts
 and live only on your machine — see [Privacy](Privacy).
 
 ## ⭐ Favorites
@@ -10,15 +10,16 @@ and live only on your machine — see [Privacy](Privacy).
 
 - From a gallery **detail page**: the **Favorite** toggle (heart) adds or removes the gallery.
   It works **with or without** an nhentai.net API key:
-  - **No API key:** the favorite is stored **locally only** in `nh-desktop.db`.
+  - **No API key:** the favorite is stored **locally only** in `database.sqlite`.
   - **API key configured:** the toggle also calls `check_favorite` / `add_favorite` /
     `remove_favorite` against your nhentai.net account (streaming sync).
 - From any grid card: the card's favorite badge/button.
 
-### 🖼️ Viewing
+### 🖼️ Viewing & Export/Import
 
-The **Favorites** page lists your favorited galleries. With an API key it can also fetch your
+The **Favorites** page lists your favorited galleries with Dynamic UI Scaling. With an API key it can also fetch your
 remote nhentai.net favorites (`fetch_favorites`) and merge/sync them into the local view.
+You can export and import your favorites as a standalone `.json` file anytime directly from the Favorites view or Settings Data management.
 
 ### 💡 What counts as a favorite?
 
@@ -46,13 +47,13 @@ Every gallery you **open** (reader or detail) is recorded with a timestamp. Hist
 ### 🗑️ Clearing
 
 History can be cleared as a batch from the History page. (Individual-entry removal is on the
-roadmap — see [Roadmap](Roadmap).)
+roadmap — see [ROADMAP.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md)).
 
 ## 💾 Storage & privacy
 
 - `src/lib/stores/library.svelte.ts` — favorites + history (SQLite-backed cache, runes-based
   store).
-- The store writes through `src/lib/cache.ts` to `nh-desktop.db` — still local.
+- The store writes through `src/lib/cache.ts` to `database.sqlite` — still local.
 - No favorites/history telemetry. Ever.
 
 ## 🔗 Related

@@ -4,7 +4,7 @@ The human-facing version of the changelog, for someone deciding whether to upgra
 Written for a person, not a log parser. See `.agents/skills/cut-release.md`.
 
 ```markdown
-# NH Desktop 0.4.0
+# NH Reader 0.5.0
 
 <One or two sentences: what this release is, in plain language.>
 
