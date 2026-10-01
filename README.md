@@ -26,7 +26,7 @@ categories, artists, characters, parodies — and lets you slice it **locally, i
 - **Private & versatile account sync.** Favorites, history, blacklist, and settings live locally on your device in SQLite (`database.sqlite`). An optional account sign-in modal supports both official API Keys (bypasses Cloudflare CAPTCHAs) and direct credentials, powering live profile display and synchronized blacklists.
 - **Mihon-inspired floating navigation.** Modern thumb-friendly floating navigation bar with a 4px corner radius, backdrop blur elevation, and responsive full-width page-fitting settings layouts.
 - **Speaks your language.** Interface defaults to your system locale and can be chosen in Settings. English is shipped out of the box with simple 100% drop-in JSON files for community-contributed translations.
-- **Native installers \u0026 mobile packaging.** Native NSIS (both per-user and per-machine) and WiX MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android.
+- **Native installers & mobile packaging.** Native NSIS (both per-user and per-machine) and WiX MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android.
 
 ## 🖥️ Platforms
 
@@ -104,6 +104,7 @@ src-tauri/            # Rust backend (Tauri 2)
   src/db.rs           # local SQLite persistence with poison-recovered locks
   src/service.rs      # background worker queue (downloads, prefetch, maintenance, sync, auto-refresh)
   src/image_cache.rs  # disk image cache (cache-first proxy fallback)
+```
 
 ## 📚 Documentation
 
