@@ -1,8 +1,9 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "NH Reader",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "identifier": "net.nh-reader.client",
+
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://127.0.0.1:14440",

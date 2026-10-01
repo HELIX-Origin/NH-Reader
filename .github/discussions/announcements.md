@@ -6,6 +6,7 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 
 ## 📑 Release Index
 
+- **[v0.7.2 — Official Code Signing, Full Desktop Installers & Pages Alignment](#v072--2026-10-01)** *(2026-10-01)*
 - **[v0.7.1 — Android CI Packaging Patch & Verification Hardening](#v071--2026-10-01)** *(2026-10-01)*
 - **[v0.7.0 — Custom Title Bar, Reader Ergonomics, Arabic RTL Polish & Multi-Platform Portability](#v070--2026-10-01)** *(2026-10-01)*
 - **[v0.6.0 — Dedicated Library Tab, Offline Archive Reader, API v2 Downloads & Product Rebrand](#v060--2026-10-01)** *(2026-10-01)*
@@ -15,6 +16,15 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 - **[v0.2.1 — Storage Architecture Hardening & Docs Synchronization](#v021--2026-09-22)** *(2026-09-22)*
 - **[v0.2.0 — Custom UI Shell, Background Service Queue & Disk Image Cache](#v020--2026-09-20)** *(2026-09-20)*
 - **[v0.1.0 — Initial Foundation Release](#v010--2026-09-15)** *(2026-09-15)*
+
+---
+
+## [v0.7.2] — 2026-10-01
+### 🛡️ Official Code Signing, Full Desktop Installers & Pages Alignment
+
+**Release Announcement Discussion:** [announcements/v0.7.2.md](announcements/v0.7.2.md)
+
+NH Reader v0.7.2 introduces automated, zero-cost code signing integration across Windows and Android in our GitHub Actions pipeline, resolves an issue where desktop installers (`.exe`, `.msi`, `.deb`, `.AppImage`, `.dmg`) were skipped during release uploads, and aligns the documentation website with the official HELIX Origin portal theme.
 
 ---
 

@@ -3,20 +3,23 @@
 Historical record of every change to the NH Reader client. Newer releases are added at the
 top; the current development state lives under `Unreleased`.
 
-## Unreleased
+## [v0.7.2](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.2)
 
-### 🔧 CI Workflow
-* Flattened nested package artifacts before publishing so Windows (`.exe`, `.msi`), macOS (`.dmg`), and Linux (`.deb`, `.AppImage`) installers are uploaded to GitHub Releases alongside portable archives and Android APKs.
+**Release date:** 2026-10-01
 
-### 🌐 Project website
-* Updated the GitHub Pages palette to match the HELIX Origin organization site (`helix-origin.github.io`) with blue, cyan, and teal styling.
+### 🔧 CI Workflow & Code Signing
+* **Official Code Signing Integration**: Configured Windows Authenticode (`WINDOWS_CERTIFICATE_BASE64`) and Android release keystore (`ANDROID_KEYSTORE_BASE64`) repository secrets, signing all Windows `.exe`/`.msi` installers with timestamping and all Android split APKs with `apksigner`.
+* **Fixed Desktop Installer Release Uploads**: Flattened nested package artifacts before publishing so Windows (`.exe`, `.msi`), macOS (`.dmg`), and Linux (`.deb`, `.AppImage`) installers are properly attached to GitHub Releases alongside portable archives and Android APKs.
+* **Pre-Release Workflow Suppression for Non-App Updates**: Configured `package.yml` to ignore pre-release tags (`!v*-*`), preventing heavy multi-platform desktop and mobile packaging runs on documentation, tooling, or CI-only updates. Defined policy requiring pre-releases to target the upcoming minor version (e.g. `v0.8.0-<target>.1`) so they sort ahead of the latest official release. Pre-releases publish with dynamic `prerelease` metadata when manually dispatched.
+
+### 🌐 Project Website
+* **Branding Alignment**: Updated the GitHub Pages documentation theme (`docs/assets/site.css`) to match the official HELIX Origin portal (`helix-origin.github.io`) using navy blue, cyan, and teal styling.
 * Replaced the project and documentation sidebar's placeholder avatar with the repository icon, sized for desktop and mobile, and added the same icon as the site favicon.
 * Removed unpublished generated root Markdown copies and their broken translation links. Documentation continues to translate in place through Google Translate without language-specific pages.
 * Made the Pages site navigation a full-width top bar with the language selector aligned at the end. Removed translation widgets from all GitHub-rendered Markdown pages; translation is available on the Pages site without shifting article content.
 * Added a GitHub Pages project page for NH Reader under `docs/`, matching the HELIX Origin portfolio's vCard-inspired design and linking to releases, documentation, and source. The landing page now links to all existing documentation; GitHub Pages renders the Markdown as interlinked HTML with a shared layout. The site is published from the `docs/` folder.
 * **Multi-page documentation site**: `docs/_data/navigation.yml` is now the single source of truth for every documentation page. The Pages documentation layout renders a sectioned sidebar of all pages with the current page highlighted, page titles, previous/next links and an "Edit on GitHub" link, and the project page builds its documentation directory from the same data.
 * **Pages translation selector**: Removed the broken `<select>`/`<script>` language widget from GitHub-rendered Markdown. The Pages site's language `<select>` translates the page in place using Google Translate and accepts a `?lang=<code>` deep link.
-* **Pages build workflow**: `.github/workflows/pages.yml` stages and builds the site, but its deployment requires switching the Pages source to GitHub Actions; the manually selected `docs/` source publishes independently.
 
 ## [v0.7.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.1)
 

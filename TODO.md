@@ -7,17 +7,32 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
-## 🎯 Active Milestone: v0.7.1 — CI Workflow Patch
+## 🎯 Active Milestone: v0.7.2 — Code Signing & Release Pipeline Enhancement
 
-> Patch release to fix the broken Android CI packaging job pushed in v0.7.0.
-> This is a CI-infrastructure-only patch — no app code changes.
-> **Nothing in this milestone may be pushed until it has been verified end-to-end
-> in dry-run mode (`dry_run: true`).** This is a hard requirement from the user.
+> Patch release adding repository-backed code signing secrets, fixing installer release asset uploads,
+> and aligning GitHub Pages documentation palette with the HELIX Origin design language.
 
 ### 📌 Documentation site deployment
 - ⬜ **Retire or adapt the redundant `GitHub Pages` Actions workflow**: Pages was enabled manually from `docs/`; the workflow still expects an Actions deployment source and cannot switch it without admin permissions.
 
-### 📌 v0.7.1 Tasks:
+### 📌 v0.7.2 Tasks:
+
+- ✅ **Step 1: Release Asset Directory Flattening**:
+  - Resolved `action-gh-release@v2` missing bundle subdirectories by flattening artifacts in `package.yml` (`publish-release`, `publish-test-prerelease`, `dry-run-summary`), ensuring all desktop installers (`.exe`, `.msi`, `.deb`, `.AppImage`, `.dmg`) are uploaded alongside portable archives and split APKs.
+- ✅ **Step 2: Official Code Signing Integration**:
+  - Configured repository secrets: `WINDOWS_CERTIFICATE_BASE64`, `WINDOWS_CERTIFICATE_PASSWORD`, `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, and `ANDROID_KEY_ALIAS`.
+  - Restored persistent certificate and keystore provisioning in `package.yml` prior to `signtool.exe` and `apksigner` invocations.
+- ✅ **Step 3: GitHub Pages Palette Alignment**:
+  - Aligned GitHub Pages palette with HELIX Origin main site (`helix-origin.github.io`) using navy blue, cyan, and teal styling in `docs/assets/site.css`.
+- ✅ **Step 4: Version Bump to v0.7.2 & Discussion Announcements**:
+  - Bumped version to `0.7.2` across `package.json`, `Cargo.toml`, `tauri.conf.json`.
+  - Finalized `CHANGELOG.md` and prepared `scratch/release-notes.md`.
+  - Seeded release announcement in `.github/discussions/announcements/v0.7.2.md` and indexed in `.github/discussions/announcements.md`.
+- ✅ **Step 5: Pre-Release Packaging Workflow Suppression for Non-App Updates**:
+  - Configured `package.yml` `on.push.tags` to ignore pre-release tags (`!v*-*`), preventing heavy desktop and mobile packaging runs on documentation, tooling, or CI-only updates. Pre-releases now publish with dynamic `prerelease` metadata when manually dispatched.
+  - Documented pre-release convention for non-app updates in `.agents/rules/release.md`, mandating that pre-releases target the next minor version (e.g. `v0.8.0-<target>.1`) so they sort ahead of the latest official release.
+
+### ✅ Completed Milestone Tasks (v0.7.1):
 
 - ✅ **Step 1: Research Android build failure root cause**:
   - Read full `package-android` job logs: identified invalid `--target aarch64,armv7,x86_64` value which requires repeated `--target` arguments.

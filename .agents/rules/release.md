@@ -14,6 +14,7 @@
   verify the build → tag annotated. In that order.
 - **Tag format:** `v<major>.<minor>.<patch>`, annotated (`git tag -a -m`), pointing at
   the release commit.
+- **Pre-releases for non-app updates:** Updates that do not affect the application binaries (such as documentation, CI workflow refactoring, developer tooling, or website updates) can be published as pre-releases using SemVer pre-release tags targeting the next minor version (`v<major>.<next_minor>.0-<identifier>`, e.g., `v0.8.0-docs.1`, `v0.8.0-ci.1`). Pre-releases do **not** touch `package.json`, `Cargo.toml`, or `tauri.conf.json` since they do not affect the application itself; app manifests remain at the latest official release version. Targeting the next minor version ensures the pre-release is chronologically and semantically ordered ahead of the latest official release (`v0.8.0-* > v0.7.x`) rather than sorting behind it. Pre-release tags containing hyphens (`v*-*`) are automatically ignored by `.github/workflows/package.yml` on push, ensuring that no multi-platform packaging runner jobs are spawned for non-app updates.
 - **Release notes** come from the changelog, but are written for a person deciding whether
   to upgrade. Lead with what changed for them, not with commit subjects.
 - **Seed release discussions:** Every release must have a detailed, comprehensive release

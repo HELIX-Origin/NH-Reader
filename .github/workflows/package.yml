@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+      - '!v*-*'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -245,7 +246,7 @@ jobs:
           tag_name: ${{ env.EFFECTIVE_TAG }}
           name: NH Reader ${{ env.EFFECTIVE_TAG }}
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(env.EFFECTIVE_TAG, '-') }}
           files: release-artifacts/*
           fail_on_unmatched_files: true
 

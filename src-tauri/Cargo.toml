@@ -1,7 +1,8 @@
 [package]
 name = "nh-reader"
-version = "0.7.1"
+version = "0.7.2"
 description = "A fast, privacy-focused cross-platform client for nhentai.net"
+
 authors = ["HELIX Origin"]
 edition = "2021"
 license = "BSD-3-Clause"
