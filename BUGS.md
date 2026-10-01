@@ -34,7 +34,22 @@
 
 ## 🚨 Open
 
-*No open bugs currently reported.*
+- The following errors have been discovered when running `npm run build:app` *(Note: I replace my hard coded local app data path with the Windows variable to not expose my system path in the error code below`)*:
+  
+  ```powershell
+  warning: !warning: LangString "MULTIUSER_TEXT_INSTALLMODE_TITLE" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
+  warning: !warning: LangString "MULTIUSER_TEXT_INSTALLMODE_SUBTITLE" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
+  warning: !warning: LangString "MULTIUSER_INNERTEXT_INSTALLMODE_TOP" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
+  warning: !warning: LangString "MULTIUSER_INNERTEXT_INSTALLMODE_ALLUSERS" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
+  warning: !warning: LangString "MULTIUSER_INNERTEXT_INSTALLMODE_CURRENTUSER" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
+  ```
+
+- The installer still displays dark text on a dark background in the final page. 
+- The installer fails to to uninstall the previous version when selecting the option to uninstall the previous version before installing the new version. 
+- The workflow updates forgot to add the Windows, macOS, and Linux installers to the release asset uploads steps. *(Currently it uploads the android apk files and the per os portable archives)*
+- The signing works correctly when done locally *(no untrusted developer warning)*, but last time i tested it from the release installer, i still got the untrusted developer warning. We will need to investigate this further to see if the issue is actually fixed or not *(I'm assuming it's probably due to the private key(s) not being published. If so, adding the private key(s) to our repo secrets should fix this issue.)*.
+
+***Note***: *Since some of these issues affect the app code, this update will warrant a version bump.*
 
 ## ✅ Closed
 
