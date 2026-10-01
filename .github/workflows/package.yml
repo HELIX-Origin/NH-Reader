@@ -44,8 +44,9 @@ jobs:
               src-tauri/target/release/bundle/NHReaderPortable_Windows_x64.zip
             build-command: |
               npm run build:app
+              powershell -ExecutionPolicy Bypass -Command "New-Item -ItemType Directory -Force -Path 'src-tauri/target/release/portable/data' | Out-Null; Copy-Item 'src-tauri/target/release/nh-reader.exe' -Destination 'src-tauri/target/release/portable/NH Reader.exe'; Copy-Item 'scripts/launch-windows.bat' -Destination 'src-tauri/target/release/portable/launch-windows.bat'; New-Item -ItemType File -Force -Path 'src-tauri/target/release/portable/.portable' | Out-Null"
               powershell -ExecutionPolicy Bypass -File scripts/sign.ps1 -BundleDir src-tauri/target/release/bundle
-              powershell -ExecutionPolicy Bypass -Command "New-Item -ItemType Directory -Force -Path 'src-tauri/target/release/portable/data' | Out-Null; Copy-Item 'src-tauri/target/release/nh-reader.exe' -Destination 'src-tauri/target/release/portable/NH Reader.exe'; Copy-Item 'scripts/launch-windows.bat' -Destination 'src-tauri/target/release/portable/launch-windows.bat'; New-Item -ItemType File -Force -Path 'src-tauri/target/release/portable/.portable' | Out-Null; Compress-Archive -Path 'src-tauri/target/release/portable/*' -DestinationPath 'src-tauri/target/release/bundle/NHReaderPortable_Windows_x64.zip' -Force"
+              powershell -ExecutionPolicy Bypass -Command "Compress-Archive -Path 'src-tauri/target/release/portable/*' -DestinationPath 'src-tauri/target/release/bundle/NHReaderPortable_Windows_x64.zip' -Force"
 
           - platform: ubuntu-22.04
             target: linux
@@ -249,6 +250,22 @@ jobs:
           prerelease: ${{ contains(env.EFFECTIVE_TAG, '-') }}
           files: release-artifacts/*
           fail_on_unmatched_files: true
+
+  publish-winget:
+    name: Publish to WinGet
+    runs-on: windows-latest
+    needs: [publish-release]
+    if: (startsWith(github.ref, 'refs/tags/v') || inputs.release_tag != '') && !contains(inputs.release_tag != '' && inputs.release_tag || github.ref_name, '-') && inputs.dry_run != true
+    steps:
+      - name: Update WinGet Package
+        if: env.WINGET_TOKEN != ''
+        env:
+          WINGET_TOKEN: ${{ secrets.WINGET_TOKEN }}
+          EFFECTIVE_TAG: ${{ inputs.release_tag != '' && inputs.release_tag || github.ref_name }}
+        run: |
+          $ver = "${{ env.EFFECTIVE_TAG }}".TrimStart('v')
+          winget install Microsoft.WingetCreate --silent --accept-source-agreements --accept-package-agreements
+          wingetcreate update HELIXOrigin.NHReader --version $ver --urls "https://github.com/${{ github.repository }}/releases/download/${{ env.EFFECTIVE_TAG }}/NH.Reader_${ver}_x64-setup.exe" "https://github.com/${{ github.repository }}/releases/download/${{ env.EFFECTIVE_TAG }}/NH.Reader_${ver}_x64_en-US.msi" --token $env:WINGET_TOKEN --submit
 
   publish-test-prerelease:
     name: Publish Test Pre-Release (Dry Run)

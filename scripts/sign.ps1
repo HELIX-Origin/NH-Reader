@@ -31,9 +31,22 @@ if (-not $signtool) {
   $signtool = "signtool.exe"
 }
 
-$files = Get-ChildItem -Path $BundleDir -Include "*.exe", "*.msi" -Recurse -File -ErrorAction SilentlyContinue
-foreach ($file in $files) {
-  Write-Host "Signing $($file.FullName)..."
-  & $signtool sign /f $certPath /p $CertPassword /fd sha256 /tr "http://timestamp.digicert.com" /td sha256 $file.FullName
+$targetFiles = @()
+if (Test-Path "src-tauri/target/release/nh-reader.exe") {
+  $targetFiles += (Get-Item "src-tauri/target/release/nh-reader.exe").FullName
+}
+if (Test-Path "src-tauri/target/release/portable/NH Reader.exe") {
+  $targetFiles += (Get-Item "src-tauri/target/release/portable/NH Reader.exe").FullName
+}
+if (Test-Path $BundleDir) {
+  $bundleFiles = Get-ChildItem -Path $BundleDir -Include "*.exe", "*.msi" -Recurse -File -ErrorAction SilentlyContinue
+  if ($bundleFiles) {
+    $targetFiles += ($bundleFiles | ForEach-Object { $_.FullName })
+  }
+}
+$uniqueFiles = $targetFiles | Select-Object -Unique
+foreach ($filePath in $uniqueFiles) {
+  Write-Host "Signing $filePath..."
+  & $signtool sign /f $certPath /p $CertPassword /fd sha256 /tr "http://timestamp.digicert.com" /td sha256 $filePath
 }
 

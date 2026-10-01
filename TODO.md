@@ -31,6 +31,9 @@
 - ✅ **Step 5: Pre-Release Packaging Workflow Suppression for Non-App Updates**:
   - Configured `package.yml` `on.push.tags` to ignore pre-release tags (`!v*-*`), preventing heavy desktop and mobile packaging runs on documentation, tooling, or CI-only updates. Pre-releases now publish with dynamic `prerelease` metadata when manually dispatched.
   - Documented pre-release convention for non-app updates in `.agents/rules/release.md`, mandating that pre-releases target the next minor version (e.g. `v0.8.0-<target>.1`) so they sort ahead of the latest official release.
+- ✅ **Step 6: Comprehensive Binary Signing**:
+  - Upgraded `scripts/sign.ps1` to sign `nh-reader.exe`, `portable/NH Reader.exe`, and bundle installers.
+  - Reordered Windows packaging job in `package.yml` to sign all binaries before archiving the portable zip.
 
 ### ✅ Completed Milestone Tasks (v0.7.1):
 
