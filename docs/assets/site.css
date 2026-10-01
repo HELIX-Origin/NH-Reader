@@ -207,6 +207,71 @@ h3 {
   border-color: var(--accent);
 }
 
+.documentation-content {
+  overflow-wrap: anywhere;
+}
+
+.documentation-content h1,
+.documentation-content h2,
+.documentation-content h3 {
+  margin-top: 30px;
+}
+
+.documentation-content h1 {
+  font-size: 1.8rem;
+}
+
+.documentation-content h2::after {
+  display: none;
+}
+
+.documentation-content p,
+.documentation-content li {
+  color: var(--muted);
+}
+
+.documentation-content a {
+  overflow-wrap: anywhere;
+}
+
+.documentation-content pre,
+.documentation-content table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.documentation-content pre {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--background);
+}
+
+.documentation-content code {
+  font-size: 0.9em;
+}
+
+.documentation-content :not(pre) > code {
+  background: var(--background);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.documentation-content table {
+  display: block;
+  border-collapse: collapse;
+}
+
+.documentation-content th,
+.documentation-content td {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.documentation-content img {
+  max-width: 100%;
+}
+
 @media (max-width: 760px) {
   .layout {
     grid-template-columns: 1fr;
