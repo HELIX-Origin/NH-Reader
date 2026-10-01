@@ -7,20 +7,22 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
-## 🎯 Planned Target: v0.6.1 — Multi-Platform Portable Packages, NSIS Dark Theme & Installer Asset Branding
+## 🎯 Current Milestone Progress: v0.6.1 (Multi-Platform Portable, NSIS Dark Theme & Asset Branding)
 
-- ⬜ **Multi-Platform Portable Packages (Windows, macOS, Linux)**:
-  - Add portable archive packaging for all desktop targets in the release pipeline (`.github/workflows/package.yml`):
-    - **Windows**: `NHReaderPortable_x64.zip` (standalone `NH Reader.exe` with `.portable` runtime marker and data directory support).
-    - **Linux**: `nh-reader_portable_x86_64.tar.gz` (standalone compiled binary with `.portable` runtime marker, running without system package installation).
+### 📌 Completed Tasks (v0.6.1):
+- ✅ **Multi-Platform Portable Packages (Windows, macOS, Linux)**:
+  - Added portable archive packaging for all desktop targets in the release pipeline (`.github/workflows/package.yml`):
+    - **Windows**: `NHReaderPortable_Windows_x64.zip` (standalone `NH Reader.exe` with `.portable` runtime marker and data directory support).
+    - **Linux**: `nh-reader_portable_linux_x86_64.tar.gz` (standalone compiled binary with `.portable` runtime marker, running without system package installation).
     - **macOS**: `NHReaderPortable_macOS.zip` (portable `.app` bundle with `.portable` runtime marker inside the app root for isolated execution).
-  - Update release workflow artifacts and packaging documentation so portable packages are emitted for Windows, macOS, and Linux on every release.
-- ⬜ **Installer Bitmaps Generation from Official App Icon**:
-  - Replace placeholder bitmaps (`src-tauri/windows/header.bmp` [150×57] and `src-tauri/windows/sidebar.bmp` [164×314]) with properly generated high-resolution assets derived from `src-tauri/icons/icon.png` on `#18181b` dark background, replacing the mismatched red glowing circles.
-- ⬜ **NSIS Control & Text Legibility Fix**:
-  - In `src-tauri/windows/hooks.nsh`, fix illegible text and white-on-gray / dark-on-dark label conflicts caused by NSIS MUI2 static control painting and DWM dark theme hooks. Ensure all dialog labels, radio options, checkboxes, headers, and directory/install controls render with crisp, high-contrast readable text against their background.
+- ✅ **Installer Bitmaps Generation from Official App Icon**:
+  - Replaced crude placeholder glowing circles with crisp, high-resolution assets generated directly from `src-tauri/icons/icon.png` with exact sampled `#0d0d0d` background (`header.bmp` [150×57] and `sidebar.bmp` [164×314]). Created repeatable generation script `scripts/generate-installer-bitmaps.ps1`.
+- ✅ **NSIS Control & Text Legibility Fix**:
+  - In `src-tauri/windows/hooks.nsh`, removed conflicting `MUI_BGCOLOR`, `MUI_TEXTCOLOR`, and `MUI_INSTFILESPAGE_COLORS` defines that caused white-on-white and white-on-gray unreadable text in NSIS dialogs, while preserving DWM dark window title bar attributes.
+- ✅ **Clean up tauri.conf.json**:
+  - Removed leftover `"iOS"` block from `src-tauri/tauri.conf.json`.
 
-## 🎯 Current Status: Complete (Track 9: Library Downloaded Favorites Isolation)
+## 🎯 Previous Status: Complete (Track 9: Library Downloaded Favorites Isolation)
 
 ### 📌 Completed Tasks (Track 9):
 - ✅ **Downloaded Favorites Filter**: Scoped the Library's "Favorites" tab (`FavoritesView.svelte` with `downloadedOnly={true}`) to exclusively display downloaded favorites (`isDownloaded(id)`), decoupling it from the standalone `/favorites` tab which continues to display all favorites.

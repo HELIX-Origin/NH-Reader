@@ -1,7 +1,3 @@
-!define MUI_BGCOLOR "18181B"
-!define MUI_TEXTCOLOR "F4F4F5"
-!define MUI_INSTFILESPAGE_COLORS "F4F4F5 18181B"
-
 !define MUI_CUSTOMFUNCTION_GUIINIT EnableDarkMode
 
 Function EnableDarkMode
