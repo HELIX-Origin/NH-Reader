@@ -106,7 +106,7 @@ The `docs/` folder is published as the GitHub Pages site from the repository's P
 2. Register it in `docs/_data/navigation.yml`, which drives the site sidebar, previous/next links, and the project page's documentation directory.
 3. Link to other pages with relative `.md` paths so the links work both on GitHub and on the Pages site.
 
-Root Markdown files with a `<details id="translate-menu">` dropdown (`README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `PRIVACY.md`, `TOS.md`) have generated copies under `docs/repo/`. Their dropdown links point at `https://helix-origin.github.io/NH-Reader/repo/<FILE>.html?lang=<code>`. When changing a root file, run `node scripts/build-pages.mjs /tmp/nh-reader-pages` and copy its updated file from `/tmp/nh-reader-pages/repo/` into `docs/repo/`. Commit both files together so the Pages copy remains current. To publish another root file, add the same dropdown, generate its copy, and list it under "Project files" in `docs/_data/navigation.yml`.
+Root Markdown files are separate from the Pages documentation. Their generated copies live in `assets/translations/root-pages/`, not in `docs/`, and are **not** published by the current docs-folder Pages source. When changing a root file, run `node scripts/build-pages.mjs /tmp/nh-reader-pages` and copy its updated file from `/tmp/nh-reader-pages/repo/` into `assets/translations/root-pages/`. The root files' existing `/repo/*.html?lang=...` links need a different hosting or translation approach before they can work.
 
 ## 📜 License
 

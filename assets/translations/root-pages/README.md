@@ -137,7 +137,7 @@ src-tauri/            # Rust backend (Tauri 2)
 
 Full documentation lives in the [`docs/`](../README.html) folder:
 
-- [Project page](https://helix-origin.github.io/NH-Reader/) — GitHub Pages site with the landing page, every documentation page, and translatable copies of this README, CONTRIBUTING, SECURITY, PRIVACY and TOS.
+- [Project page](https://helix-origin.github.io/NH-Reader/) — GitHub Pages site with the landing page and documentation pages.
 - [Documentation Home](../README.html) · [Getting Started](../Getting-Started.html) · [Search & Filters](../Search-and-Filters.html)
 - [Blacklist](../Blacklist.html) · [Reader & Galleries](../Reader-and-Galleries.html) · [Settings & API Key](../Settings-and-API-Key.html)
 - [Installation & Maintenance](../Installation-and-Maintenance.html) · [Localization](../Localization.html) · [Architecture](../Architecture.html)
@@ -147,7 +147,7 @@ Full documentation lives in the [`docs/`](../README.html) folder:
 Also see [ROADMAP.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md), [TODO.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/TODO.md), [BUGS.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/BUGS.md), [CHANGELOG.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
-The site at `https://helix-origin.github.io/NH-Reader/` is published from the `docs/` folder through repository **Settings → Pages**. The root Markdown files with translation menus are also available on the site as generated copies under `docs/repo/`. When editing one of those root files, regenerate its published copy using `node scripts/build-pages.mjs /tmp/nh-reader-pages` and copy the updated file from `/tmp/nh-reader-pages/repo/` into `docs/repo/`; commit both files together. The old [`.github/workflows/pages.yml`](https://github.com/HELIX-Origin/NH-Reader/blob/main/.github/workflows/pages.yml) builds a staged site for a GitHub Actions Pages source, but it cannot deploy to the currently selected `docs/` source. The Tauri application is never deployed as a website.
+The site at `https://helix-origin.github.io/NH-Reader/` is published from the `docs/` folder through repository **Settings → Pages**. Root Markdown copies are kept outside the Pages folder in `assets/translations/root-pages/`; the current Pages source does not publish those copies, so the root files' `/repo/*.html?lang=...` translation links cannot resolve. The old [`.github/workflows/pages.yml`](https://github.com/HELIX-Origin/NH-Reader/blob/main/.github/workflows/pages.yml) builds a staged site for a GitHub Actions Pages source, but it cannot deploy to the currently selected `docs/` source. The Tauri application is never deployed as a website.
 
 ## 🤝 Contributing
 

@@ -34,6 +34,7 @@
 
 ## 🚨 Open
 
+- **Root-file translation links still return 404:** Pages publishes only `docs/`, while generated root Markdown copies must remain outside that folder in `assets/translations/root-pages/`. The existing `/repo/*.html?lang=...` links in root Markdown cannot resolve under docs-folder publishing; choose a separate publishing or translation route before treating these links as working.
 - **Pages workflow cannot deploy to the selected source:** Pages is now enabled manually from `docs/`. The `GitHub Pages` workflow still tries to switch its source to GitHub Actions and deploy a staged artifact; it requires admin permissions to switch sources and does not publish under the current `docs/` setting. The `docs/` branch build works independently of that workflow.
 
 - The following errors have been discovered when running `npm run build:app` *(Note: I replaced my hard coded local app data path with the Windows variable to not expose my system path in the error code below)*:

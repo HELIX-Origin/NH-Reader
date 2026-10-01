@@ -134,7 +134,7 @@ src-tauri/            # Rust backend (Tauri 2)
 
 Full documentation lives in the [`docs/`](docs/README.md) folder:
 
-- [Project page](https://helix-origin.github.io/NH-Reader/) — GitHub Pages site with the landing page, every documentation page, and translatable copies of this README, CONTRIBUTING, SECURITY, PRIVACY and TOS.
+- [Project page](https://helix-origin.github.io/NH-Reader/) — GitHub Pages site with the landing page and documentation pages.
 - [Documentation Home](docs/README.md) · [Getting Started](docs/Getting-Started.md) · [Search & Filters](docs/Search-and-Filters.md)
 - [Blacklist](docs/Blacklist.md) · [Reader & Galleries](docs/Reader-and-Galleries.md) · [Settings & API Key](docs/Settings-and-API-Key.md)
 - [Installation & Maintenance](docs/Installation-and-Maintenance.md) · [Localization](docs/Localization.md) · [Architecture](docs/Architecture.md)
@@ -144,7 +144,7 @@ Full documentation lives in the [`docs/`](docs/README.md) folder:
 Also see [ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), [BUGS.md](BUGS.md), [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
-The site at `https://helix-origin.github.io/NH-Reader/` is published from the `docs/` folder through repository **Settings → Pages**. The root Markdown files with translation menus are also available on the site as generated copies under `docs/repo/`. When editing one of those root files, regenerate its published copy using `node scripts/build-pages.mjs /tmp/nh-reader-pages` and copy the updated file from `/tmp/nh-reader-pages/repo/` into `docs/repo/`; commit both files together. The old [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds a staged site for a GitHub Actions Pages source, but it cannot deploy to the currently selected `docs/` source. The Tauri application is never deployed as a website.
+The site at `https://helix-origin.github.io/NH-Reader/` is published from the `docs/` folder through repository **Settings → Pages**. Root Markdown copies are kept outside the Pages folder in `assets/translations/root-pages/`; the current Pages source does not publish those copies, so the root files' `/repo/*.html?lang=...` translation links cannot resolve. The old [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds a staged site for a GitHub Actions Pages source, but it cannot deploy to the currently selected `docs/` source. The Tauri application is never deployed as a website.
 
 ## 🤝 Contributing
 
