@@ -7,6 +7,13 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
+## 🎯 Planned: Restore Full Mobile Support (Android & iOS — Excluded from CI Workflow)
+
+- ⬜ **Restore Full Mobile Toolchain (Android & iOS)**:
+  - Restore iOS scripts (`mobile:ios:init`, `mobile:ios:build`) in `package.json` alongside Android tooling (`mobile:android:*`) to support building mobile packages locally via Tauri CLI.
+  - Restore mobile settings section, documentation, and community sideloading instructions (APK for Android, sideloading/AltStore for iOS).
+  - Exclude mobile targets from the automated GitHub Actions release workflow (`package.yml`), keeping CI strictly dedicated to desktop targets (Windows, Linux, macOS) while mobile builds remain locally operated.
+
 ## 🎯 Current Milestone Progress: v0.6.1 (Multi-Platform Portable, NSIS Dark Theme & Asset Branding)
 
 ### 📌 Completed Tasks (v0.6.1):
