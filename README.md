@@ -146,7 +146,7 @@ Full documentation lives in the [`docs/`](docs/README.md) folder:
 Also see [ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), [BUGS.md](BUGS.md), [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
-To publish the project page at `https://helix-origin.github.io/NH-Reader/`, select **Deploy from a branch** in this repository's **Settings → Pages** and choose the default branch and **`/docs`** folder. The static `docs/index.html` is the entry point; it does not deploy the Tauri application. Preview it locally from `docs/` with `python3 -m http.server 8000` and open `http://localhost:8000/`.
+To publish the project page and all 18 documentation pages at `https://helix-origin.github.io/NH-Reader/`, select **Deploy from a branch** in this repository's **Settings → Pages** and choose the default branch and **`/docs`** folder. GitHub Pages builds the Markdown into linked HTML pages using `docs/_config.yml` and the shared documentation layout. The static `docs/index.html` is the project entry point; it does not deploy the Tauri application. To preview the landing page alone, run `python3 -m http.server 8000` from `docs/` and open `http://localhost:8000/`; the Markdown pages require GitHub Pages' Jekyll build to preview as rendered HTML.
 
 ## 🤝 Contributing
 

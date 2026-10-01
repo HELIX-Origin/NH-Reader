@@ -6,7 +6,7 @@ top; the current development state lives under `Unreleased`.
 ## Unreleased
 
 ### 🌐 Project website
-* Added a standalone GitHub Pages landing page for NH Reader under `docs/`, matching the HELIX Origin portfolio's vCard-inspired design and linking to releases, documentation, and source. Publishing requires enabling Pages from the branch's `/docs` folder.
+* Added a GitHub Pages project page for NH Reader under `docs/`, matching the HELIX Origin portfolio's vCard-inspired design and linking to releases, documentation, and source. The landing page now links to all existing documentation; GitHub Pages renders the Markdown as interlinked HTML with a shared layout. Publishing requires enabling Pages from the branch's `/docs` folder.
 
 ## [v0.7.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.1)
 

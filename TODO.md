@@ -98,7 +98,7 @@
 
 ## ✅ Done — Completed Milestones & Historical Releases
 
-- ✅ **NH Reader GitHub Pages project page**: Added a standalone, vCard-inspired landing page in `docs/` for publication at `https://helix-origin.github.io/NH-Reader/` via Settings → Pages (branch `/docs`). The desktop application's SPA is not deployed as a website.
+- ✅ **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/` for publication at `https://helix-origin.github.io/NH-Reader/` via Settings → Pages (branch `/docs`). The desktop application's SPA is not deployed as a website.
 
 ### [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) — Upstream Alignment, Dedicated Library Hub & Rebuilt Native Installer (2026-10-01)
 - ✅ **Rebuilt Native Packaging with Custom NSIS Hook Template**:

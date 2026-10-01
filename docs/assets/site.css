@@ -207,6 +207,28 @@ h3 {
   border-color: var(--accent);
 }
 
+.documentation-directory {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.documentation-directory > div {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.documentation-directory ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.documentation-directory li + li {
+  margin-top: 8px;
+}
+
 .documentation-content {
   overflow-wrap: anywhere;
 }

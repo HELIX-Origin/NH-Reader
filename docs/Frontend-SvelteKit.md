@@ -86,7 +86,7 @@ src/routes/
 
 ## 📐 Dynamic UI Scaling
 
-[`GalleryGrid.svelte`](../src/lib/components/GalleryGrid.svelte) dynamically measures its container width (`bind:clientWidth={containerWidth}`) and computes optimal columns:
+[`GalleryGrid.svelte`](https://github.com/HELIX-Origin/NH-Reader/blob/main/src/lib/components/GalleryGrid.svelte) dynamically measures its container width (`bind:clientWidth={containerWidth}`) and computes optimal columns:
 - Automatically calculates `cols` so card aspect ratios remain clean.
 - Fits visible cards per page to complete rows (`Math.floor(visible.length / cols) * cols`), eliminating orphaned cards and empty slots.
 - Fluidly scales cards across available horizontal width via CSS Grid `repeat(var(--grid-cols, 5), minmax(0, 1fr))`.
@@ -146,4 +146,4 @@ Tokens live in `design/tokens.css` strictly adhering to nhentai's dark palette:
 
 *[NH Reader](https://github.com/HELIX-Origin/NH-Reader) — a lightweight, modern, cross-platform client for nhentai.net.*
 
-*[Documentation Home](README.md) · [Repository](https://github.com/HELIX-Origin/NH-Reader) · [Releases](https://github.com/HELIX-Origin/NH-Reader/releases) · [Security](Security.md) · [Privacy](Privacy.md) · [TOS](../TOS.md) · [License](../LICENSE.md)*
+*[Documentation Home](README.md) · [Repository](https://github.com/HELIX-Origin/NH-Reader) · [Releases](https://github.com/HELIX-Origin/NH-Reader/releases) · [Security](Security.md) · [Privacy](Privacy.md) · [TOS](https://github.com/HELIX-Origin/NH-Reader/blob/main/TOS.md) · [License](https://github.com/HELIX-Origin/NH-Reader/blob/main/LICENSE.md)*
