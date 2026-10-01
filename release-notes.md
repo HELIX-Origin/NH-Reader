@@ -70,6 +70,7 @@ Upgrade in place: run the new installer over your existing installation. Your SQ
 
 ## 📄 Changes & Commits
 
+- `ci(workflow): add automated signing for Windows, Android, iOS, and macOS packages`
 - `011c238` `ci(workflow): configure APPLE_DEVELOPMENT_TEAM for iOS runner`
 - `5ac1541` `ci(workflow): isolate matrix runner build commands and package paths for all platforms`
 - `c827d15` `ci(workflow): separate packaging into dedicated desktop, android, and ios jobs`
