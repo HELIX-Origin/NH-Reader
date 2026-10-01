@@ -19,6 +19,11 @@
   - Replaced crude placeholder glowing circles with crisp, high-resolution assets generated directly from `src-tauri/icons/icon.png` with exact sampled `#0d0d0d` background (`header.bmp` [150×57] and `sidebar.bmp` [164×314]). Created repeatable generation script `scripts/generate-installer-bitmaps.ps1`.
 - ✅ **NSIS Control & Text Legibility Fix**:
   - In `src-tauri/windows/hooks.nsh`, removed conflicting `MUI_BGCOLOR`, `MUI_TEXTCOLOR`, and `MUI_INSTFILESPAGE_COLORS` defines that caused white-on-white and white-on-gray unreadable text in NSIS dialogs, while preserving DWM dark window title bar attributes.
+- ✅ **CI & Packaging Workflow Stabilization**:
+  - Rebuilt `.github/workflows/package.yml` matrix so each runner strictly builds and searches for its own platform artifacts, preventing false-positive uploads and runner crosstalk.
+  - Configured `if-no-files-found: error` in `upload-artifact` and `fail_on_unmatched_files: true` in `action-gh-release` to prevent silent packaging failures.
+  - Added an explicit pinned Android NDK (`27.2.12479018`) install step via `sdkmanager` exporting `NDK_HOME` into `$GITHUB_ENV`.
+  - Dropped iOS packaging runner from CI matrix until manual Apple Developer team signing is configured.
 - ✅ **Clean up tauri.conf.json**:
   - Removed leftover `"iOS"` block from `src-tauri/tauri.conf.json`.
 

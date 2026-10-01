@@ -10,6 +10,12 @@ top; the current development state lives under `Unreleased`.
 * **Official app icon installer bitmaps**: Replaced glowing placeholder circle bitmaps with high-resolution assets (`header.bmp` [150×57] and `sidebar.bmp` [164×314]) generated directly from `src-tauri/icons/icon.png` matching the `#0d0d0d` background.
 * **NSIS text legibility fix**: Removed conflicting `MUI_BGCOLOR` and `MUI_TEXTCOLOR` defines from `src-tauri/windows/hooks.nsh` that caused white-on-white and white-on-gray unreadable dialog text, ensuring all labels, group boxes, and directory selectors render with high contrast while preserving DWM dark window title bar attributes.
 
+### 🚀 CI / Packaging Workflow Stabilization
+* **Platform-isolated matrix runners**: Rebuilt `.github/workflows/package.yml` matrix so each runner strictly builds and searches for its own platform artifacts, preventing false-positive uploads and runner crosstalk.
+* **Strict failure enforcement**: Configured `if-no-files-found: error` in `upload-artifact` and `fail_on_unmatched_files: true` in `action-gh-release` so a runner immediately fails if its expected installer packages are missing rather than falsely reporting success.
+* **Deterministic Android NDK setup**: Added an explicit pinned Android NDK (`27.2.12479018`) install step via `sdkmanager` exporting `NDK_HOME` into `$GITHUB_ENV`, eliminating APK compilation failures and unused variable warnings.
+* **iOS runner removal**: Dropped iOS packaging runner from the CI matrix until manual Apple Developer team signing is configured.
+
 
 ## [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0)
 
