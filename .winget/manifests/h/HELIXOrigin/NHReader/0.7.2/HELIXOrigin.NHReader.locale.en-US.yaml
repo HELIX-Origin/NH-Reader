@@ -9,7 +9,7 @@ Author: HELIX Origin
 PackageName: NH Reader
 PackageUrl: https://github.com/HELIX-Origin/NH-Reader
 License: GPL-3.0
-LicenseUrl: https://github.com/HELIX-Origin/NH-Reader/blob/main/LICENSE
+LicenseUrl: https://github.com/HELIX-Origin/NH-Reader/blob/main/LICENSE.md
 Copyright: Copyright (c) 2026 HELIX Origin
 ShortDescription: A fast, lightweight, and private client for nhentai.net with advanced filtering and global blacklisting.
 Description: NH Reader is a dedicated cross-platform client for nhentai.net designed to beat the site at search, filtering, and content management. Features an integrated custom title bar, instant reader preloading, dynamic image quality switching, global blacklist enforcement, offline library reader, and complete localization across 18 languages.
