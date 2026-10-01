@@ -15,6 +15,8 @@
 	import { locale } from '$lib/stores/locale.svelte';
 	import { getCurrentWindow } from '@tauri-apps/api/window';
 	import LoginModal from '$lib/components/LoginModal.svelte';
+	import WindowControls from '$lib/components/WindowControls.svelte';
+	import { getPlatform } from '$lib/platform';
 	import '../lib/design/app.css';
 
 	let { children } = $props();
@@ -34,6 +36,13 @@
 	const settings = getSettings();
 	const blacklist = $derived(getBlacklist());
 	const account = $derived(getAccountState());
+	const platform = getPlatform();
+
+	const effectiveControlsPosition = $derived.by(() => {
+		if (settings.windowControlsPosition === 'left') return 'left';
+		if (settings.windowControlsPosition === 'right') return 'right';
+		return platform === 'macos' ? 'left' : 'right';
+	});
 
 	let quickQuery = $state('');
 	let ready = $state(false);
@@ -69,7 +78,14 @@
 			}
 		}
 
+		function onTopBarDblClick(e: MouseEvent) {
+			if (!(e.target as HTMLElement)?.closest('input, button, a, kbd, [role="button"]')) {
+				getCurrentWindow().toggleMaximize().catch(() => {});
+			}
+		}
+
 		topBarEl?.addEventListener('mousedown', onTopBarMouseDown);
+		topBarEl?.addEventListener('dblclick', onTopBarDblClick);
 
 		cacheInit()
 			.then(() =>
@@ -88,7 +104,14 @@
 
 		return () => {
 			topBarEl?.removeEventListener('mousedown', onTopBarMouseDown);
+			topBarEl?.removeEventListener('dblclick', onTopBarDblClick);
 		};
+	});
+	$effect(() => {
+		if (typeof document !== 'undefined') {
+			document.documentElement.lang = locale.value;
+			document.documentElement.dir = locale.dir;
+		}
 	});
 </script>
 
@@ -97,12 +120,15 @@
 	<meta name="color-scheme" content="dark" />
 </svelte:head>
 
-<div class="app">
+<div class="app" dir={locale.dir}>
 	<header
 		class="top-bar"
 		bind:this={topBarEl}
 		data-tauri-drag-region
 	>
+		{#if effectiveControlsPosition === 'left'}
+			<WindowControls position="left" />
+		{/if}
 		<div class="tb-brand" data-tauri-drag-region>
 			<img class="tb-mark" src={`${base}/favicon.png`} alt="" data-tauri-drag-region />
 			<span class="tb-title" data-tauri-drag-region>{locale.t('app.name')}</span>
@@ -151,6 +177,10 @@
 					<span class="account-name">{locale.t('account.signIn')}</span>
 				{/if}
 			</button>
+
+			{#if effectiveControlsPosition === 'right'}
+				<WindowControls position="right" />
+			{/if}
 		</div>
 	</header>
 

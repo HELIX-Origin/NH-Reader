@@ -1,3 +1,29 @@
+<div align="right">
+  <label for="translate-select" style="font-size:12px; color:#a1a1aa; margin-right:6px;">🌐 Language:</label>
+  <select id="translate-select" style="background:#18181b; color:#f4f4f5; border:1px solid #3f3f46; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer;" onchange="translatePage(this.value)">
+    <option value="en">English</option>
+    <option value="ja">日本語 (Japanese)</option>
+    <option value="zh-CN">简体中文 (Simplified Chinese)</option>
+    <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
+    <option value="ko">한국어 (Korean)</option>
+    <option value="es">Español (Spanish)</option>
+    <option value="fr">Français (French)</option>
+    <option value="de">Deutsch (German)</option>
+    <option value="ru">Русский (Russian)</option>
+    <option value="pt">Português (Portuguese)</option>
+    <option value="it">Italiano (Italian)</option>
+    <option value="th">ไทย (Thai)</option>
+    <option value="vi">Tiếng Việt (Vietnamese)</option>
+    <option value="id">Bahasa Indonesia (Indonesian)</option>
+    <option value="pl">Polski (Polish)</option>
+    <option value="nl">Nederlands (Dutch)</option>
+    <option value="tr">Türkçe (Turkish)</option>
+    <option value="ar">العربية (Arabic)</option>
+  </select>
+  <div id="google_translate_element" style="display:none;"></div>
+</div>
+<script type="text/javascript" src="./docs/translate.js"></script>
+
 # NH Reader
 
 **A lightweight, modern, cross-platform client for [nhentai.net](https://nhentai.net).**
@@ -108,21 +134,20 @@ src-tauri/            # Rust backend (Tauri 2)
 
 ## 📚 Documentation
 
-Full documentation lives in the [Wiki](../../wiki)
-(available in the `wiki/` folder in this repository for contributions):
+Full documentation lives in the [`docs/`](docs/README.md) folder:
 
-- [Home](../../wiki/Home) · [Getting Started](../../wiki/Getting-Started) · [Search & Filters](../../wiki/Search-and-Filters)
-- [Blacklist](../../wiki/Blacklist) · [Reader & Galleries](../../wiki/Reader-and-Galleries) · [Settings & API Key](../../wiki/Settings-and-API-Key)
-- [Installation & Maintenance](../../wiki/Installation-and-Maintenance) · [Localization](../../wiki/Localization) · [Architecture](../../wiki/Architecture)
-- [Security](../../wiki/Security) · [Privacy](../../wiki/Privacy) · [Troubleshooting](../../wiki/Troubleshooting)
-- [FAQ](../../wiki/FAQ) · [Development & Contributing](../../wiki/Development-and-Contributing)
+- [Documentation Home](docs/README.md) · [Getting Started](docs/Getting-Started.md) · [Search & Filters](docs/Search-and-Filters.md)
+- [Blacklist](docs/Blacklist.md) · [Reader & Galleries](docs/Reader-and-Galleries.md) · [Settings & API Key](docs/Settings-and-API-Key.md)
+- [Installation & Maintenance](docs/Installation-and-Maintenance.md) · [Localization](docs/Localization.md) · [Architecture](docs/Architecture.md)
+- [Security](docs/Security.md) · [Privacy](docs/Privacy.md) · [Troubleshooting](docs/Troubleshooting.md)
+- [FAQ](docs/FAQ.md) · [Development & Contributing](docs/Development-and-Contributing.md)
 
 Also see [ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), [BUGS.md](BUGS.md), [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
 ## 🤝 Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Wiki's Development section](../../wiki/Development-and-Contributing)
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Development & Contributing guide](docs/Development-and-Contributing.md)
 for building, testing, and translation instructions. Be respectful, keep changes scoped, and match the existing conventions.
 
 ## 📄 License

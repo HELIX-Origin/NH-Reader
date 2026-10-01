@@ -1,6 +1,32 @@
-# Contributing to NH Desktop
+<div align="right">
+  <label for="translate-select" style="font-size:12px; color:#a1a1aa; margin-right:6px;">🌐 Language:</label>
+  <select id="translate-select" style="background:#18181b; color:#f4f4f5; border:1px solid #3f3f46; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer;" onchange="translatePage(this.value)">
+    <option value="en">English</option>
+    <option value="ja">日本語 (Japanese)</option>
+    <option value="zh-CN">简体中文 (Simplified Chinese)</option>
+    <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
+    <option value="ko">한국어 (Korean)</option>
+    <option value="es">Español (Spanish)</option>
+    <option value="fr">Français (French)</option>
+    <option value="de">Deutsch (German)</option>
+    <option value="ru">Русский (Russian)</option>
+    <option value="pt">Português (Portuguese)</option>
+    <option value="it">Italiano (Italian)</option>
+    <option value="th">ไทย (Thai)</option>
+    <option value="vi">Tiếng Việt (Vietnamese)</option>
+    <option value="id">Bahasa Indonesia (Indonesian)</option>
+    <option value="pl">Polski (Polish)</option>
+    <option value="nl">Nederlands (Dutch)</option>
+    <option value="tr">Türkçe (Turkish)</option>
+    <option value="ar">العربية (Arabic)</option>
+  </select>
+  <div id="google_translate_element" style="display:none;"></div>
+</div>
+<script type="text/javascript" src="./docs/translate.js"></script>
 
-Thank you for your interest in **NH Desktop**. This document covers how to set up a development environment, follow the project's conventions, open issues, and submit changes.
+# Contributing to NH Reader
+
+Thank you for your interest in **NH Reader**. This document covers how to set up a development environment, follow the project's conventions, open issues, and submit changes.
 
 If you have not read it yet, start with [`AGENTS.md`](./AGENTS.md) for the high-level project overview, stack decisions, and layout.
 
@@ -27,7 +53,7 @@ If you have not read it yet, start with [`AGENTS.md`](./AGENTS.md) for the high-
 
 - Be respectful and constructive.
 - Keep criticism focused on the code, not the person.
-- Respect project boundaries: NH Desktop is a desktop-only client for nhentai.net. Mobile support and server-side hosting are out of scope.
+- Respect project boundaries: NH Reader is a client for nhentai.net with custom desktop and mobile packaging.
 - Follow the nhentai.net terms of service and do not build features designed to abuse the site or its API.
 
 ---
@@ -37,7 +63,7 @@ If you have not read it yet, start with [`AGENTS.md`](./AGENTS.md) for the high-
 - **Report bugs** via [GitHub Issues](https://github.com/HELIX-Origin/NH-Reader/issues) using the bug-report template.
 - **Propose features** via [GitHub Issues](https://github.com/HELIX-Origin/NH-Reader/issues) using the feature-proposal template.
 - **Contribute translations** for your language (100% drop-in, see [Contributing Translations](#contributing-translations)).
-- **Improve documentation** in `README.md`, `wiki/`, or `.agents/`.
+- **Improve documentation** in `README.md`, `docs/`, or `.agents/`.
 - **Submit code changes** via pull request.
 - **Review pull requests** from other contributors.
 
@@ -47,7 +73,7 @@ Before starting significant work, open an issue or comment on an existing one so
 
 ## Contributing Translations
 
-NH Desktop features a **100% drop-in localization architecture**. English (`src/lib/i18n/en.json`) is the default language pack shipped with the application.
+NH Reader features a **100% drop-in localization architecture**. English (`src/lib/i18n/en.json`) is the default language pack shipped with the application.
 
 Contributing a new language or updating an existing one requires **editing only a single JSON file** in `src/lib/i18n/`. You never need to touch Rust code, TypeScript registries, or component files.
 
@@ -64,7 +90,7 @@ Contributing a new language or updating an existing one requires **editing only 
    ```bash
    npm run i18n:check
    ```
-   The validator automatically detects your new drop-in file and verifies that all 78 required keys are present, non-empty, and free of typos.
+   The validator automatically detects your new drop-in file and verifies that all 258 required keys are present, non-empty, and free of typos.
 
 4. **Verify frontend integrity:**
    ```bash
@@ -283,7 +309,7 @@ src-tauri/                   # Rust backend
     db.rs                    # SQLite persistence with poison-recovered locks
     installer.rs             # Unified installer/uninstaller logic
     platform/                # Platform-specific installer & uninstaller helpers
-wiki/                        # GitHub wiki pages
+docs/                        # Documentation pages (with live translation & in-page nav)
 ```
 
 ---
@@ -349,7 +375,7 @@ Common types:
 | --- | --- | --- |
 | ✨ | `feat` | New user-facing capability |
 | 🐛 | `fix` | Bug fix |
-| 📝 | `docs` | Documentation, wiki, `.agents/` |
+| 📝 | `docs` | Documentation, `.agents/` |
 | 🧪 | `test` | Tests only |
 | ♻️ | `refactor` | No behavior change |
 | ⚡ | `perf` | Performance improvement |
@@ -406,7 +432,7 @@ All ten unit tests must pass:
 2. **Create a branch** from `main`.
 3. **Make focused commits** following the commit-message format.
 4. **Run checks** (`npm run check`, `cargo check`, `cargo test`).
-5. **Update docs** if behavior changed (`CHANGELOG.md`, `README.md`, `wiki/`, `.agents/` as appropriate).
+5. **Update docs** if behavior changed (`CHANGELOG.md`, `README.md`, `docs/`, `.agents/` as appropriate).
 6. **Open a PR** and fill out the template. Use `--body-file` for non-interactive submission if needed.
 7. **Respond to review feedback** and keep the branch up to date with `main`.
 
@@ -419,12 +445,14 @@ Do not push directly to `main`. Releases are managed via annotated tags per `.ag
 Releases follow `.agents/rules/release.md` and `.agents/skills/cut-release.md`:
 
 1. Sync version strings in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json`.
-2. Run the verification gate: `cargo check`, `cargo test`, `npm run check`, `npm run build`, installer smoke test.
+2. Run the verification gate: `cargo check`, `cargo test`, `npm run check`, `npm run i18n:check`, `npm run check:agents`, `npm run build`, installer smoke test.
 3. Update `CHANGELOG.md`.
-4. Create an annotated tag: `git tag -a vX.Y.Z -m "vX.Y.Z — summary"`.
-5. Push tags: `git push origin main --tags`.
-6. Create a GitHub release with detailed notes (never just "See CHANGELOG.md").
-7. The `v*` tag push triggers the Cross-Platform Packaging workflow, which attaches installers.
+4. Rewrite `release-notes.md` for human readability.
+5. Seed release discussion in `.github/discussions/announcements/v<version>.md` and `.github/discussions/announcements.md`.
+6. Create an annotated tag: `git tag -a vX.Y.Z -m "vX.Y.Z — summary"`.
+7. Push tags: `git push origin main --tags`.
+8. Create a GitHub release with detailed notes (never just "See CHANGELOG.md").
+9. The `v*` tag push triggers the Cross-Platform Packaging workflow, which attaches installers.
 
 Only maintainers cut releases.
 
@@ -442,7 +470,7 @@ Only maintainers cut releases.
 ## Getting Help
 
 - Read [`AGENTS.md`](./AGENTS.md) and `.agents/ROLES.md`.
-- Check `wiki/` and existing [Discussions](https://github.com/HELIX-Origin/NH-Reader/discussions).
+- Check `docs/` and existing [Discussions](https://github.com/HELIX-Origin/NH-Reader/discussions).
 - Open a [GitHub Issue](https://github.com/HELIX-Origin/NH-Reader/issues) if something is unclear or broken.
 
 Thank you for contributing.

@@ -249,6 +249,33 @@
 
 		<div class="row-label">
 			<div>
+				<span>{locale.t('settings.windowControlsPosition')}</span>
+				<div class="faint">{locale.t('settings.windowControlsPositionDesc')}</div>
+			</div>
+			<div class="seg">
+				<button
+					class:on={s.windowControlsPosition === 'auto'}
+					onclick={() => updateSettings({ windowControlsPosition: 'auto' })}
+				>
+					{locale.t('settings.windowControlsPositionAuto')}
+				</button>
+				<button
+					class:on={s.windowControlsPosition === 'left'}
+					onclick={() => updateSettings({ windowControlsPosition: 'left' })}
+				>
+					{locale.t('settings.windowControlsPositionLeft')}
+				</button>
+				<button
+					class:on={s.windowControlsPosition === 'right'}
+					onclick={() => updateSettings({ windowControlsPosition: 'right' })}
+				>
+					{locale.t('settings.windowControlsPositionRight')}
+				</button>
+			</div>
+		</div>
+
+		<div class="row-label">
+			<div>
 				<span>{locale.t('settings.dynamicScaling')}</span>
 				<div class="faint">{locale.t('settings.dynamicScalingDescription')}</div>
 			</div>
@@ -309,6 +336,30 @@
 			>
 				<span class="knob"></span>
 			</button>
+		</div>
+
+		<div class="row-label">
+			<div>
+				<span>{locale.t('settings.preloadDistance')}</span>
+				<div class="faint">{locale.t('settings.preloadDistanceHelp')}</div>
+			</div>
+			<div class="seg">
+				<button class:on={s.readerPreload === 1} onclick={() => updateSettings({ readerPreload: 1 })}>{locale.t('settings.preload1')}</button>
+				<button class:on={s.readerPreload === 2 || !s.readerPreload} onclick={() => updateSettings({ readerPreload: 2 })}>{locale.t('settings.preload2')}</button>
+				<button class:on={s.readerPreload === 3} onclick={() => updateSettings({ readerPreload: 3 })}>{locale.t('settings.preload3')}</button>
+				<button class:on={s.readerPreload === 5} onclick={() => updateSettings({ readerPreload: 5 })}>{locale.t('settings.preload5')}</button>
+			</div>
+		</div>
+
+		<div class="row-label">
+			<div>
+				<span>{locale.t('settings.imageQuality')}</span>
+				<div class="faint">{locale.t('settings.imageQualityHelp')}</div>
+			</div>
+			<div class="seg">
+				<button class:on={s.readerQuality === 'high' || !s.readerQuality} onclick={() => updateSettings({ readerQuality: 'high' })}>{locale.t('settings.qualityHigh')}</button>
+				<button class:on={s.readerQuality === 'low'} onclick={() => updateSettings({ readerQuality: 'low' })}>{locale.t('settings.qualityLow')}</button>
+			</div>
 		</div>
 	</section>
 

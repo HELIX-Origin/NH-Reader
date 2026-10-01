@@ -7,12 +7,12 @@ it — see `.agents/rules/doc-truthfulness.md`.
 
 1. **Identify the drift.** What is the doc claiming that is no longer true?
 2. **Find every place that repeats it.** A behaviour change usually lands in two or three
-   places: the changelog, a wiki page, a README section, a rule file. Search, do not
+   places: the changelog, a documentation page in `docs/`, a README section, a rule file. Search, do not
    guess.
 3. **Fix the drift in the same change as the code.** Docs updated "afterwards" are how
    ledgers rot.
 4. **Respect the hierarchy.** `AGENTS.md` wins over a rule file, a rule file wins over
-   `CONTRIBUTING.md`, a root doc wins over the wiki. When two disagree, the higher one is
+   `CONTRIBUTING.md`, a root doc wins over `docs/`. When two disagree, the higher one is
    corrected downward.
 5. **Cross-check every factual claim:**
    - every command named exists in `package.json` scripts

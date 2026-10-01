@@ -145,6 +145,10 @@ export interface HistoryEntry {
 	visitedAt: number;
 }
 
+export type ReaderQuality = 'high' | 'low';
+export type PreloadDistance = 1 | 2 | 3 | 5;
+export type WindowControlsPosition = 'auto' | 'left' | 'right';
+
 export interface SettingsState {
 	density: 'cozy' | 'compact';
 	blacklistEnabled: boolean;
@@ -152,6 +156,9 @@ export interface SettingsState {
 	readerFit: 'width' | 'height' | 'contain';
 	readerRtl: boolean;
 	dynamicScaling: boolean;
+	readerPreload: PreloadDistance;
+	readerQuality: ReaderQuality;
+	windowControlsPosition: WindowControlsPosition;
 }
 
 export interface TagRef {

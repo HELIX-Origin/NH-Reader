@@ -52,7 +52,41 @@ if (usedButMissing.length) {
 }
 
 const codeRe = /^[a-z]{2,3}(-[A-Za-z0-9]+)?$/;
-const allowedSame = new Set(['app.name', 'titlebar.searchShortcut', 'app.setup']);
+const allowedSame = new Set([
+	'app.name',
+	'app.setup',
+	'app.version',
+	'account.passwordLabel',
+	'downloads.file',
+	'titlebar.searchShortcut',
+	'settings.budget500mb',
+	'settings.budget1gb',
+	'settings.budget2gb',
+	'settings.budget5gb',
+	'settings.interval15m',
+	'settings.cache',
+	'settings.data',
+	'gallery.id',
+	'gallery.tags',
+	'gallery.pages',
+	'common.page',
+	'common.pages',
+	'library.pagesCount',
+	'filter.min',
+	'filter.max',
+	'reader.readingOrderRtl',
+	'reader.readingOrderLtr',
+	'reader.qualityHigh',
+	'reader.qualityLow',
+	'settings.preload1',
+	'settings.preload2',
+	'settings.preload3',
+	'settings.preload5',
+	'settings.qualityHigh',
+	'settings.qualityLow',
+	'reader.exportCbz',
+	'reader.cbzExported',
+]);
 const otherPacks = (await readdir(i18nDir)).filter((f) => f.endsWith('.json') && f !== 'en.json');
 
 if (otherPacks.length > 0) {

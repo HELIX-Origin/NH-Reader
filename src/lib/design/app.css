@@ -327,7 +327,8 @@
 
 	@media (max-width: 720px) {
 		.account-name,
-		.top-bar kbd {
+		.top-bar kbd,
+		.window-controls {
 			display: none;
 		}
 
@@ -2253,5 +2254,59 @@
 
 	[data-scope="page-search"] .search-input::placeholder {
 		color: var(--text-faint);
+	}
+
+	:root[dir="rtl"],
+	[dir="rtl"] {
+		line-height: 1.6;
+	}
+
+	[dir="rtl"] .quick-search input,
+	[dir="rtl"] .search-input,
+	[dir="rtl"] input[type="text"],
+	[dir="rtl"] input[type="search"] {
+		text-align: right;
+	}
+
+	[dir="rtl"] [data-scope="drawer"].panel {
+		right: auto;
+		left: 0;
+		border-left: none;
+		border-right: 1px solid var(--border);
+		animation: nh-drawer-slide-rtl 0.18s ease;
+	}
+
+	@keyframes nh-drawer-slide-rtl {
+		from {
+			transform: translateX(-28px);
+			opacity: 0;
+		}
+		to {
+			transform: none;
+			opacity: 1;
+		}
+	}
+
+	[dir="rtl"] [data-scope="settings-view"] .knob {
+		left: auto;
+		right: 3px;
+	}
+
+	[dir="rtl"] [data-scope="settings-view"] .switch.on .knob {
+		transform: translateX(-18px);
+	}
+
+	[dir="rtl"] [data-scope="settings-view"] .seg button + button {
+		border-left: none;
+		border-right: 1px solid var(--border);
+	}
+
+	[dir="rtl"] [data-scope="page-reader"] .icon-now svg {
+		transform: scaleX(-1);
+	}
+
+	[dir="rtl"] .badge {
+		margin-left: 0;
+		margin-right: 4px;
 	}
 

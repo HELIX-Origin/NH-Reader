@@ -1,13 +1,13 @@
 name: "✨ Feature Proposal"
-description: "Suggest a new idea or capability for NH Desktop"
+description: "Suggest a new idea or capability for NH Reader"
 title: "✨ [Feature]: "
 labels: ["enhancement", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Have an idea to make **NH Desktop** even better? We welcome feature proposals!
-        Please review our [Roadmap](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md) and [Wiki](https://github.com/HELIX-Origin/NH-Reader/wiki) first.
+        Have an idea to make **NH Reader** even better? We welcome feature proposals!
+        Please review our [Roadmap](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md) and [Documentation](https://github.com/HELIX-Origin/NH-Reader/tree/main/docs) first.
   - type: dropdown
     id: scope
     attributes:

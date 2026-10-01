@@ -1,24 +1,28 @@
 <script lang="ts">
-	import { pagePath, proxiedBlobUrl } from '$lib/image';
+	import { pagePath, thumbPath, proxiedBlobUrl } from '$lib/image';
 	import { isDownloaded, getDownloadedPageBlobUrl } from '$lib/stores/library.svelte';
-	import type { PageInfo } from '$lib/types';
+	import type { PageInfo, ReaderQuality } from '$lib/types';
 	import Icon from './Icon.svelte';
 
 	let {
 		page,
 		galleryId,
 		fit = 'width',
+		quality = 'high',
 		visible = true,
 	}: {
 		page: PageInfo;
 		galleryId?: number;
 		fit?: 'width' | 'height' | 'contain';
+		quality?: ReaderQuality;
 		visible?: boolean;
 	} = $props();
 
 	let currentSrc = $state('');
 	let failed = $state(false);
 	let trying = $state(false);
+
+	const targetUrl = $derived(quality === 'low' ? thumbPath(page.thumbnail) : pagePath(page.path));
 
 	$effect(() => {
 		failed = false;
@@ -29,10 +33,10 @@
 					currentSrc = url;
 				})
 				.catch(() => {
-					currentSrc = pagePath(page.path);
+					currentSrc = targetUrl;
 				});
 		} else {
-			currentSrc = pagePath(page.path);
+			currentSrc = targetUrl;
 		}
 	});
 
@@ -48,7 +52,7 @@
 			}
 		} catch {}
 		try {
-			currentSrc = await proxiedBlobUrl(pagePath(page.path));
+			currentSrc = await proxiedBlobUrl(targetUrl);
 			failed = false;
 		} catch {
 			failed = true;

@@ -57,7 +57,7 @@ this session, and read its output. "Should compile" is not verification.
 → `.agents/rules/verification.md` · **enforced** by `npm run check:agents`
 
 ### 2.5 Tracking docs stay true
-Update tracking files (`ROADMAP.md`, `TODO.md`) **first** or in lockstep before finishing code changes so they are never forgotten. If behaviour changes, `CHANGELOG.md` gets an entry. If a task is done, its `TODO.md` row is updated in the same change. `BUGS.md` gains or loses rows when bugs are found or fixed. A stale ledger is a bug. Tracking ledgers live at repo root; do not duplicate them (e.g. separate Roadmap) in `wiki/`.
+Update tracking files (`ROADMAP.md`, `TODO.md`) **first** or in lockstep before finishing code changes so they are never forgotten. If behaviour changes, `CHANGELOG.md` gets an entry. If a task is done, its `TODO.md` row is updated in the same change. `BUGS.md` gains or loses rows when bugs are found or fixed. A stale ledger is a bug. Tracking ledgers live at repo root; do not duplicate them (e.g. separate Roadmap) in `docs/`.
 → `.agents/rules/doc-truthfulness.md`
 
 ### 2.6 Respect the upstream API
@@ -85,7 +85,7 @@ a password or a human choice, **stop and report** — never pipe credentials
 | Naming, branding, product/window/exe strings | `.agents/rules/identity.md` |
 | Commit, tag, release, `gh` | `.agents/rules/git-workflow.md` |
 | Declaring a task done | `.agents/rules/verification.md` |
-| Editing `TODO.md` / `BUGS.md` / `CHANGELOG.md` / `wiki/` | `.agents/rules/doc-truthfulness.md` |
+| Editing `TODO.md` / `BUGS.md` / `CHANGELOG.md` / `docs/` | `.agents/rules/doc-truthfulness.md` |
 | Committing, tagging, cutting a release | `.agents/rules/release.md` |
 | DCP `compress` nudges, long sessions | `.agents/rules/context-management.md` |
 | Never sure what's true about the project | `.agents/ROLES.md` then `ROADMAP.md` |
@@ -124,7 +124,7 @@ AGENTS.md                  this file — always loaded, the authority
   rules/                   13 standing conventions, each with trigger + enforcement
   agents/{primary}/{sub}/  role specs
   skills/                  6 repeatable workflows
-  templates/               7 fill-in templates
+  templates/               8 fill-in templates
 .opencode/                 opencode config: instructions wiring, commands, DCP
 .github/copilot-instructions.md
 scripts/check-agents.mjs   the mechanical gate

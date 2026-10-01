@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 📖 NH Desktop Wiki
-    url: https://github.com/HELIX-Origin/NH-Reader/wiki
-    about: Read the user guide, architecture notes, and troubleshooting page in the wiki.
+  - name: 📖 NH Reader Documentation
+    url: https://github.com/HELIX-Origin/NH-Reader/tree/main/docs
+    about: Read the user guide, architecture notes, and troubleshooting documentation.
   - name: 💬 GitHub Discussions
     url: https://github.com/HELIX-Origin/NH-Reader/discussions
     about: Ask general questions, share feature ideas, or engage with the community.

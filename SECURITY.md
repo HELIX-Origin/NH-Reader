@@ -1,6 +1,32 @@
+<div align="right">
+  <label for="translate-select" style="font-size:12px; color:#a1a1aa; margin-right:6px;">🌐 Language:</label>
+  <select id="translate-select" style="background:#18181b; color:#f4f4f5; border:1px solid #3f3f46; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer;" onchange="translatePage(this.value)">
+    <option value="en">English</option>
+    <option value="ja">日本語 (Japanese)</option>
+    <option value="zh-CN">简体中文 (Simplified Chinese)</option>
+    <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
+    <option value="ko">한국어 (Korean)</option>
+    <option value="es">Español (Spanish)</option>
+    <option value="fr">Français (French)</option>
+    <option value="de">Deutsch (German)</option>
+    <option value="ru">Русский (Russian)</option>
+    <option value="pt">Português (Portuguese)</option>
+    <option value="it">Italiano (Italian)</option>
+    <option value="th">ไทย (Thai)</option>
+    <option value="vi">Tiếng Việt (Vietnamese)</option>
+    <option value="id">Bahasa Indonesia (Indonesian)</option>
+    <option value="pl">Polski (Polish)</option>
+    <option value="nl">Nederlands (Dutch)</option>
+    <option value="tr">Türkçe (Turkish)</option>
+    <option value="ar">العربية (Arabic)</option>
+  </select>
+  <div id="google_translate_element" style="display:none;"></div>
+</div>
+<script type="text/javascript" src="./docs/translate.js"></script>
+
 # Security Policy
 
-The NH Desktop client is an independent client for nhentai.net. We take security
+The NH Reader client is an independent client for nhentai.net. We take security
 seriously — both for the app itself and for the privacy of your local data.
 
 ## 🛡️ Supported versions
@@ -75,11 +101,11 @@ Out of scope:
   argv routing). Uninstall strings, Start Menu/Desktop shortcuts, PATH, and the HKCU uninstall
   key are all managed through the `platform/` module with PowerShell/AppleScript desktop APIs.
 - **User data** (favorites, history, blacklist, settings, API key) is stored locally only in
-  SQLite (`nh-desktop.db`). See [PRIVACY.md](PRIVACY.md).
+  SQLite (`database.sqlite`). See [PRIVACY.md](PRIVACY.md).
 
 ## ⬜ Security hardening wishlist
 
-These are tracked in the Wiki's [Roadmap](../../wiki/Roadmap):
+These are tracked in [ROADMAP.md](ROADMAP.md):
 
 - 🔏 Code-signing / notarization for Windows + macOS release binaries.
 - Installer signature verification prior to launch-any-later-updates.

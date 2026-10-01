@@ -26,6 +26,6 @@ Write self-documenting code. No explanatory comments, no commented-out code, no
 
 ## Why
 
-Comments rot. The decision log in `AGENTS.md` and the wiki exist for rationale that
+Comments rot. The decision log in `AGENTS.md` and `docs/` exist for rationale that
 outlives a line of code. Rationale that must live next to code goes in a doc comment on
 the exported symbol.

@@ -25,105 +25,117 @@ public API — we fetch data, we don't scrape aggressively.
 
 ## 🗺️ Milestones
 
-| # | Milestone | Status | Scope |
-| --- | --- | --- | --- |
-| M1 | Foundation | ✅ Shipped | Scaffold, green toolchain, Rust client + 45 commands, CSP, app shell, tokens, stores, all views |
-| M2 | Browse & discover | ✅ Shipped (core) | Home (new releases), popular, gallery grid/cards, pagination, lazy images with proxy fallback |
-| M3 | Search & filters | ✅ Shipped (core) | Query builder, filter drawer (text, language, category, per-type tag include/exclude, page ranges, sort), results + count |
-| M4 | Global blacklist | ✅ Shipped (core) | Manage panel, server-side `-tag:` excludes, client-side hide/blur, master toggle |
-| M5 | Library & Offline Reader | ✅ Shipped | Dedicated Library navigation tab with downloaded doujins shelf, direct reading from downloaded zip/cbz archives, download removal, and integrated Favorites/History tabs |
-| M6 | Reader | ✅ Shipped (core) | Gallery detail, paged thumbnails, strip mode, preload, fullscreen |
-| M7 | Downloads & background services | ✅ Shipped | Background-service worker queue (zip/cbz/torrent downloads to disk with progress, image prefetch, cache/image maintenance, account sync, Popular auto-refresh with job events); per-gallery Download button + Downloads page; queue resume/persist across restarts; JSON export/import; configurable cache storage budget and vacuum compaction |
-| M8 | Polish / release | ✅ v0.4.0 & v0.5.0 shipped | [Release 0.5.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.5.0) shipped 2026-09-30 (native Tauri packaging with NSIS both/per-user/per-machine and WiX MSI on Windows, DMG on macOS, deb/AppImage on Linux, and portable mode with `.portable` runtime isolation); [Release 0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0) shipped 2026-09-30 (dedicated uninstaller executable, HELIX Origin publisher attribution, poison-recovered DB locks, drop-in localization architecture) |
-| M9 | Localization & language packs | ✅ Shipped (Core + UI) | 100% drop-in hand-rolled architecture with LocaleCatalog, English default with OS fallback, installer + Settings language pickers; 100% full UI localization across all views (217 keys). Community packs open for contribution |
-| M11 | Upstream API Alignment & UI Refinements | ✅ Shipped | Official archive downloads via `POST /api/v2/galleries/{id}/download`, dedicated dual-mode Login Modal (API Key & Credentials), reactive account state getters, native OS window title bar, Mihon-style floating bottom bar (4px radius), and full-width settings cards |
+| # | Milestone | Status | Release | Scope |
+| --- | --- | --- | --- | --- |
+| M1 | Foundation | ✅ Shipped | [v0.1.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.1.0) | Scaffold, green toolchain, Rust client (`nh_desktop.rs`), CSP hardening, app shell, design tokens, stores, base views |
+| M2 | Browse & discover | ✅ Shipped | [v0.1.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.1.1), [v0.2.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.0) | Home (new releases), popular, gallery grid/cards, pagination, lazy images with proxy fallback, platform-tagged packaging |
+| M3 | Search & filters | ✅ Shipped | [v0.2.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.0) | Query builder, filter drawer (text, language, category, per-type tag include/exclude, page ranges, sort), results + count |
+| M4 | Global blacklist | ✅ Shipped | [v0.2.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.1) | Manage panel, server-side `-tag:` excludes, client-side hide/blur, master toggle, titlebar stabilization |
+| M5 | Library & local persistence | ✅ Shipped | [v0.3.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.3.0) | Favorites, history, SQLite-backed cache, DB poison recovery, JSON export/import |
+| M6 | Reader | ✅ Shipped | [v0.3.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.3.0), [v0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0) | Gallery detail, paged thumbnails, strip mode, fullscreen, responsive reader |
+| M7 | Background services & downloads | ✅ Shipped | [v0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0), [v0.5.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.5.0) | Throttled background worker queue (`service.rs`: zip downloads, prefetch, maintenance, auto-refresh), Downloads page, queue persistence |
+| M8 | Native packaging & portability | ✅ Shipped | [v0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0), [v0.5.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.5.0) | Tauri native packaging, NSIS dual-scope installer, WiX MSI, dedicated uninstaller, standalone portable mode with `.portable` runtime isolation |
+| M9 | Localization core | ✅ Shipped | [v0.3.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.3.0) | Drop-in i18n architecture, LocaleCatalog, English default pack, OS fallback, installer + Settings language pickers, `i18n:check` validator |
+| M10 | Cache management & storage optimization | ✅ Shipped | [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) | Configurable disk storage budget (500 MB – Unlimited), background LRU image cache pruning, database compaction (`VACUUM`), dynamic UI scaling with zero empty cards |
+| M11 | Upstream API alignment & offline library hub | ✅ Shipped | [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) | Official archive API downloads (`POST /api/v2/galleries/{id}/download`), dual-mode Login Modal, dedicated Library navigation tab (`/library`) with offline archive reader (zip/cbz extraction), Mihon-style floating bottom bar |
+| M12 | Multi-Platform, Mobile Toolchain & Community i18n | 🚧 In progress | Candidate [v0.7.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.0) | All 17 complete language packs (279/279 keys), per-locale formatting, reader preload distance (1-5 pages), image quality selector, CBZ direct export from reader toolbar, Arabic RTL layout polish, custom title bar with per-OS window controls (macOS traffic lights, Windows/Linux framed squircles) & positioning setting, restored system tray minimize-on-close, multi-platform portable archives (Windows/macOS/Linux), launcher scripts, CI packaging with per-ABI Android APKs and dry-run, in-repo docs with live translation, per-platform Tauri configs |
 
-## 🎯 Current focus & Update Tracks
+## 🎯 Current focus: Milestone M12 — Upcoming Release (v0.7.0)
 
-Active development is organized into tracks:
+Driving checklist lives in `TODO.md`. M12 scope items:
 
-### Track 9: Library Downloaded Favorites Isolation (✅ Shipped)
-- **Downloaded Favorites Scope**: The Library's "Favorites" tab strictly filters and displays downloaded favorites (`isDownloaded(id)`), ensuring the Library remains an offline/download hub while the standalone `/favorites` tab continues to display all favorites across the library.
-- **Dedicated Count Badges & States**: Dedicated counts and localized empty states for downloaded favorites in the Library view.
+- ✅ **All 17 Language Packs at 100% Parity**: Hand-rolled translations for `ja`, `zh-CN`, `zh-TW`, `ko`, `es`, `fr`, `de`, `ru`, `pt`, `it`, `th`, `vi`, `id`, `pl`, `nl`, `tr`, and `ar` with 279/279 keys covered (validated via `npm run i18n:check`).
+- ✅ **Per-Locale Date and Number Formatting**: Upgraded `src/lib/format.ts` to use browser standard `Intl.NumberFormat`, `Intl.DateTimeFormat`, and `Intl.RelativeTimeFormat`, reactively bound to `locale.value`.
+- ✅ **Reader Preload Distance**: Configurable preload buffer (`1`, `2`, `3`, `5` pages) dynamically sizing reader slice buffering ahead and behind for instant transitions.
+- ✅ **Image Quality Selector**: User toggle between `Original (High)` (full-resolution streaming from `IMAGE_HOST`) and `Data Saver (Fast)` (compressed preview thumbnails from `THUMB_HOST` for bandwidth conservation).
+- ✅ **Reader Toolbar Quick Controls & CBZ Direct Export**: Quality cycle button with `Q` hotkey, and direct CBZ export button (`E` hotkey) with background worker queue integration and live progress tracking.
+- ✅ **Arabic RTL Layout Polish (M9.2 RTL Phase)**: Added `isRTL` and `dir` getters to `locale.svelte.ts`, document-level `dir="rtl"` reactivity, Arabic typography font fallbacks (`Segoe UI Arabic`, `Noto Sans Arabic`, `Tahoma`), mirrored drawer animations, switch toggle knobs, and RTL search alignments.
+- ✅ **Custom Title Bar with Per-OS Window Controls**: Disabled native OS decorations in `tauri.conf.json` (`"decorations": false`) in favor of an integrated custom title bar. Built dedicated `WindowControls.svelte` supporting per-OS glyphs: native macOS traffic lights on the left revealing inner glyphs on hover, and Windows/Linux shrunken squircle-framed controls (24×22px, 5px radius) with line, square/stacked, and X glyphs. Highlight effects respect custom Linux desktop themes.
+- ✅ **Customizable Window Controls Position**: Added `windowControlsPosition` setting (`Auto`, `Left`, `Right`) under Appearance settings in `SettingsView.svelte`, allowing users on Linux and custom desktop environments to align window buttons with their system conventions.
+- ✅ **Window Dragging & Maximize Toggle**: Configured window dragging across empty title bar regions and double-click to toggle maximize/restore. Added `core:window:allow-is-maximized` permission for reactive icon and tooltip updates.
+- ✅ **Restored System Tray & Minimize-to-Tray on Close**: Restored `api.prevent_close()` and `let _ = window.hide();` in `WindowEvent::CloseRequested` within `src-tauri/src/lib.rs` to allow the window close button to minimize the app into the system tray without terminating background services, while preserving full application quit via the tray menu.
+- ✅ **Multi-Platform Portable Packages (Windows, macOS, Linux)**: Standalone portable archives (`NHReaderPortable_Windows_x64.zip`, `nh-reader_portable_linux_x86_64.tar.gz`, `NHReaderPortable_macOS.zip`) sharing root `.portable` marker and isolated `./data/` folder, with ancestor traversal in `src-tauri/src/lib.rs`.
+- ✅ **Universal Portable Launcher Scripts**: Standalone launcher scripts `scripts/launch-linux.sh`, `scripts/launch-macos.command`, and `scripts/launch-windows.bat`.
+- ✅ **NSIS Theme & Contrast Alignment**: Configured coordinated text and background colors in `src-tauri/windows/hooks.nsh` to eliminate black-on-dark unreadable text and preserve dark DWM title bars.
+- ✅ **Official App Icon Installer Bitmaps**: Generated crisp 150×57 `header.bmp` and 164×314 `sidebar.bmp` assets directly from `icon.png` via `scripts/generate-installer-bitmaps.ps1`.
+- ✅ **Restored Mobile Toolchain & CI Android Split APKs**: Restored Android (`mobile:android:*`) and iOS (`mobile:ios:*`) scripts in `package.json` with manual build wiki documentation; added dedicated CI packaging job generating separate split APKs per architecture (`aarch64`, `armv7`, `x86_64`) with pre-installed NDK discovery and dry-run support.
+- ✅ **In-Repo Documentation with Live Translation**: Migrated documentation into repository `docs/` folder (`docs/README.md`) with in-page Google Translate dropdown widget (`docs/translate.js`) supporting all 18 languages.
+- ✅ **GitHub Discussions Release Announcements**: Seeded release announcements for all historical versions (`v0.1.0` – `v0.6.0`) in `.github/discussions/announcements/` and created standardized announcement template (`.agents/templates/release-announcement.md`).
+- ✅ **Per-Platform Tauri Configs & Node.js 26**: Added `tauri.<platform>.conf.json` platform configurations and upgraded CI packaging workflow to Node.js 26.
 
-### Track 8: Clean Window Exit & Refined Rounded Square Radiuses (✅ Shipped)
-- **Clean Window Exit & Process Shutdown**: Remove `api.prevent_close()` on the native title bar close button and eliminate destructive `window.destroy()` calls, ensuring an orderly process termination without WebView2 `Chrome_WidgetWin_0` Error 1411 or forced SIGINT exits (`0xc000013a`).
-- **Refined Rounded Square Radiuses**: Soften the overly strict 4px radius limit to modern small rounded square corners (`8px` - `10px`) across the floating navigation bar, gallery cards, tab switchers, and modals.
+## 📌 Historical Milestones & Shipped Releases (M1 – M11)
 
-### Track 7: Dedicated Library Tab & Direct Offline Archive Reading (✅ Shipped)
-- **Library Navigation Tab**: Added `/library` as a primary bottom navigation tab with an open book icon (`book`), serving as the central hub for local and offline doujins.
-- **Downloaded Doujins Shelf**: Scan and display all completed downloads (`gallery-{id}.zip`, `gallery-{id}.cbz`) with titles, cover thumbnails, page counts, file formats, and file sizes.
+### Milestone M11: Upstream API Alignment & Offline Library Hub ([v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0))
+- **Official Archive Downloads**: Adopted dedicated `POST /api/v2/galleries/{id}/download` endpoint as advised in official API documentation, eliminating page-by-page CDN crawling.
+- **Dedicated Account Login Modal**: Comprehensive dual-mode authentication modal supporting official API Keys (bypasses Cloudflare CAPTCHAs) and direct credentials, with live account status display.
+- **Primary Library Navigation Tab**: Added `/library` bottom navigation item serving as the central hub for local and offline doujins.
 - **Direct Reading from Downloaded Archives**: Backend zip/cbz extractor commands (`get_downloaded_gallery_page`, `get_downloaded_galleries`, `delete_downloaded_gallery`) enabling offline reading directly from downloaded archives without network requests.
-- **Offline Reader Fallback**: Transparently serve pages from downloaded local archives in `ReaderImage.svelte` whenever a download exists, enabling instant and 100% offline reading.
-- **Multi-Category Views**: Tabbed organization in the Library view offering quick switching between Downloaded doujins, Favorites, and Reading History.
-
-### Track 6: Upstream API Alignment, Authentication & UI Refinements (✅ Shipped)
-- **Official Archive Downloads**: Adopt the dedicated `POST /api/v2/galleries/{id}/download` endpoint as advised in official nhentai API documentation, eliminating page-by-page CDN reconstruction when authenticated.
-- **Dedicated Account Login Modal**: Comprehensive dual-mode authentication modal supporting official API Keys (bypasses Cloudflare CAPTCHAs) and direct credentials, with live account status display and disconnect actions.
-- **Reactive Account State & Username Display**: Reactive Svelte 5 getters in `getAccountState()`, ensuring real-time username and avatar rendering upon connection.
-- **Account Blacklist Isolation**: Strict isolation between user profile and blacklisted tags, ensuring tag IDs are resolved and never mixed with username or `favorite_tags`.
-- **Native Window Titlebar & In-App Top Bar**: Restored native system window decorations (`decorations: true`) in `tauri.conf.json`, replacing custom window chrome with an in-app top bar.
-- **Floating Mihon Bottom Navigation**: Elevated floating bottom bar with 4px corner radius, backdrop blur, and safe content padding.
+- **Library Downloaded Favorites Isolation**: Dedicated filtering for downloaded favorites (`isDownloaded(id)`) within the Library view, keeping it decoupled from the general `/favorites` tab.
+- **Mihon-Style Floating Bottom Navigation**: Elevated floating bottom bar with squircle corners, backdrop blur, and safe content padding.
 - **Full-Width Settings Layout**: Expanded settings cards to span the full page width, eliminating left-aligned constriction.
 
-### Track 1: Full UI Localization (Priority 1 — ✅ Shipped, Issue #5)
-- Wrap all remaining hardcoded strings across all views into `locale.t()` calls.
-- Views in scope: `SettingsView.svelte`, `DownloadsView` (`routes/downloads/+page.svelte`), `BlacklistView.svelte`, `GalleryDetailView` (`routes/gallery/[id]/+page.svelte`), `ReaderView` (`routes/gallery/[id]/reader/+page.svelte`), `FilterPanel.svelte`, `SearchView` (`routes/search/+page.svelte`), `FavoritesView.svelte`, `HistoryView.svelte`, `GalleryCard.svelte`.
-- Expand `src/lib/i18n/en.json` to 100% cover the entire user interface (217 keys, 206 references).
-- Validated with `npm run i18n:check`, `npm run check`, and `npm run check:agents`.
+### Milestone M10: Cache Management & Storage Optimization ([v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0))
+- **Storage Budget Controls**: Configurable disk storage budgets (500 MB, 1 GB, 2 GB, 5 GB, Unlimited) in settings.
+- **Background LRU Cache Pruning**: Automatic background LRU cache pruning in `image_cache.rs` and `service.rs`, evicting oldest files down to 85% of budget.
+- **Compaction & Clean Purging**: SQLite `VACUUM` compaction and isolated API response cache purging without wiping user data (`db.rs`, `cache.ts`).
+- **Dynamic UI Scaling**: Adaptive column calculation and full-row fitting (`GalleryGrid.svelte`) ensuring cards dynamically scale to fit the window with zero empty card spaces.
 
-### Track 2: Downloads & Library Polish (+ Portability) (Priority 2 — ✅ Shipped, Issue #6)
-- Background service download queue persistence across app restarts (SQLite-backed `downloads:jobs` state).
-- Wire auto-refresh cache consumers for Popular and Account data (cache invalidation and reactive reload).
-- Import / Export favorites and blacklist as portable JSON files (`library.svelte.ts`, `blacklist.svelte.ts`).
-- Full portability polish: ensure download folders, databases, and cache strictly respect the portable environment (`.portable` marker and isolated `./data` directory).
+### Milestone M9: Localization Core ([v0.3.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.3.0))
+- **Drop-in i18n Architecture**: Locale store, `t()` helper, system-locale detection (`get_system_locale`), `npm run i18n:check` validator, and complete English default pack.
+- **Installer & Settings Pickers**: Language selection in NSIS installer and Settings view.
 
-### Track 3: Cache Management & Storage Optimization (Priority 3 — ✅ Shipped, Issue #7)
-- Configurable maximum disk storage budgets (500 MB, 1 GB, 2 GB, 5 GB, Unlimited) stored in settings.
-- Automatic background LRU cache pruning in `image_cache.rs` and `service.rs`, evicting oldest files down to 85% of budget.
-- Database compaction (`VACUUM`) and isolated cache clearing without wiping user data (`db.rs`, `cache.ts`).
-- Storage telemetry and management controls in `SettingsView.svelte`.
+### Milestone M8: Native Packaging & Portability ([v0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0), [v0.5.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.5.0))
+- **Tauri Native Packaging**: Migrated from custom webview installer to Tauri 2's native packaging toolchain with NSIS hooks (`hooks.nsh`).
+- **Dual Installation Scopes**: Support for per-user (local AppData without elevation) and per-machine (administrative Program Files) targets.
+- **Standard Windows Uninstaller**: Automatically registers uninstaller in Windows "Installed apps" / "Add or remove programs", offering to preserve local user data.
+- **Enterprise WiX MSI & Free Code Signing**: WiX `.msi` installers and PowerShell code signing script (`scripts/sign.ps1`) utilizing local code-signing certificates.
 
-### Track 5: Mobile Support — Android (Priority 4 — ✅ Shipped, Issue #9)
-- Native Android build pipeline leveraging Tauri 2's mobile toolchain (`tauri android`).
-- **Android**: APK packaging for direct distribution and sideloading (`mobile:android:init` / `mobile:android:build`).
-- **Hardware Testing Status**: Because the primary maintainer lacks a physical Android device, Android builds are currently community-supported and untested by the maintainer.
-- **iOS**: Dropped. Not supported.
+### Milestone M7: Background Services & Downloads ([v0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0), [v0.5.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.5.0))
+- **Background Worker Queue**: Throttled worker queue (`service.rs`) for gallery downloads (zip/cbz), image prefetch, cache maintenance, account sync, and periodic Popular auto-refresh.
+- **Live Event Streaming**: `service://job` and `service://refresh` events piped to frontend runes store.
+- **Queue Persistence**: SQLite-backed download queue persistence across app restarts.
+- **Dedicated Downloads View**: Download progress monitoring, format selection, and open folder actions.
 
-### Track 4: UI Consistency & Polish Audit (Final Stage — ✅ Shipped, Issue #8)
-- Final visual stabilization and layout audit across all views.
-- Mihon-style bottom navigation ergonomics, pill indicator dimensions, and responsive layout pass.
-- Standardize spacing, padding, margins, font sizing, and contrast.
-- Ensure strict adherence to nhentai's dark theme palette (`#141414` / `#1f1f1f` / `#ed2553`).
-- Mobile 2-column gallery grid scaling and touch-friendly pointer accessibility.
+### Milestone M6: Reader ([v0.3.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.3.0), [v0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0))
+- **Gallery Detail & Reader**: Paged thumbnails, continuous vertical strip mode, and responsive fullscreen reading.
+- **Keyboard Navigation**: Arrow keys, Page Up/Down, Home/End, and quick controls hotkeys.
 
-### 🚫 Dropped Features
-- **Theme Engine**: Dropped by architectural decision. NH Reader does not support multi-theme engines or custom skins; it strictly standardizes on nhentai.net's native dark color scheme. All multi-theme code/issues are permanently dropped.
+### Milestone M5: Library & Local Persistence ([v0.3.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.3.0))
+- **Favorites & History**: On-device favorites bookmarking, reading history tracking with last-page recovery, and local SQLite persistence.
+- **Poison-Recovered DB Locks**: Resilient SQLite transaction handling recovering safely from mutex panics.
+- **Data Export & Import**: JSON export and import for favorites and blacklisted tags.
+
+### Milestone M4: Global Blacklist ([v0.2.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.1))
+- **Blacklist Management**: Tag and keyword exclusion panel with add/remove controls.
+- **Dual-Layer Filtering**: Server-side `-tag:` query exclusions combined with client-side hide/blur grid masking and master toggle.
+
+### Milestone M3: Search & Filters ([v0.2.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.0))
+- **Search Query Builder**: Full query builder supporting nhentai search syntax.
+- **Filter Drawer**: Multi-criteria filtering by text query, language, category, per-type tag inclusions/exclusions, page ranges, and sorting.
+
+### Milestone M2: Browse & Discover ([v0.1.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.1.1), [v0.2.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.0))
+- **Home & Popular Views**: Real-time browsing of newest releases and popular galleries with pagination.
+- **Card Grid & Lazy Images**: Responsive gallery cards with lazy loading and Rust image proxy fallback (`proxy_image`).
+
+### Milestone M1: Foundation ([v0.1.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.1.0))
+- **Scaffold & Architecture**: Tauri 2 + SvelteKit static SPA (`adapter-static`), Svelte 5 runes, TypeScript strict.
+- **Rust Client**: Throttled `nh_desktop.rs` API client (`reqwest`), 26 Tauri commands, error handling.
+- **Design System & Shell**: Pure CSS design tokens (`tokens.css`, `base.css`), dark theme, sidebar navigation.
+- **Security**: Hardened CSP allowlisting `*.nhentai.net`, IPC-only network boundaries.
+
+## 🚫 Dropped Features
+
+- **Theme Engine**: Dropped by architectural decision. NH Reader does not support multi-theme engines or custom skins; it strictly standardizes on nhentai.net's native dark color scheme (`#141414` / `#1f1f1f` / `#ed2553`). All multi-theme code/issues are permanently dropped.
+- **Automated Mobile CI Packaging**: Dropped from GitHub Actions CI workflow to ensure runner stability. Mobile builds are supported and built locally via Tauri CLI.
 
 ## 🔁 Recurring themes (applies to every milestone)
 
 - 🐢 Rate-limit and cache requests; single-flight duplicate requests.
 - Images always lazy; degraded gracefully when the CDN 404s.
 - Accessibility: keyboard navigation for filters, focus states, reduced motion.
-- Testing: svelte-check strictness + Rust unit tests on query building and URL mapping;
-  filter-query round-trip is a permanent invariant.
-
-## 🌍 M9 — Localization & language packs
-
-Goal: full UI localization with language packs for every language nhentai.net tags on content.
-
-- **Phase 1 — M9.1 core (shipped)**: locale store, `t()` helper, system-language detection,
-  language selector in installer options and Settings page, `npm run i18n:check` validator, and
-  complete default pack for English (source) with 100% drop-in architecture for community translations.
-- **Phase 2 — M9.2 remaining packs (planned, not started)**: the other nhentai content languages
-  (`ko`, `es`, `fr`, `de`, `ru`, `pt`, `it`, `th`, `vi`, `id`, `pl`, `nl`, `tr`, `ar`). All are
-  already registered and selectable with per-key English fallback. Itemised in `TODO.md`;
-  contributed opportunistically or via community pull requests. See [Localization](../../wiki/Localization).
-- **Phase 3 — M9.2 RTL (planned, not started)**: RTL layout for Arabic, date/number formatting
-  per locale, extension of `en.json` to the remaining views.
+- Testing: svelte-check strictness + Rust unit tests on query building and URL mapping; filter-query round-trip is a permanent invariant.
 
 ## 📅 Review cadence
 
-- 📝 ROADMAP.md is updated whenever scope changes, a milestone completes, or a decision log
-  entry lands in `AGENTS.md`.
-- Everything in ROADMAP should trace to `TODO.md` items; orphaned items get cleaned up.
+- 📝 ROADMAP.md is updated whenever scope changes, a milestone completes, or a decision log entry lands in `AGENTS.md`.
+- Everything in ROADMAP traces to `TODO.md` items; orphaned items get cleaned up.

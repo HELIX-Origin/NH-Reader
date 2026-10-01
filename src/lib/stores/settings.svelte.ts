@@ -10,6 +10,9 @@ const DEFAULT_SETTINGS: SettingsState = {
 	readerFit: 'width',
 	readerRtl: false,
 	dynamicScaling: true,
+	readerPreload: 2,
+	readerQuality: 'high',
+	windowControlsPosition: 'auto',
 };
 
 let state = $state<SettingsState>({ ...DEFAULT_SETTINGS });

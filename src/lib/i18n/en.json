@@ -55,6 +55,11 @@
 		"density": "Density",
 		"densityCozy": "Cozy",
 		"densityCompact": "Compact",
+		"windowControlsPosition": "Window controls position",
+		"windowControlsPositionDesc": "Placement of minimize, maximize, and close controls.",
+		"windowControlsPositionAuto": "Auto",
+		"windowControlsPositionLeft": "Left",
+		"windowControlsPositionRight": "Right",
 		"dynamicScaling": "Dynamic UI scaling",
 		"dynamicScalingDescription": "Scales cards and fits visible doujins to window columns so there is never an empty card space.",
 		"language": "Language",
@@ -120,7 +125,17 @@
 		"mobileSupportDesc": "NH Reader supports Android (APK sideloading) and iOS (Apple Silicon macOS & personal provisioning sideloading). Mobile builds are community-supported and built locally via the Tauri CLI.",
 		"iosDisclaimerTitle": "Jailbreak & Sideloading Notice",
 		"iosDisclaimerText": "No technical support or warranty is provided for users who attempt to jailbreak their devices. Jailbreaking or sideloading is performed solely at your own risk.",
-		"about": "About"
+		"about": "About",
+		"preloadDistance": "Preload distance",
+		"preloadDistanceHelp": "Number of pages to buffer ahead and behind for instant transitions.",
+		"preload1": "1 page",
+		"preload2": "2 pages",
+		"preload3": "3 pages",
+		"preload5": "5 pages",
+		"imageQuality": "Image quality",
+		"imageQualityHelp": "Choose between full original quality or data-saver compressed previews.",
+		"qualityHigh": "Original (High)",
+		"qualityLow": "Data Saver (Fast)"
 	},
 	"downloads": {
 		"title": "Downloads",
@@ -203,7 +218,13 @@
 		"fitHeight": "Fit height",
 		"noPageData": "No page data available for this gallery.",
 		"prevPage": "Previous page",
-		"nextPage": "Next page"
+		"nextPage": "Next page",
+		"cycleQuality": "Cycle image quality",
+		"qualityHigh": "High",
+		"qualityLow": "Data Saver",
+		"exportCbz": "Export CBZ",
+		"cbzExporting": "Exporting CBZ…",
+		"cbzExported": "CBZ Exported"
 	},
 	"search": {
 		"title": "Search",

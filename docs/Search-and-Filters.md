@@ -1,0 +1,137 @@
+<div align="right">
+  <label for="translate-select" style="font-size:12px; color:#a1a1aa; margin-right:6px;">🌐 Language:</label>
+  <select id="translate-select" style="background:#18181b; color:#f4f4f5; border:1px solid #3f3f46; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer;" onchange="translatePage(this.value)">
+    <option value="en">English</option>
+    <option value="ja">日本語 (Japanese)</option>
+    <option value="zh-CN">简体中文 (Simplified Chinese)</option>
+    <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
+    <option value="ko">한국어 (Korean)</option>
+    <option value="es">Español (Spanish)</option>
+    <option value="fr">Français (French)</option>
+    <option value="de">Deutsch (German)</option>
+    <option value="ru">Русский (Russian)</option>
+    <option value="pt">Português (Portuguese)</option>
+    <option value="it">Italiano (Italian)</option>
+    <option value="th">ไทย (Thai)</option>
+    <option value="vi">Tiếng Việt (Vietnamese)</option>
+    <option value="id">Bahasa Indonesia (Indonesian)</option>
+    <option value="pl">Polski (Polish)</option>
+    <option value="nl">Nederlands (Dutch)</option>
+    <option value="tr">Türkçe (Turkish)</option>
+    <option value="ar">العربية (Arabic)</option>
+  </select>
+  <div id="google_translate_element" style="display:none;"></div>
+</div>
+<script type="text/javascript" src="./translate.js"></script>
+
+---
+
+> **[Documentation](README.md)** / **Search & Filters**
+>
+> 🧭 **Navigation:** [Getting Started](Getting-Started.md) · [Installation](Installation-and-Maintenance.md) · [Search & Filters](Search-and-Filters.md) · [Blacklist](Blacklist.md) · [Settings](Settings-and-API-Key.md) · [Architecture](Architecture.md) · [All Docs](README.md)
+
+---
+
+# Search & Filters
+
+The search page is the heart of NH Reader. It compiles your structured filters and raw
+query text into **native nhentai.net search syntax** and runs it through the site's API —
+server-side filtering (plus your [blacklist](Blacklist.md) on top). Quick search can also be launched directly from the in-app top bar.
+
+## 🔍 The search box
+
+Type anything nhentai's own search understands. The full syntax you can use here:
+
+| Pattern | Meaning |
+| --- | --- |
+| `blue archive` | Free-text search (titles, tags) |
+| `-lolicon` | Exclude all-tags matching `lolicon` |
+| `tag:lolicon` | Include the `lolicon` tag explicitly |
+| `artist:hana` | Only galleries by artist `hana` |
+| `character:yuki` / `parody:fate` / `group:circle` / `language:japanese` / `category:doujinshi` | Type-scoped filters |
+| `pages:>100` / `pages:<50` | Page-count bounds |
+| `uploaded:2025` | Date-ish filter (site-supported syntax) |
+| `sort:popular-today` | Sort order (also available in the drawer) |
+
+Rules nhentai enforces (you cannot bypass them through the UI, we inherit them):
+
+- Excluded terms use `-`.
+- Multiple tokens are implicitly AND.
+- There is no cross-token OR in the public search — block queries overlap instead.
+
+## 🔍 The filter drawer (structured filters)
+
+Click **Filters** (top-right of the Search page) to open a side drawer with structured
+controls. The URI built from the drawer is **the same query language** as the box above —
+they compose:
+
+- **Query** — the free-text query.
+- **Included tags** — per-type (artist, character, parody, group, tag, …) — added as
+  `type:name` tokens.
+- **Excluded tags** — per-type — added as `-type:name` tokens.
+- **Language** — e.g. `language:english`.
+- **Category** — e.g. `category:doujinshi`.
+- **Page count** — `pages:>N` and/or `pages:<M`.
+- **Sort** — `date`, `popular-today`, `popular-week`, `popular-month`, `popular` (all time).
+  Nonexistent: a stable "total popularity" sort (the site only exposes recency).
+
+The current composed query is shown as a pill next to the search title, so you always know
+exactly what was sent.
+
+## 🚫 How your blacklist is combined
+
+Every search automatically appends your global blacklist tag-exclusions
+(`-tag:...`, etc.) to the query via `buildServerExcludes()`. So **Search results never show
+blacklisted tags even if the site would return them.** Your blacklist is built in
+[Blacklist](Blacklist.md).
+
+Here is the whole journey of a search — from your controls to the rendered grid:
+
+```mermaid
+flowchart TD
+    A[Filter drawer] -->|structured controls| C
+    B[Search box] -->|raw syntax| C
+    C[buildQuery compiles query] -->|compiled query| D
+    D[Append blacklist excludes] -->|final query| E
+    E[search_galleries via API] -->|results| F
+    F[Results grid]
+```
+
+## 📄 Pagination
+
+Results paginate via the site's page model. The **Pager** at the bottom gives Previous / Next
+plus page numbers. Page transitions re-issue the query with `page=N`.
+
+## ⚙️ Behavior details
+
+- Typing in the search box does **not** auto-search; press **Search** (or Enter). The drawer
+  applies instantly.
+- The URL shows `?q=...`; the app re-runs the current query if you navigate with a query
+  present.
+- **Cancellation:** an in-flight search is cancelled when you change the query — the app never
+  shows a stale result for a fast retype.
+- Loading spinner and an inline error banner (with retry) handle the network path.
+
+## 🏗️ Query builder source-of-truth
+
+The exact query-string compilation lives in `src/lib/query.ts`
+(`buildQuery`, `tagQueryPart`, `SORT_OPTIONS`). The backend search command is
+`search_galleries` in `src-tauri/src/commands.rs`.
+
+---
+
+- Previous: [Getting Started](Getting-Started.md) · Next: [Blacklist](Blacklist.md)
+
+---
+
+### 📚 Documentation Index
+- **Core**: [Home](README.md) · [Getting Started](Getting-Started.md) · [Installation & Maintenance](Installation-and-Maintenance.md)
+- **App Features**: [Search & Filters](Search-and-Filters.md) · [Blacklist](Blacklist.md) · [Favorites & History](Favorites-and-History.md) · [Reader & Galleries](Reader-and-Galleries.md) · [Settings & API Key](Settings-and-API-Key.md) · [Localization](Localization.md)
+- **Architecture & Development**: [Architecture](Architecture.md) · [Backend (Rust)](Backend-Rust.md) · [Frontend (SvelteKit)](Frontend-SvelteKit.md) · [Packaging & Bundling](Installer-Engine.md) · [Development & Contributing](Development-and-Contributing.md)
+- **Reference**: [Security](Security.md) · [Privacy](Privacy.md) · [Troubleshooting](Troubleshooting.md) · [FAQ](FAQ.md)
+
+---
+
+*[NH Reader](https://github.com/HELIX-Origin/NH-Reader) — a lightweight, modern, cross-platform client for nhentai.net.*
+
+*[Documentation Home](README.md) · [Repository](https://github.com/HELIX-Origin/NH-Reader) · [Releases](https://github.com/HELIX-Origin/NH-Reader/releases) · [Security](Security.md) · [Privacy](Privacy.md) · [TOS](../TOS.md) · [License](../LICENSE.md)*

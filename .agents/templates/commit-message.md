@@ -20,7 +20,7 @@ no trailing period, ≤ 72 characters of subject.
 | `perf` | performance work | ⚡ |
 | `refactor` | no behaviour change | ♻️ |
 | `style` | formatting only | 🎨 |
-| `docs` | documentation, wiki, `.agents/` | 📝 |
+| `docs` | documentation, `docs/`, `.agents/` | 📝 |
 | `test` | tests | 🧪 |
 | `build` | deps, build, packaging | 📦 |
 | `ci` | automation | 👷 |

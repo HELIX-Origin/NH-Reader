@@ -62,6 +62,12 @@ function createLocaleStore() {
 		get ready() {
 			return ready;
 		},
+		get isRTL(): boolean {
+			return value === 'ar';
+		},
+		get dir(): 'rtl' | 'ltr' {
+			return value === 'ar' ? 'rtl' : 'ltr';
+		},
 		init,
 		set,
 		t: (key: string) => t(key, value, systemLocale),

@@ -1,26 +1,26 @@
-name: "📖 Documentation or Wiki Improvement"
-description: "Suggest improvements, report errors, or propose new guides for the Wiki and repo documentation"
+name: "📖 Documentation Improvement"
+description: "Suggest improvements, report errors, or propose new guides for repo documentation in docs/"
 title: "📖 [Docs]: "
 labels: ["documentation", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Accurate, high-quality documentation is a priority for NH Desktop.
-        Before filing, please review our [Wiki](https://github.com/HELIX-Origin/NH-Reader/wiki).
+        Accurate, high-quality documentation is a priority for NH Reader.
+        Before filing, please review our [Documentation](https://github.com/HELIX-Origin/NH-Reader/tree/main/docs).
   - type: dropdown
     id: doc_target
     attributes:
       label: "Documentation Location"
       description: "Where is the documentation located?"
       options:
-        - "Wiki - Getting Started & Installation"
-        - "Wiki - Search & Filters Guide"
-        - "Wiki - Blacklist Guide"
-        - "Wiki - Reader Guide"
-        - "Wiki - Architecture & Internal Design"
-        - "Wiki - Downloads / Background Service"
-        - "Wiki - Troubleshooting & FAQ"
+        - "docs/ - Getting Started & Installation"
+        - "docs/ - Search & Filters Guide"
+        - "docs/ - Blacklist Guide"
+        - "docs/ - Reader Guide"
+        - "docs/ - Architecture & Internal Design"
+        - "docs/ - Downloads / Background Service"
+        - "docs/ - Troubleshooting & FAQ"
         - "Repository README.md"
         - "Agent ecosystem (.agents/ rules, agents, skills, templates)"
         - "Other / New Page Proposal"
@@ -47,9 +47,9 @@ body:
     attributes:
       label: "Style & Guidelines Checklist"
       options:
-        - label: "I verified that internal wiki links use `{page}` paths without `.md` extensions."
+        - label: "I verified that documentation links use explicit `.md` extensions and valid relative paths."
           required: false
-        - label: "I verified that external links from the repo root use `../../wiki/{page}` paths."
+        - label: "I verified that links to documentation from the repo root use `docs/{page}.md` paths."
           required: false
         - label: "I verified emoji + mermaid legibility per the docs-format rule if I included a diagram."
           required: false

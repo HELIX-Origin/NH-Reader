@@ -16,22 +16,30 @@ Preparing files is fine; tagging, pushing, and publishing are not.
    A bump that touches one and not the others is incomplete.
 4. **Write the changelog** for the version using `.agents/templates/changelog.md` — what
    changed, and what it means for the user.
-5. **Rewrite `release-notes.md`** from `.agents/templates/release-notes.md` — the human
-   version, leading with what a user would notice.
-6. **Verify everything:**
+5. **Rewrite `release-notes.md`** from `.agents/templates/release-notes.md` — the concise
+   technical release notes attached to the GitHub release tag and repo root. (Do not confuse
+   with discussion announcements).
+6. **Seed the release announcement discussion:**
+   - Author the comprehensive, long-form community announcement in
+     `.github/discussions/announcements/v<version>.md` using
+     `.agents/templates/release-announcement.md` (separate format from release notes).
+   - Update `.github/discussions/announcements.md` with the release overview, feature
+     breakdown, and table of contents entry.
+7. **Verify everything:**
    - `npm run check`
    - `npm run i18n:check`
    - `npm run check:agents`
    - `cargo check` and `cargo test` in `src-tauri/`
    - `npm run tauri build`
    Read every output. A red build does not get tagged.
-7. **Stage only release files** — never `git add .`. Confirm nothing unrelated rides along.
-8. **Commit** with the release message, using `-m` (no editor).
-9. **Tag annotated:** `git tag -a v<version> -m "NH Reader v<version>"`.
-10. **Stop.** Report the commit and tag. Do not push unless asked.
+8. **Stage only release files** — never `git add .`. Confirm nothing unrelated rides along.
+9. **Commit** with the release message, using `-m` (no editor).
+10. **Tag annotated:** `git tag -a v<version> -m "NH Reader v<version>"`.
+11. **Stop.** Report the commit and tag. Do not push unless asked.
 
 ## Never
 
+- Never confuse release announcements with release notes — they use separate templates and serve different purposes.
 - Never tag a build you did not verify.
 - Never amend or move a published tag.
 - Never bump a version during ordinary feature work.

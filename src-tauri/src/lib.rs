@@ -13,14 +13,24 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use tauri::Manager;
 
+fn detect_portable_dir(exe: &std::path::Path) -> Option<PathBuf> {
+    let parent = exe.parent()?;
+    if parent.join(".portable").exists() || parent.join("data").is_dir() {
+        return Some(parent.join("data"));
+    }
+    for ancestor in parent.ancestors().skip(1).take(4) {
+        if ancestor.join(".portable").exists() || ancestor.join("data").is_dir() {
+            return Some(ancestor.join("data"));
+        }
+    }
+    None
+}
+
 pub fn resolve_app_data_dir<M: Manager<R>, R: tauri::Runtime>(manager: &M) -> Result<PathBuf, Box<dyn std::error::Error>> {
     if let Ok(exe) = std::env::current_exe() {
-        if let Some(parent) = exe.parent() {
-            if parent.join(".portable").exists() || parent.join("data").is_dir() {
-                let p = parent.join("data");
-                let _ = std::fs::create_dir_all(&p);
-                return Ok(p);
-            }
+        if let Some(data_dir) = detect_portable_dir(&exe) {
+            let _ = std::fs::create_dir_all(&data_dir);
+            return Ok(data_dir);
         }
     }
     Ok(manager.path().app_data_dir()?)
@@ -28,12 +38,10 @@ pub fn resolve_app_data_dir<M: Manager<R>, R: tauri::Runtime>(manager: &M) -> Re
 
 pub fn resolve_default_downloads_dir<M: Manager<R>, R: tauri::Runtime>(manager: &M) -> PathBuf {
     if let Ok(exe) = std::env::current_exe() {
-        if let Some(parent) = exe.parent() {
-            if parent.join(".portable").exists() || parent.join("data").is_dir() {
-                let p = parent.join("data").join("downloads");
-                let _ = std::fs::create_dir_all(&p);
-                return p;
-            }
+        if let Some(data_dir) = detect_portable_dir(&exe) {
+            let p = data_dir.join("downloads");
+            let _ = std::fs::create_dir_all(&p);
+            return p;
         }
     }
     let data_dir = manager
@@ -98,7 +106,7 @@ pub fn run() {
 
                 let menu = Menu::with_items(app, &[&show_i, &min_i, &sep, &quit_i])?;
 
-                let mut tray_builder = TrayIconBuilder::new()
+                let mut tray_builder = TrayIconBuilder::with_id("main")
                     .menu(&menu)
                     .show_menu_on_left_click(false)
                     .tooltip("NH Reader")
@@ -146,17 +154,17 @@ pub fn run() {
                     tray_builder = tray_builder.icon(icon);
                 }
 
-                tray_builder.build(app)?;
+                let _ = tray_builder.build(app);
             }
 
             Ok(())
         })
         .on_window_event(|window, event| {
             #[cfg(desktop)]
-            if let tauri::WindowEvent::CloseRequested { .. } = event {
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
                 if window.label() == "main" {
-                    let app = window.app_handle().clone();
-                    app.exit(0);
+                    api.prevent_close();
+                    let _ = window.hide();
                 }
             }
         })

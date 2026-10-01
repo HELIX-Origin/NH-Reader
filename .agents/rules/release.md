@@ -9,11 +9,19 @@
 - **Versions move together.** `package.json` and `src-tauri/tauri.conf.json` /
   `Cargo.toml` must agree. A bump that touches one and not the other is incomplete.
 - **A release is:** bump version → `CHANGELOG.md` for that version → `release-notes.md`
-  rewritten for humans → tag annotated → verify the build. In that order.
+  rewritten for humans → seed release announcement in GitHub Discussions
+  (`.github/discussions/announcements/v<version>.md` and `.github/discussions/announcements.md`) →
+  verify the build → tag annotated. In that order.
 - **Tag format:** `v<major>.<minor>.<patch>`, annotated (`git tag -a -m`), pointing at
   the release commit.
 - **Release notes** come from the changelog, but are written for a person deciding whether
   to upgrade. Lead with what changed for them, not with commit subjects.
+- **Seed release discussions:** Every release must have a detailed, comprehensive release
+  announcement discussion seeded in `.github/discussions/announcements/v<version>.md` and indexed
+  in `.github/discussions/announcements.md` explaining the release and its features.
+- **Two separate release documents — never confuse Release Notes and Release Announcements:**
+  - **Release Notes** (`release-notes.md`, via `.agents/templates/release-notes.md`): Concise technical summary attached to GitHub Releases and the repo root. Contains version metadata, brief highlights, change/fix lists, installer filenames, verification outputs, and commit hashes.
+  - **Release Announcements** (`.github/discussions/announcements/v<version>.md`, via `.agents/templates/release-announcement.md`): Long-form, community-facing editorial discussions. Contains engaging headline (`# 📢 NH Reader v<version> — <Theme>`), narrative overview, deep thematic feature walkthroughs with emoji headers, comprehensive package table, and links to documentation guides.
 - **Verify before tagging:** `npm run check`, `cargo check`, `cargo test`,
   `npm run i18n:check`, `npm run check:agents`, `npm run tauri build`.
 - **No release without explicit user request.** Preparing files is fine; tagging,
@@ -21,6 +29,7 @@
 
 ## Never
 
+- Never confuse Release Announcements with Release Notes — they serve different audiences and use separate formats.
 - Never tag a commit that has not had the build verified.
 - Never amend or move a published tag.
 - Never bump a version as a side effect of ordinary feature work.
@@ -29,5 +38,6 @@
 ## Order of operations
 
 Work down from `ROADMAP.md` for scope, `CHANGELOG.md` for content,
-`.agents/skills/cut-release.md` for the procedure, and
-`.agents/templates/release-notes.md` for the output shape.
+`.agents/skills/cut-release.md` for the procedure,
+`.agents/templates/release-notes.md` for the release notes shape, and
+`.agents/templates/release-announcement.md` for the discussion announcement format.

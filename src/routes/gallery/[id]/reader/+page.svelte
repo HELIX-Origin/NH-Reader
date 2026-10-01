@@ -13,6 +13,7 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import { locale } from '$lib/stores/locale.svelte';
 	import { thumbPath } from '$lib/image';
+	import { enqueueDownload, getServiceJobs } from '$lib/stores/service.svelte';
 
 	const id = $derived(Number(page.params.id));
 	const settings = getSettings();
@@ -29,8 +30,33 @@
 	const pages = $derived(gallery?.pages ?? []);
 	const orderedPages = $derived(settings.readerRtl ? [...pages].reverse() : pages);
 	const current = $derived(orderedPages[currentIdx] ?? null);
-	const shown = $derived(orderedPages.slice(Math.max(0, currentIdx - 1), currentIdx + 2));
+	const preload = $derived(settings.readerPreload ?? 2);
+	const shown = $derived(orderedPages.slice(Math.max(0, currentIdx - preload), currentIdx + preload + 1));
 	const isLast = $derived(currentIdx >= orderedPages.length - 1);
+
+	let cbzJobId = $state<number | null>(null);
+	const serviceJobs = $derived(getServiceJobs());
+	const activeCbzJob = $derived(
+		cbzJobId !== null
+			? serviceJobs.find((j) => j.jobId === cbzJobId) ?? null
+			: serviceJobs.find((j) => j.galleryId === id && j.format === 'cbz' && j.kind === 'download') ?? null,
+	);
+	const cbzExporting = $derived(activeCbzJob?.state === 'running' || activeCbzJob?.state === 'queued');
+	const cbzExported = $derived(activeCbzJob?.state === 'finished');
+	const cbzProgress = $derived(
+		activeCbzJob && activeCbzJob.total && activeCbzJob.total > 0
+			? Math.round(((activeCbzJob.done ?? 0) / activeCbzJob.total) * 100)
+			: null,
+	);
+
+	async function exportCbz() {
+		if (cbzExporting) return;
+		try {
+			cbzJobId = await enqueueDownload(id, 'cbz');
+		} catch (e) {
+			console.error(e);
+		}
+	}
 
 	function forward() {
 		if (currentIdx >= orderedPages.length - 1) return;
@@ -47,6 +73,10 @@
 		updateSettings({ readerFit: next });
 	}
 
+	function cycleQuality() {
+		updateSettings({ readerQuality: settings.readerQuality === 'high' ? 'low' : 'high' });
+	}
+
 	function onKey(e: KeyboardEvent) {
 		if (e.key === 'Escape' || e.key === 'Backspace') {
 			goto(`/gallery/${id}`);
@@ -56,6 +86,10 @@
 			settings.readerRtl ? forward() : back();
 		} else if (e.key === 'f' || e.key === 'F') {
 			cycleFit();
+		} else if (e.key === 'q' || e.key === 'Q') {
+			cycleQuality();
+		} else if (e.key === 'e' || e.key === 'E') {
+			exportCbz();
 		} else if (e.key === 'r' || e.key === 'R') {
 			updateSettings({ readerRtl: !settings.readerRtl });
 			currentIdx = 0;
@@ -174,9 +208,23 @@
 					<Icon name="book" size={14} />
 					{settings.readerRtl ? locale.t('reader.readingOrderRtl') : locale.t('reader.readingOrderLtr')}
 				</button>
+				<button class="btn btn-ghost" onclick={cycleQuality} title={locale.t('reader.cycleQuality')}>
+					<Icon name="image" size={14} />
+					{settings.readerQuality === 'high' ? locale.t('reader.qualityHigh') : locale.t('reader.qualityLow')}
+				</button>
 				<button class="btn btn-ghost" onclick={cycleFit} title={locale.t('reader.cycleFitMode')}>
 					<Icon name="eye" size={14} />
 					{settings.readerFit === 'width' ? locale.t('reader.fitWidth') : settings.readerFit === 'height' ? locale.t('reader.fitHeight') : locale.t('reader.fitPage')}
+				</button>
+				<button
+					class="btn btn-ghost"
+					onclick={exportCbz}
+					disabled={cbzExporting}
+					title={cbzExported ? locale.t('reader.cbzExported') : cbzExporting ? locale.t('reader.cbzExporting') : locale.t('reader.exportCbz')}
+					aria-label={locale.t('reader.exportCbz')}
+				>
+					<Icon name={cbzExported ? 'check' : 'download'} size={14} />
+					{cbzExported ? locale.t('reader.cbzExported') : cbzExporting ? `${cbzProgress ?? '...'}%` : locale.t('reader.exportCbz')}
 				</button>
 				<a class="icon-now btn btn-ghost" href={`https://nhentai.net/g/${id}`}>
 					<Icon name="external" size={14} />
@@ -203,7 +251,7 @@
 			{:else}
 				{#each shown as p, i}
 					<div class="layer" class:visible={p.number === current?.number}>
-						<ReaderImage page={p} galleryId={id} fit={settings.readerFit} visible={p.number === current?.number} />
+						<ReaderImage page={p} galleryId={id} fit={settings.readerFit} quality={settings.readerQuality} visible={p.number === current?.number} />
 					</div>
 				{/each}
 			{/if}

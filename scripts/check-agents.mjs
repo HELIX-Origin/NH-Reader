@@ -71,6 +71,7 @@ const TEMPLATES = [
 	'feature-spec.md',
 	'changelog.md',
 	'release-notes.md',
+	'release-announcement.md',
 	'agent.md',
 ];
 

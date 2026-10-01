@@ -3,24 +3,40 @@
 Historical record of every change to the NH Reader client. Newer releases are added at the
 top; the current development state lives under `Unreleased`.
 
-## Unreleased
-
-## [v0.6.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.1)
+## [v0.7.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.0)
 
 **Release date:** 2026-10-01
 
+### 🖥️ Custom Title Bar, Per-OS Window Controls & System Tray Restore
+* **Custom Integrated Title Bar**: Disabled native OS decorations in `tauri.conf.json` (`"decorations": false`) in favor of an integrated custom title bar across desktop platforms.
+* **Per-OS Window Controls (`WindowControls.svelte`)**: Built native-style window controls tailored to the operating system. On macOS, renders unframed traffic lights on the left that reveal inner glyphs on hover. On Windows and Linux, renders compact 24×22px buttons enclosed within a subtle 5px squircle frame (`border: 1px solid var(--border)`, `border-radius: 5px`) with line, square/stacked, and X vector glyphs.
+* **Linux Desktop Theme Compatibility**: Highlight and hover states respect custom Linux desktop styling without overriding theme engine color choices.
+* **Customizable Window Controls Position**: Added `windowControlsPosition` setting (`Auto`, `Left`, `Right`) under Appearance in Settings, allowing users on Linux and custom window managers to align window controls with their environment conventions.
+* **Restored System Tray & Minimize-to-Tray on Close**: Restored `api.prevent_close()` and `window.hide()` in `CloseRequested` event in `src-tauri/src/lib.rs` to allow the window close button to minimize the app into the system tray without terminating background services, while preserving full application quit via the tray menu.
+* **Title Bar Drag & Maximize Toggle**: Configured window dragging across empty title bar regions and double-click to toggle maximize/restore with `core:window:allow-is-maximized` permission for reactive icon and tooltip updates.
 
-### 📦 Multi-Platform Portable Packages & NSIS Dark Theme / Branding (v0.6.1)
-* **Multi-platform portable packaging**: Added standalone portable packages to the release workflow (`.github/workflows/package.yml`) across all desktop platforms: Windows (`NHReaderPortable_Windows_x64.zip`), Linux (`nh-reader_portable_linux_x86_64.tar.gz`), and macOS (`NHReaderPortable_macOS.zip`), each pre-configured with the `.portable` runtime marker for instant zero-install execution.
-* **Official app icon installer bitmaps**: Replaced glowing placeholder circle bitmaps with high-resolution assets (`header.bmp` [150×57] and `sidebar.bmp` [164×314]) generated directly from `src-tauri/icons/icon.png` matching the `#0d0d0d` background.
-* **NSIS text legibility fix**: Removed conflicting `MUI_BGCOLOR` and `MUI_TEXTCOLOR` defines from `src-tauri/windows/hooks.nsh` that caused white-on-white and white-on-gray unreadable dialog text, ensuring all labels, group boxes, and directory selectors render with high contrast while preserving DWM dark window title bar attributes.
-* **Publisher & copyright metadata**: Configured explicit `"publisher": "HELIX Origin"` and `"copyright": "Copyright © 2026 HELIX Origin"` in `src-tauri/tauri.conf.json`, ensuring Windows installer metadata, Add/Remove Programs, and system package details display HELIX Origin rather than the fallback package slug.
+### 📖 Reader Ergonomics: Preload Buffer, Quality Selector & Direct CBZ Export
+* **Configurable Preload Distance**: Added reader preload distance options (`1`, `2`, `3`, `5` pages) dynamically sizing reader slice buffering ahead and behind to provide instant transitions and eliminate page turn delays.
+* **Image Quality Selector**: Introduced image quality selection between `Original (High)` (full-resolution streaming from `IMAGE_HOST`) and `Data Saver (Fast)` (compressed previews from `THUMB_HOST` to conserve metered bandwidth and accelerate slow connections).
+* **Direct CBZ Export from Reader Toolbar**: Added a dedicated CBZ export button to reader toolbar controls and bound to the `E` keyboard shortcut, triggering background worker queue packaging via `enqueueDownload(id, 'cbz')` with live percentage progress and completion checkmark indicator.
+* **Reader Toolbar Quick Controls**: Added quality cycle button to reader controls (with `Q` keyboard shortcut) alongside full controls in Settings.
 
-### 🚀 CI / Packaging Workflow Stabilization
-* **Platform-isolated matrix runners**: Rebuilt `.github/workflows/package.yml` matrix so each runner strictly builds and searches for its own platform artifacts, preventing false-positive uploads and runner crosstalk.
-* **Strict failure enforcement**: Configured `if-no-files-found: error` in `upload-artifact` and `fail_on_unmatched_files: true` in `action-gh-release` so a runner immediately fails if its expected installer packages are missing rather than falsely reporting success.
-* **Deterministic Android NDK setup**: Added an explicit pinned Android NDK (`27.2.12479018`) install step via `sdkmanager` exporting `NDK_HOME` into `$GITHUB_ENV`, eliminating APK compilation failures and unused variable warnings.
-* **iOS runner removal**: Dropped iOS packaging runner from the CI matrix until manual Apple Developer team signing is configured.
+### 🌐 Complete 17 Language Packs, Arabic RTL Polish & In-Page Live Translation
+* **All 17 Language Packs Shipped**: Complete hand-rolled translations for Japanese (`ja`), Simplified Chinese (`zh-CN`), Traditional Chinese (`zh-TW`), Korean (`ko`), Spanish (`es`), French (`fr`), German (`de`), Russian (`ru`), Portuguese (`pt`), Italian (`it`), Thai (`th`), Vietnamese (`vi`), Indonesian (`id`), Polish (`pl`), Dutch (`nl`), Turkish (`tr`), and Arabic (`ar`). All 18 packs achieve 100% key parity (279/279 keys each) validated with `npm run i18n:check`.
+* **Arabic RTL Layout Polish (M9.2 RTL Phase)**: Added `isRTL` and `dir` getters to `locale.svelte.ts`, document-level `dir="rtl"` reactivity, Arabic typography font fallbacks (`'Segoe UI Arabic'`, `'Noto Sans Arabic'`, `'Tahoma'`) with ergonomic 1.6 line height, mirrored drawer animations (`nh-drawer-slide-rtl`), mirrored toggle switch knobs, and RTL search alignments.
+* **Per-Locale Date and Number Formatting**: Upgraded `src/lib/format.ts` (`formatCount`, `formatDate`, `relativeDate`, `formatBytes`) to use browser standard `Intl.NumberFormat`, `Intl.DateTimeFormat`, and `Intl.RelativeTimeFormat`, dynamically linked to `locale.value`.
+* **Documentation Migration to `docs/` with Live Translation Dropdown**: Moved documentation from GitHub Wiki into the repository `docs/` folder (`docs/README.md` as entrypoint). Added interactive in-page Google Translate dropdown widget (`docs/translate.js`) at the top-right of all markdown files with all 18 supported languages, and replaced external sidebar/footer with in-page breadcrumb navigation and index footers.
+
+### 📦 Multi-Platform Portability & CI Packaging with Android Split APKs
+* **Standalone Multi-Platform Portable Packages**: Implemented standalone portable packages (`NHReaderPortable_Windows_x64.zip`, `nh-reader_portable_linux_x86_64.tar.gz`, `NHReaderPortable_macOS.zip`) sharing root `.portable` marker and isolated `./data/` folder, with ancestor traversal in `src-tauri/src/lib.rs`.
+* **Universal Portable Launcher Scripts**: Added standalone launcher scripts `scripts/launch-linux.sh`, `scripts/launch-macos.command`, and `scripts/launch-windows.bat`.
+* **Decoupled Downstream Release Publishing**: Decoupled asset publishing from build runners into a dedicated downstream `publish-release` job, eliminating race conditions on release creation and ensuring that failed builds never produce partial releases.
+* **Dedicated Android Split APKs**: Added dedicated `package-android` job in CI building separate APK files for each supported Android architecture (`aarch64` / arm64-v8a, `armv7` / armeabi-v7a, `x86_64`) via `--apk --split-per-abi`, excluding universal APKs to minimize file size.
+* **True Dry Run Mode & Test Pre-Release**: Added true dry-run mode via `workflow_dispatch` input (`dry_run: true`) to validate and verify all packages without publishing to GitHub releases, alongside optional draft pre-release creation (`create_test_release: true`) for testing asset uploads safely.
+* **Per-Platform Tauri Configs & Node.js 26 Upgrade**: Added `tauri.<platform>.conf.json` platform configurations and upgraded CI packaging workflow to Node.js 26.
+* **NSIS Theme & Contrast Alignment**: Configured coordinated text and background colors in `src-tauri/windows/hooks.nsh` to eliminate black-on-dark unreadable text and preserve dark DWM title bars.
+* **Official App Icon Installer Bitmaps**: Generated crisp 150×57 `header.bmp` and 164×314 `sidebar.bmp` assets directly from `icon.png` via `scripts/generate-installer-bitmaps.ps1`.
+* **GitHub Discussions Release Announcements**: Seeded release announcements for all historical versions (`v0.1.0` – `v0.6.0`) under `.github/discussions/announcements/` and created standardized announcement template (`.agents/templates/release-announcement.md`).
 
 
 ## [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0)
@@ -184,7 +200,7 @@ top; the current development state lives under `Unreleased`.
       keys.
     * **Validator**: `npm run i18n:check` reports missing keys, untranslated leftovers, and
       unknown keys for every pack. Fully offline and free.
-    * **Contributor documentation**: New [Localization](../../wiki/Localization) covering both improving existing
+    * **Contributor documentation**: New [Localization](docs/Localization.md) covering both improving existing
       packs and adding new languages, including free cross-reference resources for verifying
       terminology. Linked from `Home`, `Settings & API Key`, `Installation & Maintenance`, the
       sidebar, and the wiki index.
