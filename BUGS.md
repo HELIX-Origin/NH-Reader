@@ -34,7 +34,7 @@
 
 ## 🚨 Open
 
-- The following errors have been discovered when running `npm run build:app` *(Note: I replace my hard coded local app data path with the Windows variable to not expose my system path in the error code below`)*:
+- The following errors have been discovered when running `npm run build:app` *(Note: I replace my hard coded local app data path with the Windows variable to not expose my system path in the error code below)*:
   
   ```powershell
   warning: !warning: LangString "MULTIUSER_TEXT_INSTALLMODE_TITLE" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
