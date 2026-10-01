@@ -487,6 +487,21 @@ body > .skiptranslate,
   box-shadow: none !important;
 }
 
+@media (min-width: 1024px) {
+  .navbar-list {
+    flex-wrap: nowrap;
+  }
+
+  article {
+    padding-top: 100px;
+  }
+
+  .site-footer {
+    margin-bottom: 15px;
+  }
+}
+
 @media (min-width: 1250px) {
   .sidebar.active { max-height: none; }
 }
+
