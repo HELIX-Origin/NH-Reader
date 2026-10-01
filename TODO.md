@@ -13,6 +13,7 @@
   - Restore iOS scripts (`mobile:ios:init`, `mobile:ios:build`) in `package.json` alongside Android tooling (`mobile:android:*`) to support building mobile packages locally via Tauri CLI.
   - Restore mobile settings section, documentation, and community sideloading instructions (APK for Android, sideloading/AltStore for iOS).
   - Exclude mobile targets from the automated GitHub Actions release workflow (`package.yml`), keeping CI strictly dedicated to desktop targets (Windows, Linux, macOS) while mobile builds remain locally operated.
+  - **Note on CI Exclusion**: The sole reason automated mobile builds are not included in the CI workflow is because the AI is a piece of shit and can't figure out how to handle workflow files properly.
 
 ## 🎯 Current Milestone Progress: v0.6.1 (Multi-Platform Portable, NSIS Dark Theme & Asset Branding)
 
