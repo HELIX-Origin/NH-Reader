@@ -14,6 +14,9 @@
 > **Nothing in this milestone may be pushed until it has been verified end-to-end
 > in dry-run mode (`dry_run: true`).** This is a hard requirement from the user.
 
+### 📌 Documentation site deployment
+- ⬜ **Enable GitHub Pages with GitHub Actions as its source and rerun the `GitHub Pages` workflow on `main`**: The translation links cannot resolve until the site is deployed; the most recent deploy failed because Pages is not enabled and no `PAGES_ADMIN_TOKEN` was configured.
+
 ### 📌 v0.7.1 Tasks:
 
 - ✅ **Step 1: Research Android build failure root cause**:
@@ -98,6 +101,7 @@
 
 ## ✅ Done — Completed Milestones & Historical Releases
 
+- ✅ **Pages navigation polish**: Made the Pages navigation a full-width top bar and removed the Markdown translation menu promptly when the Pages language selector initializes, avoiding content displacement on the site. GitHub-rendered Markdown retains its fallback menu.
 - ✅ **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/` published at `https://helix-origin.github.io/NH-Reader/` by the `GitHub Pages` workflow (`.github/workflows/pages.yml`). The desktop application's SPA is not deployed as a website.
 - ✅ **Pages documentation navigation & working translate dropdowns**: Data-driven sidebar, previous/next links and project-page directory (`docs/_data/navigation.yml`); every Markdown page now ships a GitHub-renderable `<details>` language dropdown, and Pages pages get a real in-place Google Translate `<select>` (`docs/translate.js`).
 - ✅ **Automatic Pages deployment & in-place translation for root Markdown**: `.github/workflows/pages.yml` builds, enables (via `PAGES_ADMIN_TOKEN`) and deploys the site; `scripts/build-pages.mjs` publishes `README`, `CONTRIBUTING`, `SECURITY`, `PRIVACY` and `TOS` under `repo/` so their translate dropdowns translate in place.

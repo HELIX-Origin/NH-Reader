@@ -6,6 +6,7 @@ top; the current development state lives under `Unreleased`.
 ## Unreleased
 
 ### 🌐 Project website
+* Made the Pages site navigation a full-width top bar with the language selector aligned at the end, and removed the Markdown-only translation fallback as soon as the Pages script runs to avoid shifting the article. Translation links still require the site to be enabled and deployed in repository Pages settings.
 * Added a GitHub Pages project page for NH Reader under `docs/`, matching the HELIX Origin portfolio's vCard-inspired design and linking to releases, documentation, and source. The landing page now links to all existing documentation; GitHub Pages renders the Markdown as interlinked HTML with a shared layout. The site is published by the `GitHub Pages` workflow.
 * **Multi-page documentation site**: `docs/_data/navigation.yml` is now the single source of truth for every documentation page. The Pages documentation layout renders a sectioned sidebar of all pages with the current page highlighted, page titles, previous/next links and an "Edit on GitHub" link, and the project page builds its documentation directory from the same data.
 * **Working translate dropdowns**: Replaced the broken `<select>`/`<script>` language widget, which GitHub stripped into a flat list of language names, on every Markdown page with a collapsible `<details>` dropdown that GitHub renders. On the Pages site a real language `<select>` translates the page in place using Google Translate and accepts a `?lang=<code>` deep link.
