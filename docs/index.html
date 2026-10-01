@@ -10,92 +10,206 @@ layout: null
   <meta name="theme-color" content="#081426">
   <title>NH Reader | HELIX Origin</title>
   <link rel="icon" type="image/jpeg" href="{{ '/assets/appicon.jpg' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <main class="layout">
-    <aside class="sidebar">
-      <div class="identity">
-        <img class="avatar" src="{{ '/assets/appicon.jpg' | relative_url }}" alt="" width="100" height="100">
-        <div>
-          <h1>NH Reader</h1>
-          <p class="badge">HELIX Origin project</p>
+  <main>
+    <!-- #SIDEBAR -->
+    <aside class="sidebar" data-sidebar>
+      <div class="sidebar-info">
+        <figure class="avatar-box">
+          <img src="{{ '/assets/appicon.jpg' | relative_url }}" alt="NH Reader icon" width="80" height="80">
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="NH Reader">NH Reader</h1>
+          <p class="title">Desktop &amp; Android Reader</p>
         </div>
+
+        <button class="info_more-btn" type="button" aria-expanded="false" aria-controls="sidebar-more" data-sidebar-btn>
+          <span>Show Info</span>
+          <span class="chevron" aria-hidden="true">▾</span>
+        </button>
       </div>
-      <div class="divider"></div>
-      <p>A lightweight, cross-platform client with a custom interface for discovering and reading galleries.</p>
-      <div class="divider"></div>
-      <a href="https://helix-origin.github.io/">HELIX Origin portfolio ↗</a>
-      <a href="https://github.com/HELIX-Origin/NH-Reader">Source on GitHub ↗</a>
-    </aside>
 
-    <div class="content">
-      <nav class="topbar" aria-label="Page navigation">
-        <a href="#about">About</a>
-        <a href="#features">Features</a>
-        <a href="#documentation">Documentation</a>
-        <a href="#downloads">Downloads</a>
-        {% include translate-control.html %}
-      </nav>
+      <div class="sidebar-info_more" id="sidebar-more">
+        <div class="separator"></div>
 
-      <section id="about" aria-labelledby="about-title">
-        <h2 id="about-title">About NH Reader</h2>
-        <p>NH Reader is a native desktop and Android client for nhentai.net, not a browser-based reader. Browse with powerful search and filters, organize your library, and apply a persistent global blacklist. Your favorites, history, and settings are stored locally.</p>
-        <p class="notice"><strong>18+ only.</strong> This software is intended for adults who are of legal age to view adult content in their jurisdiction. NH Reader is an independent client and is not affiliated with or endorsed by nhentai.net.</p>
-      </section>
-
-      <section id="features" aria-labelledby="features-title">
-        <h2 id="features-title">Highlights</h2>
-        <ul class="cards">
-          <li>
-            <h3>Search &amp; filter</h3>
-            <p>Find galleries by language, category, tags, page count, and sort order.</p>
+        <ul class="contacts-list">
+          <li class="contact-item">
+            <div class="icon-box" aria-hidden="true">📦</div>
+            <div class="contact-info">
+              <p class="contact-title">Source</p>
+              <a class="contact-link" href="https://github.com/HELIX-Origin/NH-Reader">GitHub repository</a>
+            </div>
           </li>
-          <li>
-            <h3>Global blacklist</h3>
-            <p>Exclude unwanted tags from searches and hide or blur matches in discovery grids.</p>
+
+          <li class="contact-item">
+            <div class="icon-box" aria-hidden="true">🏷️</div>
+            <div class="contact-info">
+              <p class="contact-title">Releases</p>
+              <a class="contact-link" href="https://github.com/HELIX-Origin/NH-Reader/releases">Download a release</a>
+            </div>
           </li>
-          <li>
-            <h3>Local library</h3>
-            <p>Keep favorites and history on your device, download archives, and read them offline.</p>
+
+          <li class="contact-item">
+            <div class="icon-box" aria-hidden="true">📖</div>
+            <div class="contact-info">
+              <p class="contact-title">Documentation</p>
+              <a class="contact-link" href="{{ '/README.html' | relative_url }}">Project docs</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box" aria-hidden="true">⚖️</div>
+            <div class="contact-info">
+              <p class="contact-title">License</p>
+              <a class="contact-link" href="https://github.com/HELIX-Origin/NH-Reader/blob/main/LICENSE">GPL-3.0</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box" aria-hidden="true">🧬</div>
+            <div class="contact-info">
+              <p class="contact-title">Organization</p>
+              <a class="contact-link" href="https://helix-origin.github.io/">HELIX Origin</a>
+            </div>
           </li>
         </ul>
-      </section>
 
-      <section id="documentation" aria-labelledby="documentation-title">
-        <h2 id="documentation-title">Documentation</h2>
-        <p>Explore the complete guides and references on this site. The <a href="{{ '/README.html' | relative_url }}">documentation home</a> also links to every page.</p>
-        <div class="documentation-directory">
-          {%- assign site_paths = site.pages | map: "path" %}
-          {%- for group in site.data.navigation %}
-          {%- assign group_pages = group.pages | where_exp: "entry", "site_paths contains entry.path" %}
-          {%- if group_pages.size > 0 %}
-          <div>
-            <h3>{{ group.section }}</h3>
-            <ul>
-              {%- for entry in group_pages %}
-              <li><a href="{{ entry.path | replace: '.md', '.html' | prepend: '/' | relative_url }}">{{ entry.title | escape }}</a></li>
-              {%- endfor %}
-            </ul>
+        <div class="separator"></div>
+
+        <ul class="social-list">
+          <li class="social-item"><a class="social-link" href="https://github.com/HELIX-Origin/NH-Reader/issues">🐛 Issues</a></li>
+          <li class="social-item"><a class="social-link" href="https://github.com/HELIX-Origin/NH-Reader/discussions">💬 Discussions</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- #MAIN-CONTENT -->
+    <div class="main-content">
+      <!-- #NAVBAR -->
+      <nav class="navbar" aria-label="Main navigation">
+        <ul class="navbar-list">
+          <li class="navbar-item">
+            <a class="navbar-link active" href="#about" aria-current="page" data-nav-link="about">About</a>
+          </li>
+          <li class="navbar-item">
+            <a class="navbar-link" href="#features" data-nav-link="features">Features</a>
+          </li>
+          <li class="navbar-item">
+            <a class="navbar-link" href="#documentation" data-nav-link="documentation">Docs</a>
+          </li>
+          <li class="navbar-item">
+            <a class="navbar-link" href="#downloads" data-nav-link="downloads">Downloads</a>
+          </li>
+          <li class="navbar-item">
+            <div class="translate-control notranslate" translate="no">
+              <label for="translate-select">🌐 <span class="visually-hidden">Language</span></label>
+              <select id="translate-select" aria-label="Translate this page" disabled>
+                {%- for language in site.data.languages %}
+                <option value="{{ language.code }}" lang="{{ language.code }}">{{ language.name }}</option>
+                {%- endfor %}
+              </select>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- #ABOUT -->
+      <article class="about active" data-page="about">
+        <header>
+          <h2 class="h2 article-title">About NH Reader</h2>
+        </header>
+
+        <section class="about-text">
+          <p>NH Reader is a native desktop and Android client for nhentai.net, not a browser-based reader. Browse with powerful search and filters, organize your library, and apply a persistent global blacklist. Your favorites, history, and settings are stored locally.</p>
+          <div class="notice">
+            <p><strong>18+ only.</strong> This software is intended for adults who are of legal age to view adult content in their jurisdiction. NH Reader is an independent client and is not affiliated with or endorsed by nhentai.net.</p>
           </div>
-          {%- endif %}
-          {%- endfor %}
-        </div>
-      </section>
+        </section>
+      </article>
 
-      <section id="downloads" aria-labelledby="downloads-title">
-        <h2 id="downloads-title">Get NH Reader</h2>
-        <p>Windows and Linux packages are supported. macOS and Android builds are available through their toolchains but remain untested on physical devices. iOS is not supported.</p>
-        <div class="actions">
-          <a class="primary" href="https://github.com/HELIX-Origin/NH-Reader/releases">Download releases ↗</a>
-          <a href="{{ '/README.html' | relative_url }}">Read documentation</a>
-        </div>
-      </section>
+      <!-- #FEATURES -->
+      <article class="features" data-page="features">
+        <header>
+          <h2 class="h2 article-title">Highlights &amp; Features</h2>
+        </header>
+
+        <section class="service">
+          <ul class="cards">
+            <li>
+              <h3>🔍 Search &amp; filter</h3>
+              <p>Find galleries by language, category, tags, page count, and sort order.</p>
+            </li>
+            <li>
+              <h3>🛡️ Global blacklist</h3>
+              <p>Exclude unwanted tags from searches and hide or blur matches in discovery grids.</p>
+            </li>
+            <li>
+              <h3>📚 Local library</h3>
+              <p>Keep favorites and history on your device, download archives, and read them offline.</p>
+            </li>
+          </ul>
+        </section>
+      </article>
+
+      <!-- #DOCUMENTATION -->
+      <article class="documentation" data-page="documentation">
+        <header>
+          <h2 class="h2 article-title">Documentation</h2>
+        </header>
+
+        <section class="about-text">
+          <p>Explore the complete guides and references on this site. The <a href="{{ '/README.html' | relative_url }}">documentation home</a> also links to every page.</p>
+
+          <div class="documentation-directory">
+            {%- assign site_paths = site.pages | map: "path" %}
+            {%- for group in site.data.navigation %}
+            {%- assign group_pages = group.pages | where_exp: "entry", "site_paths contains entry.path" %}
+            {%- if group_pages.size > 0 %}
+            <div>
+              <h3>{{ group.section }}</h3>
+              <ul>
+                {%- for entry in group_pages %}
+                <li><a href="{{ entry.path | replace: '.md', '.html' | prepend: '/' | relative_url }}">{{ entry.title | escape }}</a></li>
+                {%- endfor %}
+              </ul>
+            </div>
+            {%- endif %}
+            {%- endfor %}
+          </div>
+        </section>
+      </article>
+
+      <!-- #DOWNLOADS -->
+      <article class="downloads" data-page="downloads">
+        <header>
+          <h2 class="h2 article-title">Get NH Reader</h2>
+        </header>
+
+        <section class="about-text">
+          <p>Windows and Linux packages are supported. macOS and Android builds are available through their toolchains but remain untested on physical devices. iOS is not supported.</p>
+          <div class="actions">
+            <a class="primary" href="https://github.com/HELIX-Origin/NH-Reader/releases">Download releases ↗</a>
+            <a href="{{ '/README.html' | relative_url }}">Read documentation</a>
+          </div>
+        </section>
+      </article>
+
+      <!-- #FOOTER -->
+      <footer class="site-footer">
+        <p>NH Reader is an open-source project by <a href="https://helix-origin.github.io/">HELIX Origin</a> · Site layout from <a href="https://github.com/codewithsadee/vcard-personal-portfolio">vCard</a> (MIT)</p>
+        <p><a href="https://helix-origin.github.io/">← Back to HELIX Origin</a></p>
+      </footer>
     </div>
   </main>
-  <script src="{{ '/translate.js' | relative_url }}"></script>
+
+  <script src="{{ '/assets/js/script.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/translate.js' | relative_url }}"></script>
 </body>
 </html>
