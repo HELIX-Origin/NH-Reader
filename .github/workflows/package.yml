@@ -70,6 +70,7 @@ jobs:
             package-files: |
               src-tauri/gen/apple/build/**/*.ipa
             build-command: |
+              export APPLE_DEVELOPMENT_TEAM="0000000000"
               if [ ! -d "src-tauri/gen/apple" ]; then
                 npm run mobile:ios:init
               fi
