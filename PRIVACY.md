@@ -1,28 +1,26 @@
 <div align="right">
-  <label for="translate-select" style="font-size:12px; color:#a1a1aa; margin-right:6px;">🌐 Language:</label>
-  <select id="translate-select" style="background:#18181b; color:#f4f4f5; border:1px solid #3f3f46; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer;" onchange="translatePage(this.value)">
-    <option value="en">English</option>
-    <option value="ja">日本語 (Japanese)</option>
-    <option value="zh-CN">简体中文 (Simplified Chinese)</option>
-    <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
-    <option value="ko">한국어 (Korean)</option>
-    <option value="es">Español (Spanish)</option>
-    <option value="fr">Français (French)</option>
-    <option value="de">Deutsch (German)</option>
-    <option value="ru">Русский (Russian)</option>
-    <option value="pt">Português (Portuguese)</option>
-    <option value="it">Italiano (Italian)</option>
-    <option value="th">ไทย (Thai)</option>
-    <option value="vi">Tiếng Việt (Vietnamese)</option>
-    <option value="id">Bahasa Indonesia (Indonesian)</option>
-    <option value="pl">Polski (Polish)</option>
-    <option value="nl">Nederlands (Dutch)</option>
-    <option value="tr">Türkçe (Turkish)</option>
-    <option value="ar">العربية (Arabic)</option>
-  </select>
-  <div id="google_translate_element" style="display:none;"></div>
+<details id="translate-menu">
+<summary>🌐 Translate this page</summary>
+<a href="https://github.com/HELIX-Origin/NH-Reader/blob/main/PRIVACY.md" lang="en">English</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=ja&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="ja">日本語 (Japanese)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=zh-CN&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=zh-TW&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=ko&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="ko">한국어 (Korean)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=es&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="es">Español (Spanish)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=fr&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="fr">Français (French)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=de&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="de">Deutsch (German)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=ru&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="ru">Русский (Russian)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=pt&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="pt">Português (Portuguese)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=it&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="it">Italiano (Italian)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=th&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="th">ไทย (Thai)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=vi&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="vi">Tiếng Việt (Vietnamese)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=id&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="id">Bahasa Indonesia (Indonesian)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=pl&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="pl">Polski (Polish)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=nl&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="nl">Nederlands (Dutch)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=tr&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="tr">Türkçe (Turkish)</a><br>
+<a href="https://translate.google.com/translate?sl=en&amp;tl=ar&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FPRIVACY.md" lang="ar">العربية (Arabic)</a><br>
+</details>
 </div>
-<script type="text/javascript" src="./docs/translate.js"></script>
 
 # Privacy Policy
 

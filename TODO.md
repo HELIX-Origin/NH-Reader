@@ -68,7 +68,7 @@
   - Enhanced `src/lib/format.ts` (`formatCount`, `formatDate`, `relativeDate`, `formatBytes`) to use standard browser `Intl.NumberFormat`, `Intl.DateTimeFormat`, and `Intl.RelativeTimeFormat`, reactively linked to `locale.value`.
 - ✅ **Step 11: Migration from GitHub Wiki to In-Repo `docs/` with Live Translation**:
   - Moved all documentation from `wiki/` into repository `docs/` folder, converting `Home.md` into `docs/README.md`.
-  - Added interactive Google Translate widget and button with custom JS script (`docs/translate.js`) at the top-right of all markdown files.
+  - Added interactive Google Translate widget and button with custom JS script (`docs/translate.js`) at the top-right of all markdown files (later replaced by a GitHub-safe `<details>` dropdown plus an in-place `<select>` on GitHub Pages).
   - Replaced `_Sidebar.md` and `_Footer.md` with responsive in-page navigation breadcrumbs, documentation index, and footer.
   - Updated all internal and cross-document links to use concrete relative paths and explicit `.md` file extensions.
   - Removed obsolete `.github/workflows/wiki.yml` sync workflow.
@@ -99,6 +99,7 @@
 ## ✅ Done — Completed Milestones & Historical Releases
 
 - ✅ **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/` for publication at `https://helix-origin.github.io/NH-Reader/` via Settings → Pages (branch `/docs`). The desktop application's SPA is not deployed as a website.
+- ✅ **Pages documentation navigation & working translate dropdowns**: Data-driven sidebar, previous/next links and project-page directory (`docs/_data/navigation.yml`); every Markdown page now ships a GitHub-renderable `<details>` language dropdown, and Pages pages get a real in-place Google Translate `<select>` (`docs/translate.js`).
 
 ### [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) — Upstream Alignment, Dedicated Library Hub & Rebuilt Native Installer (2026-10-01)
 - ✅ **Rebuilt Native Packaging with Custom NSIS Hook Template**:

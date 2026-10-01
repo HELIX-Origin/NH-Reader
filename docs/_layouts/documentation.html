@@ -1,10 +1,32 @@
+{%- assign doc_pages = "" | split: "" -%}
+{%- for group in site.data.navigation -%}
+  {%- for entry in group.pages -%}
+    {%- assign doc_pages = doc_pages | push: entry -%}
+  {%- endfor -%}
+{%- endfor -%}
+{%- assign current_entry = nil -%}
+{%- assign previous_entry = nil -%}
+{%- assign next_entry = nil -%}
+{%- for entry in doc_pages -%}
+  {%- if entry.path == page.path -%}
+    {%- assign current_entry = entry -%}
+    {%- unless forloop.first -%}
+      {%- assign previous_index = forloop.index0 | minus: 1 -%}
+      {%- assign previous_entry = doc_pages[previous_index] -%}
+    {%- endunless -%}
+    {%- unless forloop.last -%}
+      {%- assign next_entry = doc_pages[forloop.index] -%}
+    {%- endunless -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign page_title = page.title | default: current_entry.title | default: "Documentation" -%}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="NH Reader project documentation">
-  <title>{{ page.title | default: "Documentation" | escape }} | NH Reader</title>
+  <meta name="description" content="NH Reader documentation: {{ page_title | escape }}">
+  <title>{{ page_title | escape }} | NH Reader</title>
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
 </head>
 <body>
@@ -18,18 +40,41 @@
         </div>
       </div>
       <div class="divider"></div>
-      <a href="{{ '/' | relative_url }}">Project page</a>
-      <a href="{{ '/README.html' | relative_url }}">Documentation home</a>
-      <a href="https://github.com/HELIX-Origin/NH-Reader">Source on GitHub ↗</a>
+      <nav class="docs-nav" aria-label="Documentation pages">
+        {%- for group in site.data.navigation %}
+        <h2 class="docs-nav-heading">{{ group.section }}</h2>
+        <ul>
+          {%- for entry in group.pages %}
+          {%- assign entry_url = entry.path | replace: ".md", ".html" | prepend: "/" | relative_url %}
+          <li><a href="{{ entry_url }}"{% if entry.path == page.path %} aria-current="page"{% endif %}>{{ entry.title | escape }}</a></li>
+          {%- endfor %}
+        </ul>
+        {%- endfor %}
+      </nav>
+      <div class="divider"></div>
+      <a href="{{ '/' | relative_url }}">← Project page</a>
+      <a href="https://github.com/HELIX-Origin/NH-Reader/blob/main/docs/{{ page.path }}">Edit on GitHub ↗</a>
     </aside>
     <div class="content">
-      <nav aria-label="Documentation navigation">
+      <nav class="topbar" aria-label="Site navigation">
         <a href="{{ '/' | relative_url }}">Project</a>
         <a href="{{ '/README.html' | relative_url }}">All docs</a>
         <a href="https://github.com/HELIX-Origin/NH-Reader/releases">Releases ↗</a>
+        {% include translate-control.html %}
       </nav>
       <article class="documentation-content">{{ content }}</article>
+      {%- if previous_entry or next_entry %}
+      <nav class="pager" aria-label="Previous and next pages">
+        {%- if previous_entry %}
+        <a class="pager-previous" href="{{ previous_entry.path | replace: '.md', '.html' | prepend: '/' | relative_url }}"><span>Previous</span>{{ previous_entry.title | escape }}</a>
+        {%- endif %}
+        {%- if next_entry %}
+        <a class="pager-next" href="{{ next_entry.path | replace: '.md', '.html' | prepend: '/' | relative_url }}"><span>Next</span>{{ next_entry.title | escape }}</a>
+        {%- endif %}
+      </nav>
+      {%- endif %}
     </div>
   </main>
+  <script src="{{ '/translate.js' | relative_url }}"></script>
 </body>
 </html>

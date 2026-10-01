@@ -48,20 +48,19 @@
 - The installer fails to to uninstall the previous version when selecting the option to uninstall the previous version before installing the new version. 
 - The workflow updates forgot to add the Windows, macOS, and Linux installers to the release asset uploads steps. *(Currently it uploads the android apk files and the per os portable archives)*
 - The signing works correctly when done locally *(no untrusted developer warning)*, but last time i tested it from the release installer, i still got the untrusted developer warning. We will need to investigate this further to see if the issue is actually fixed or not *(I'm assuming it's probably due to the private key(s) not being published. If so, adding the private key(s) to our repo secrets should fix this issue.)*.
-- The translate dropdown button in the repo md files is displaying as a list of languages instead of an actual dropdown language selector.
-
-  ```markdown
-  🌐 Language: English 日本語 (Japanese) 简体中文 (Simplified Chinese) 繁體中文 (Traditional Chinese) 한국어 (Korean) Español (Spanish) Français (French) Deutsch (German) Русский (Russian) Português (Portuguese) Italiano (Italian) ไทย (Thai) Tiếng Việt (Vietnamese) Bahasa Indonesia (Indonesian) Polski (Polish) Nederlands (Dutch) Türkçe (Turkish) العربية (Arabic)
-  <script type="text/javascript" src="./docs/translate.js"></script>
-  ```
-
 ***Notes***:
 
 - *Since some of these issues affect the app code, this update will warrant a version bump.*
-- *This repository has a variation of the in-page google translate feature we want to implement across all markdown files. [ciddwd/overlay-translator](https://github.com/ciddwd/overlay-translator). however this one doesn't use the dropdown button we want. So it is mainly just a reference for how ours will need to work.*
-- *not a bug, but worth mentioning here. One of the reasons we need to ensure the Translate button is coded corectly, is because I am planing to add GitHub pages support to the repository using this GitHub Pages theme: [codewithsadee/vcard-personal-portfolio](https://github.com/codewithsadee/vcard-personal-portfolio).*
 
 ## ✅ Closed
+
+### 2026-10-01 — Markdown translate "dropdown" rendered as a flat list of language names
+- **Severity**: ⚠️ Medium (Documentation usability)
+- **Status**: ✅ resolved (Unreleased)
+- **Root Cause**: Every Markdown page embedded a `<select>` with inline styles, an `onchange` handler and a `<script src="./docs/translate.js">`. GitHub's Markdown sanitizer strips `<select>`, `<label>`, `<script>`, `style` and event handlers, so only the bare option text survived and no script ever ran.
+- **Fix**:
+  1. Replaced the widget in all 23 Markdown pages (root `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `PRIVACY.md`, `TOS.md` and every `docs/*.md`) with a GitHub-safe collapsible `<details>` "🌐 Translate this page" dropdown. On `docs/` pages each language opens the GitHub Pages copy with `?lang=<code>`; root pages open Google Translate's page proxy.
+  2. The GitHub Pages layout and project page render a real `<select>` (`docs/_includes/translate-control.html`, languages from `docs/_data/languages.yml`). The rewritten `docs/translate.js` removes the static fallback menu, honours `?lang=`, and translates the page in place through the Google Translate element without leaving the page.
 
 ### 2026-10-01 — NSIS installer dark mode text illegibility, placeholder branding & missing macOS/Linux portable packages (Resolved in v0.6.1)
 - **Severity**: ⚠️ High (Usability / Packaging)

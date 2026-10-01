@@ -1,96 +1,128 @@
 (function () {
-	const supportedLanguages = [
-		{ code: 'en', name: 'English' },
-		{ code: 'ja', name: '日本語' },
-		{ code: 'zh-CN', name: '简体中文' },
-		{ code: 'zh-TW', name: '繁體中文' },
-		{ code: 'ko', name: '한국어' },
-		{ code: 'es', name: 'Español' },
-		{ code: 'fr', name: 'Français' },
-		{ code: 'de', name: 'Deutsch' },
-		{ code: 'ru', name: 'Русский' },
-		{ code: 'pt', name: 'Português' },
-		{ code: 'it', name: 'Italiano' },
-		{ code: 'th', name: 'ไทย' },
-		{ code: 'vi', name: 'Tiếng Việt' },
-		{ code: 'id', name: 'Bahasa Indonesia' },
-		{ code: 'pl', name: 'Polski' },
-		{ code: 'nl', name: 'Nederlands' },
-		{ code: 'tr', name: 'Türkçe' },
-		{ code: 'ar', name: 'العربية' }
-	];
+	const sourceLanguage = 'en';
+	const scriptId = 'google-translate-api';
+	const hostId = 'google_translate_element';
 
-	const langCodes = supportedLanguages.map((l) => l.code).join(',');
+	function getSelect() {
+		return document.getElementById('translate-select');
+	}
 
-	window.googleTranslateElementInit = function () {
-		if (window.google && window.google.translate) {
+	function supportedCodes() {
+		const select = getSelect();
+		return select ? Array.from(select.options, (option) => option.value) : [];
+	}
+
+	function writeCookie(value, maxAge) {
+		const base = `googtrans=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
+		document.cookie = base;
+		if (window.location.hostname) {
+			document.cookie = `${base}; domain=${window.location.hostname}`;
+		}
+	}
+
+	function setTranslationCookie(language) {
+		if (language === sourceLanguage) {
+			writeCookie('', 0);
+		} else {
+			writeCookie(`/${sourceLanguage}/${language}`, 31536000);
+		}
+	}
+
+	function readTranslationCookie() {
+		const match = document.cookie.match(/(?:^|;\s*)googtrans=\/[^/;]*\/([^;]+)/);
+		return match ? decodeURIComponent(match[1]) : sourceLanguage;
+	}
+
+	function isTranslated() {
+		const classes = document.documentElement.classList;
+		return classes.contains('translated-ltr') || classes.contains('translated-rtl');
+	}
+
+	function consumeLanguageParameter() {
+		const url = new URL(window.location.href);
+		const requested = url.searchParams.get('lang');
+		if (!requested) return;
+		if (supportedCodes().includes(requested)) {
+			setTranslationCookie(requested);
+		}
+		url.searchParams.delete('lang');
+		window.history.replaceState(null, '', url.toString());
+	}
+
+	function removeStaticFallbackMenus() {
+		document.querySelectorAll('#translate-menu, #user-content-translate-menu').forEach((menu) => {
+			const wrapper = menu.parentElement;
+			if (wrapper && wrapper.tagName === 'DIV' && wrapper.children.length === 1) {
+				wrapper.remove();
+			} else {
+				menu.remove();
+			}
+		});
+	}
+
+	function googleCombo() {
+		return document.querySelector('select.goog-te-combo');
+	}
+
+	function applyLanguage(language) {
+		setTranslationCookie(language);
+		if (language === sourceLanguage) {
+			if (isTranslated()) window.location.reload();
+			return;
+		}
+		const combo = googleCombo();
+		if (combo) {
+			combo.value = language;
+			combo.dispatchEvent(new Event('change', { bubbles: true }));
+		} else {
+			window.location.reload();
+		}
+	}
+
+	function ensureHost() {
+		if (document.getElementById(hostId)) return;
+		const host = document.createElement('div');
+		host.id = hostId;
+		host.hidden = true;
+		document.body.appendChild(host);
+	}
+
+	function loadGoogleTranslate() {
+		if (document.getElementById(scriptId)) return;
+		ensureHost();
+		window.googleTranslateElementInit = function () {
+			if (!window.google || !window.google.translate) return;
 			new window.google.translate.TranslateElement(
 				{
-					pageLanguage: 'en',
-					includedLanguages: langCodes,
-					layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+					pageLanguage: sourceLanguage,
+					includedLanguages: supportedCodes().join(','),
 					autoDisplay: false
 				},
-				'google_translate_element'
+				hostId
 			);
-		}
-	};
-
-	function setTranslateCookie(targetLang) {
-		const host = window.location.hostname;
-		document.cookie = `googtrans=/en/${targetLang}; path=/;`;
-		if (host) {
-			document.cookie = `googtrans=/en/${targetLang}; path=/; domain=${host};`;
-		}
+		};
+		const script = document.createElement('script');
+		script.id = scriptId;
+		script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+		script.async = true;
+		document.head.appendChild(script);
 	}
 
-	function applyTranslation(targetLang) {
-		if (!targetLang) return;
-		setTranslateCookie(targetLang);
-		const combo = document.querySelector('.goog-te-combo');
-		if (combo) {
-			combo.value = targetLang;
-			combo.dispatchEvent(new Event('change'));
-		} else {
-			loadGoogleTranslateScript();
-			if (!window.location.protocol.startsWith('http')) return;
-			setTimeout(() => {
-				const retryCombo = document.querySelector('.goog-te-combo');
-				if (retryCombo) {
-					retryCombo.value = targetLang;
-					retryCombo.dispatchEvent(new Event('change'));
-				} else if (targetLang !== 'en') {
-					window.location.href = `https://translate.google.com/translate?sl=en&tl=${targetLang}&u=${encodeURIComponent(window.location.href)}`;
-				}
-			}, 1000);
-		}
-	}
-
-	window.translatePage = applyTranslation;
-
-	function loadGoogleTranslateScript() {
-		if (!document.getElementById('google-translate-api')) {
-			const s = document.createElement('script');
-			s.id = 'google-translate-api';
-			s.type = 'text/javascript';
-			s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-			document.head.appendChild(s);
-		}
-	}
-
-	function setupDropdown() {
-		const select = document.getElementById('translate-select');
-		if (select) {
-			select.addEventListener('change', function () {
-				applyTranslation(this.value);
-			});
-		}
-		loadGoogleTranslateScript();
+	function init() {
+		removeStaticFallbackMenus();
+		const select = getSelect();
+		if (!select) return;
+		consumeLanguageParameter();
+		const current = readTranslationCookie();
+		select.value = supportedCodes().includes(current) ? current : sourceLanguage;
+		select.disabled = false;
+		select.addEventListener('change', () => applyLanguage(select.value));
+		loadGoogleTranslate();
 	}
 
 	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', setupDropdown);
+		document.addEventListener('DOMContentLoaded', init);
 	} else {
-		setupDropdown();
+		init();
 	}
 })();
