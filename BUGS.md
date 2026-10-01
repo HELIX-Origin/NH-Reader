@@ -34,7 +34,7 @@
 
 ## 🚨 Open
 
-- **Documentation translation links return 404:** The links target GitHub Pages, but the `GitHub Pages` workflow's deployment on `main` failed because Pages is not enabled and `PAGES_ADMIN_TOKEN` is absent (run 36919398848). The build succeeded; the site has not been deployed. An administrator must enable Pages with **GitHub Actions** as its source in repository Settings → Pages, then rerun the workflow, or provide the documented admin token and rerun it. This cannot be corrected by changing the links to other Pages paths while the site is unpublished.
+- **Pages workflow cannot deploy to the selected source:** Pages is now enabled manually from `docs/`. The `GitHub Pages` workflow still tries to switch its source to GitHub Actions and deploy a staged artifact; it requires admin permissions to switch sources and does not publish under the current `docs/` setting. The `docs/` branch build works independently of that workflow.
 
 - The following errors have been discovered when running `npm run build:app` *(Note: I replaced my hard coded local app data path with the Windows variable to not expose my system path in the error code below)*:
   
