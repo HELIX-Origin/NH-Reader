@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="NH Reader is a cross-platform client for nhentai.net with advanced search, filters, and a global blacklist.">
   <title>NH Reader | HELIX Origin</title>
-  <link rel="stylesheet" href="./assets/site.css">
+  <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
 </head>
 <body>
   <main class="layout">
@@ -25,11 +28,12 @@
     </aside>
 
     <div class="content">
-      <nav aria-label="Page navigation">
+      <nav class="topbar" aria-label="Page navigation">
         <a href="#about">About</a>
         <a href="#features">Features</a>
         <a href="#documentation">Documentation</a>
         <a href="#downloads">Downloads</a>
+        {% include translate-control.html %}
       </nav>
 
       <section id="about" aria-labelledby="about-title">
@@ -58,45 +62,22 @@
 
       <section id="documentation" aria-labelledby="documentation-title">
         <h2 id="documentation-title">Documentation</h2>
-        <p>Explore the complete guides and references on this site. The <a href="./README.html">documentation home</a> also links to every page.</p>
+        <p>Explore the complete guides and references on this site. The <a href="{{ '/README.html' | relative_url }}">documentation home</a> also links to every page.</p>
         <div class="documentation-directory">
+          {%- assign site_paths = site.pages | map: "path" %}
+          {%- for group in site.data.navigation %}
+          {%- assign group_pages = group.pages | where_exp: "entry", "site_paths contains entry.path" %}
+          {%- if group_pages.size > 0 %}
           <div>
-            <h3>Getting started</h3>
+            <h3>{{ group.section }}</h3>
             <ul>
-              <li><a href="./Getting-Started.html">Getting Started</a></li>
-              <li><a href="./Installation-and-Maintenance.html">Installation &amp; Maintenance</a></li>
+              {%- for entry in group_pages %}
+              <li><a href="{{ entry.path | replace: '.md', '.html' | prepend: '/' | relative_url }}">{{ entry.title | escape }}</a></li>
+              {%- endfor %}
             </ul>
           </div>
-          <div>
-            <h3>Features</h3>
-            <ul>
-              <li><a href="./Search-and-Filters.html">Search &amp; Filters</a></li>
-              <li><a href="./Blacklist.html">Blacklist</a></li>
-              <li><a href="./Favorites-and-History.html">Favorites &amp; History</a></li>
-              <li><a href="./Reader-and-Galleries.html">Reader &amp; Galleries</a></li>
-              <li><a href="./Settings-and-API-Key.html">Settings &amp; API Key</a></li>
-              <li><a href="./Localization.html">Localization</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3>Development</h3>
-            <ul>
-              <li><a href="./Architecture.html">Architecture</a></li>
-              <li><a href="./Backend-Rust.html">Backend (Rust)</a></li>
-              <li><a href="./Frontend-SvelteKit.html">Frontend (SvelteKit)</a></li>
-              <li><a href="./Installer-Engine.html">Packaging &amp; Bundling</a></li>
-              <li><a href="./Development-and-Contributing.html">Development &amp; Contributing</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3>Reference</h3>
-            <ul>
-              <li><a href="./Security.html">Security</a></li>
-              <li><a href="./Privacy.html">Privacy</a></li>
-              <li><a href="./Troubleshooting.html">Troubleshooting</a></li>
-              <li><a href="./FAQ.html">FAQ</a></li>
-            </ul>
-          </div>
+          {%- endif %}
+          {%- endfor %}
         </div>
       </section>
 
@@ -105,10 +86,11 @@
         <p>Windows and Linux packages are supported. macOS and Android builds are available through their toolchains but remain untested on physical devices. iOS is not supported.</p>
         <div class="actions">
           <a class="primary" href="https://github.com/HELIX-Origin/NH-Reader/releases">Download releases ↗</a>
-          <a href="./README.html">Read documentation</a>
+          <a href="{{ '/README.html' | relative_url }}">Read documentation</a>
         </div>
       </section>
     </div>
   </main>
+  <script src="{{ '/translate.js' | relative_url }}"></script>
 </body>
 </html>

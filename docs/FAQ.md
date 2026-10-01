@@ -1,28 +1,26 @@
 <div align="right">
-  <label for="translate-select" style="font-size:12px; color:#a1a1aa; margin-right:6px;">🌐 Language:</label>
-  <select id="translate-select" style="background:#18181b; color:#f4f4f5; border:1px solid #3f3f46; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer;" onchange="translatePage(this.value)">
-    <option value="en">English</option>
-    <option value="ja">日本語 (Japanese)</option>
-    <option value="zh-CN">简体中文 (Simplified Chinese)</option>
-    <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
-    <option value="ko">한국어 (Korean)</option>
-    <option value="es">Español (Spanish)</option>
-    <option value="fr">Français (French)</option>
-    <option value="de">Deutsch (German)</option>
-    <option value="ru">Русский (Russian)</option>
-    <option value="pt">Português (Portuguese)</option>
-    <option value="it">Italiano (Italian)</option>
-    <option value="th">ไทย (Thai)</option>
-    <option value="vi">Tiếng Việt (Vietnamese)</option>
-    <option value="id">Bahasa Indonesia (Indonesian)</option>
-    <option value="pl">Polski (Polish)</option>
-    <option value="nl">Nederlands (Dutch)</option>
-    <option value="tr">Türkçe (Turkish)</option>
-    <option value="ar">العربية (Arabic)</option>
-  </select>
-  <div id="google_translate_element" style="display:none;"></div>
+<details id="translate-menu">
+<summary>🌐 Translate this page</summary>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=en" lang="en">English</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=ja" lang="ja">日本語 (Japanese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=zh-CN" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=zh-TW" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=ko" lang="ko">한국어 (Korean)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=es" lang="es">Español (Spanish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=fr" lang="fr">Français (French)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=de" lang="de">Deutsch (German)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=ru" lang="ru">Русский (Russian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=pt" lang="pt">Português (Portuguese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=it" lang="it">Italiano (Italian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=th" lang="th">ไทย (Thai)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=vi" lang="vi">Tiếng Việt (Vietnamese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=id" lang="id">Bahasa Indonesia (Indonesian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=pl" lang="pl">Polski (Polish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=nl" lang="nl">Nederlands (Dutch)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=tr" lang="tr">Türkçe (Turkish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/FAQ.html?lang=ar" lang="ar">العربية (Arabic)</a><br>
+</details>
 </div>
-<script type="text/javascript" src="./translate.js"></script>
 
 ---
 

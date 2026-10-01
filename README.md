@@ -1,28 +1,26 @@
 <div align="right">
-  <label for="translate-select" style="font-size:12px; color:#a1a1aa; margin-right:6px;">🌐 Language:</label>
-  <select id="translate-select" style="background:#18181b; color:#f4f4f5; border:1px solid #3f3f46; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer;" onchange="translatePage(this.value)">
-    <option value="en">English</option>
-    <option value="ja">日本語 (Japanese)</option>
-    <option value="zh-CN">简体中文 (Simplified Chinese)</option>
-    <option value="zh-TW">繁體中文 (Traditional Chinese)</option>
-    <option value="ko">한국어 (Korean)</option>
-    <option value="es">Español (Spanish)</option>
-    <option value="fr">Français (French)</option>
-    <option value="de">Deutsch (German)</option>
-    <option value="ru">Русский (Russian)</option>
-    <option value="pt">Português (Portuguese)</option>
-    <option value="it">Italiano (Italian)</option>
-    <option value="th">ไทย (Thai)</option>
-    <option value="vi">Tiếng Việt (Vietnamese)</option>
-    <option value="id">Bahasa Indonesia (Indonesian)</option>
-    <option value="pl">Polski (Polish)</option>
-    <option value="nl">Nederlands (Dutch)</option>
-    <option value="tr">Türkçe (Turkish)</option>
-    <option value="ar">العربية (Arabic)</option>
-  </select>
-  <div id="google_translate_element" style="display:none;"></div>
+<details id="translate-menu">
+<summary>🌐 Translate this page</summary>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=en" lang="en">English</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=ja" lang="ja">日本語 (Japanese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=zh-CN" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=zh-TW" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=ko" lang="ko">한국어 (Korean)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=es" lang="es">Español (Spanish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=fr" lang="fr">Français (French)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=de" lang="de">Deutsch (German)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=ru" lang="ru">Русский (Russian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=pt" lang="pt">Português (Portuguese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=it" lang="it">Italiano (Italian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=th" lang="th">ไทย (Thai)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=vi" lang="vi">Tiếng Việt (Vietnamese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=id" lang="id">Bahasa Indonesia (Indonesian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=pl" lang="pl">Polski (Polish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=nl" lang="nl">Nederlands (Dutch)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=tr" lang="tr">Türkçe (Turkish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/README.html?lang=ar" lang="ar">العربية (Arabic)</a><br>
+</details>
 </div>
-<script type="text/javascript" src="./docs/translate.js"></script>
 
 # NH Reader
 
@@ -136,7 +134,7 @@ src-tauri/            # Rust backend (Tauri 2)
 
 Full documentation lives in the [`docs/`](docs/README.md) folder:
 
-- [Project page](https://helix-origin.github.io/NH-Reader/) — static GitHub Pages landing page (available after Pages is enabled for this repository).
+- [Project page](https://helix-origin.github.io/NH-Reader/) — GitHub Pages site with the landing page, every documentation page, and translatable copies of this README, CONTRIBUTING, SECURITY, PRIVACY and TOS.
 - [Documentation Home](docs/README.md) · [Getting Started](docs/Getting-Started.md) · [Search & Filters](docs/Search-and-Filters.md)
 - [Blacklist](docs/Blacklist.md) · [Reader & Galleries](docs/Reader-and-Galleries.md) · [Settings & API Key](docs/Settings-and-API-Key.md)
 - [Installation & Maintenance](docs/Installation-and-Maintenance.md) · [Localization](docs/Localization.md) · [Architecture](docs/Architecture.md)
@@ -146,7 +144,7 @@ Full documentation lives in the [`docs/`](docs/README.md) folder:
 Also see [ROADMAP.md](ROADMAP.md), [TODO.md](TODO.md), [BUGS.md](BUGS.md), [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
-To publish the project page and all 18 documentation pages at `https://helix-origin.github.io/NH-Reader/`, select **Deploy from a branch** in this repository's **Settings → Pages** and choose the default branch and **`/docs`** folder. GitHub Pages builds the Markdown into linked HTML pages using `docs/_config.yml` and the shared documentation layout. The static `docs/index.html` is the project entry point; it does not deploy the Tauri application. To preview the landing page alone, run `python3 -m http.server 8000` from `docs/` and open `http://localhost:8000/`; the Markdown pages require GitHub Pages' Jekyll build to preview as rendered HTML.
+The site at `https://helix-origin.github.io/NH-Reader/` is published automatically by [`.github/workflows/pages.yml`](.github/workflows/pages.yml) on every push to `main` that touches `docs/` or the root pages. `scripts/build-pages.mjs` stages `docs/` together with every root Markdown file that has a translate menu (under `repo/`), Jekyll builds it with `docs/_config.yml` and the shared layout, and the result is deployed with GitHub Actions. The workflow also enables Pages and sets its source to **GitHub Actions** by itself. GitHub only lets an admin token do that, so the repository needs a one-time `PAGES_ADMIN_TOKEN` secret (a fine-grained token for this repository with **Administration: write** and **Pages: write**). Once Pages is on GitHub Actions the secret is no longer used. Other branches build the site without deploying, and a manual run can set `dry_run` to only build. The Tauri application is never deployed as a website. To preview locally, run `node scripts/build-pages.mjs .pages` and build `.pages/` with the `github-pages` Jekyll gem.
 
 ## 🤝 Contributing
 
