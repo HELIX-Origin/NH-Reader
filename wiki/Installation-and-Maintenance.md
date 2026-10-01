@@ -1,6 +1,6 @@
 # Installation & Maintenance
 
-NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-solid platform-native installers across Windows, macOS, and Linux with full dependency and resource bundling, alongside mobile targets for Android and iOS.
+NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-solid platform-native installers across Windows, macOS, and Linux with full dependency and resource bundling, alongside an Android mobile target.
 
 ## 📦 Distribution Formats
 
@@ -9,8 +9,8 @@ NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-s
 | **Windows** | NSIS (`.exe`), WiX (`.msi`), Portable (`.zip`) | Installer / MSI / Standalone | `%LOCALAPPDATA%\Programs\NH Reader` (per-user) or `C:\Program Files\NH Reader` (all-users) |
 | **macOS** | DMG (`.dmg`), App bundle (`.app`) | Disk Image / Bundle | `/Applications` |
 | **Linux** | Debian (`.deb`), AppImage (`.AppImage`) | Native package / Self-contained | `/usr/bin` (deb) or user directory |
-| **Android** | APK (`.apk`), AAB (`.aab`) | Sideloadable Android Package | Device storage / App drawer |
-| **iOS** | IPA (`.ipa`), Sideload Bundle | iOS App Archive | Sideloaded / Apple Silicon macOS |
+| **Android** | APK (`.apk`) | Sideloadable Android Package | Device storage / App drawer |
+| **iOS** | — | Not supported | — |
 
 ---
 
@@ -45,12 +45,12 @@ NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-s
 
 ---
 
-## 📱 Mobile Platforms & Sideloading
+## 📱 Mobile Platforms — Android
 
-NH Reader leverages Tauri 2's cross-platform mobile toolchain to provide full-featured reading on touch devices.
+NH Reader leverages Tauri 2's Android mobile toolchain to provide full-featured reading on Android devices. iOS is not supported.
 
 > [!IMPORTANT]
-> **Hardware Testing Notice**: The project maintainer does not possess physical Android, macOS, or iOS test devices. While Tauri 2 mobile tooling and builds are configured and output valid standalone packages, **Android and iOS builds are currently community-supported and untested by the maintainer**. Feedback and community testing are welcomed.
+> **Hardware Testing Notice**: The project maintainer does not possess a physical Android test device. While the Android toolchain is configured and outputs valid packages, **Android builds are currently community-supported and untested by the maintainer**. Feedback and community testing are welcomed.
 
 ### 🤖 Android (APK Sideloading)
 
@@ -59,18 +59,6 @@ NH Reader leverages Tauri 2's cross-platform mobile toolchain to provide full-fe
 3. If prompted, grant permission to "Install unknown apps" for that application in system settings.
 4. Complete installation and open NH Reader from your home screen or app drawer.
 5. *Developer Note*: To build from source, run `npm run mobile:android:init` followed by `npm run mobile:android:build`. Android keystores can be generated completely free using Android SDK's `keytool`.
-
-### 🍎 iOS & Apple Silicon macOS (Sideloading)
-
-NH Reader can be built for iOS using `npm run mobile:ios:init` and `npm run mobile:ios:build`.
-
-- **Apple Silicon macOS Sideloading (Primary Focus)**: iOS application bundles (`.ipa` / `.app`) can be installed and run natively on M-series Apple Silicon Macs without requiring jailbreaking, developer accounts, or special certificates (using tools like PlayCover or standard ad-hoc provisioning).
-- **Sideloaded iOS Devices**: Users can install the `.ipa` onto compatible iPhones/iPads using personal free Apple ID provisioning tools (such as AltStore, Sideloadly, or TrollStore where supported).
-
-> [!CAUTION]
-> **Mandatory Jailbreak Disclaimer**
-> 
-> NH Reader provides native iOS package targets for community testing and Apple Silicon macOS usage. **No technical support, customer assistance, or warranty is provided for users who brick, damage, crash, or compromise their devices by attempting to jailbreak their phones.** Jailbreaking alters core system firmware and security measures; any jailbreaking attempts are performed solely at your own risk.
 
 ---
 

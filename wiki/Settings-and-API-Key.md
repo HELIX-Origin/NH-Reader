@@ -77,12 +77,7 @@ flowchart TD
 
 ## 📱 Mobile & Sideloading
 
-NH Reader produces native Android APKs and iOS packages via Tauri 2.
-
-> [!CAUTION]
-> **Mandatory Jailbreak Disclaimer**
-> 
-> NH Reader provides iOS packages primarily for Apple Silicon macOS sideloading (no jailbreak required) and personal iOS provisioning. **No technical support or warranty is provided for users who brick, damage, or compromise their devices by attempting to jailbreak their phones.** Sideloading or jailbreaking is undertaken entirely at the user's own risk.
+NH Reader produces native Android APKs via Tauri 2. iOS is not supported.
 
 ## 🔄 Background services
 

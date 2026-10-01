@@ -35,7 +35,7 @@ NH Reader v0.6.0 is a major milestone delivering a completely rebuilt native ins
 - Rebranded product name to **NH Reader** (`NH Reader.exe`, window title "NH Reader", package `nh-reader`, identifier `net.nh-reader.client`).
 - Decoupled persistence to ambiguous `database.sqlite` with automatic schema and key prefix migration.
 - Bumped project version to `0.6.0` across `package.json`, `Cargo.toml`, `tauri.conf.json`, `Cargo.lock`, and documentation.
-- Documented across documentation and wiki that because the maintainer lacks physical macOS and Android devices, iOS and Android (as well as macOS) builds are currently community-supported and untested by the author.
+- Documented across documentation and wiki that because the maintainer lacks a physical Android device, Android (as well as macOS) builds are currently community-supported and untested by the maintainer. iOS is not supported and has been dropped.
 - Synchronized all tracking ledgers and documentation (`ROADMAP.md`, `TODO.md`, `BUGS.md`, `README.md`, `CHANGELOG.md`, and all `wiki/` pages).
 
 ## 🐛 Fixed
@@ -69,11 +69,11 @@ Upgrade in place: run the new installer over your existing installation. Your SQ
 
 ## 📄 Changes & Commits
 
-- `e5be71a` `ci(workflow): add automated signing for Windows, Android, iOS, and macOS packages`
-- `011c238` `ci(workflow): configure APPLE_DEVELOPMENT_TEAM for iOS runner`
-- `5ac1541` `ci(workflow): isolate matrix runner build commands and package paths for all platforms`
-- `c827d15` `ci(workflow): separate packaging into dedicated desktop, android, and ios jobs`
-- `e86642f` `ci(workflow): add Android and iOS runners to packaging matrix`
+- `09c7b71` `ci(workflow): drop iOS runner from matrix and retain Android and desktop packaging`
+- `e5be71a` `ci(workflow): add automated signing for Windows, Android, and macOS packages`
+- `5ac1541` `ci(workflow): isolate matrix runner build commands and package paths`
+- `c827d15` `ci(workflow): separate packaging into dedicated desktop and android jobs`
+- `e86642f` `ci(workflow): add Android runner to packaging matrix`
 - `7e13fad` `docs(templates): restore canonical release notes template format`
 - `e384975` `docs(release): format release notes to standard`
 - `454a8dd` `chore(release): bump version to 0.6.0`

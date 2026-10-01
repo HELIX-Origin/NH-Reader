@@ -117,9 +117,7 @@
 		"entries": "entries",
 		"files": "files",
 		"mobileSupport": "Mobile & Sideloading",
-		"mobileSupportDesc": "NH Reader supports Android (APK sideloading) and iOS / iPadOS (Apple Silicon macOS & sideloaded or jailbroken mobile devices).",
-		"iosDisclaimerTitle": "Important iOS / Jailbreak Notice",
-		"iosDisclaimerText": "iOS support is provided primarily for Apple Silicon macOS sideloading (no jailbreak required) and sideloaded or jailbroken iOS devices. HELIX Origin provides NO technical support or warranty for users who brick, damage, or compromise their devices by attempting to jailbreak their phones.",
+		"mobileSupportDesc": "NH Reader supports Android (APK sideloading).",
 		"about": "About"
 	},
 	"downloads": {

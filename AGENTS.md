@@ -18,10 +18,10 @@ own custom UI, built to beat the site at search/filtering and global blacklistin
 | Styling | Plain modern CSS + design tokens — **no** CSS framework |
 | Networking | Rust `reqwest` behind Tauri commands — **never** fetch nhentai from the webview |
 | Persistence | SQLite-backed KV cache (`src/lib/cache.ts` → `db.rs` → `database.sqlite`) |
-| Packaging | Tauri native bundler (NSIS/MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android, IPA on iOS) + portable zip |
+| Packaging | Tauri native bundler (NSIS/MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android) + portable zip |
 | Package manager | npm |
 
-Cross-platform: Desktop (Windows/macOS/Linux) and Mobile (Android/iOS via Tauri 2 native mobile support). Note: Because the maintainer lacks physical macOS and Android devices, iOS and Android (as well as macOS) builds are currently community-supported and untested by the maintainer. iOS support is provided primarily for Apple Silicon macOS sideloading without jailbreak; native iOS builds are included via Tauri's iOS support (compatible with sideloaded or jailbroken iPhones), with an explicit disclaimer that no support is provided for users who brick or damage their devices by jailbreaking.
+Cross-platform: Desktop (Windows/macOS/Linux) and Mobile (Android via Tauri 2 native mobile support). Note: Because the maintainer lacks physical macOS and Android devices, Android (as well as macOS) builds are currently community-supported and untested by the maintainer. iOS is not supported.
 
 ## 2. ⛔ MANDATORY — these are not negotiable
 
@@ -178,7 +178,7 @@ came from in the same change.
 - **Single instance** via `tauri-plugin-single-instance`; a second launch focuses the
   existing `main` window.
 - **Packaging & uninstaller** Tauri native packaging generates native NSIS (`.exe`) and WiX MSI (`.msi`) installers on Windows (DMG on macOS, deb/AppImage on Linux), with clean uninstaller support registered in system uninstallation mechanisms, alongside portable zip packages. PAF is dropped in favor of native Tauri packaging.
-- **Mobile support (Android & iOS)** Native mobile support is planned using Tauri 2's mobile toolchain (`tauri android`, `tauri ios`). Android targets APK sideloading. iOS support is provided primarily for macOS Apple Silicon sideloading (no jailbreak required) and sideloaded/jailbroken iOS devices; no support is provided for users who brick their devices by jailbreaking. Because the maintainer lacks physical Android and macOS test devices, mobile builds are currently untested.
+- **Mobile support (Android)** Native Android mobile support via Tauri 2's mobile toolchain (`tauri android`). Targets APK sideloading. Because the maintainer lacks a physical Android test device, Android builds are currently untested. iOS is not supported and has been dropped.
 - **i18n** drop-in packs with `en` default; system-locale fallback; community contributions; completeness is
   gated by `npm run i18n:check`.
 - **Context management** DCP (`@tarquinen/opencode-dcp`) is **agent tooling, not a product

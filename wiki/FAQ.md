@@ -29,7 +29,7 @@ NH Reader is distributed using Tauri v2's native packaging toolchain:
 - **macOS**: DMG disk image (`.dmg`) and `.app` bundle.
 - **Linux**: Debian package (`.deb`) and self-contained AppImage (`.AppImage`).
 - **Android**: Sideloadable APK (`.apk`).
-- **iOS**: Sideloadable IPA (`.ipa`) bundle, targeted primarily for Apple Silicon macOS sideloading.
+- **iOS**: Not supported.
 
 ## 💾 Where is my data stored on disk?
 
@@ -54,11 +54,10 @@ Yes. NH Reader includes a full-featured background download service:
 
 ## 📱 Is there a mobile version?
 
-Yes. NH Reader supports mobile devices via Tauri 2:
+Yes. NH Reader supports Android via Tauri 2:
 - **Android**: Direct APK distribution and sideloading without third-party store dependencies.
-- **iOS**: Sideloadable IPA bundle, targeted primarily for Apple Silicon macOS sideloading (no jailbreak required) and personal iOS provisioning.
-- *Notice*: Because the maintainer does not possess physical Android or macOS/iOS test hardware, mobile builds are currently community-supported and untested by the maintainer.
-- *Disclaimer*: No technical support or warranty is provided for users who attempt to jailbreak their devices.
+- *Notice*: Because the maintainer does not possess physical Android test hardware, Android builds are currently community-supported and untested.
+- **iOS**: Not supported.
 
 ## 🤝 I found a bug / want a feature.
 

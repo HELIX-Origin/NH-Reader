@@ -17,8 +17,6 @@
     "sign:windows": "powershell -ExecutionPolicy Bypass -File scripts/sign.ps1",
     "mobile:android:init": "tauri android init",
     "mobile:android:build": "tauri android build --apk",
-    "mobile:ios:init": "tauri ios init",
-    "mobile:ios:build": "tauri ios build",
     "i18n:check": "node scripts/check-i18n.mjs",
     "check:agents": "node scripts/check-agents.mjs"
   },

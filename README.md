@@ -26,7 +26,7 @@ categories, artists, characters, parodies — and lets you slice it **locally, i
 - **Private & versatile account sync.** Favorites, history, blacklist, and settings live locally on your device in SQLite (`database.sqlite`). An optional account sign-in modal supports both official API Keys (bypasses Cloudflare CAPTCHAs) and direct credentials, powering live profile display and synchronized blacklists.
 - **Mihon-inspired floating navigation.** Modern thumb-friendly floating navigation bar with a 4px corner radius, backdrop blur elevation, and responsive full-width page-fitting settings layouts.
 - **Speaks your language.** Interface defaults to your system locale and can be chosen in Settings. English is shipped out of the box with simple 100% drop-in JSON files for community-contributed translations.
-- **Native installers & mobile packaging.** Native NSIS (both per-user and per-machine) and WiX MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android, and sideloadable iOS targets.
+- **Native installers \u0026 mobile packaging.** Native NSIS (both per-user and per-machine) and WiX MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android.
 
 ## 🖥️ Platforms
 
@@ -36,12 +36,10 @@ categories, artists, characters, parodies — and lets you slice it **locally, i
 | macOS 10.13+ | ⚠️ Toolchain supported (untested due to lack of macOS hardware) |
 | Linux (x86_64) | ✅ Supported (deb, AppImage) |
 | Android | ⚠️ Toolchain supported (currently untested due to lack of physical Android device) |
-| iOS | ⚠️ Toolchain supported (currently untested due to lack of macOS/iOS test hardware) |
+| iOS | ❌ Not supported |
 
 > [!WARNING]
-> **Platform Testing Notice (Android, iOS & macOS):** The maintainer does not own physical Android, macOS, or iOS test devices. Consequently, while Tauri 2 mobile and desktop toolchains are configured and produce valid packages (APK, DMG, iOS targets), **Android, iOS, and macOS builds are currently untested**. Community verification, test reports, and contributions are welcomed!
->
-> **iOS Support & Jailbreak Policy:** iOS support is built via Tauri 2 native iOS tooling, targeted primarily for Apple Silicon macOS sideloading (which requires no jailbreak). While native iOS binaries are available for sideloading or installation on jailbroken devices, **no technical support or warranty is provided for users who brick or damage their devices by attempting to jailbreak their phones**.
+> **Platform Testing Notice (Android & macOS):** The maintainer does not own physical Android or macOS test devices. Android and macOS builds are currently untested. Community verification, test reports, and contributions are welcomed!
 
 ## 📦 Installation
 

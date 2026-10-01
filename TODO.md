@@ -77,10 +77,10 @@
   - Background LRU image cache pruning in `image_cache.rs` and `service.rs`.
   - SQLite `VACUUM` compaction and isolated API response cache purging.
   - Real-time disk storage telemetry in Settings.
-- ✅ **Track 5: Mobile Support (Android & iOS) (Completed — Issue #9 Closed)**:
-  - Tauri 2 mobile tooling wired (`package.json`, `tauri.conf.json`, `mobile:android:*`, `mobile:ios:*`).
+- ✅ **Track 5: Mobile Support — Android (Completed — Issue #9 Closed)**:
+  - Tauri 2 Android tooling wired (`package.json`, `tauri.conf.json`, `mobile:android:*`).
   - Isolated desktop-only tray and single-instance plugins via `#[cfg(desktop)]` guards.
-  - Documented Android APK sideloading and iOS sideloading / Apple Silicon macOS instructions with mandatory jailbreak disclaimer in UI and wiki, noting that Android and iOS builds are currently untested due to lack of physical test hardware.
+  - Documented Android APK sideloading instructions. iOS is not supported and has been dropped.
 - ✅ **Track 4: UI Consistency & Polish Audit (Completed — Issue #8 Closed)**:
   - Normalized design system tokens in `tokens.css` with nhentai dark palette (`#141414` / `#1f1f1f` / `#ed2553`).
   - Resolved missing token declarations (`--text-soft`, `--text-sm`, `--text-xs`, `--radius-md`).

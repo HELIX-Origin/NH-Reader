@@ -8,7 +8,7 @@ no account required, nothing to sign up for.
 Download the installer or package for your OS/device from
 [Releases](https://github.com/HELIX-Origin/NH-Reader/releases) and run the installer. See
 [Installation & Maintenance](Installation-and-Maintenance) for the full walkthrough across
-Windows, macOS, Linux, Android, and iOS sideloading.
+Windows, macOS, Linux, and Android.
 
 ## 🏁 2. First launch
 

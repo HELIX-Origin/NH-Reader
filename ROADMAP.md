@@ -84,12 +84,11 @@ Active development is organized into tracks:
 - Database compaction (`VACUUM`) and isolated cache clearing without wiping user data (`db.rs`, `cache.ts`).
 - Storage telemetry and management controls in `SettingsView.svelte`.
 
-### Track 5: Mobile Support (Android & iOS) (Priority 4 — ✅ Shipped, Issue #9)
-- Native mobile build pipelines leveraging Tauri 2's mobile toolchains (`tauri android`, `tauri ios`).
-- **Android**: APK / AAB packaging for direct distribution and sideloading (`mobile:android:init` / `mobile:android:build`).
-- **iOS**: Provided primarily for Apple Silicon macOS sideloading without requiring a jailbreak. Native iOS builds will be produced via Tauri's native iOS support, allowing sideloading or installation on jailbroken devices.
-- **Hardware Testing Status**: Because the primary maintainer lacks physical macOS and Android devices, Android and iOS builds are currently community-supported and untested by the maintainer.
-- **Support Disclaimer**: An explicit disclaimer and warning is documented and displayed that **no technical support is provided for users who brick or damage their devices by attempting to jailbreak their phones**.
+### Track 5: Mobile Support — Android (Priority 4 — ✅ Shipped, Issue #9)
+- Native Android build pipeline leveraging Tauri 2's mobile toolchain (`tauri android`).
+- **Android**: APK packaging for direct distribution and sideloading (`mobile:android:init` / `mobile:android:build`).
+- **Hardware Testing Status**: Because the primary maintainer lacks a physical Android device, Android builds are currently community-supported and untested by the maintainer.
+- **iOS**: Dropped. Not supported.
 
 ### Track 4: UI Consistency & Polish Audit (Final Stage — ✅ Shipped, Issue #8)
 - Final visual stabilization and layout audit across all views.

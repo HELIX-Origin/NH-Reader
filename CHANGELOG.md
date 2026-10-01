@@ -66,12 +66,10 @@ top; the current development state lives under `Unreleased`.
 * **Database compaction & isolated cache clearing**: Fixed cache flushing to selectively purge API response rows without touching user favorites, blacklist, history, or settings. Added SQLite `VACUUM` support to physically reclaim disk space.
 * **Real-time storage telemetry**: Settings UI displays live disk consumption for image cache (bytes + file count), response cache entries, and total SQLite database footprint.
 
-### 📱 Mobile Support & Sideloading (Track 5 Complete)
-* **Cross-platform mobile toolchain**: Configured Tauri 2 mobile project capabilities for Android (`minSdkVersion: 24`, APK packaging) and iOS targets via `npm run mobile:android:*` and `npm run mobile:ios:*`.
+### 📱 Mobile Support — Android (Track 5 Complete)
+* **Android mobile toolchain**: Configured Tauri 2 Android project capabilities (`minSdkVersion: 24`, APK packaging) via `npm run mobile:android:init` / `npm run mobile:android:build`. iOS is not supported.
 * **Platform boundary isolation**: Guarded desktop-specific single-instance plugins, system tray menus, and window close-to-tray listeners behind `#[cfg(desktop)]` in `src-tauri/src/lib.rs` for pristine compilation on mobile targets.
-* **Apple Silicon macOS & sideloading focus**: Optimized iOS distribution format for macOS Apple Silicon sideloading (no jailbreak required) and personal provisioning sideloading on iPhones.
-* **Jailbreak warning & disclaimer**: Integrated clear user-facing warnings in both the UI (`SettingsView.svelte`) and documentation that no technical support or warranty is provided for users who brick or damage devices by jailbreaking.
-* **Untested mobile hardware status**: Documented that because the maintainer lacks physical Android, macOS, and iOS testing hardware, Android and iOS builds are currently community-supported and untested.
+* **Untested mobile hardware status**: Documented that because the maintainer lacks a physical Android device, Android builds are currently community-supported and untested.
 
 ### 🎨 UI Consistency & Polish Audit (Track 4 Complete)
 * **Design system token normalization**: Fixed missing CSS variable declarations in `tokens.css` (`--text-soft`, `--text-sm`, `--text-xs`, `--radius-md`) and harmonized color definitions with nhentai.net's dark palette (`#141414` / `#1f1f1f` / `#ed2553`).

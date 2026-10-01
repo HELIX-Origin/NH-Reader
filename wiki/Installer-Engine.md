@@ -1,6 +1,6 @@
 # Packaging & Installer Architecture
 
-NH Reader utilizes **Tauri v2 Native Packaging** (`tauri build`) to produce reliable, signed, and fully bundled distributions for Windows, macOS, Linux, Android, and iOS.
+NH Reader utilizes **Tauri v2 Native Packaging** (`tauri build`) to produce reliable, signed, and fully bundled distributions for Windows, macOS, Linux, and Android. iOS is not supported.
 
 ## 🧭 Why Native Packaging Over Custom Installers
 
@@ -8,7 +8,7 @@ In earlier versions, a custom embedded installer was evaluated. However, custom 
 1. **Asset & Webview Bundling**: Native packaging automatically links and bundles frontend static assets, webview loaders, and platform runtime dependencies into the output binary package.
 2. **Elevation & UAC**: Windows User Account Control (UAC) handling during custom installs often causes file-locking collisions and permission errors when updating program files.
 3. **Uninstallation & System Registry**: Native installers (NSIS and WiX) manage system uninstaller registrations, start menu entries, and desktop shortcuts cleanly through standard OS facilities.
-4. **Mobile & Cross-Platform Alignment**: Tauri's native packaging toolchain cleanly supports mobile APK and iOS packaging alongside desktop installers.
+4. **Mobile & Cross-Platform Alignment**: Tauri's native packaging toolchain cleanly supports Android APK packaging alongside desktop installers.
 
 ---
 
@@ -23,8 +23,7 @@ flowchart TD
     D -->|Windows| F[WiX .msi]
     D -->|macOS| G[DMG & .app bundle]
     D -->|Linux| H[deb & AppImage]
-    D -->|Android| I[APK & AAB]
-    D -->|iOS| J[IPA bundle]
+    D -->|Android| I[APK]
 ```
 
 ### Build Commands
@@ -36,11 +35,9 @@ npm run build:app
 # Debug desktop build (unoptimized, useful for rapid testing)
 npm run build:app:debug
 
-# Mobile build pipelines
+# Android mobile build pipeline
 npm run mobile:android:init    # initialize Android studio project
 npm run mobile:android:build   # compile standalone APK
-npm run mobile:ios:init        # initialize Xcode project
-npm run mobile:ios:build       # compile iOS archive / sideload bundle
 ```
 
 ---
