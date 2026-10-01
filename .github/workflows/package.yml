@@ -100,6 +100,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Install Android NDK (Android)
+        if: matrix.target == 'android'
+        run: |
+          sdkmanager --install "ndk;27.2.12479018"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> $GITHUB_ENV
+
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
