@@ -1,0 +1,90 @@
+name: GitHub Pages
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'SECURITY.md'
+      - 'PRIVACY.md'
+      - 'TOS.md'
+      - 'scripts/build-pages.mjs'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (build the site without enabling Pages or deploying)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Stage docs and repository pages
+        run: node scripts/build-pages.mjs .pages
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./.pages
+          destination: ./_site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./_site
+
+  deploy:
+    name: Enable Pages and deploy
+    needs: build
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && !inputs.dry_run
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Enable Pages with GitHub Actions as the source
+        env:
+          REPOSITORY: ${{ github.repository }}
+          ADMIN_TOKEN: ${{ secrets.PAGES_ADMIN_TOKEN }}
+          WORKFLOW_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          lookup_token="${ADMIN_TOKEN:-$WORKFLOW_TOKEN}"
+          build_type="$(GH_TOKEN="$lookup_token" gh api "repos/$REPOSITORY/pages" --jq '.build_type' 2>/dev/null)" || build_type="missing"
+          echo "Current Pages build type: $build_type"
+          if [ "$build_type" = "workflow" ]; then
+            exit 0
+          fi
+          if [ -z "$ADMIN_TOKEN" ]; then
+            echo "::error title=GitHub Pages is not enabled for GitHub Actions::GitHub does not allow the workflow token to enable Pages or change its source. Add a repository secret named PAGES_ADMIN_TOKEN (a fine-grained token for this repository with Administration: write and Pages: write) and re-run this workflow; it will then enable Pages automatically."
+            exit 1
+          fi
+          if [ "$build_type" = "missing" ]; then
+            GH_TOKEN="$ADMIN_TOKEN" gh api --method POST "repos/$REPOSITORY/pages" -f build_type=workflow > /dev/null
+            echo "Enabled GitHub Pages with GitHub Actions as the source."
+          else
+            GH_TOKEN="$ADMIN_TOKEN" gh api --method PUT "repos/$REPOSITORY/pages" -f build_type=workflow
+            echo "Switched GitHub Pages source from '$build_type' to GitHub Actions."
+          fi
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

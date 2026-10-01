@@ -6,9 +6,11 @@ top; the current development state lives under `Unreleased`.
 ## Unreleased
 
 ### 🌐 Project website
-* Added a GitHub Pages project page for NH Reader under `docs/`, matching the HELIX Origin portfolio's vCard-inspired design and linking to releases, documentation, and source. The landing page now links to all existing documentation; GitHub Pages renders the Markdown as interlinked HTML with a shared layout. Publishing requires enabling Pages from the branch's `/docs` folder.
+* Added a GitHub Pages project page for NH Reader under `docs/`, matching the HELIX Origin portfolio's vCard-inspired design and linking to releases, documentation, and source. The landing page now links to all existing documentation; GitHub Pages renders the Markdown as interlinked HTML with a shared layout. The site is published by the `GitHub Pages` workflow.
 * **Multi-page documentation site**: `docs/_data/navigation.yml` is now the single source of truth for every documentation page. The Pages documentation layout renders a sectioned sidebar of all pages with the current page highlighted, page titles, previous/next links and an "Edit on GitHub" link, and the project page builds its documentation directory from the same data.
 * **Working translate dropdowns**: Replaced the broken `<select>`/`<script>` language widget, which GitHub stripped into a flat list of language names, on every Markdown page with a collapsible `<details>` dropdown that GitHub renders. On the Pages site a real language `<select>` translates the page in place using Google Translate and accepts a `?lang=<code>` deep link.
+* **Automatic Pages deployment**: New `.github/workflows/pages.yml` builds and deploys the site on every push to `main` that touches the docs or root pages, and enables Pages with GitHub Actions as the source (or switches an existing branch source) when a `PAGES_ADMIN_TOKEN` secret is present. Other branches and `dry_run` dispatches build without deploying.
+* **Root Markdown pages translate in place**: `scripts/build-pages.mjs` publishes `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `PRIVACY.md` and `TOS.md` on the site under `repo/` (relative links rewritten to the site or GitHub), listed in a new "Project files" navigation section. Their translate dropdowns now open these copies and translate in place instead of going through Google's page proxy.
 
 ## [v0.7.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.1)
 

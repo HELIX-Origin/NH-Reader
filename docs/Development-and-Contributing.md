@@ -100,11 +100,13 @@ To contribute translations, see [Contributing Translations](https://github.com/H
 
 ### 📚 Adding a documentation page
 
-The `docs/` folder is published as the GitHub Pages site. To add a page:
+The `docs/` folder is published as the GitHub Pages site by the `GitHub Pages` workflow on every push to `main`. To add a page:
 
 1. Create `docs/<Page-Name>.md` and copy the `<details id="translate-menu">` language dropdown from an existing page, changing the page name in each link.
 2. Register it in `docs/_data/navigation.yml`, which drives the site sidebar, previous/next links, and the project page's documentation directory.
 3. Link to other pages with relative `.md` paths so the links work both on GitHub and on the Pages site.
+
+Root Markdown files with a `<details id="translate-menu">` dropdown (`README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `PRIVACY.md`, `TOS.md`) are also published, under `repo/`, by `scripts/build-pages.mjs`. Their dropdown links point at `https://helix-origin.github.io/NH-Reader/repo/<FILE>.html?lang=<code>`. To publish another root file, add the same dropdown to it and list it under "Project files" in `docs/_data/navigation.yml`.
 
 ## 📜 License
 

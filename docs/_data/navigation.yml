@@ -44,3 +44,15 @@
       path: Troubleshooting.md
     - title: FAQ
       path: FAQ.md
+- section: Project files
+  pages:
+    - title: Project README
+      path: repo/README.md
+    - title: Contributing Guide
+      path: repo/CONTRIBUTING.md
+    - title: Security Policy
+      path: repo/SECURITY.md
+    - title: Privacy Policy
+      path: repo/PRIVACY.md
+    - title: Terms of Service
+      path: repo/TOS.md

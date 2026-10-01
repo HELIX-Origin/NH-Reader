@@ -1,24 +1,24 @@
 <div align="right">
 <details id="translate-menu">
 <summary>🌐 Translate this page</summary>
-<a href="https://github.com/HELIX-Origin/NH-Reader/blob/main/SECURITY.md" lang="en">English</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=ja&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="ja">日本語 (Japanese)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=zh-CN&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=zh-TW&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=ko&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="ko">한국어 (Korean)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=es&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="es">Español (Spanish)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=fr&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="fr">Français (French)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=de&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="de">Deutsch (German)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=ru&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="ru">Русский (Russian)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=pt&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="pt">Português (Portuguese)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=it&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="it">Italiano (Italian)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=th&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="th">ไทย (Thai)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=vi&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="vi">Tiếng Việt (Vietnamese)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=id&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="id">Bahasa Indonesia (Indonesian)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=pl&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="pl">Polski (Polish)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=nl&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="nl">Nederlands (Dutch)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=tr&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="tr">Türkçe (Turkish)</a><br>
-<a href="https://translate.google.com/translate?sl=en&amp;tl=ar&amp;u=https%3A%2F%2Fgithub.com%2FHELIX-Origin%2FNH-Reader%2Fblob%2Fmain%2FSECURITY.md" lang="ar">العربية (Arabic)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=en" lang="en">English</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=ja" lang="ja">日本語 (Japanese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=zh-CN" lang="zh-CN">简体中文 (Simplified Chinese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=zh-TW" lang="zh-TW">繁體中文 (Traditional Chinese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=ko" lang="ko">한국어 (Korean)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=es" lang="es">Español (Spanish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=fr" lang="fr">Français (French)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=de" lang="de">Deutsch (German)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=ru" lang="ru">Русский (Russian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=pt" lang="pt">Português (Portuguese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=it" lang="it">Italiano (Italian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=th" lang="th">ไทย (Thai)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=vi" lang="vi">Tiếng Việt (Vietnamese)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=id" lang="id">Bahasa Indonesia (Indonesian)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=pl" lang="pl">Polski (Polish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=nl" lang="nl">Nederlands (Dutch)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=tr" lang="tr">Türkçe (Turkish)</a><br>
+<a href="https://helix-origin.github.io/NH-Reader/repo/SECURITY.html?lang=ar" lang="ar">العربية (Arabic)</a><br>
 </details>
 </div>
 

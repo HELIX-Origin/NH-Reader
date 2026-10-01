@@ -64,15 +64,19 @@ layout: null
         <h2 id="documentation-title">Documentation</h2>
         <p>Explore the complete guides and references on this site. The <a href="{{ '/README.html' | relative_url }}">documentation home</a> also links to every page.</p>
         <div class="documentation-directory">
+          {%- assign site_paths = site.pages | map: "path" %}
           {%- for group in site.data.navigation %}
+          {%- assign group_pages = group.pages | where_exp: "entry", "site_paths contains entry.path" %}
+          {%- if group_pages.size > 0 %}
           <div>
             <h3>{{ group.section }}</h3>
             <ul>
-              {%- for entry in group.pages %}
+              {%- for entry in group_pages %}
               <li><a href="{{ entry.path | replace: '.md', '.html' | prepend: '/' | relative_url }}">{{ entry.title | escape }}</a></li>
               {%- endfor %}
             </ul>
           </div>
+          {%- endif %}
           {%- endfor %}
         </div>
       </section>

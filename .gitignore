@@ -53,3 +53,6 @@ pnpm-debug.log*
 
 # --- Whitelisted Files ---
 !*.gitkeep
+# --- GitHub Pages staging ---
+/.pages/
+/_site/

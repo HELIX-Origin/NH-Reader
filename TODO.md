@@ -98,8 +98,9 @@
 
 ## ✅ Done — Completed Milestones & Historical Releases
 
-- ✅ **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/` for publication at `https://helix-origin.github.io/NH-Reader/` via Settings → Pages (branch `/docs`). The desktop application's SPA is not deployed as a website.
+- ✅ **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/` published at `https://helix-origin.github.io/NH-Reader/` by the `GitHub Pages` workflow (`.github/workflows/pages.yml`). The desktop application's SPA is not deployed as a website.
 - ✅ **Pages documentation navigation & working translate dropdowns**: Data-driven sidebar, previous/next links and project-page directory (`docs/_data/navigation.yml`); every Markdown page now ships a GitHub-renderable `<details>` language dropdown, and Pages pages get a real in-place Google Translate `<select>` (`docs/translate.js`).
+- ✅ **Automatic Pages deployment & in-place translation for root Markdown**: `.github/workflows/pages.yml` builds, enables (via `PAGES_ADMIN_TOKEN`) and deploys the site; `scripts/build-pages.mjs` publishes `README`, `CONTRIBUTING`, `SECURITY`, `PRIVACY` and `TOS` under `repo/` so their translate dropdowns translate in place.
 
 ### [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) — Upstream Alignment, Dedicated Library Hub & Rebuilt Native Installer (2026-10-01)
 - ✅ **Rebuilt Native Packaging with Custom NSIS Hook Template**:
@@ -221,7 +222,9 @@ All 17 community language packs are hand-rolled and shipped with 100% key parity
 
 ## ⬜ Backlog / Future Enhancements
 
-All items from previous milestones and backlogs have been resolved and consolidated into Milestone M12 (Candidate v0.7.0).
+- ⬜ **Add the `PAGES_ADMIN_TOKEN` repository secret** (fine-grained token for this repository, Administration: write + Pages: write). One-time step that lets the Pages workflow turn on Pages; GitHub does not allow the workflow token to do it.
+
+All other items from previous milestones and backlogs have been resolved and consolidated into Milestone M12 (Candidate v0.7.0).
 
 ## 🔁 Recurring
 
