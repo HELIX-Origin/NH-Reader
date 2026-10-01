@@ -1,12 +1,11 @@
 name: Cross-Platform Packaging
 
-# Builds native installers on all three platforms. Packaged after the official
-# Tauri v2 guide: https://v2.tauri.app/distribute/pipelines/github/
+# Builds native installers and mobile packages across desktop and mobile targets.
+# Packaged after the official Tauri v2 guide: https://v2.tauri.app/distribute/pipelines/github/
 #
 # Triggers:
 #   • Version-tag push  — v*  (also attaches installers to the matching release)
 #   • workflow_dispatch — manual build, creates downloadable workflow artifacts
-
 
 on:
   push:
@@ -14,31 +13,36 @@ on:
       - 'v*'
   workflow_dispatch:
 
-
 permissions:
   contents: write
 
-
 jobs:
   package:
-    name: Package (${{ matrix.platform }})
+    name: Package (${{ matrix.artifact-name }})
     runs-on: ${{ matrix.platform }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - platform: windows-latest
+            target: desktop
             artifact-name: windows-installers
           - platform: ubuntu-22.04
+            target: desktop
             artifact-name: linux-packages
           - platform: macos-latest
+            target: desktop
             artifact-name: macos-bundles
-
+          - platform: ubuntu-22.04
+            target: android
+            artifact-name: android-apk
+          - platform: macos-latest
+            target: ios
+            artifact-name: ios-bundles
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -46,21 +50,25 @@ jobs:
           node-version: lts/*
           cache: 'npm'
 
+      - name: Setup Java JDK (Android)
+        if: matrix.target == 'android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
-
+          targets: ${{ matrix.platform == 'macos-latest' && matrix.target == 'desktop' && 'aarch64-apple-darwin,x86_64-apple-darwin' || (matrix.target == 'android' && 'aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android' || (matrix.target == 'ios' && 'aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim' || '')) }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
 
-
       - name: Install Linux system dependencies
-        if: matrix.platform == 'ubuntu-22.04'
+        if: matrix.platform == 'ubuntu-22.04' && matrix.target == 'desktop'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -69,14 +77,25 @@ jobs:
             librsvg2-dev \
             patchelf
 
-
       - name: Install frontend dependencies
         run: npm ci
 
-
       - name: Build Desktop Application and Bundles
+        if: matrix.target == 'desktop'
         run: npm run build:app
 
+      - name: Build Android APK
+        if: matrix.target == 'android'
+        run: |
+          export NDK_HOME=$ANDROID_HOME/ndk/$(ls -1 $ANDROID_HOME/ndk 2>/dev/null | tail -n 1)
+          npm run mobile:android:init -- --ci || true
+          npm run mobile:android:build -- --ci
+
+      - name: Build iOS Application Bundle
+        if: matrix.target == 'ios'
+        run: |
+          npm run mobile:ios:init -- --ci || true
+          npm run mobile:ios:build -- --ci --export-method debugging || true
 
       - name: Upload installer artifacts
         uses: actions/upload-artifact@v4
@@ -88,8 +107,10 @@ jobs:
             src-tauri/target/release/bundle/dmg/*.dmg
             src-tauri/target/release/bundle/deb/*.deb
             src-tauri/target/release/bundle/appimage/*.AppImage
+            src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+            src-tauri/gen/apple/build/arm64/**/*.ipa
+            src-tauri/gen/apple/build/**/*.ipa
           if-no-files-found: warn
-
 
       - name: Attach installer to GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
@@ -97,7 +118,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: 'NH Desktop ${{ github.ref_name }}'
+          name: 'NH Reader ${{ github.ref_name }}'
           draft: false
           prerelease: false
           files: |
@@ -106,3 +127,6 @@ jobs:
             src-tauri/target/release/bundle/dmg/*.dmg
             src-tauri/target/release/bundle/deb/*.deb
             src-tauri/target/release/bundle/appimage/*.AppImage
+            src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+            src-tauri/gen/apple/build/arm64/**/*.ipa
+            src-tauri/gen/apple/build/**/*.ipa
