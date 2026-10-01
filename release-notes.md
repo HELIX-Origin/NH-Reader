@@ -57,7 +57,6 @@ Download the installer or package for your platform from the Assets section belo
 - Linux (Debian): `nh-reader_0.6.0_amd64.deb`
 - Linux (AppImage): `nh-reader_0.6.0_amd64.AppImage`
 - Android (APK): `nh-reader_0.6.0_universal.apk` *(community-supported / untested)*
-- iOS (IPA): `nh-reader_0.6.0.ipa` *(Apple Silicon macOS sideloading & iOS; community-supported / untested)*
 
 Upgrade in place: run the new installer over your existing installation. Your SQLite database (`database.sqlite`), favorites, reading history, downloaded archives, and settings carry over automatically.
 

@@ -84,28 +84,6 @@ jobs:
                 done
               fi
 
-          - platform: macos-latest
-            target: ios
-            artifact-name: ios-bundles
-            rust-targets: 'aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim'
-            package-files: |
-              src-tauri/gen/apple/build/**/*.ipa
-            build-command: |
-              export APPLE_DEVELOPMENT_TEAM="0000000000"
-              if [ ! -d "src-tauri/gen/apple" ]; then
-                npm run mobile:ios:init
-              fi
-              npm run mobile:ios:build -- --export-method development CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-              APP_DIR=$(find src-tauri/gen/apple/build -name "*.app" -type d | head -n 1)
-              if [ -n "$APP_DIR" ]; then
-                codesign --force --deep --sign - "$APP_DIR" || true
-                mkdir -p Payload
-                cp -R "$APP_DIR" Payload/
-                mkdir -p src-tauri/gen/apple/build
-                zip -r src-tauri/gen/apple/build/nh-reader.ipa Payload
-                rm -rf Payload
-              fi
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
