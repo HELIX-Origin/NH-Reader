@@ -7,6 +7,15 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
+## 🎯 Planned Target: v0.6.1 — NSIS Dark Theme & Installer Asset Branding
+
+- ⬜ **Installer Bitmaps Generation from Official App Icon**:
+  - Replace placeholder bitmaps (`src-tauri/windows/header.bmp` [150×57] and `src-tauri/windows/sidebar.bmp` [164×314]) with properly generated high-resolution assets derived from `src-tauri/icons/icon.png` on `#18181b` dark background, replacing the mismatched red glowing circles.
+- ⬜ **NSIS Control & Text Legibility Fix**:
+  - In `src-tauri/windows/hooks.nsh`, fix illegible text and white-on-gray / dark-on-dark label conflicts caused by NSIS MUI2 static control painting and DWM dark theme hooks. Ensure all dialog labels, radio options, checkboxes, headers, and directory/install controls render with crisp, high-contrast readable text against their background.
+- ⬜ **Clean up tauri.conf.json**:
+  - Remove leftover `"iOS"` block from `src-tauri/tauri.conf.json`.
+
 ## 🎯 Current Status: Complete (Track 9: Library Downloaded Favorites Isolation)
 
 ### 📌 Completed Tasks (Track 9):

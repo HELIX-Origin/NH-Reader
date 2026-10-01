@@ -34,7 +34,16 @@
 
 ## 🚨 Open
 
-*No open bugs currently reported.*
+### 2026-10-01 — NSIS installer dark mode text illegibility & placeholder bitmap branding (Planned for v0.6.1)
+- **Severity**: ⚠️ High (Usability / Branding)
+- **Status**: 🚨 open (reproduced, planned for v0.6.1 fix)
+- **Problem**:
+  1. The NSIS installer uses crude glowing red/blue circle placeholder images (`header.bmp` [150×57] and `sidebar.bmp` [164×314]) rather than the actual `src-tauri/icons/icon.png` application branding.
+  2. The custom dark theme in `src-tauri/windows/hooks.nsh` causes static text controls, labels, and dialog elements to render with illegible contrast (white-on-gray or dark-on-dark) during installation.
+- **Proposed Solution (v0.6.1)**:
+  1. Regenerate `src-tauri/windows/header.bmp` and `src-tauri/windows/sidebar.bmp` directly from `src-tauri/icons/icon.png` on `#18181b` dark background.
+  2. Refactor `hooks.nsh` control styling and color defines (`MUI_BGCOLOR`, `MUI_TEXTCOLOR`, `SetCtlColors`) so all static text and inner dialogs render legibly.
+  3. Clean up legacy `"iOS"` config in `src-tauri/tauri.conf.json`.
 
 ## 📝 Filing a bug
 
