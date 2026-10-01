@@ -34,16 +34,17 @@
 
 ## 🚨 Open
 
-### 2026-10-01 — NSIS installer dark mode text illegibility & placeholder bitmap branding (Planned for v0.6.1)
-- **Severity**: ⚠️ High (Usability / Branding)
+### 2026-10-01 — NSIS installer dark mode text illegibility, placeholder branding & missing macOS/Linux portable packages (Planned for v0.6.1)
+- **Severity**: ⚠️ High (Usability / Packaging)
 - **Status**: 🚨 open (reproduced, planned for v0.6.1 fix)
 - **Problem**:
-  1. The NSIS installer uses crude glowing red/blue circle placeholder images (`header.bmp` [150×57] and `sidebar.bmp` [164×314]) rather than the actual `src-tauri/icons/icon.png` application branding.
-  2. The custom dark theme in `src-tauri/windows/hooks.nsh` causes static text controls, labels, and dialog elements to render with illegible contrast (white-on-gray or dark-on-dark) during installation.
+  1. Portable packages were mistakenly limited only to Windows (`.zip`), omitting macOS (`.zip` bundle) and Linux (`.tar.gz`), despite the backend engine supporting `.portable` on all platforms.
+  2. The NSIS installer uses crude glowing red/blue circle placeholder images (`header.bmp` [150×57] and `sidebar.bmp` [164×314]) rather than the actual `src-tauri/icons/icon.png` application branding.
+  3. The custom dark theme in `src-tauri/windows/hooks.nsh` causes static text controls, labels, and dialog elements to render with illegible contrast (white-on-gray or dark-on-dark) during installation.
 - **Proposed Solution (v0.6.1)**:
-  1. Regenerate `src-tauri/windows/header.bmp` and `src-tauri/windows/sidebar.bmp` directly from `src-tauri/icons/icon.png` on `#18181b` dark background.
-  2. Refactor `hooks.nsh` control styling and color defines (`MUI_BGCOLOR`, `MUI_TEXTCOLOR`, `SetCtlColors`) so all static text and inner dialogs render legibly.
-  3. Clean up legacy `"iOS"` config in `src-tauri/tauri.conf.json`.
+  1. Add portable release packaging steps in `.github/workflows/package.yml` for Windows (`NHReaderPortable_x64.zip`), Linux (`nh-reader_portable_x86_64.tar.gz`), and macOS (`NHReaderPortable_macOS.zip`).
+  2. Regenerate `src-tauri/windows/header.bmp` and `src-tauri/windows/sidebar.bmp` directly from `src-tauri/icons/icon.png` on `#18181b` dark background.
+  3. Refactor `hooks.nsh` control styling and color defines (`MUI_BGCOLOR`, `MUI_TEXTCOLOR`, `SetCtlColors`) so all static text and inner dialogs render legibly.
 
 ## 📝 Filing a bug
 
