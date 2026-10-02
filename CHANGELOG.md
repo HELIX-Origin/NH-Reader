@@ -10,6 +10,7 @@ top; the current development state lives under `Unreleased`.
 ### Distribution
 * **Manual signed distribution:** Removed the automated packaging workflow. NH Reader will not publish unsigned release assets; build and sign packages locally with the platform commands in `package.json`.
 * **Platform signing commands:** Added package scripts for macOS, Linux, Android, and iOS while retaining Windows signing.
+* **WinGet:** Removed the WinGet manifests; NH Reader is no longer offered through WinGet.
 * **iOS support documentation:** Corrected outdated references that said iOS was unsupported and documented the existing Tauri iOS build/signing support.
 
 ## Unreleased

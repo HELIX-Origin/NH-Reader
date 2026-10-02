@@ -25,7 +25,7 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 
 **Release Announcement Discussion:** [announcements/v0.7.3.md](announcements/v0.7.3.md)
 
-NH Reader v0.7.3 removes automated package builds and release-asset publishing because the project cannot reliably provide properly signed binaries. The source release has no prebuilt assets; local platform signing commands are documented for Windows, macOS, Linux, Android, and iOS. Project documentation also now correctly reflects restored iOS support.
+NH Reader v0.7.3 removes automated package builds and release-asset publishing because the project cannot reliably provide properly signed binaries. The source release has no prebuilt assets, and the WinGet manifests have been removed. Local platform signing commands are documented for Windows, macOS, Linux, Android, and iOS. Project documentation also now correctly reflects restored iOS support.
 
 ---
 

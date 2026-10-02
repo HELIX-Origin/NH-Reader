@@ -12,6 +12,7 @@
 > Removes automated packaging because the project cannot reliably sign release artifacts, documents local platform signing, and restores accurate iOS support documentation.
 
 - ✅ Removed the automated packaging and release workflow; do not publish unsigned assets.
+- ✅ Removed the WinGet manifests so the project is no longer listed in the WinGet package source.
 - ✅ Added local signing commands for Windows, macOS, Linux, Android, and iOS in `package.json`.
 - ✅ Updated release note and announcement templates with manual build/signing instructions.
 - ✅ Corrected iOS support statements across project and user documentation.

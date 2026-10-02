@@ -18,6 +18,7 @@ The release also adds local signing commands for macOS, Linux, Android, and iOS,
 
 - Bumped project version to `0.7.3` across `package.json`, `src-tauri/Cargo.toml`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.lock`.
 - Removed `.github/workflows/package.yml`; no CI workflow builds or publishes package assets.
+- Removed the WinGet manifests; NH Reader is no longer offered through WinGet.
 - Updated release and user documentation with manual build/signing instructions and the no-unsigned-assets policy.
 
 ## 🐛 Fixed
