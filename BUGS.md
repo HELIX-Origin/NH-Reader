@@ -49,6 +49,13 @@
 
 - The installer still displays dark text on a dark background in the final page. 
 - The installer fails to to uninstall the previous version when selecting the option to uninstall the previous version before installing the new version. 
+- **Blacklisting tags/languages leaves pages empty or with sparse listings instead of filling the page with non-blacklisted doujins:**
+  - **Reproduction / Reported Behavior**: When blacklisting tags, languages, artists, or categories with the blacklist mode set to "Hide", pages fail to dynamically scale/fill. Because filtering occurs client-side against fixed server page batches, some pages end up completely empty while others show only one or very few listings instead of backfilling and populating a full page of doujins that aren't blacklisted.
+  - **Expected Behavior**: Pages and grids should dynamically scale and fill with unblocked doujins so that each page presents a full listing set without sparse or completely empty pages.
+  - **Areas Affected / Under Investigation**:
+    - `src/lib/components/GalleryGrid.svelte`: Client-side filtering in `visible` reduces displayed items down to zero or single digits without fetching further items.
+    - Server-side query integration & pagination backfilling: Ingesting server exclusion terms (`-tag:"..."`, `-language:"..."`) for discovery endpoints and search queries (e.g. `buildServerExcludes()` in `src/lib/stores/blacklist.svelte.ts`), or fetching subsequent pages until the target page size (e.g. 28 doujins) is reached.
+
 ***Notes***:
 
 - *Since some of these issues affect the app code, this update will warrant a version bump.*
