@@ -9,11 +9,12 @@
 
 ## 📖 Legend
 
-### {{ emoji }} Status
+### 🚦 Status
 
-- 🚨 **open** — reproducible, needs fixing *(Detailed lists with possible fixes encouraged. Attempt to include steps to reproduce, expected behavior, and actual behavior. An estimate of how long it might take to fix is also helpful.)*
+- ⚠️ **open** — reproducible, needs fixing *(Detailed lists with possible fixes encouraged. Attempt to include steps to reproduce, expected behavior, and actual behavior. An estimate of how long it might take to fix is also helpful.)*
 - 🚧 **investigating** — repro/root-cause in progress *(List of issues currently being worked on. Used for tracking active work. must reference an existing bug from the open section.)*
-- ⚠️ **wontfix** — accepted limitations *(features that can't be fixed at this time without significant changes or trade-offs)*
+- 🚫 **wontfix** — accepted limitations *(features that can't be fixed at this time without significant changes or trade-offs)*
+- ✅ **resolved** — verified and fixed *(moved to closed with the corresponding release version or commit)*
 
 ### 🚨 Severity
 
@@ -22,7 +23,7 @@
 - 🟡 **Medium**: *Bugs that affect certain features or have minor usability issues.*
 - 🟢 **Low**: *Minor bugs or visual glitches that do not significantly impact the user experience.*
 
-## ⚠️ Known quirks & external limitations (wontfix bucket)
+## 🚫 Known quirks & external limitations (wontfix bucket)
 
 - 🐢 **Rate limiting / 429s:** nhentai throttles rapid API access. The Rust client throttles
   requests; UI must back off and not spam-retry.
@@ -37,12 +38,12 @@
   only recency. Surfaces limited accordingly. *(This is not necessarily a won't fix. But until we can create our own way of determining popularity, this limitation remains.)*
 - **Trusted release signing is unavailable:** No trusted organization code-signing identity is available for automated release builds. The packaging workflow has been removed; the project does not publish prebuilt or unsigned release assets. Local self-signed Windows certificates do not establish publisher trust.
 
-## 🧠 Explicitly not bugs
+## 💡 Explicitly not bugs
 
 - 💡 Galleries that legitimately contain blacklisted tags are still accessible from detail/reader
   (blacklist governs discovery lists, not direct links) — by design.
 
-## 🚨 Open
+## ⚠️ Open
 
 *No open bugs currently reported.*
 
@@ -50,7 +51,7 @@
 
 ### 2026-10-02 — Blacklist page filling & dynamic scaling stream buffer
 
-- **Severity**: ⚠️ High (Usability / Discovery)
+- **Severity**: 🟠 High (Usability / Discovery)
 - **Status**: ✅ resolved (fixed in v0.7.4)
 - **Root Cause**: When blacklisting tags, languages, artists, or categories with the blacklist mode set to "Hide", `GalleryGrid` filtered items client-side from fixed-size server page batches (28 items). When many items matched the blacklist, pages rendered partially empty or with only 1 or 0 items instead of maintaining a full grid.
 - **Fix**:
@@ -60,7 +61,7 @@
 
 ### 2026-10-02 — NSIS installer finish page text legibility & previous version uninstall failure
 
-- **Severity**: ⚠️ High (Installer & Usability)
+- **Severity**: 🟠 High (Installer & Usability)
 - **Status**: ✅ resolved (fixed in v0.7.4)
 - **Root Cause**:
   1. Setting `MUI_BGCOLOR "18181B"` darkened the dialog background, but the finish page title and body text controls retained Windows default black text (`COLOR_WINDOWTEXT`), rendering dark text on a dark background.
@@ -78,27 +79,27 @@
 
 ### 2026-10-02 — GitHub Pages deployment workflow authenticated with PAT_TOKEN
 
-- **Severity**: ⚠️ Medium (Deployment)
+- **Severity**: 🟡 Medium (Deployment)
 - **Status**: ✅ resolved (fixed in v0.7.4)
 - **Root Cause**: The deployment workflow used default repository tokens which lacked permissions to configure and deploy Pages across branches.
 - **Fix**: Configured `.github/workflows/pages.yml` with `secrets.PAT_TOKEN`, using standard `actions/configure-pages@v5`, `actions/upload-pages-artifact@v3` (`path: docs`), and `actions/deploy-pages@v4`.
 
 ### 2026-10-01 — Release workflow failed to publish desktop installers (.exe, .msi, .deb, .AppImage, .dmg)
 
-- **Severity**: 🚨 High (Packaging & Distribution)
+- **Severity**: 🟠 High (Packaging & Distribution)
 - **Status**: ✅ resolved (Unreleased)
 - **Root Cause**: `actions/upload-artifact@v4` preserved subdirectories (`nsis/`, `msi/`, `deb/`, `appimage/`, `dmg/`) when uploading artifacts from `src-tauri/target/release/bundle/`. When `actions/download-artifact@v4` merged all artifacts into `release-artifacts`, the installers remained inside nested subdirectories. The `action-gh-release@v2` job used `files: release-artifacts/*` which only matched top-level files (`.zip`, `.apk`, `.tar.gz`) and ignored directories.
 - **Fix**: Added a flattening step in `publish-release`, `publish-test-prerelease`, and `dry-run-summary` (`find release-artifacts -mindepth 2 -type f -exec mv {} release-artifacts/ \;`) before publishing, ensuring all platform installers sit directly in `release-artifacts/` and are attached to GitHub releases.
 
 ### 2026-10-01 — Root-file translation links led to unpublished Pages paths
 
-- **Severity**: ⚠️ Medium (Documentation usability)
+- **Severity**: 🟡 Medium (Documentation usability)
 - **Status**: ✅ resolved (Unreleased)
 - **Root Cause & Fix**: The root Markdown menus linked to `/repo/*.html` copies that the docs-folder Pages source does not publish. Removed the broken root menus and unnecessary generated copies. The documentation site continues to translate in place with `docs/translate.js`.
 
 ### 2026-10-01 — Markdown translate "dropdown" rendered as a flat list of language names
 
-- **Severity**: ⚠️ Medium (Documentation usability)
+- **Severity**: 🟡 Medium (Documentation usability)
 - **Status**: ✅ resolved (Unreleased)
 - **Root Cause**: Every Markdown page embedded a `<select>` with inline styles, an `onchange` handler and a `<script src="./docs/translate.js">`. GitHub's Markdown sanitizer strips `<select>`, `<label>`, `<script>`, `style` and event handlers, so only the bare option text survived and no script ever ran.
 - **Fix**:
@@ -107,7 +108,7 @@
 
 ### 2026-10-01 — NSIS installer dark mode text illegibility, placeholder branding & missing macOS/Linux portable packages (Resolved in v0.6.1)
 
-- **Severity**: ⚠️ High (Usability / Packaging)
+- **Severity**: 🟠 High (Usability / Packaging)
 - **Status**: ✅ resolved (fixed in v0.6.1)
 - **Root Cause & Fix**:
   1. Multi-platform portable packages added to `.github/workflows/package.yml` across Windows (`NHReaderPortable_Windows_x64.zip`), Linux (`nh-reader_portable_linux_x86_64.tar.gz`), and macOS (`NHReaderPortable_macOS.zip`).
