@@ -18,10 +18,10 @@ own custom UI, built to beat the site at search/filtering and global blacklistin
 | Styling | Plain modern CSS + design tokens — **no** CSS framework |
 | Networking | Rust `reqwest` behind Tauri commands — **never** fetch nhentai from the webview |
 | Persistence | SQLite-backed KV cache (`src/lib/cache.ts` → `db.rs` → `database.sqlite`) |
-| Packaging | Tauri native bundler (NSIS/MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android) + portable zip |
+| Packaging | Tauri native bundler (NSIS/MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android, IPA on iOS) + portable zip |
 | Package manager | npm |
 
-Cross-platform: Desktop (Windows/macOS/Linux) and Mobile (Android via Tauri 2 native mobile support). Note: Because the maintainer lacks physical macOS and Android devices, Android (as well as macOS) builds are currently community-supported and untested by the maintainer. iOS is not supported.
+Cross-platform: Desktop (Windows/macOS/Linux) and Mobile (Android/iOS via Tauri 2 native mobile support). Android, macOS, and iOS builds are community-supported and currently untested by the maintainer.
 
 ## 2. ⛔ MANDATORY — these are not negotiable
 
@@ -51,12 +51,13 @@ commit. `git add` of unrelated pre-existing modifications is forbidden — stage
 files belonging to the requested work.
 → `.agents/rules/git-workflow.md`
 
-### 2.4 Verify before declaring done — and before pushing
-Never report a task complete without having actually run the relevant check in §4 in
-this session, and read its output. "Should compile" is not verification.
-**Never push to remote until all relevant checks pass in this session.** Unverified or
-broken code must never reach the remote. CI workflow changes require end-to-end
-dry-run validation (`dry_run: true`) before being pushed.
+### 2.4 Verify application changes — not documentation-only work
+Run and read checks required for application code or executable application configuration
+before declaring that work done or pushing it. Do not run build, test, lint, localization,
+or agent-ecosystem checks for documentation-only, release-note-only, version-metadata-only,
+or workflow-only changes. If a change includes app code, run checks required by that code.
+CI workflow dry-runs apply only when workflow changes alter app build or deployment behavior;
+removal-only or documentation-only workflow edits do not require one.
 → `.agents/rules/verification.md` · **enforced** by `npm run check:agents`
 
 ### 2.5 Tracking docs stay true
@@ -93,15 +94,15 @@ a password or a human choice, **stop and report** — never pipe credentials
 | DCP `compress` nudges, long sessions | `.agents/rules/context-management.md` |
 | Never sure what's true about the project | `.agents/ROLES.md` then `ROADMAP.md` |
 
-## 4. Verification matrix — run what the change touches
+## 4. Verification matrix — run only checks applicable to changed app code
 
 | Change touched | Run |
 | --- | --- |
 | `src/**`, `.svelte`, `.css` | `npm run check` |
 | `src-tauri/**`, `.rs` | `cargo check` + `cargo test` (in `src-tauri/`) |
 | `src/lib/i18n/**` or user-visible strings | `npm run i18n:check` |
-| `.agents/**`, `AGENTS.md`, agent config | `npm run check:agents` |
-| Anything | `npm run check:agents` — it is fast and it is the ecosystem's own gate |
+| `.agents/**`, `AGENTS.md`, agent config | `npm run check:agents` only when app code is also changed or explicitly requested |
+| Docs, release notes, changelog, version metadata, workflow-only changes | No build or test checks |
 
 Commands:
 
@@ -181,7 +182,7 @@ came from in the same change.
 - **Single instance** via `tauri-plugin-single-instance`; a second launch focuses the
   existing `main` window.
 - **Packaging & uninstaller** Tauri native packaging generates native NSIS (`.exe`) and WiX MSI (`.msi`) installers on Windows (DMG on macOS, deb/AppImage on Linux), with clean uninstaller support registered in system uninstallation mechanisms, alongside portable zip packages. PAF is dropped in favor of native Tauri packaging.
-- **Mobile support (Android)** Native Android mobile support via Tauri 2's mobile toolchain (`tauri android`). Targets APK sideloading. Because the maintainer lacks a physical Android test device, Android builds are currently untested. iOS is not supported and has been dropped.
+- **Mobile support (Android and iOS)** Native mobile builds via Tauri 2's Android and iOS toolchains (`tauri android` and `tauri ios`). Targets APK sideloading and iOS archives/IPAs. The maintainer does not have mobile test hardware; mobile builds are community-supported and untested.
 - **i18n** drop-in packs with `en` default; system-locale fallback; community contributions; completeness is
   gated by `npm run i18n:check`.
 - **Context management** DCP (`@tarquinen/opencode-dcp`) is **agent tooling, not a product

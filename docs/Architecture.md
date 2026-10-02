@@ -34,7 +34,7 @@ periodic Popular refreshes.
 ## 🏗️ Design decisions
 
 1. ✅ **Cross-platform shell = Tauri 2.** Rust backend owns all networking and persistence; the SPA is
-   presentation. Supports Windows, macOS, Linux, and Android. iOS is not supported.
+   presentation. Supports Windows, macOS, Linux, Android, and iOS.
 2. **Native packaging & uninstaller.** Built with Tauri's native packaging toolchain:
    NSIS (`.exe`) with dual per-user and per-machine scopes, enterprise WiX MSI (`.msi`), DMG, deb, AppImage, APK, and portable zip.
 3. **Local-first.** No server, no accounts required. Favorites/history/blacklist/settings and

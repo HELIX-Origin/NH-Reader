@@ -6,6 +6,7 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 
 ## 📑 Release Index
 
+- **[v0.7.3 — Manual Signed Builds & Restored iOS Support](#v073--2026-10-01)** *(2026-10-01)*
 - **[v0.7.2 — Official Code Signing, Full Desktop Installers & Pages Alignment](#v072--2026-10-01)** *(2026-10-01)*
 - **[v0.7.1 — Android CI Packaging Patch & Verification Hardening](#v071--2026-10-01)** *(2026-10-01)*
 - **[v0.7.0 — Custom Title Bar, Reader Ergonomics, Arabic RTL Polish & Multi-Platform Portability](#v070--2026-10-01)** *(2026-10-01)*
@@ -16,6 +17,15 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 - **[v0.2.1 — Storage Architecture Hardening & Docs Synchronization](#v021--2026-09-22)** *(2026-09-22)*
 - **[v0.2.0 — Custom UI Shell, Background Service Queue & Disk Image Cache](#v020--2026-09-20)** *(2026-09-20)*
 - **[v0.1.0 — Initial Foundation Release](#v010--2026-09-15)** *(2026-09-15)*
+
+---
+
+## [v0.7.3] — 2026-10-01
+### 📦 Manual Signed Builds & Restored iOS Support
+
+**Release Announcement Discussion:** [announcements/v0.7.3.md](announcements/v0.7.3.md)
+
+NH Reader v0.7.3 removes automated package builds and release-asset publishing because the project cannot reliably provide properly signed binaries. The source release has no prebuilt assets; local platform signing commands are documented for Windows, macOS, Linux, Android, and iOS. Project documentation also now correctly reflects restored iOS support.
 
 ---
 

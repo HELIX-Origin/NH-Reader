@@ -92,7 +92,7 @@ flowchart TD
 
 ## 📱 Mobile & Sideloading
 
-NH Reader produces native Android APKs via Tauri 2. iOS is not supported.
+NH Reader produces native Android APKs and iOS archives/IPAs via Tauri 2. iOS builds require macOS, Xcode, and Apple signing credentials.
 
 ## 🔄 Background services
 

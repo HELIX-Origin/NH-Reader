@@ -25,13 +25,14 @@ Preparing files is fine; tagging, pushing, and publishing are not.
      `.agents/templates/release-announcement.md` (separate format from release notes).
    - Update `.github/discussions/announcements.md` with the release overview, feature
      breakdown, and table of contents entry.
-7. **Verify everything:**
-   - `npm run check`
-   - `npm run i18n:check`
-   - `npm run check:agents`
-   - `cargo check` and `cargo test` in `src-tauri/`
-   - `npm run tauri build`
-   Read every output. A red build does not get tagged.
+7. **Verify changed application code only:**
+   - Run `npm run check` for frontend source changes.
+   - Run `npm run i18n:check` for locale-pack or user-visible string changes.
+   - Run `npm run check:agents` for agent-ecosystem changes only when app code is also changed or this check is explicitly requested.
+   - Run `cargo check` and `cargo test` in `src-tauri/` for Rust source changes.
+   - Run `npm run tauri build` when application code or executable packaging configuration changes.
+   - For documentation-, release-note-, version-metadata-, or workflow-only changes, do not run build/test checks; state that they were intentionally skipped.
+   Read every output for checks that apply. A red applicable build does not get tagged.
 8. **Stage only release files** — never `git add .`. Confirm nothing unrelated rides along.
 9. **Commit** with the release message, using `-m` (no editor).
 10. **Tag annotated:** `git tag -a v<version> -m "NH Reader v<version>"`.

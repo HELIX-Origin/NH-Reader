@@ -8,7 +8,7 @@
 
 # Packaging & Installer Architecture
 
-NH Reader utilizes **Tauri v2 Native Packaging** (`tauri build`) to produce reliable, signed, and fully bundled distributions for Windows, macOS, Linux, and Android. iOS is not supported.
+NH Reader utilizes **Tauri v2 Native Packaging** (`tauri build`) for local builds of Windows, macOS, Linux, Android, and iOS packages. Packages are not signed or published by CI; there is no automated packaging workflow. iOS builds require macOS, Xcode, and Apple signing credentials.
 
 ## 🧭 Why Native Packaging Over Custom Installers
 

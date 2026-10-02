@@ -26,6 +26,7 @@
   Our UI builds it, but edge semantics (e.g. OR-within-type) are inherited, not invented.
 - **Upload-date "popular" ordering:** the site exposes no stable *popularity* sort in search;
   only recency. Surfaces limited accordingly. *(This is not necessarily a won't fix. But until we can create our own way of determining popularity, this limitation remains.)*
+- **Trusted release signing is unavailable:** No trusted organization code-signing identity is available for automated release builds. The packaging workflow has been removed; the project does not publish prebuilt or unsigned release assets. Local self-signed Windows certificates do not establish publisher trust.
 
 ## 🧠 Explicitly not bugs
 
@@ -48,7 +49,6 @@
 
 - The installer still displays dark text on a dark background in the final page. 
 - The installer fails to to uninstall the previous version when selecting the option to uninstall the previous version before installing the new version. 
-- The signing works correctly when done locally *(no untrusted developer warning)*, but last time i tested it from the release installer, i still got the untrusted developer warning. We will need to investigate this further to see if the issue is actually fixed or not *(I'm assuming it's probably due to the private key(s) not being published. If so, adding the private key(s) to our repo secrets should fix this issue.)*.
 ***Notes***:
 
 - *Since some of these issues affect the app code, this update will warrant a version bump.*

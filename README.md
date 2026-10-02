@@ -36,21 +36,26 @@ categories, artists, characters, parodies — and lets you slice it **locally, i
 | macOS 10.13+ | ⚠️ Toolchain supported (untested due to lack of macOS hardware) |
 | Linux (x86_64) | ✅ Supported (deb, AppImage) |
 | Android | ⚠️ Toolchain supported (currently untested due to lack of physical Android device) |
-| iOS | ❌ Not supported |
+| iOS | ⚠️ Toolchain supported (requires macOS, Xcode, and Apple signing) |
 
 > [!WARNING]
-> **Platform Testing Notice (Android & macOS):** The maintainer does not own physical Android or macOS test devices. Android and macOS builds are currently untested. Community verification, test reports, and contributions are welcomed!
+> **Platform Testing Notice (Android, macOS & iOS):** These targets are community-supported and untested by the maintainer. iOS builds require macOS, Xcode, and Apple signing credentials.
 
 ## 📦 Installation
 
-Download the latest installer or package from the [Releases](https://github.com/HELIX-Origin/NH-Reader/releases)
-page:
+The project does not publish release assets. Build and sign packages locally using the
+commands in `package.json` and the [installation guide](docs/Installation-and-Maintenance.md):
 
 - 🪟 **Windows:** `NH Reader_<version>_x64-setup.exe` (NSIS) or `NH Reader_<version>_x64_en-US.msi` (WiX).
 - **macOS:** `NH Reader_<version>_x64.dmg` (or `aarch64` for Apple Silicon).
 - **Linux:** `nh-reader_<version>_amd64.deb` or `nh-reader_<version>_amd64.AppImage`.
 - **Android:** `nh-reader_<version>_universal.apk`.
+- **iOS:** Xcode archive or IPA, built on macOS with Xcode and Apple signing credentials.
 - **Portable:** Standalone zip package with `.portable` runtime isolation mode.
+
+Build packages locally with `npm run build:app`; use `npm run mobile:android:*` or
+`npm run mobile:ios:*` for mobile targets. Sign using the `sign:*` commands in
+`package.json`. Windows' generated self-signed certificate is not a trusted publisher identity.
 
 ## 🛠️ Building from source
 

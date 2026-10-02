@@ -32,12 +32,12 @@ This is a client for an adult-adjacent site; you must be 18+ to use it. See
 
 ## 📦 What installation packages are available?
 
-NH Reader is distributed using Tauri v2's native packaging toolchain:
+NH Reader uses Tauri v2's native packaging toolchain for local builds. The project does not publish release assets:
 - **Windows**: Modern NSIS installer (`.exe`) with dual-scope support (per-user or all-users) and enterprise WiX MSI (`.msi`). A portable standalone `.zip` is also provided.
 - **macOS**: DMG disk image (`.dmg`) and `.app` bundle.
 - **Linux**: Debian package (`.deb`) and self-contained AppImage (`.AppImage`).
 - **Android**: Sideloadable APK (`.apk`).
-- **iOS**: Not supported.
+- **iOS**: Xcode archive or IPA; requires macOS, Xcode, and Apple signing credentials.
 
 ## 💾 Where is my data stored on disk?
 
@@ -62,10 +62,10 @@ Yes. NH Reader includes a full-featured background download service:
 
 ## 📱 Is there a mobile version?
 
-Yes. NH Reader supports Android via Tauri 2:
-- **Android**: Direct APK distribution and sideloading without third-party store dependencies.
+Yes. NH Reader supports Android and iOS via Tauri 2:
+- **Android**: Build, sign with your own keystore, and sideload an APK without third-party store dependencies.
 - *Notice*: Because the maintainer does not possess physical Android test hardware, Android builds are currently community-supported and untested.
-- **iOS**: Not supported.
+- **iOS**: Build archives/IPAs on macOS using Xcode and your own Apple signing credentials. iOS builds are community-supported and untested by the maintainer.
 
 ## 🤝 I found a bug / want a feature.
 

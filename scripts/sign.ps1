@@ -49,4 +49,3 @@ foreach ($filePath in $uniqueFiles) {
   Write-Host "Signing $filePath..."
   & $signtool sign /f $certPath /p $CertPassword /fd sha256 /tr "http://timestamp.digicert.com" /td sha256 $filePath
 }
-
