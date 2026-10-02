@@ -42,6 +42,7 @@ Do not commit private keys, keystores, certificates, or provisioning profiles.
 
 ## 📄 Changes & Commits
 
+- `182ec73` `chore(release): prepare v0.7.3 source-only release`
 - Release source: annotated tag `v0.7.3` (source only; no application assets)
 
 Full commit history: `git log --oneline v0.7.2..v0.7.3`

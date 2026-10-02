@@ -17,7 +17,7 @@
 - ✅ Corrected iOS support statements across project and user documentation.
 - ✅ Bumped package, Tauri, and Rust crate versions to `0.7.3`.
 - ✅ Prepared v0.7.3 source-only release notes and announcement; build/test checks intentionally skipped at the maintainer's request because no application logic changed.
-- ⬜ Commit, tag, push, and publish source-only v0.7.3 release.
+- ✅ Committed `182ec73`, pushed the release branch and annotated `v0.7.3` tag, and published the source-only GitHub release without application assets. Build/test checks were intentionally skipped at the maintainer's request; no application logic changed.
 
 ## 📦 Previous Milestone: v0.7.2 — Code Signing & Release Pipeline Enhancement
 
