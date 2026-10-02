@@ -2,16 +2,25 @@
 
 > [!IMPORTANT]
 > All known bugs are listed here. Keep in mind, that if a bug is missing, it may not have been discovered or reported yet.
-> 
+>
 > The repository maintainers (and contributors) actively search for new bugs and update this document accordingly. In some cases, a bug will be spotted and fixed without this page being immediately updated. This page is primarily a living index and may not always reflect the most current state of the codebase.
-> 
+>
 > AI agents are strongly advised to update this page first and push it to the remote before working on any new bug fixes or features. This way the remote repository always has the most up-to-date list of known issues.
 
-## 📖 Status legend
+## 📖 Legend
+
+### {{ emoji }} Status
 
 - 🚨 **open** — reproducible, needs fixing *(Detailed lists with possible fixes encouraged. Attempt to include steps to reproduce, expected behavior, and actual behavior. An estimate of how long it might take to fix is also helpful.)*
 - 🚧 **investigating** — repro/root-cause in progress *(List of issues currently being worked on. Used for tracking active work. must reference an existing bug from the open section.)*
 - ⚠️ **wontfix** — accepted limitations *(features that can't be fixed at this time without significant changes or trade-offs)*
+
+### 🚨 Severity
+
+- 🔴 **Critical**: *Bugs that cause crashes or major functionality loss.*
+- 🟠 **High**: *Bugs that significantly impact usability but do not crash the app.*
+- 🟡 **Medium**: *Bugs that affect certain features or have minor usability issues.*
+- 🟢 **Low**: *Minor bugs or visual glitches that do not significantly impact the user experience.*
 
 ## ⚠️ Known quirks & external limitations (wontfix bucket)
 
@@ -35,45 +44,60 @@
 
 ## 🚨 Open
 
-- **Pages workflow cannot deploy to the selected source:** Pages is now enabled manually from `docs/`. The `GitHub Pages` workflow still tries to switch its source to GitHub Actions and deploy a staged artifact; it requires admin permissions to switch sources and does not publish under the current `docs/` setting. The `docs/` branch build works independently of that workflow.
-
-- The following errors have been discovered when running `npm run build:app` *(Note: I replaced my hard coded local app data path with the Windows variable to not expose my system path in the error code below)*:
-  
-  ```powershell
-  warning: !warning: LangString "MULTIUSER_TEXT_INSTALLMODE_TITLE" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
-  warning: !warning: LangString "MULTIUSER_TEXT_INSTALLMODE_SUBTITLE" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
-  warning: !warning: LangString "MULTIUSER_INNERTEXT_INSTALLMODE_TOP" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
-  warning: !warning: LangString "MULTIUSER_INNERTEXT_INSTALLMODE_ALLUSERS" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
-  warning: !warning: LangString "MULTIUSER_INNERTEXT_INSTALLMODE_CURRENTUSER" for language Korean is missing, using fallback from "%LOCALAPPDATA%\tauri\NSIS\Contrib\Language files\English.nsh" (macro:LANGFILE_SETSTRING:7)
-  ```
-
-- The installer still displays dark text on a dark background in the final page. 
-- The installer fails to to uninstall the previous version when selecting the option to uninstall the previous version before installing the new version. 
-- **Blacklisting tags/languages leaves pages empty or with sparse listings instead of filling the page with non-blacklisted doujins:**
-  - **Reproduction / Reported Behavior**: When blacklisting tags, languages, artists, or categories with the blacklist mode set to "Hide", pages fail to dynamically scale/fill. Because filtering occurs client-side against fixed server page batches, some pages end up completely empty while others show only one or very few listings instead of backfilling and populating a full page of doujins that aren't blacklisted.
-  - **Expected Behavior**: Pages and grids should dynamically scale and fill with unblocked doujins so that each page presents a full listing set without sparse or completely empty pages.
-  - **Areas Affected / Under Investigation**:
-    - `src/lib/components/GalleryGrid.svelte`: Client-side filtering in `visible` reduces displayed items down to zero or single digits without fetching further items.
-    - Server-side query integration & pagination backfilling: Ingesting server exclusion terms (`-tag:"..."`, `-language:"..."`) for discovery endpoints and search queries (e.g. `buildServerExcludes()` in `src/lib/stores/blacklist.svelte.ts`), or fetching subsequent pages until the target page size (e.g. 28 doujins) is reached.
-
-***Notes***:
-
-- *Since some of these issues affect the app code, this update will warrant a version bump.*
+*No open bugs currently reported.*
 
 ## ✅ Closed
 
+### 2026-10-02 — Blacklist page filling & dynamic scaling stream buffer
+
+- **Severity**: ⚠️ High (Usability / Discovery)
+- **Status**: ✅ resolved (fixed in v0.7.4)
+- **Root Cause**: When blacklisting tags, languages, artists, or categories with the blacklist mode set to "Hide", `GalleryGrid` filtered items client-side from fixed-size server page batches (28 items). When many items matched the blacklist, pages rendered partially empty or with only 1 or 0 items instead of maintaining a full grid.
+- **Fix**:
+  1. Implemented client-side stream buffering and pagination backfilling in `src/lib/api.ts` (`streamBackfilledList`). When `blacklistMode === 'hide'`, it continuously pulls upstream pages until accumulating enough non-blacklisted galleries to deliver a full page of 28 unblocked items.
+  2. Maintained surplus unblocked items in memory for seamless forward and backward navigation with zero empty slots.
+  3. Added reactive `blacklistVersion` state tracking in `src/lib/stores/blacklist.svelte.ts` and `src/routes/+page.svelte` to invalidate and re-stream full unblocked pages whenever blacklist tags or modes are updated.
+
+### 2026-10-02 — NSIS installer finish page text legibility & previous version uninstall failure
+
+- **Severity**: ⚠️ High (Installer & Usability)
+- **Status**: ✅ resolved (fixed in v0.7.4)
+- **Root Cause**:
+  1. Setting `MUI_BGCOLOR "18181B"` darkened the dialog background, but the finish page title and body text controls retained Windows default black text (`COLOR_WINDOWTEXT`), rendering dark text on a dark background.
+  2. In NSIS, running the previous uninstaller without `_?=$INSTDIR` caused it to copy itself to `%TEMP%`, spawn asynchronously, and immediately exit, allowing the new installer to write files while the uninstaller was still deleting them.
+- **Fix**:
+  1. Added `SetFinishPageColors` with `MUI_FINISHPAGE_CUSTOMFUNCTION_SHOW` and `MUI_WELCOMEPAGE_CUSTOMFUNCTION_SHOW` in `src-tauri/windows/hooks.nsh` to explicitly color title (1201), body (1202), and checkboxes (1203/1204) with light `#FFFFFF` and `#F4F4F5` on transparent background.
+  2. Implemented `NSIS_HOOK_PREINSTALL` to terminate any lingering app process and invoke `"$INSTDIR\uninstall.exe" /S _?=$INSTDIR` synchronously with `ExecWait`, ensuring previous files are completely purged before the new version installs.
+
+### 2026-10-02 — NSIS Korean language MultiUser string missing fallback warnings
+
+- **Severity**: 🟢 Low (Build Warning)
+- **Status**: ✅ resolved (fixed in v0.7.4)
+- **Root Cause**: Standard NSIS `Korean.nsh` lacked the `MULTIUSER_INSTALLMODEPAGE` language string definitions, producing build warnings for `MULTIUSER_TEXT_INSTALLMODE_TITLE` and related strings during `npm run build:app`.
+- **Fix**: Added full Korean translations for `MULTIUSER_INSTALLMODEPAGE` strings into `src-tauri/windows/hooks.nsh` and the local NSIS Korean language file.
+
+### 2026-10-02 — GitHub Pages deployment workflow authenticated with PAT_TOKEN
+
+- **Severity**: ⚠️ Medium (Deployment)
+- **Status**: ✅ resolved (fixed in v0.7.4)
+- **Root Cause**: The deployment workflow used default repository tokens which lacked permissions to configure and deploy Pages across branches.
+- **Fix**: Configured `.github/workflows/pages.yml` with `secrets.PAT_TOKEN`, using standard `actions/configure-pages@v5`, `actions/upload-pages-artifact@v3` (`path: docs`), and `actions/deploy-pages@v4`.
+
 ### 2026-10-01 — Release workflow failed to publish desktop installers (.exe, .msi, .deb, .AppImage, .dmg)
+
 - **Severity**: 🚨 High (Packaging & Distribution)
 - **Status**: ✅ resolved (Unreleased)
 - **Root Cause**: `actions/upload-artifact@v4` preserved subdirectories (`nsis/`, `msi/`, `deb/`, `appimage/`, `dmg/`) when uploading artifacts from `src-tauri/target/release/bundle/`. When `actions/download-artifact@v4` merged all artifacts into `release-artifacts`, the installers remained inside nested subdirectories. The `action-gh-release@v2` job used `files: release-artifacts/*` which only matched top-level files (`.zip`, `.apk`, `.tar.gz`) and ignored directories.
 - **Fix**: Added a flattening step in `publish-release`, `publish-test-prerelease`, and `dry-run-summary` (`find release-artifacts -mindepth 2 -type f -exec mv {} release-artifacts/ \;`) before publishing, ensuring all platform installers sit directly in `release-artifacts/` and are attached to GitHub releases.
 
 ### 2026-10-01 — Root-file translation links led to unpublished Pages paths
+
 - **Severity**: ⚠️ Medium (Documentation usability)
 - **Status**: ✅ resolved (Unreleased)
 - **Root Cause & Fix**: The root Markdown menus linked to `/repo/*.html` copies that the docs-folder Pages source does not publish. Removed the broken root menus and unnecessary generated copies. The documentation site continues to translate in place with `docs/translate.js`.
 
 ### 2026-10-01 — Markdown translate "dropdown" rendered as a flat list of language names
+
 - **Severity**: ⚠️ Medium (Documentation usability)
 - **Status**: ✅ resolved (Unreleased)
 - **Root Cause**: Every Markdown page embedded a `<select>` with inline styles, an `onchange` handler and a `<script src="./docs/translate.js">`. GitHub's Markdown sanitizer strips `<select>`, `<label>`, `<script>`, `style` and event handlers, so only the bare option text survived and no script ever ran.
@@ -82,44 +106,13 @@
   2. The GitHub Pages layout and project page render a real `<select>` (`docs/_includes/translate-control.html`, languages from `docs/_data/languages.yml`). `docs/translate.js` honours `?lang=` and translates the page in place through the Google Translate element without leaving the page.
 
 ### 2026-10-01 — NSIS installer dark mode text illegibility, placeholder branding & missing macOS/Linux portable packages (Resolved in v0.6.1)
+
 - **Severity**: ⚠️ High (Usability / Packaging)
 - **Status**: ✅ resolved (fixed in v0.6.1)
 - **Root Cause & Fix**:
   1. Multi-platform portable packages added to `.github/workflows/package.yml` across Windows (`NHReaderPortable_Windows_x64.zip`), Linux (`nh-reader_portable_linux_x86_64.tar.gz`), and macOS (`NHReaderPortable_macOS.zip`).
   2. Regenerated `src-tauri/windows/header.bmp` and `src-tauri/windows/sidebar.bmp` from official app icon `src-tauri/icons/icon.png` with exact sampled `#0d0d0d` background.
   3. Cleaned conflicting `MUI_BGCOLOR` and `MUI_TEXTCOLOR` defines in `src-tauri/windows/hooks.nsh` that caused unreadable white-on-white / white-on-gray text, while retaining DWM dark titlebar decorations.
-
-## 📝 Filing a bug
-
-Bug title on GitHub: `🐛 <problem summary>`. Body must include:
-
-- Steps to reproduce (reproduce-first)
-- Expected vs actual behavior
-- Environment (OS, app/CLI version, DM in use)
-- ≥1 verifiable diagram or log when applicable
-
-Entry format once filed:
-
-```
-## 2026-09-21 — <short title>  (#<issue>)
-- [ ] Reproduced
-- [ ] Root cause identified
-- [ ] Fix in PR (`Closes #<issue>`)
-
----
-
-## 📖 Severity Legend
-- 🚨 Critical: Bugs that cause crashes or major functionality loss.
-- ⚠️ High: Bugs that significantly impact usability but do not crash the app.
-- 🟡 Medium: Bugs that affect certain features or have minor usability issues.
-- 🟢 Low: Minor bugs or visual glitches that do not significantly impact the user experience.
-
-
-| Severity | Description |
-| :---: | :---: |
-| 🚨 | The app is eating up a massive amount of storage |
-| 🟡 | Some UI elements have minor visual inconsistencies |
-| 🟢 | Minor text alignment issues in certain UI components |
 
 ---
 

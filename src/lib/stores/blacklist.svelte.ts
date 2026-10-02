@@ -5,18 +5,27 @@ import type { BlacklistEntry, GalleryListItem, Tag, TagRef } from '$lib/types';
 const KEY = 'blacklist:v1';
 
 let entries = $state<BlacklistEntry[]>([]);
+let blacklistVersion = $state(0);
 
 function persist(): void {
+	blacklistVersion++;
 	cacheSetJson(KEY, entries);
 }
 
 export async function loadBlacklist(): Promise<void> {
 	const saved = await cacheGetJson<BlacklistEntry[]>(KEY);
-	if (saved) entries = saved;
+	if (saved) {
+		entries = saved;
+		blacklistVersion++;
+	}
 }
 
 export function getBlacklist(): BlacklistEntry[] {
 	return entries;
+}
+
+export function getBlacklistVersion(): number {
+	return blacklistVersion;
 }
 
 export function fromTag(tag: Tag): BlacklistEntry {
@@ -92,6 +101,7 @@ export function importBlacklistData(data: unknown): number {
 }
 
 export function matchesBlacklist(item: GalleryListItem): boolean {
+	if (item.blacklisted === true) return true;
 	if (entries.length === 0) return false;
 	const ids = item.tag_ids ?? [];
 	return ids.some((id) => entries.some((e) => e.id !== 0 && e.id === id));

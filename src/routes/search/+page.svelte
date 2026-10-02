@@ -58,6 +58,7 @@
 	}
 
 	$effect(() => {
+		void tick;
 		if (!appliedQuery) return;
 		let cancelled = false;
 		loading = true;

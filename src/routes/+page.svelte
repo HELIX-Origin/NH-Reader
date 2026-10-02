@@ -8,8 +8,11 @@
 	import ErrorNotice from '$lib/components/ErrorNotice.svelte';
 	import Pager from '$lib/components/Pager.svelte';
 	import { locale } from '$lib/stores/locale.svelte';
+	import { getSettings } from '$lib/stores/settings.svelte';
+	import { getBlacklistVersion } from '$lib/stores/blacklist.svelte';
 
 	const current = $derived(Number(page.url.searchParams.get('page')) || 1);
+	const settings = getSettings();
 
 	let data = $state<GalleryList | null>(null);
 	let error = $state<string | null>(null);
@@ -19,6 +22,9 @@
 
 	$effect(() => {
 		void tick;
+		void settings.blacklistEnabled;
+		void settings.blacklistMode;
+		void getBlacklistVersion();
 		const id = ++requestId;
 		loading = true;
 		error = null;
@@ -35,6 +41,16 @@
 					loading = false;
 				}
 			});
+	});
+
+	$effect(() => {
+		const onRefresh = () => {
+			tick++;
+		};
+		window.addEventListener('nh-reader:refresh:latest', onRefresh);
+		return () => {
+			window.removeEventListener('nh-reader:refresh:latest', onRefresh);
+		};
 	});
 
 	function gotoPage(n: number) {
