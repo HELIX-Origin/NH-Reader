@@ -32,16 +32,17 @@ Seeded in `.github/discussions/announcements/v<version>.md` and indexed in
 
 ---
 
-## 📦 Distribution & Available Packages
+## 🛠️ Manual Build & Signing
 
-Download the package for your platform from the [GitHub Release](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v<version>):
+There are no prebuilt release assets. Build on each target platform and sign locally with your own certificate or key before distributing:
 
-- **Windows:** NSIS Installer (`NH Reader_<version>_x64-setup.exe`), WiX MSI (`NH Reader_<version>_x64_en-US.msi`), and Portable ZIP (`NHReaderPortable_<version>.zip`).
-- **Linux:** Debian package (`nh-reader_<version>_amd64.deb`), AppImage (`nh-reader_<version>_amd64.AppImage`), and Portable Tarball (`nh-reader_portable_<version>_linux_x86_64.tar.gz`).
-- **macOS:** DMG Disk Image (`NH Reader_<version>_x64.dmg`), App Bundle (`NH Reader_<version>_x64.app`), and Portable ZIP (`NHReaderPortable_<version>_macOS.zip`).
-- **Android:** Sideload APK (`nh-reader_<version>_universal.apk`) *(community-supported / untested)*.
+- **Windows:** `npm run build:app`, then `npm run sign:windows`. Place your PFX at `certificates/nh-reader-codesign.pfx`; the script can generate a local self-signed certificate if none exists, but self-signed certificates are not trusted publisher identities.
+- **macOS:** `npm run build:app`, then `npm run sign:macos -- "<Developer ID Application identity>" "src-tauri/target/release/bundle/macos/NH Reader.app"`.
+- **Linux:** `npm run build:app`, then `npm run sign:linux -- path/to/package`; verify with `gpg --verify path/to/package.asc path/to/package`.
+- **Android:** `npm run mobile:android:init`, `npm run mobile:android:build`, then `npm run sign:android -- path/to/release.keystore --ks-key-alias <alias> path/to/app.apk`.
+- **iOS:** From macOS with Xcode and a valid Apple signing identity/provisioning profile, run `npm run mobile:ios:init`, then `npm run sign:ios -- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<team-id> CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER=<profile-name>`.
 
-Upgrade in place: run the new installer over your existing installation. Your local database (`database.sqlite`), favorites, reading history, downloaded archives, and settings carry over automatically.
+Signing credentials and provisioning profiles are user-managed and must not be committed. The project does not publish release assets.
 
 ---
 
@@ -63,6 +64,7 @@ Thank you to everyone in our community for testing, providing feedback, and cont
 - Lead with an engaging title, release date, tag link, and user-centric summary.
 - Organize features by thematic categories with clear subheadings and emoji badges.
 - Detail *why* features matter and how to use them, not just commit diffs.
-- List all supported platforms and installer variants under Distribution & Available Packages.
+- Include the local build and signing command for every supported platform.
+- Never claim that prebuilt release assets are available.
 - Always include links to the user documentation in `docs/`.
 - No personal local paths, secrets, or unverified claims.

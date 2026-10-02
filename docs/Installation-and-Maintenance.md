@@ -8,25 +8,27 @@
 
 # Installation & Maintenance
 
-NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-solid platform-native installers across Windows, macOS, and Linux with full dependency and resource bundling, alongside manual build tooling for Android and iOS.
+NH Reader uses **native Tauri packaging** (`tauri build`) for local builds. There is no automated packaging workflow, and the project will not publish release assets until properly signed releases are available. Build and sign packages locally using the commands in `package.json`.
 
 ## 📦 Distribution Formats
 
 | Platform | Formats | Package Type | Distribution / Build Method |
 | --- | --- | --- | --- |
-| **Windows** | NSIS (`.exe`), WiX (`.msi`), Portable (`.zip`) | Installer / MSI / Standalone | Automated Release Asset (or optional manual build) |
-| **macOS** | DMG (`.dmg`), App bundle (`.app`), Portable (`.zip`) | Disk Image / Bundle / Standalone | Automated Release Asset (or optional manual build) |
-| **Linux** | Debian (`.deb`), AppImage (`.AppImage`), Portable (`.tar.gz`) | Native package / Self-contained / Archive | Automated Release Asset (or optional manual build) |
-| **Android** | APK (`.apk`) | Sideloadable Android Package | **Mandatory manual build** via local CLI |
-| **iOS** | IPA (`.ipa`), Xcode archive | Sideloadable iOS / Apple Silicon | **Mandatory manual build** via local CLI / Xcode |
+| **Windows** | NSIS (`.exe`), WiX (`.msi`), Portable (`.zip`) | Installer / MSI / Standalone | Manual local build and signing |
+| **macOS** | DMG (`.dmg`), App bundle (`.app`), Portable (`.zip`) | Disk Image / Bundle / Standalone | Manual local build and signing |
+| **Linux** | Debian (`.deb`), AppImage (`.AppImage`), Portable (`.tar.gz`) | Native package / Self-contained / Archive | Manual local build and signing |
+| **Android** | APK (`.apk`) | Sideloadable Android Package | Manual local build and signing |
+| **iOS** | Xcode archive, IPA (`.ipa`) | iPhone / iPad | **Manual build and signing** via Tauri CLI / Xcode on macOS |
 
 ---
 
 ## 📦 Installing on Desktop
 
+Install the package you built and signed locally. The project does not publish release assets.
+
 ### 📦 Windows
 
-1. Download `NH Reader_<version>_x64-setup.exe` (NSIS) or `NH Reader_<version>_x64_en-US.msi` (WiX) from the [Releases](https://github.com/HELIX-Origin/NH-Reader/releases) page.
+1. Build with `npm run build:app` and sign with `npm run sign:windows`. Find the NSIS `.exe` or WiX `.msi` under `src-tauri/target/release/bundle/`.
 2. Run the installer:
    - **NSIS Setup**: Supports both **Current User** (per-user, non-elevated) and **All Users** (per-machine, administrative) installation scopes, custom directory selection, and creates Desktop / Start Menu shortcuts.
    - **WiX MSI**: Standard enterprise-ready Windows Installer package with silent install capability (`msiexec /i ... /qn`).
@@ -34,13 +36,13 @@ NH Reader ships via **native Tauri packaging** (`tauri build`), providing rock-s
 
 ### 📦 macOS
 
-1. Download `NH Reader_<version>_x64.dmg` (or `aarch64` for Apple Silicon).
+1. Build with `npm run build:app`, then sign the generated `.app` bundle using `npm run sign:macos -- "<Developer ID Application identity>" "src-tauri/target/release/bundle/macos/NH Reader.app"`.
 2. Open the DMG disk image and drag **NH Reader** into the **Applications** folder.
 3. Launch from Launchpad or `/Applications`. *(Note: For ad-hoc unsigned builds on macOS, control-click the app and choose "Open" on first launch to approve Gatekeeper).*
 
 ### 📦 Linux
 
-1. Download `nh-reader_<version>_amd64.deb` or `nh-reader_<version>_amd64.AppImage`.
+1. Build with `npm run build:app`, then sign the generated package using `npm run sign:linux -- path/to/package`.
 2. For Debian/Ubuntu:
    ```bash
    sudo dpkg -i nh-reader_<version>_amd64.deb
@@ -75,10 +77,10 @@ If you prefer building your own desktop packages from source:
 ## 📱 Mobile Platforms — Android & iOS (Manual Build Mandatory)
 
 > [!NOTE]
-> Automated CI releases exclusively package desktop targets (Windows, macOS, Linux). **Mobile packages (Android & iOS) are not built by CI workflows and must be built manually from source.**
+> There is no automated packaging workflow. **All platform packages must be built and signed manually from source.**
 
 > [!IMPORTANT]
-> **Hardware Testing Notice**: The maintainer does not possess physical Android or macOS/iOS test hardware. Mobile toolchains are fully supported through Tauri 2, but builds are community-supported and untested by the maintainer.
+> **Hardware Testing Notice**: Android, macOS, and iOS builds are community-supported and untested by the maintainer. iOS builds require macOS, Xcode, and valid Apple signing credentials.
 
 ### 🤖 Android (APK Manual Build & Sideloading)
 
@@ -114,9 +116,9 @@ To compile and install your own Android APK:
 
 ---
 
-### 🍎 iOS & Apple Silicon macOS (Manual Build & Sideloading)
+### 🍎 iOS (Manual Build & Signing)
 
-To compile for iOS or Apple Silicon macOS:
+To compile and sign for iOS:
 
 1. **Prerequisites**:
    - macOS computer with Xcode 15+ installed.
@@ -138,17 +140,11 @@ To compile for iOS or Apple Silicon macOS:
      ```bash
      open src-tauri/gen/ios/nh-reader.xcodeproj
      ```
-4. **Configure Personal Signing (Free)**:
+4. **Configure Signing**:
    - In Xcode, go to **Signing & Capabilities**.
-   - Under **Team**, select your free Personal Apple ID (no paid developer subscription required).
+   - Select your Apple Developer team, signing identity, and a provisioning profile for the app's bundle identifier.
 5. **Deploy & Run**:
-   - **Apple Silicon Mac**: Run directly as a native desktop application without needing jailbreaks or developer certificates.
-   - **Physical iPhone / iPad**: Select your connected iOS device in Xcode and click **Run**, or export the unsigned archive and sideload via AltStore, SideStore, Sideloadly, or TrollStore.
-
-> [!CAUTION]
-> **Mandatory Jailbreak Disclaimer**
-> 
-> NH Reader provides native iOS packaging capabilities for Apple Silicon macOS usage and personal ad-hoc sideloading. **No technical support, customer assistance, or warranty is provided for users who brick, damage, crash, or compromise their devices by attempting to jailbreak their phones.** Sideloading or jailbreaking is undertaken entirely at your own risk.
+   - Select a connected iPhone or iPad in Xcode and click **Run**, or export the signed archive for distribution.
 
 ---
 
@@ -178,9 +174,12 @@ User data (favorites, blacklist, and settings stored in `database.sqlite`) is pr
 ### Free Code Signing (Zero Budget / No API Keys)
 
 - **Windows**: Uses a self-signed code signing certificate generated locally with PowerShell (`New-SelfSignedCertificate`) stored in `certificates/` as `.pfx`. This signs the binaries for integrity without requiring a paid Commercial CA certificate.
-- **macOS**: Uses ad-hoc code signing (`codesign -s -`) built into the macOS command line. Apple Developer ID notarization requires a paid $99/year subscription and is not required for local use or sideloading.
-- **Linux**: GPG signatures can be generated freely using `gpg --detach-sign`.
-- **Android**: Can be built and signed completely free using Android SDK `keytool` to generate a release keystore (`keytool -genkey -v -keystore release.keystore`). Sideloading `.apk` is natively supported on all Android devices.
+- **macOS**: Sign the generated app bundle with your Developer ID Application identity using `npm run sign:macos -- "<identity>" "src-tauri/target/release/bundle/macos/NH Reader.app"`. Notarization is a separate Apple distribution step.
+- **Linux**: Create an armored detached signature with `npm run sign:linux -- path/to/package`; verify it with `gpg --verify path/to/package.asc path/to/package`.
+- **Android**: Generate your own protected keystore with `keytool -genkeypair -keystore src-tauri/gen/android/release.keystore -alias nh-reader -keyalg RSA -keysize 2048 -validity 10000`, then sign with `npm run sign:android -- src-tauri/gen/android/release.keystore --ks-key-alias nh-reader path/to/app.apk`. `apksigner` prompts for the keystore password.
+- **iOS**: Use `npm run sign:ios -- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<team-id> CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER=<profile-name>` on macOS with Xcode, an Apple signing identity, and a valid provisioning profile.
+
+The Windows helper can generate a self-signed certificate if no PFX is present. That signature does not establish a trusted publisher identity. The project does not provide a trusted signing certificate for release binaries.
 
 ---
 

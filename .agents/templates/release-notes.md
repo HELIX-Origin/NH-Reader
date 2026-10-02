@@ -31,20 +31,17 @@ Written for users and release publishing. See `.agents/skills/cut-release.md`.
 
 - **<Bug summary>** — <What was broken and how it behaves now>.
 
-## 📦 Install & Upgrading
+## 🛠️ Manual Build & Signing
 
-Download the installer or package for your platform from the Assets section below:
+There are no prebuilt release assets. Build on each target platform and sign locally with your own certificate or key before distributing:
 
-- Windows (NSIS Setup): `NH Reader_<version>_x64-setup.exe`
-- Windows (WiX MSI): `NH Reader_<version>_x64_en-US.msi`
-- Windows (Portable ZIP): `NHReaderPortable_<version>.zip`
-- macOS (DMG): `NH Reader_<version>_x64.dmg` (or `aarch64` for Apple Silicon)
-- Linux (Debian): `nh-reader_<version>_amd64.deb`
-- Linux (AppImage): `nh-reader_<version>_amd64.AppImage`
-- Android (APK): `nh-reader_<version>_universal.apk` *(community-supported / untested)*
-- iOS (IPA): `nh-reader_<version>.ipa` *(Apple Silicon macOS sideloading & iOS; community-supported / untested)*
+- Windows: `npm run build:app`, then `npm run sign:windows`. Place your PFX at `certificates/nh-reader-codesign.pfx`; the script can generate a local self-signed certificate if none exists, but self-signed certificates are not trusted publisher identities.
+- macOS: `npm run build:app`, then `npm run sign:macos -- "<Developer ID Application identity>" "src-tauri/target/release/bundle/macos/NH Reader.app"`.
+- Linux: `npm run build:app`, then `npm run sign:linux -- path/to/package`; verify with `gpg --verify path/to/package.asc path/to/package`.
+- Android: `npm run mobile:android:init`, `npm run mobile:android:build`, then `npm run sign:android -- path/to/release.keystore --ks-key-alias <alias> path/to/app.apk`.
+- iOS: From macOS with Xcode and a valid Apple signing identity/provisioning profile, run `npm run mobile:ios:init`, then `npm run sign:ios -- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<team-id> CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER=<profile-name>`.
 
-Upgrade in place: run the new installer over your existing installation. Your SQLite database (`database.sqlite`), favorites, reading history, downloaded archives, and settings carry over automatically.
+Signing credentials and provisioning profiles are user-managed and must not be committed. The project does not publish release assets.
 
 ## Verification
 
@@ -65,7 +62,8 @@ Full commit history: `git log --oneline v<previous-version>..v<version>`
 
 - Always follow this exact structure and section headings.
 - Lead with what a user would notice.
-- List all platforms and installers clearly under Install & Upgrading.
+- Include the local build and signing command for every supported platform.
+- Never claim that prebuilt release assets are available.
 - Include verification test results and git commit references for transparency.
 - "Your data carries over" is a claim — only write it if it is true for this release.
 - No secrets, tokens, or personal local paths.

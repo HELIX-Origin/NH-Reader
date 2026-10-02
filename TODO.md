@@ -7,7 +7,19 @@
 > When a task changes behavior or scope, update this file **in the same change**.
 > When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
 
-## 🎯 Active Milestone: v0.7.2 — Code Signing & Release Pipeline Enhancement
+## 🎯 Active Milestone: v0.7.3 — Manual Signed Distribution
+
+> Removes automated packaging because the project cannot reliably sign release artifacts, documents local platform signing, and restores accurate iOS support documentation.
+
+- ✅ Removed the automated packaging and release workflow; do not publish unsigned assets.
+- ✅ Added local signing commands for Windows, macOS, Linux, Android, and iOS in `package.json`.
+- ✅ Updated release note and announcement templates with manual build/signing instructions.
+- ✅ Corrected iOS support statements across project and user documentation.
+- ✅ Bumped package, Tauri, and Rust crate versions to `0.7.3`.
+- ✅ Prepared v0.7.3 source-only release notes and announcement; build/test checks intentionally skipped at the maintainer's request because no application logic changed.
+- ⬜ Commit, tag, push, and publish source-only v0.7.3 release.
+
+## 📦 Previous Milestone: v0.7.2 — Code Signing & Release Pipeline Enhancement
 
 > Patch release adding repository-backed code signing secrets, fixing installer release asset uploads,
 > and aligning GitHub Pages documentation palette with the HELIX Origin design language.

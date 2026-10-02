@@ -1,6 +1,6 @@
 {
   "name": "nh-reader",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "A fast, privacy-focused cross-platform client for nhentai.net",
   "type": "module",
   "scripts": {
@@ -15,6 +15,10 @@
     "build:app": "tauri build",
     "build:app:debug": "tauri build --debug",
     "sign:windows": "powershell -ExecutionPolicy Bypass -File scripts/sign.ps1",
+    "sign:macos": "codesign --force --deep --options runtime --timestamp --sign",
+    "sign:linux": "gpg --armor --detach-sign",
+    "sign:android": "apksigner sign --ks",
+    "sign:ios": "xcodebuild -project src-tauri/gen/ios/nh-reader.xcodeproj -scheme nh-reader -configuration Release -destination generic/platform=iOS -archivePath src-tauri/target/ios/NHReader.xcarchive archive",
     "mobile:android:init": "tauri android init",
     "mobile:android:build": "tauri android build --apk",
     "mobile:ios:init": "tauri ios init",

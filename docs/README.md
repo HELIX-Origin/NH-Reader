@@ -12,7 +12,7 @@ title: Documentation Home
 - 🔍 **Search that actually works** — a filter drawer (text, language, category, per-type tag include/exclude, page ranges, six sorts) compiled into native nhentai query syntax, so you can cut a giant haystack down to exactly what you want.
 - 🛡️ **A blacklist you can trust** — global, persistent, applied server-side (`-tag:` excludes) *and* client-side (hide/blur), with a master toggle. It never silently breaks the grid.
 - 🔒 **Private by default & versatile account sync** — no accounts required, no servers, no telemetry. Favorites, history, blacklist, and settings are stored locally in an ambiguous `database.sqlite` database. An optional account sign-in modal supports both official API Keys (bypasses Cloudflare CAPTCHAs) and direct credentials for live profile rendering and server-synced blacklists.
-- 📦 **Native packaging** — platform-native NSIS and WiX MSI installers on Windows (supporting both per-user and per-machine scopes), DMG on macOS, deb/AppImage on Linux, APK on Android.
+- 📦 **Native packaging** — platform-native NSIS and WiX MSI installers on Windows (supporting both per-user and per-machine scopes), DMG on macOS, deb/AppImage on Linux, APK on Android, and iOS archives/IPAs.
 - 🌐 **Speaks your language** — the interface defaults to your system language and can be changed in Settings. Complete 100% UI localization with automatic fallback to your system locale and drop-in language packs for community contributions. See **[Localization](Localization.md)**.
 - ⚡ **Official archive downloads & background services** — official pre-built gallery archives via `POST /api/v2/galleries/{id}/download` (ZIP/CBZ with streaming progress), background image prefetch, LRU cache eviction down to 85% of storage budget, SQLite `VACUUM` compaction, account sync, and periodic Popular refreshes.
 
@@ -27,9 +27,10 @@ title: Documentation Home
 | macOS 10.13+ | ⚠️ Toolchain supported | DMG image (`.dmg`), App bundle (`.app`) *(untested)* |
 | Linux (x86_64) | ✅ Supported | Debian package (`.deb`), AppImage (`.AppImage`) |
 | Android | ⚠️ Toolchain supported | Sideloadable Android package (`.apk`) *(untested)* |
+| iOS | ⚠️ Toolchain supported | Xcode archive / IPA *(requires macOS, Xcode, and Apple signing; untested)* |
 
 > [!WARNING]
-> **Platform Testing Notice (Android & macOS):** The maintainer does not possess physical macOS or Android test hardware. While Tauri 2 build toolchains are configured and output valid binaries, **Android and macOS builds are currently untested**. Feedback and testing reports from community members are welcome!
+> **Platform Testing Notice (Android, macOS & iOS):** The maintainer does not possess physical macOS or Android test hardware. While Tauri 2 build toolchains are configured, these builds are community-supported and untested. iOS builds require macOS, Xcode, and valid Apple signing credentials.
 
 ## 🧭 Getting around
 

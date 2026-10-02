@@ -3,6 +3,17 @@
 Historical record of every change to the NH Reader client. Newer releases are added at the
 top; the current development state lives under `Unreleased`.
 
+## [v0.7.3](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.3)
+
+**Release date:** 2026-10-01
+
+### Distribution
+* **Manual signed distribution:** Removed the automated packaging workflow. NH Reader will not publish unsigned release assets; build and sign packages locally with the platform commands in `package.json`.
+* **Platform signing commands:** Added package scripts for macOS, Linux, Android, and iOS while retaining Windows signing.
+* **iOS support documentation:** Corrected outdated references that said iOS was unsupported and documented the existing Tauri iOS build/signing support.
+
+## Unreleased
+
 ## [v0.7.2](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.2)
 
 **Release date:** 2026-10-01
@@ -135,7 +146,7 @@ top; the current development state lives under `Unreleased`.
 * **Real-time storage telemetry**: Settings UI displays live disk consumption for image cache (bytes + file count), response cache entries, and total SQLite database footprint.
 
 ### 📱 Mobile Support — Android (Track 5 Complete)
-* **Android mobile toolchain**: Configured Tauri 2 Android project capabilities (`minSdkVersion: 24`, APK packaging) via `npm run mobile:android:init` / `npm run mobile:android:build`. iOS is not supported.
+* **Mobile toolchains**: Configured Tauri 2 Android APK and iOS archive builds via `npm run mobile:android:*` and `npm run mobile:ios:*`.
 * **Platform boundary isolation**: Guarded desktop-specific single-instance plugins, system tray menus, and window close-to-tray listeners behind `#[cfg(desktop)]` in `src-tauri/src/lib.rs` for pristine compilation on mobile targets.
 * **Untested mobile hardware status**: Documented that because the maintainer lacks a physical Android device, Android builds are currently community-supported and untested.
 
