@@ -257,6 +257,7 @@ Always run the relevant checks before declaring a task done:
 AGENTS.md                    # Agent entry point and project overview
 README.md                    # Human-facing quick start and overview
 ROADMAP.md                   # Product direction and milestones
+PLAN.md                      # Active sprint plan for the current release cycle
 TODO.md                      # Actionable task ledger
 BUGS.md                      # Known issues and quirks
 CHANGELOG.md                 # Release changelog
@@ -421,7 +422,7 @@ Releases follow `.agents/rules/release.md` and `.agents/skills/cut-release.md`:
 1. Sync version strings in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json`.
 2. Run the verification gate: `cargo check`, `cargo test`, `npm run check`, `npm run i18n:check`, `npm run check:agents`, `npm run build`, installer smoke test.
 3. Update `CHANGELOG.md`.
-4. Rewrite `release-notes.md` for human readability.
+4. Rewrite `scratch/release-notes.md` for human readability.
 5. Seed release discussion in `.github/discussions/announcements/v<version>.md` and `.github/discussions/announcements.md`.
 6. Create an annotated tag: `git tag -a vX.Y.Z -m "vX.Y.Z — summary"`.
 7. Push tags: `git push origin main --tags`.

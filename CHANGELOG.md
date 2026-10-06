@@ -3,6 +3,22 @@
 Historical record of every change to the NH Reader client. Newer releases are added at the
 top; the current development state lives under `Unreleased`.
 
+## Unreleased
+
+## [v0.7.4](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.4)
+
+**Release date:** 2026-10-06
+
+### 🐛 Fixes
+* **Blacklist grids stay full in Hide mode:** Added client-side stream backfilling (`streamBackfilledList` in `src/lib/api.ts`) that keeps pulling upstream pages until every server page delivers its full 28 non-blacklisted galleries, with surplus buffered for seamless forward/backward navigation. Blacklist edits re-trigger streaming via a reactive `blacklistVersion`, so the grid never renders partially empty slots.
+* **NSIS finish page text legibility:** Added `SetFinishPageColors` hooked to `MUI_FINISHPAGE_CUSTOMFUNCTION_SHOW` / `MUI_WELCOMEPAGE_CUSTOMFUNCTION_SHOW` in `src-tauri/windows/hooks.nsh` so finish/welcome page titles, body text, and checkboxes render light on the dark background instead of Windows default black.
+* **Previous version fully uninstalled before upgrade:** Added `NSIS_HOOK_PREINSTALL` to terminate lingering processes and run the previous uninstaller synchronously (`"$INSTDIR\uninstall.exe" /S _?=$INSTDIR` via `ExecWait`), preventing the new install from racing a still-running uninstall.
+* **Korean installer strings:** Added `MULTIUSER_INSTALLMODEPAGE` Korean translations, eliminating `MULTIUSER_TEXT_INSTALLMODE_TITLE` NSIS build warnings.
+
+### 🔧 CI & Tooling
+* **GitHub Pages deployment authentication:** Configured `.github/workflows/pages.yml` to authenticate with `secrets.PAT_TOKEN` alongside `actions/configure-pages@v5`, `actions/upload-pages-artifact@v3` (`path: docs`), and `actions/deploy-pages@v4`.
+* **Tracking ledgers realigned:** Realigned `ROADMAP.md`, `TODO.md`, and `BUGS.md` to their root file templates, created `PLAN.md` for sprint planning and full repo planned-item history, and registered all four root templates in the `check:agents` gate.
+
 ## [v0.7.3](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.3)
 
 **Release date:** 2026-10-01
@@ -12,8 +28,6 @@ top; the current development state lives under `Unreleased`.
 * **Platform signing commands:** Added package scripts for macOS, Linux, Android, and iOS while retaining Windows signing.
 * **WinGet:** Removed the WinGet manifests; NH Reader is no longer offered through WinGet.
 * **iOS support documentation:** Corrected outdated references that said iOS was unsupported and documented the existing Tauri iOS build/signing support.
-
-## Unreleased
 
 ## [v0.7.2](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.2)
 

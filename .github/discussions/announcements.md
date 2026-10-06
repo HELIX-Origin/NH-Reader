@@ -6,6 +6,7 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 
 ## 📑 Release Index
 
+- **[v0.7.4 — Full Blacklist Grids & Polished Windows Installer](#v074--2026-10-06)** *(2026-10-06)*
 - **[v0.7.3 — Manual Signed Builds & Restored iOS Support](#v073--2026-10-01)** *(2026-10-01)*
 - **[v0.7.2 — Official Code Signing, Full Desktop Installers & Pages Alignment](#v072--2026-10-01)** *(2026-10-01)*
 - **[v0.7.1 — Android CI Packaging Patch & Verification Hardening](#v071--2026-10-01)** *(2026-10-01)*
@@ -17,6 +18,15 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 - **[v0.2.1 — Storage Architecture Hardening & Docs Synchronization](#v021--2026-09-22)** *(2026-09-22)*
 - **[v0.2.0 — Custom UI Shell, Background Service Queue & Disk Image Cache](#v020--2026-09-20)** *(2026-09-20)*
 - **[v0.1.0 — Initial Foundation Release](#v010--2026-09-15)** *(2026-09-15)*
+
+---
+
+## [v0.7.4] — 2026-10-06
+### 🔍 Full Blacklist Grids & Polished Windows Installer
+
+**Release Announcement Discussion:** [announcements/v0.7.4.md](announcements/v0.7.4.md)
+
+NH Reader v0.7.4 is a stability and installer-polish release. Browsing with the blacklist set to "Hide" now always produces full grids: unblocked galleries are backfilled from upstream pages so filtered pages never render empty slots, and blacklist edits re-stream the view instantly. Windows installers gain a readable dark finish page, fully synchronous removal of the previous version before upgrades, and a warning-free Korean language build. The Pages deployment workflow is authenticated with a repository PAT, and the root tracking ledgers (`ROADMAP.md`, `TODO.md`, `BUGS.md`, new `PLAN.md`) were realigned to their canonical templates with full repo history.
 
 ---
 

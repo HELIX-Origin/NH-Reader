@@ -2,7 +2,7 @@
 
 **Status:** MANDATORY
 **Triggers:** editing `TODO.md`, `BUGS.md`, `CHANGELOG.md`, `README.md`, `docs/**`,
-`ROADMAP.md`, or changing behaviour
+`ROADMAP.md`, `PLAN.md`, or changing behaviour
 **Enforced by:** review
 
 A stale ledger is a bug, not a cosmetic issue. These files are how the next agent decides
@@ -34,7 +34,7 @@ what to do.
 
 ## Docs vs Tracking
 
-- Repo root holds **tracking ledgers** (`ROADMAP.md`, `TODO.md`, `BUGS.md`, `CHANGELOG.md`).
+- Repo root holds **tracking ledgers** (`ROADMAP.md`, `TODO.md`, `BUGS.md`, `CHANGELOG.md`, `PLAN.md`).
 - `docs/` holds **user & developer documentation** (how to use, architecture, troubleshooting).
   If behaviour changes, update the docs pages to explain the new behavior. Do not put tracking
   or roadmap ledgers in `docs/`.

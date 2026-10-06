@@ -1,89 +1,122 @@
-# TODO.md
+# NH Reader — Task Checklist & Workstream Tracking
 
-> Actionable task ledger. Statuses: ⬜ backlog · 🚧 in progress · ✅ done.
-> High-level direction lives in `ROADMAP.md`; role and workflow definitions live in
-> `.agents/` (see `.agents/ROLES.md`).
->
-> When a task changes behavior or scope, update this file **in the same change**.
-> When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
+> 📋 **Living Source of Truth**: Actionable task ledger for **NH Reader**. Statuses: ⬜ backlog · 🚧 in progress · ✅ done (tracked as checkboxes). High-level direction lives in `ROADMAP.md`, active sprints in `PLAN.md`; role and workflow definitions live in `.agents/` (see `.agents/ROLES.md`).
 
-## 🎯 Active Milestone: v0.7.3 — Manual Signed Distribution
+> [!IMPORTANT]
+> AI agents strictly required to update this page and all related pages **before** working on any new bug fixes or features and push it to the remote first, without exception. Failure to do so may result in working with outdated information and potentially introducing conflicts or redundant work.
+
+---
+
+## 📜 Tracking Rules
+
+- **No Typo Duplication**: When recording user reports, clean and fix all typos to preserve professional quality.
+- **Consistent Formatting**: Maintain consistent formatting and style throughout all documentation to ensure readability and professionalism.
+- **Clear Sectioning**: Use clear and descriptive headers for each section to improve navigation and readability.
+- **Active Items First**: The currently active milestone, sprint, task, or workstream must always be placed at the top of the content sections.
+- **Regular Updates**: Ensure that this file is regularly updated to reflect the latest developments and changes in the project.
+- **Improve User Directives**: Continuously refine and clarify user directives to ensure they are easily understood and actionable.
+- **Same-Change Updates**: When a task changes behavior or scope, update this file **in the same change**.
+- **Done Moves Down**: When a task is done, move it to the bottom under **Done** and link the PR/commit if any.
+- **Tracking Docs Stay True**: Update `ROADMAP.md`, `TODO.md`, `BUGS.md`, and `PLAN.md` first or in lockstep with code changes so a stale ledger counts as a bug.
+- **Always Track Everything**: Every new feature request, enhancement, or bug report must be logged in [`BUGS.md`](./BUGS.md), [`TODO.md`](./TODO.md), and [`ROADMAP.md`](./ROADMAP.md) before execution.
+
+---
+
+## 🔥 Active Workstream: v0.7.4 — Stability, Installer & Release Fixes
+
+> Patch release hardening merged in `171a480` (blacklist backfill, NSIS finish page & upgrade uninstall, Korean installer strings, Pages deployment auth), plus tracking-ledger realignment and release paperwork.
+
+**Implementation checklist:**
+
+- [x] Backfilled unblocked galleries via `streamBackfilledList` (`src/lib/api.ts`) with `blacklistVersion`-driven re-streaming on blacklist changes.
+- [x] Set NSIS finish/welcome page colors and added `NSIS_HOOK_PREINSTALL` to uninstall the previous version synchronously before installing.
+- [x] Added Korean `MULTIUSER_INSTALLMODEPAGE` NSIS strings; authenticated `pages.yml` with `secrets.PAT_TOKEN`.
+- [x] Bumped versions to `0.7.4` across `package.json`, `tauri.conf.json`, `Cargo.toml`, and `Cargo.lock`.
+- [x] Realigned `ROADMAP.md`, `TODO.md`, `BUGS.md` to the root file templates and created `PLAN.md`.
+- [x] Filled the `CHANGELOG.md` `Unreleased` section with the v0.7.4 fixes.
+- [x] Prepare the human-readable release notes for v0.7.4.
+- [x] Seed the `v0.7.4` release announcement in `.github/discussions/announcements/` and index it.
+- [ ] Commit the release, tag `v0.7.4`, push, and publish the GitHub release.
+
+---
+
+## 📦 Previous Milestone: v0.7.3 — Manual Signed Distribution
 
 > Removes automated packaging because the project cannot reliably sign release artifacts, documents local platform signing, and restores accurate iOS support documentation.
 
-- ✅ Removed the automated packaging and release workflow; do not publish unsigned assets.
-- ✅ Removed the WinGet manifests so the project is no longer listed in the WinGet package source.
-- ✅ Added local signing commands for Windows, macOS, Linux, Android, and iOS in `package.json`.
-- ✅ Updated release note and announcement templates with manual build/signing instructions.
-- ✅ Corrected iOS support statements across project and user documentation.
-- ✅ Bumped package, Tauri, and Rust crate versions to `0.7.3`.
-- ✅ Prepared v0.7.3 source-only release notes and announcement; build/test checks intentionally skipped at the maintainer's request because no application logic changed.
-- ✅ Committed `182ec73`, pushed the release branch and annotated `v0.7.3` tag, and published the source-only GitHub release without application assets. Build/test checks were intentionally skipped at the maintainer's request; no application logic changed.
+- [x] Removed the automated packaging and release workflow; do not publish unsigned assets.
+- [x] Removed the WinGet manifests so the project is no longer listed in the WinGet package source.
+- [x] Added local signing commands for Windows, macOS, Linux, Android, and iOS in `package.json`.
+- [x] Updated release note and announcement templates with manual build/signing instructions.
+- [x] Corrected iOS support statements across project and user documentation.
+- [x] Bumped package, Tauri, and Rust crate versions to `0.7.3`.
+- [x] Prepared v0.7.3 source-only release notes and announcement; build/test checks intentionally skipped at the maintainer's request because no application logic changed.
+- [x] Committed `182ec73`, pushed the release branch and annotated `v0.7.3` tag, and published the source-only GitHub release without application assets. Build/test checks were intentionally skipped at the maintainer's request; no application logic changed.
 
-## 📦 Previous Milestone: v0.7.2 — Code Signing & Release Pipeline Enhancement
+## 🗄️ Milestone Archive: v0.7.2 — Code Signing & Release Pipeline Enhancement
 
 > Patch release adding repository-backed code signing secrets, fixing installer release asset uploads,
 > and aligning GitHub Pages documentation palette with the HELIX Origin design language.
 
 ### 📌 Documentation site deployment
-- ⬜ **Retire or adapt the redundant `GitHub Pages` Actions workflow**: Pages was enabled manually from `docs/`; the workflow still expects an Actions deployment source and cannot switch it without admin permissions.
+- [ ] **Retire or adapt the redundant `GitHub Pages` Actions workflow**: Pages was enabled manually from `docs/`; the workflow still expects an Actions deployment source and cannot switch it without admin permissions.
 
 ### 📌 v0.7.2 Tasks:
 
-- ✅ **Step 1: Release Asset Directory Flattening**:
+- [x] **Step 1: Release Asset Directory Flattening**:
   - Resolved `action-gh-release@v2` missing bundle subdirectories by flattening artifacts in `package.yml` (`publish-release`, `publish-test-prerelease`, `dry-run-summary`), ensuring all desktop installers (`.exe`, `.msi`, `.deb`, `.AppImage`, `.dmg`) are uploaded alongside portable archives and split APKs.
-- ✅ **Step 2: Official Code Signing Integration**:
+- [x] **Step 2: Official Code Signing Integration**:
   - Configured repository secrets: `WINDOWS_CERTIFICATE_BASE64`, `WINDOWS_CERTIFICATE_PASSWORD`, `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, and `ANDROID_KEY_ALIAS`.
   - Restored persistent certificate and keystore provisioning in `package.yml` prior to `signtool.exe` and `apksigner` invocations.
-- ✅ **Step 3: GitHub Pages Palette Alignment**:
+- [x] **Step 3: GitHub Pages Palette Alignment**:
   - Aligned GitHub Pages palette with HELIX Origin main site (`helix-origin.github.io`) using navy blue, cyan, and teal styling in `docs/assets/site.css`.
-- ✅ **Step 4: Version Bump to v0.7.2 & Discussion Announcements**:
+- [x] **Step 4: Version Bump to v0.7.2 & Discussion Announcements**:
   - Bumped version to `0.7.2` across `package.json`, `Cargo.toml`, `tauri.conf.json`.
-  - Finalized `CHANGELOG.md` and prepared `scratch/release-notes.md`.
+  - Finalized `CHANGELOG.md` and prepared the human-readable release notes.
   - Seeded release announcement in `.github/discussions/announcements/v0.7.2.md` and indexed in `.github/discussions/announcements.md`.
-- ✅ **Step 5: Pre-Release Packaging Workflow Suppression for Non-App Updates**:
+- [x] **Step 5: Pre-Release Packaging Workflow Suppression for Non-App Updates**:
   - Configured `package.yml` `on.push.tags` to ignore pre-release tags (`!v*-*`), preventing heavy desktop and mobile packaging runs on documentation, tooling, or CI-only updates. Pre-releases now publish with dynamic `prerelease` metadata when manually dispatched.
   - Documented pre-release convention for non-app updates in `.agents/rules/release.md`, mandating that pre-releases target the next minor version (e.g. `v0.8.0-<target>.1`) so they sort ahead of the latest official release.
-- ✅ **Step 6: Comprehensive Binary Signing**:
+- [x] **Step 6: Comprehensive Binary Signing**:
   - Upgraded `scripts/sign.ps1` to sign `nh-reader.exe`, `portable/NH Reader.exe`, and bundle installers.
   - Reordered Windows packaging job in `package.yml` to sign all binaries before archiving the portable zip.
 
 ### ✅ Completed Milestone Tasks (v0.7.1):
 
-- ✅ **Step 1: Research Android build failure root cause**:
+- [x] **Step 1: Research Android build failure root cause**:
   - Read full `package-android` job logs: identified invalid `--target aarch64,armv7,x86_64` value which requires repeated `--target` arguments.
-- ✅ **Step 2: Migrate `actions/setup-java@v4` → `@v5`**:
+- [x] **Step 2: Migrate `actions/setup-java@v4` → `@v5`**:
   - Updated `package-android` job in `.github/workflows/package.yml`.
-- ✅ **Step 3: Fix Android build command & environment**:
+- [x] **Step 3: Fix Android build command & environment**:
   - Corrected `--target` flags to `--target aarch64 --target armv7 --target x86_64` and prefixed `_window`/`_event` in `on_window_event`.
-- ✅ **Step 4: Dry-run validation (`dry_run: true`) & recovery mode**:
+- [x] **Step 4: Dry-run validation (`dry_run: true`) & recovery mode**:
   - Added `release_tag` workflow input and verified workflow dry runs.
-- ✅ **Step 5: Release v0.7.1**:
+- [x] **Step 5: Release v0.7.1**:
   - Bumped version to `0.7.1` across `package.json`, `Cargo.toml`, `tauri.conf.json`.
-  - Finalized `CHANGELOG.md` and prepared `scratch/release-notes.md`.
+  - Finalized `CHANGELOG.md` and prepared the human-readable release notes.
   - Seeded all GitHub discussions (announcements v0.1.0-v0.7.1, General, Ideas, Q&A, Show & Tell).
-- ✅ **Step 6: Fix release workflow installer uploads & align Pages color palette**:
+- [x] **Step 6: Fix release workflow installer uploads & align Pages color palette**:
   - Added artifact directory flattening in `package.yml` (`publish-release`, `publish-test-prerelease`, `dry-run-summary`) so desktop installers (`.exe`, `.msi`, `.deb`, `.AppImage`, `.dmg`) are uploaded to releases alongside portable archives and APKs.
   - Aligned GitHub Pages palette with HELIX Origin main site (`helix-origin.github.io`) using navy blue, cyan, and teal styling in `docs/assets/site.css`.
 
 
 
 ### ✅ Completed Milestone Tasks (v0.7.0):
-- ✅ **Step 1: Multi-Platform Portable Packages (Windows, macOS, Linux)**:
+- [x] **Step 1: Multi-Platform Portable Packages (Windows, macOS, Linux)**:
   - Added standalone platform-native portable archives (`NHReaderPortable_Windows_x64.zip`, `nh-reader_portable_linux_x86_64.tar.gz`, `NHReaderPortable_macOS.zip`) sharing root `.portable` marker and isolated `./data/` folder.
   - Added ancestor traversal in `src-tauri/src/lib.rs` (`detect_portable_dir`) so `.portable` and `./data/` are resolved inside or outside `.app` bundles and desktop folders.
-- ✅ **Step 2: Universal Portable Launcher Scripts**:
+- [x] **Step 2: Universal Portable Launcher Scripts**:
   - Added standalone launcher scripts `scripts/launch-linux.sh`, `scripts/launch-macos.command`, and `scripts/launch-windows.bat`.
-- ✅ **Step 3: NSIS Coordinated Contrast & Dark Theme Alignment**:
+- [x] **Step 3: NSIS Coordinated Contrast & Dark Theme Alignment**:
   - Configured `MUI_BGCOLOR "18181B"`, `MUI_TEXTCOLOR "F4F4F5"`, `MUI_HEADER_BGCOLOR "0D0D0D"`, `MUI_HEADER_TEXTCOLOR "FFFFFF"`, `MUI_HEADER_TRANSPARENT_TEXT`, and `MUI_INSTFILESPAGE_COLORS "F4F4F5 18181B"` in `src-tauri/windows/hooks.nsh` to eliminate black-on-dark unreadable text while aligning text contrast cleanly for both light and dark page sections.
-- ✅ **Step 4: Installer Bitmaps Generation from Official App Icon**:
+- [x] **Step 4: Installer Bitmaps Generation from Official App Icon**:
   - Generated crisp assets directly from `src-tauri/icons/icon.png` with exact `#0d0d0d` background (`header.bmp` [150×57] and `sidebar.bmp` [164×314]) via `scripts/generate-installer-bitmaps.ps1`.
-- ✅ **Step 5: Restore Full Mobile Toolchain (Android & iOS — Excluded from CI Workflow)**:
+- [x] **Step 5: Restore Full Mobile Toolchain (Android & iOS — Excluded from CI Workflow)**:
   - Restored iOS scripts (`mobile:ios:init`, `mobile:ios:build`) in `package.json` alongside Android tooling (`mobile:android:*`) to support building mobile packages locally via Tauri CLI.
   - Restored mobile settings section and jailbreak disclaimer in `SettingsView.svelte` and `en.json`.
   - Added step-by-step manual build instructions for Android (APK) and iOS (Xcode/sideloading) in documentation.
   - Excluded mobile targets from the automated GitHub Actions release workflow (`package.yml`), keeping CI strictly dedicated to desktop targets (Windows, Linux, macOS).
-- ✅ **Step 6: CI & Packaging Workflow Stabilization, Android Split ABIs & True Dry Run Mode**:
+- [x] **Step 6: CI & Packaging Workflow Stabilization, Android Split ABIs & True Dry Run Mode**:
   - Rebuilt `.github/workflows/package.yml` matrix so each runner strictly builds and searches for its own platform artifacts, preventing false-positive uploads and runner crosstalk.
   - Decoupled release publishing from build runners into a dedicated downstream `publish-release` job, eliminating race conditions on release creation and ensuring that failed builds never produce partial releases.
   - Added dedicated `package-android` job to `.github/workflows/package.yml` building separate APK files for each supported Android architecture (`aarch64` / arm64-v8a, `armv7` / armeabi-v7a, `x86_64`) via `--apk --split-per-abi`, excluding universal APKs to minimize file size.
@@ -91,147 +124,147 @@
   - Added true dry-run mode via `workflow_dispatch` input (`dry_run: true`): builds and validates all desktop and Android packages, generates workflow run artifacts, and runs a dedicated verification job without publishing release assets to non-existent releases.
   - Added optional draft pre-release support (`create_test_release: true`) during dry runs to safely test the complete release asset publication pipeline without public visibility.
   - Upgraded packaging workflow to Node.js 26 (`actions/setup-node@v4`), matching local development runtime (`v26.8.1`).
-- ✅ **Step 7: Per-Platform Tauri Configuration Files (`tauri.<platform>.conf.json`)**:
+- [x] **Step 7: Per-Platform Tauri Configuration Files (`tauri.<platform>.conf.json`)**:
   - Created `src-tauri/tauri.windows.conf.json` with dedicated Windows icon manifest (`icon.ico`, `32x32.png`, `128x128.png`, and `Square*Logo.png` / `StoreLogo.png`).
   - Created `src-tauri/tauri.linux.conf.json` with Linux icon sizes (`32x32.png`, `64x64.png`, `128x128.png`, `128x128@2x.png`, `icon.png`).
   - Created `src-tauri/tauri.macos.conf.json` with macOS icon formats (`icon.icns`, `128x128.png`, `128x128@2x.png`).
   - Created `src-tauri/tauri.android.conf.json` and `src-tauri/tauri.ios.conf.json` for mobile platform parameters.
   - Updated base `src-tauri/tauri.conf.json` icon list with `64x64.png` and `icon.png`.
-- ✅ **Step 8: NSIS Multi-Language Configuration & Selector**:
+- [x] **Step 8: NSIS Multi-Language Configuration & Selector**:
   - In `src-tauri/tauri.conf.json`, enabled `"displayLanguageSelector": true` under `windows.nsis` and registered core installer languages (`English`, `Japanese`, `SimpChinese`, `TradChinese`, `Korean`, `Spanish`, `French`, `German`, `Russian`, `Portuguese`).
-- ✅ **Step 9: Complete All 17 Language Packs (100% Key Parity Across All 276 Keys)**:
+- [x] **Step 9: Complete All 17 Language Packs (100% Key Parity Across All 276 Keys)**:
   - Authored full hand-rolled drop-in translations for all languages: `ar`, `de`, `es`, `fr`, `id`, `it`, `ja`, `ko`, `nl`, `pl`, `pt`, `ru`, `th`, `tr`, `vi`, `zh-CN`, and `zh-TW`.
   - Every single pack provides 276/276 keys, fully validated with `npm run i18n:check` (0 missing, 0 untranslated, 0 extra).
-- ✅ **Step 10: Per-Locale Date and Number Formatting**:
+- [x] **Step 10: Per-Locale Date and Number Formatting**:
   - Enhanced `src/lib/format.ts` (`formatCount`, `formatDate`, `relativeDate`, `formatBytes`) to use standard browser `Intl.NumberFormat`, `Intl.DateTimeFormat`, and `Intl.RelativeTimeFormat`, reactively linked to `locale.value`.
-- ✅ **Step 11: Migration from GitHub Wiki to In-Repo `docs/` with Live Translation**:
+- [x] **Step 11: Migration from GitHub Wiki to In-Repo `docs/` with Live Translation**:
   - Moved all documentation from `wiki/` into repository `docs/` folder, converting `Home.md` into `docs/README.md`.
   - Added interactive Google Translate support to the documentation site (`docs/translate.js`); translation widgets in GitHub-rendered Markdown were later removed.
   - Replaced `_Sidebar.md` and `_Footer.md` with responsive in-page navigation breadcrumbs, documentation index, and footer.
   - Updated all internal and cross-document links to use concrete relative paths and explicit `.md` file extensions.
   - Removed obsolete `.github/workflows/wiki.yml` sync workflow.
-- ✅ **Step 12: GitHub Discussions Release Announcements & Template**:
+- [x] **Step 12: GitHub Discussions Release Announcements & Template**:
   - Seeded detailed release announcements for all historical versions (`v0.1.0` through `v0.6.0`) in `.github/discussions/announcements/` and indexed in `.github/discussions/announcements.md`.
   - Standardized the release announcement structure using `.agents/templates/release-announcement.md` based on the v0.6.0 announcement format.
   - Updated release standards across `.agents/rules/release.md`, `.agents/skills/cut-release.md`, and agent role contracts.
-- ✅ **Step 13: Reader Preload Distance & Image Quality Selector**:
+- [x] **Step 13: Reader Preload Distance & Image Quality Selector**:
   - Implemented configurable reader preload buffer (`1`, `2`, `3`, `5` pages) dynamically sizing reader slice buffering.
   - Implemented image quality selector (`high` / Original vs `low` / Data Saver preview thumbnails from `THUMB_HOST`).
   - Added quick quality cycle button (`Q` hotkey) to the reader toolbar and full controls in Settings.
   - Added localized strings across all 18 supported languages with 100% key parity (276/276 keys).
-- ✅ **Step 14: Custom Framed Title Bar, Per-OS Window Controls & System Tray Restore**:
+- [x] **Step 14: Custom Framed Title Bar, Per-OS Window Controls & System Tray Restore**:
   - Disabled OS window decorations in `src-tauri/tauri.conf.json` (`"decorations": false`) for an integrated custom title bar.
   - Built dedicated `WindowControls.svelte` supporting per-OS glyphs: native macOS traffic lights on the left revealing inner glyphs on hover, and Windows/Linux shrunken squircle-framed controls (24×22px, 5px squircle radius) with line, square/stacked, and X glyphs. Highlight effects respect custom Linux desktop themes.
   - Added configurable `windowControlsPosition` setting (`Auto`, `Left`, `Right`) under Appearance settings in `SettingsView.svelte` for Linux and custom desktop environments.
   - Added window drag regions, title bar double-click maximize/restore toggle, and reactive window state synchronization.
   - Added `core:window:allow-is-maximized` permission to `src-tauri/capabilities/default.json`.
-- ✅ **Step 15: Arabic RTL Layout Polish (M9.2 RTL Phase)**:
+- [x] **Step 15: Arabic RTL Layout Polish (M9.2 RTL Phase)**:
   - Added `isRTL` and `dir` getters to `locale.svelte.ts` reactively bound to `document.documentElement.dir`, `document.documentElement.lang`, and `<div class="app" dir={locale.dir}>`.
   - Added Arabic typography font fallbacks (`'Segoe UI Arabic'`, `'Noto Sans Arabic'`, `'Tahoma'`) in `tokens.css` and 1.6 line height for Arabic text rendering.
   - Implemented RTL-aware layout polish in `app.css`: right-aligned search inputs, mirrored drawer panel sliding from the left (`nh-drawer-slide-rtl`), mirrored toggle switch knobs, flipped back navigation icons, and corrected badge margins.
-- ✅ **Step 16: CBZ Direct Export from Reader Toolbar**:
+- [x] **Step 16: CBZ Direct Export from Reader Toolbar**:
   - Implemented direct CBZ export button in reader toolbar (`src/routes/gallery/[id]/reader/+page.svelte`) triggering background download worker via `enqueueDownload(id, 'cbz')`.
   - Added live progress percentage, checkmark indicator when completed, and `E` keyboard shortcut.
   - Added localized strings across all 18 supported languages with 100% key parity (279/279 keys verified via `npm run i18n:check`).
 
 ## ✅ Done — Completed Milestones & Historical Releases
 
-- ✅ **Remove unpublished root translation pages and broken links**: Deleted generated root copies and their Markdown dropdowns; Pages documentation keeps the in-page Google Translate script without extra published root pages.
-- ✅ **Pages navigation polish**: Made the Pages navigation a full-width top bar with a language selector; GitHub-rendered Markdown no longer includes fallback translation menus.
-- ✅ **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/`, published from the `docs/` folder at `https://helix-origin.github.io/NH-Reader/`. The desktop application's SPA is not deployed as a website.
-- ✅ **Pages documentation navigation & translation**: Data-driven sidebar, previous/next links and project-page directory (`docs/_data/navigation.yml`); the Pages layout supplies an in-place Google Translate `<select>` (`docs/translate.js`) without per-page menus.
+- [x] **Remove unpublished root translation pages and broken links**: Deleted generated root copies and their Markdown dropdowns; Pages documentation keeps the in-page Google Translate script without extra published root pages.
+- [x] **Pages navigation polish**: Made the Pages navigation a full-width top bar with a language selector; GitHub-rendered Markdown no longer includes fallback translation menus.
+- [x] **NH Reader GitHub Pages project and documentation site**: Added a vCard-inspired landing page with a directory of the existing, interlinked multi-page documentation in `docs/`, published from the `docs/` folder at `https://helix-origin.github.io/NH-Reader/`. The desktop application's SPA is not deployed as a website.
+- [x] **Pages documentation navigation & translation**: Data-driven sidebar, previous/next links and project-page directory (`docs/_data/navigation.yml`); the Pages layout supplies an in-place Google Translate `<select>` (`docs/translate.js`) without per-page menus.
 
 ### [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) — Upstream Alignment, Dedicated Library Hub & Rebuilt Native Installer (2026-10-01)
-- ✅ **Rebuilt Native Packaging with Custom NSIS Hook Template**:
+- [x] **Rebuilt Native Packaging with Custom NSIS Hook Template**:
   - Migrated from custom webview installer to Tauri 2 native packaging augmented with `src-tauri/windows/hooks.nsh`.
   - Added dual installation scopes (per-user AppData and per-machine Program Files) with automatic uninstaller registration in Windows Installed Apps.
   - Built enterprise WiX `.msi` installers and added PowerShell code signing script (`scripts/sign.ps1`, `npm run sign:windows`).
-- ✅ **Primary Library Navigation Tab & Downloaded Doujins Shelf**:
+- [x] **Primary Library Navigation Tab & Downloaded Doujins Shelf**:
   - Added `/library` bottom navigation item with `book` icon serving as the central offline reading hub.
   - Implemented `get_downloaded_galleries`, `get_downloaded_gallery_page`, `get_downloaded_gallery_info`, `has_downloaded_gallery`, and `delete_downloaded_gallery` in `commands.rs`.
   - Direct reading from downloaded `.zip`/`.cbz` archives in `ReaderImage.svelte` without network requests.
-- ✅ **Library Downloaded Favorites Isolation (Track 9)**:
+- [x] **Library Downloaded Favorites Isolation (Track 9)**:
   - Scoped the Library's "Favorites" tab (`FavoritesView.svelte` with `downloadedOnly={true}`) to exclusively display downloaded favorites (`isDownloaded(id)`), decoupling it from the standalone `/favorites` tab.
-- ✅ **Official Archive Downloads via Upstream API**:
+- [x] **Official Archive Downloads via Upstream API**:
   - Adopted `POST /api/v2/galleries/{id}/download` endpoint, eliminating page-by-page CDN crawling when authenticated.
-- ✅ **Dedicated Account Login & Authentication Modal**:
+- [x] **Dedicated Account Login & Authentication Modal**:
   - Implemented `LoginModal.svelte` with dual tabs: API Key (recommended, bypasses Cloudflare CAPTCHAs) and direct credentials.
   - Wired reactive account state getters in `account.svelte.ts` for immediate avatar/username rendering.
-- ✅ **Mihon-Style Floating Bottom Navigation**:
+- [x] **Mihon-Style Floating Bottom Navigation**:
   - Floating pill navigation bar with squircle corners, backdrop blur, elevation shadow, and safe bottom content padding.
-- ✅ **Cache Management & Storage Optimization (Track 3)**:
+- [x] **Cache Management & Storage Optimization (Track 3)**:
   - Configurable storage budgets (500 MB to Unlimited) in settings.
   - Automatic background LRU image cache pruning in `image_cache.rs` and `service.rs`.
   - SQLite `VACUUM` compaction and isolated API response cache purging.
-- ✅ **Dynamic UI Scaling & Zero-Empty-Card Layout**:
+- [x] **Dynamic UI Scaling & Zero-Empty-Card Layout**:
   - Implemented dynamic column calculation based on container width and full-row fitting in `GalleryGrid.svelte`, eliminating empty card gaps.
-- ✅ **Closed Tracking Issues**:
+- [x] **Closed Tracking Issues**:
   - Closed Issue #4 (Resource Packaging), Issue #5 (Full UI Localization), Issue #6 (Downloads & Library Polish), Issue #7 (Cache Management & Storage), Issue #8 (UI Consistency Audit), and Issue #9 (Mobile Support).
 
 ### [v0.5.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.5.0) — Installation Destination Scopes & Portable Mode (2026-09-30)
-- ✅ **Installation Scopes & Folder Picker**:
+- [x] **Installation Scopes & Folder Picker**:
   - Support for per-user local AppData, all-users administrative Program Files, and custom target folders with native directory picker.
-- ✅ **Portable Mode Architecture**:
+- [x] **Portable Mode Architecture**:
   - Standalone portable mode with `.portable` runtime marker and isolated `./data/` database and cache directory.
-- ✅ **PortableApps.com PAF Packaging**:
+- [x] **PortableApps.com PAF Packaging**:
   - Added PAF packaging configuration and portable archive builds.
-- ✅ **Background Service Download Queue Persistence**:
+- [x] **Background Service Download Queue Persistence**:
   - SQLite-backed download queue persistence across app restarts in `database.sqlite` (`downloads:jobs`).
 
 ### [v0.4.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.4.0) — Dedicated Uninstaller & DB Recovery (2026-09-30)
-- ✅ **Dedicated Uninstaller Executable**:
+- [x] **Dedicated Uninstaller Executable**:
   - Emitted `uninstall.exe` cleanly registered in Windows system uninstallation facilities.
-- ✅ **HELIX Origin Attribution**:
+- [x] **HELIX Origin Attribution**:
   - Updated publisher identity to HELIX Origin across all bundle configurations.
-- ✅ **SQLite Mutex Poison Recovery**:
+- [x] **SQLite Mutex Poison Recovery**:
   - Added poison-recovered database locks across all DB commands in `db.rs`.
-- ✅ **Download Engine & Favorite Toggle Bug Fixes**:
+- [x] **Download Engine & Favorite Toggle Bug Fixes**:
   - Resolved file-lock collisions on Windows during download rename and fixed favorite button synchronization.
 
 ### [v0.3.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.3.0) — Localization Core (M9.1) & Titlebar Search (2026-09-25)
-- ✅ **Localization Core Infrastructure (M9.1)**:
+- [x] **Localization Core Infrastructure (M9.1)**:
   - Created `locale` runes store, `t()` translation helper, system-locale detection command (`get_system_locale`), and offline `npm run i18n:check` validator.
   - Hand-rolled default English pack (`en.json`).
-- ✅ **Context-Aware Titlebar Search**:
+- [x] **Context-Aware Titlebar Search**:
   - Integrated search query input in titlebar with keyboard shortcut (`Enter`).
-- ✅ **Installer Launch Optimization**:
+- [x] **Installer Launch Optimization**:
   - Deferred application launch until explicit finish button click.
 
 ### [v0.2.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.1) — Title Bar Simplification & Maintenance Isolation (2026-09-25)
-- ✅ **Title Bar Simplification**:
+- [x] **Title Bar Simplification**:
   - Refined title bar styling and controls.
-- ✅ **Process Isolation for Maintenance Installer**:
+- [x] **Process Isolation for Maintenance Installer**:
   - Spawned maintenance installer as an isolated process and ensured proper main window destruction.
-- ✅ **Console Window Suppression**:
+- [x] **Console Window Suppression**:
   - Suppressed flashing PowerShell console windows during background actions.
 
 ### [v0.2.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.2.0) — Search Filters & Multi-Platform Packaging (2026-09-24)
-- ✅ **Comprehensive Search Filter Drawer**:
+- [x] **Comprehensive Search Filter Drawer**:
   - Multi-criteria filtering by text query, language, category, per-type tag inclusions/exclusions, page ranges, and sorting.
-- ✅ **Platform-Tagged Installer Download Names**:
+- [x] **Platform-Tagged Installer Download Names**:
   - Standardized release asset naming across Windows, Linux, and macOS.
-- ✅ **Open Source Licensing & Citation**:
+- [x] **Open Source Licensing & Citation**:
   - Added BSD 3-Clause `LICENSE.md` and `CITATION.cff`.
 
 ### [v0.1.1](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.1.1) — Rebranding & Ecosystem Polish (2026-09-23)
-- ✅ **Identifier Rebranding**:
+- [x] **Identifier Rebranding**:
   - Rebranded product identifiers to `nh-desktop` / `nh-reader` (`net.nh-reader.client`).
-- ✅ **CI Packaging Matrix**:
+- [x] **CI Packaging Matrix**:
   - Configured multi-platform GitHub Actions workflow for Windows, Linux, and macOS.
-- ✅ **Agent Ecosystem Standards**:
+- [x] **Agent Ecosystem Standards**:
   - Initialized standing conventions, rule triggers, and verification gates.
 
 ### [v0.1.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.1.0) — Foundation (2026-09-22)
-- ✅ **Scaffold & Architecture (M1)**:
+- [x] **Scaffold & Architecture (M1)**:
   - Tauri 2 + SvelteKit static SPA template scaffold with Svelte 5 runes and TypeScript strict.
-- ✅ **Rust API Client (`nh_desktop.rs`)**:
+- [x] **Rust API Client (`nh_desktop.rs`)**:
   - Throttled `reqwest` client querying nhentai public API v2 endpoints with 26 Tauri commands.
-- ✅ **Design System & App Shell**:
+- [x] **Design System & App Shell**:
   - Plain CSS design tokens (`tokens.css`, `base.css`) with nhentai dark palette (`#141414` / `#1f1f1f` / `#ed2553`).
   - App shell with sidebar navigation, Home, Popular, Favorites, History, Blacklist, and Settings views.
-- ✅ **Security Hardening**:
+- [x] **Security Hardening**:
   - Hardened CSP allowlisting `*.nhentai.net` with IPC-only network traffic.
-- ✅ **Background Service Worker Queue**:
+- [x] **Background Service Worker Queue**:
   - Background worker queue (`service.rs`) and disk image cache (`image_cache.rs`).
 
 ### Milestone M9.2: Complete 17 Language Packs Ledger
@@ -266,5 +299,13 @@ All other items from previous milestones and backlogs have been resolved and con
 
 ## 🔁 Recurring
 
-- ⬜ Run `npm run check` + `cargo check` / `cargo test` before any task is marked done.
-- ⬜ Run `npm run check:agents` and `npm run i18n:check` before committing.
+- [ ] Run `npm run check` + `cargo check` / `cargo test` before any task is marked done.
+- [ ] Run `npm run check:agents` and `npm run i18n:check` before committing.
+
+---
+
+## 🔖 Metadata
+
+- **Project**: NH Reader · **version** 0.7.4
+- **Agent Ecosystem:** [`AGENTS`](./AGENTS.md) and [`.agents/`](.agents/) are tracked directly in repository git tracking.
+- **Last Updated:** Oct, 06 2026 - 02:38 PM

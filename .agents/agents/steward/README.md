@@ -1,6 +1,6 @@
 # steward
 
-**Owns:** the ledgers — `CHANGELOG.md`, `TODO.md`, `BUGS.md`, `release-notes.md` — and the
+**Owns:** the ledgers — `CHANGELOG.md`, `TODO.md`, `BUGS.md`, `PLAN.md`, `scratch/release-notes.md` — and the
 release procedure. Keeps the record true.
 **Reads:** `.agents/rules/doc-truthfulness.md`, `.agents/rules/release.md`.
 **Hands off to:** the user with an accurate picture, or to `engineer` for a real fix.

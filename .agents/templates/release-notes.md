@@ -5,7 +5,7 @@ Written for users and release publishing. See `.agents/skills/cut-release.md`.
 
 > [!IMPORTANT]
 > **Do not confuse with Release Announcements.** Release Notes are concise, technical summaries
-> attached to GitHub Releases and `release-notes.md`. Discussion announcements for GitHub Discussions
+> attached to GitHub Releases and `scratch/release-notes.md` (gitignored — never pushed to remote). Discussion announcements for GitHub Discussions
 > use a distinct, long-form editorial format defined in `.agents/templates/release-announcement.md`.
 
 ```markdown

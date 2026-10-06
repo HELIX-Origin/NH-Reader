@@ -16,7 +16,7 @@ Preparing files is fine; tagging, pushing, and publishing are not.
    A bump that touches one and not the others is incomplete.
 4. **Write the changelog** for the version using `.agents/templates/changelog.md` — what
    changed, and what it means for the user.
-5. **Rewrite `release-notes.md`** from `.agents/templates/release-notes.md` — the concise
+5. **Rewrite `scratch/release-notes.md`** from `.agents/templates/release-notes.md` — the concise
    technical release notes attached to the GitHub release tag and repo root. (Do not confuse
    with discussion announcements).
 6. **Seed the release announcement discussion:**

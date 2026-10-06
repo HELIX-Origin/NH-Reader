@@ -73,6 +73,10 @@ const TEMPLATES = [
 	'release-notes.md',
 	'release-announcement.md',
 	'agent.md',
+	'root-plan-file-template.md',
+	'root-todo-file-template.md',
+	'root-roadmap-file-template.md',
+	'root-bugs-file-template.md',
 ];
 
 const ROLES = {

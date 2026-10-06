@@ -15,6 +15,7 @@ How to build, test, and contribute to NH Reader.
 ```
 AGENTS.md        agent/setup entry point + locked-in decisions
 ROADMAP.md       product direction & milestones
+PLAN.md          active sprint plan
 TODO.md          actionable task ledger
 BUGS.md          known issues
 wiki/            GitHub wiki source (copy to .wiki.git to publish)
@@ -62,7 +63,7 @@ relevant) for Rust changes before calling a task done. For translation contribut
   name; see `.agents/rules/identity.md`).
 - Respect nhentai.net: throttle, no scraping, no hammering — it's a public API, be polite.
 - No panics across the command boundary (return `Result<_, String>`).
-- Keep tracking docs honest: update `TODO.md`/`ROADMAP.md`/`BUGS.md` in the same change.
+- Keep tracking docs honest: update `TODO.md`/`ROADMAP.md`/`PLAN.md`/`BUGS.md` in the same change.
 - Follow `.agents/` rules before submitting code.
 
 ## 🤝 How to contribute

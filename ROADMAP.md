@@ -1,7 +1,24 @@
-# ROADMAP.md
+# NH Reader — Roadmap & Milestones
 
-> Product direction and milestones for **NH Reader**. This is the "what / why" doc —
-> pair it with `TODO.md` (executable tasks) and `BUGS.md` (known issues).
+> 🗺️ **Living Source of Truth**: Product direction, positioning principles, and milestone history for **NH Reader** — the "what / why" doc. Pair it with `PLAN.md` (active sprints), `TODO.md` (executable tasks), and `BUGS.md` (known issues).
+
+> [!IMPORTANT]
+> AI agents strictly required to update this page and all related pages **before** working on any new bug fixes or features and push it to the remote first, without exception. Failure to do so may result in working with outdated information and potentially introducing conflicts or redundant work.
+
+---
+
+## 📜 Tracking Rules
+
+- **No Typo Duplication**: When recording user reports, clean and fix all typos to preserve professional quality.
+- **Consistent Formatting**: Maintain consistent formatting and style throughout all documentation to ensure readability and professionalism.
+- **Clear Sectioning**: Use clear and descriptive headers for each section to improve navigation and readability.
+- **Active Items First**: The currently active milestone, sprint, task, or workstream must always be placed at the top of the content sections.
+- **Regular Updates**: Ensure that the roadmap is regularly updated to reflect the latest developments and changes in the project.
+- **Improve User Directives**: Continuously refine and clarify user directives to ensure they are easily understood and actionable.
+- **Tracking Docs Stay True**: Update `ROADMAP.md`, `TODO.md`, `BUGS.md`, and `PLAN.md` first or in lockstep with code changes so a stale ledger counts as a bug.
+- **Always Track Everything**: Every new feature request, enhancement, or bug report must be logged in [`BUGS.md`](./BUGS.md), [`TODO.md`](./TODO.md), and [`ROADMAP.md`](./ROADMAP.md) before execution.
+
+---
 
 ## 🔭 Vision
 
@@ -39,6 +56,12 @@ public API — we fetch data, we don't scrape aggressively.
 | M10 | Cache management & storage optimization | ✅ Shipped | [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) | Configurable disk storage budget (500 MB – Unlimited), background LRU image cache pruning, database compaction (`VACUUM`), dynamic UI scaling with zero empty cards |
 | M11 | Upstream API alignment & offline library hub | ✅ Shipped | [v0.6.0](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.6.0) | Official archive API downloads (`POST /api/v2/galleries/{id}/download`), dual-mode Login Modal, dedicated Library navigation tab (`/library`) with offline archive reader (zip/cbz extraction), Mihon-style floating bottom bar |
 | M12 | Multi-Platform, Mobile Toolchain & Community i18n | ✅ Shipped | [v0.7.3](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.3) | All 17 complete language packs (279/279 keys), per-locale formatting, reader preload distance (1-5 pages), image quality selector, CBZ direct export from reader toolbar, Arabic RTL layout polish, custom title bar with per-OS window controls (macOS traffic lights, Windows/Linux framed squircles) & positioning setting, restored system tray minimize-on-close, multi-platform portable archives (Windows/macOS/Linux), Android and iOS toolchains, manual platform builds and signing, in-repo docs with live translation, per-platform Tauri configs |
+
+## 🔮 Planned & Future Milestones
+
+> No new milestone is committed yet. Candidate work is logged in [`TODO.md`](./TODO.md) and [`BUGS.md`](./BUGS.md) first per the tracking rules above; the next milestone (M13) is scoped after v0.7.4 ships.
+
+---
 
 ## 📌 Milestone M12 Delivery (v0.7.3)
 
@@ -139,3 +162,11 @@ Driving checklist lives in `TODO.md`. M12 scope items:
 
 - 📝 ROADMAP.md is updated whenever scope changes, a milestone completes, or a decision log entry lands in `AGENTS.md`.
 - Everything in ROADMAP traces to `TODO.md` items; orphaned items get cleaned up.
+
+---
+
+## 🔖 Metadata
+
+- **Project**: NH Reader · **version** 0.7.4
+- **Agent Ecosystem:** [`AGENTS`](./AGENTS.md) and [`.agents/`](.agents/) are tracked directly in repository git tracking.
+- **Last Updated:** Oct, 06 2026 - 02:38 PM

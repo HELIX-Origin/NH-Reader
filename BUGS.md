@@ -1,4 +1,6 @@
-# 🐛 BUGS
+# NH Reader — 🐛 Bug Tracker
+
+> 🐛 **Living Source of Truth**: Known issues, quirks, and verified fixes for **NH Reader**.
 
 > [!IMPORTANT]
 > All known bugs are listed here. Keep in mind, that if a bug is missing, it may not have been discovered or reported yet.
@@ -6,6 +8,21 @@
 > The repository maintainers (and contributors) actively search for new bugs and update this document accordingly. In some cases, a bug will be spotted and fixed without this page being immediately updated. This page is primarily a living index and may not always reflect the most current state of the codebase.
 >
 > AI agents are strongly advised to update this page first and push it to the remote before working on any new bug fixes or features. This way the remote repository always has the most up-to-date list of known issues.
+
+---
+
+## 📜 Tracking Rules
+
+- **No Typo Duplication**: When recording user reports, clean and fix all typos to preserve professional quality.
+- **Consistent Formatting**: Maintain consistent formatting and style throughout all documentation to ensure readability and professionalism.
+- **Clear Sectioning**: Use clear and descriptive headers for each section to improve navigation and readability.
+- **Active Items First**: The currently active milestone, sprint, task, or workstream must always be placed at the top of the content sections.
+- **Regular Updates**: Ensure that this file is regularly updated to reflect the latest developments and changes in the project.
+- **Improve User Directives**: Continuously refine and clarify user directives to ensure they are easily understood and actionable.
+- **Tracking Docs Stay True**: Update `ROADMAP.md`, `TODO.md`, `BUGS.md`, and `PLAN.md` first or in lockstep with code changes so a stale ledger counts as a bug.
+- **Always Track Everything**: Every new feature request, enhancement, or bug report must be logged in [`BUGS.md`](./BUGS.md), [`TODO.md`](./TODO.md), and [`ROADMAP.md`](./ROADMAP.md) before execution.
+
+---
 
 ## 📖 Legend
 
@@ -23,7 +40,7 @@
 - 🟡 **Medium**: *Bugs that affect certain features or have minor usability issues.*
 - 🟢 **Low**: *Minor bugs or visual glitches that do not significantly impact the user experience.*
 
-## 🚫 Known quirks & external limitations (wontfix bucket)
+## 🚫 Known Quirks & External Limitations (wontfix bucket)
 
 - 🐢 **Rate limiting / 429s:** nhentai throttles rapid API access. The Rust client throttles
   requests; UI must back off and not spam-retry.
@@ -38,12 +55,12 @@
   only recency. Surfaces limited accordingly. *(This is not necessarily a won't fix. But until we can create our own way of determining popularity, this limitation remains.)*
 - **Trusted release signing is unavailable:** No trusted organization code-signing identity is available for automated release builds. The packaging workflow has been removed; the project does not publish prebuilt or unsigned release assets. Local self-signed Windows certificates do not establish publisher trust.
 
-## 💡 Explicitly not bugs
+## 💡 Explicitly Not Bugs
 
 - 💡 Galleries that legitimately contain blacklisted tags are still accessible from detail/reader
   (blacklist governs discovery lists, not direct links) — by design.
 
-## ⚠️ Open
+## ⚠️ Active & Open Bugs
 
 *No open bugs currently reported.*
 
@@ -87,20 +104,20 @@
 ### 2026-10-01 — Release workflow failed to publish desktop installers (.exe, .msi, .deb, .AppImage, .dmg)
 
 - **Severity**: 🟠 High (Packaging & Distribution)
-- **Status**: ✅ resolved (Unreleased)
+- **Status**: ✅ resolved (v0.7.2)
 - **Root Cause**: `actions/upload-artifact@v4` preserved subdirectories (`nsis/`, `msi/`, `deb/`, `appimage/`, `dmg/`) when uploading artifacts from `src-tauri/target/release/bundle/`. When `actions/download-artifact@v4` merged all artifacts into `release-artifacts`, the installers remained inside nested subdirectories. The `action-gh-release@v2` job used `files: release-artifacts/*` which only matched top-level files (`.zip`, `.apk`, `.tar.gz`) and ignored directories.
 - **Fix**: Added a flattening step in `publish-release`, `publish-test-prerelease`, and `dry-run-summary` (`find release-artifacts -mindepth 2 -type f -exec mv {} release-artifacts/ \;`) before publishing, ensuring all platform installers sit directly in `release-artifacts/` and are attached to GitHub releases.
 
 ### 2026-10-01 — Root-file translation links led to unpublished Pages paths
 
 - **Severity**: 🟡 Medium (Documentation usability)
-- **Status**: ✅ resolved (Unreleased)
+- **Status**: ✅ resolved (v0.7.2)
 - **Root Cause & Fix**: The root Markdown menus linked to `/repo/*.html` copies that the docs-folder Pages source does not publish. Removed the broken root menus and unnecessary generated copies. The documentation site continues to translate in place with `docs/translate.js`.
 
 ### 2026-10-01 — Markdown translate "dropdown" rendered as a flat list of language names
 
 - **Severity**: 🟡 Medium (Documentation usability)
-- **Status**: ✅ resolved (Unreleased)
+- **Status**: ✅ resolved (v0.7.2)
 - **Root Cause**: Every Markdown page embedded a `<select>` with inline styles, an `onchange` handler and a `<script src="./docs/translate.js">`. GitHub's Markdown sanitizer strips `<select>`, `<label>`, `<script>`, `style` and event handlers, so only the bare option text survived and no script ever ran.
 - **Fix**:
   1. Removed the widget from all GitHub-rendered Markdown files; Github does not execute the translation script there.
@@ -128,3 +145,11 @@
 - **Mutex poison unwrap panic in db.rs (Fixed in v0.4.0)**: Replaced 9 `.unwrap()` calls with `lock_conn()` poison recovery.
 - **Favorites button state reflection (Fixed in v0.4.0)**: Fixed the favorite button so it immediately toggles and updates its reactive state between "Favorite" and "Saved", accurately reflecting the current gallery favorite status.
 - **Gallery download pipeline failure (Fixed in v0.4.0)**: Fixed background downloads by fetching and archiving pages directly into clean `.zip` and `.cbz` packages without requiring an external API key.
+
+---
+
+## 🔖 Metadata
+
+- **Project**: NH Reader · **version** 0.7.4
+- **Agent Ecosystem:** [`AGENTS`](./AGENTS.md) and [`.agents/`](.agents/) are tracked directly in repository git tracking.
+- **Last Updated:** Oct, 06 2026 - 02:38 PM

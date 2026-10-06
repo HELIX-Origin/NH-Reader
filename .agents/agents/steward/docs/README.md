@@ -1,7 +1,7 @@
 # steward / docs
 
 **Owns:** `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `PRIVACY.md`, `TOS.md`, `docs/**`,
-`CHANGELOG.md`, `release-notes.md`, `.github/discussions/**`.
+`CHANGELOG.md`, `scratch/release-notes.md`, `.github/discussions/**`.
 **Reads:** `.agents/rules/doc-truthfulness.md`, `.agents/templates/changelog.md`,
 `.agents/templates/release-notes.md`, `.agents/templates/release-announcement.md`.
 **Hands off to:** `steward` to close the loop across all ledgers, or the user when a doc

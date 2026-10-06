@@ -61,7 +61,7 @@ removal-only or documentation-only workflow edits do not require one.
 → `.agents/rules/verification.md` · **enforced** by `npm run check:agents`
 
 ### 2.5 Tracking docs stay true
-Update tracking files (`ROADMAP.md`, `TODO.md`) **first** or in lockstep before finishing code changes so they are never forgotten. If behaviour changes, `CHANGELOG.md` gets an entry. If a task is done, its `TODO.md` row is updated in the same change. `BUGS.md` gains or loses rows when bugs are found or fixed. A stale ledger is a bug. Tracking ledgers live at repo root; do not duplicate them (e.g. separate Roadmap) in `docs/`.
+Update tracking files (`ROADMAP.md`, `PLAN.md`, `TODO.md`) **first** or in lockstep before finishing code changes so they are never forgotten. If behaviour changes, `CHANGELOG.md` gets an entry. If a task is done, its `TODO.md` row is updated in the same change. `BUGS.md` gains or loses rows when bugs are found or fixed. A stale ledger is a bug. Tracking ledgers live at repo root; do not duplicate them (e.g. separate Roadmap) in `docs/`.
 → `.agents/rules/doc-truthfulness.md`
 
 ### 2.6 Respect the upstream API
@@ -128,7 +128,7 @@ AGENTS.md                  this file — always loaded, the authority
   rules/                   13 standing conventions, each with trigger + enforcement
   agents/{primary}/{sub}/  role specs
   skills/                  6 repeatable workflows
-  templates/               8 fill-in templates
+  templates/               12 fill-in templates
 .opencode/                 opencode config: instructions wiring, commands, DCP
 .github/copilot-instructions.md
 scripts/check-agents.mjs   the mechanical gate

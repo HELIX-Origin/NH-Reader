@@ -8,7 +8,7 @@
 
 - **Versions move together.** `package.json` and `src-tauri/tauri.conf.json` /
   `Cargo.toml` must agree. A bump that touches one and not the other is incomplete.
-- **A release is:** bump version → `CHANGELOG.md` for that version → `release-notes.md`
+- **A release is:** bump version → `CHANGELOG.md` for that version → `scratch/release-notes.md`
   rewritten for humans → seed release announcement in GitHub Discussions
   (`.github/discussions/announcements/v<version>.md` and `.github/discussions/announcements.md`) →
   verify the build → tag annotated. In that order.
@@ -21,7 +21,7 @@
   announcement discussion seeded in `.github/discussions/announcements/v<version>.md` and indexed
   in `.github/discussions/announcements.md` explaining the release and its features.
 - **Two separate release documents — never confuse Release Notes and Release Announcements:**
-  - **Release Notes** (`release-notes.md`, via `.agents/templates/release-notes.md`): Concise technical summary attached to GitHub Releases and the repo root. Contains version metadata, brief highlights, change/fix lists, installer filenames, verification outputs, and commit hashes.
+  - **Release Notes** (`scratch/release-notes.md`, via `.agents/templates/release-notes.md`): Concise technical summary attached to GitHub Releases. Scratch-only — lives in the gitignored `scratch/` folder so it is never pushed to remote. Contains version metadata, brief highlights, change/fix lists, installer filenames, verification outputs, and commit hashes.
   - **Release Announcements** (`.github/discussions/announcements/v<version>.md`, via `.agents/templates/release-announcement.md`): Long-form, community-facing editorial discussions. Contains engaging headline (`# 📢 NH Reader v<version> — <Theme>`), narrative overview, deep thematic feature walkthroughs with emoji headers, comprehensive package table, and links to documentation guides.
 - **Verify before tagging:** Run `npm run check`, `cargo check`, `cargo test`,
   `npm run i18n:check`, and `npm run tauri build` only when the release changes
