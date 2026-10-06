@@ -22,7 +22,7 @@
 
 ---
 
-## 🔥 Active Workstream: v0.7.4 — Stability, Installer & Release Fixes
+## ✅ Completed Workstream: v0.7.4 — Stability, Installer & Release Fixes
 
 > Patch release hardening merged in `171a480` (blacklist backfill, NSIS finish page & upgrade uninstall, Korean installer strings, Pages deployment auth), plus tracking-ledger realignment and release paperwork.
 
@@ -36,7 +36,7 @@
 - [x] Filled the `CHANGELOG.md` `Unreleased` section with the v0.7.4 fixes.
 - [x] Prepare the human-readable release notes for v0.7.4.
 - [x] Seed the `v0.7.4` release announcement in `.github/discussions/announcements/` and index it.
-- [ ] Commit the release, tag `v0.7.4`, push, and publish the GitHub release.
+- [x] Committed `e55086a`, pushed `main` and the annotated `v0.7.4` tag, and published the source-only GitHub release without application assets.
 
 ---
 

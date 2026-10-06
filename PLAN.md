@@ -23,28 +23,7 @@
 
 ## 🎯 Active Sprints
 
-### 🚀 Sprint 14: v0.7.4 Release Prep
-
-> Ship the v0.7.4 patch. Application fixes are already merged in `171a480`; what remains is release paperwork and publishing.
-
-#### 📝 Tasks
-
-```mermaid
-flowchart LR
-    A[CHANGELOG Unreleased] --> B[Release notes]
-    B --> C[Discussion announcement]
-    C --> D[Commit & tag v0.7.4]
-    D --> E[Publish GitHub release]
-```
-
-1. **Changelog & release notes**:
-    - `CHANGELOG.md` `Unreleased` section filled with the v0.7.4 fixes: ✅ done
-    - Prepare the human-readable release notes for v0.7.4: ✅ done
-2. **Announcement**:
-    - Seed `v0.7.4.md` in `.github/discussions/announcements/` from the template and index it: ✅ done
-3. **Publish**:
-    - Commit tracking files + version bump, tag `v0.7.4`, push: ⬜ pending
-    - Publish the GitHub release: ⬜ pending
+_No active sprint — v0.7.4 shipped on 2026-10-06. The next sprint opens when M13 scope work begins (see 🔮 Planned Sprints)._
 
 ---
 
@@ -55,6 +34,14 @@ flowchart LR
 ---
 
 ## ✅ Completed Sprints
+
+### ✅ Sprint 14: v0.7.4 Release Prep (shipped 2026-10-06)
+
+- ✅ `CHANGELOG.md` frozen: `Unreleased` promoted to `## [v0.7.4]` (2026-10-06) with the v0.7.4 fixes.
+- ✅ Release notes prepared with manual build & sign commands for every platform (Windows, macOS, Linux, Android, iOS).
+- ✅ Release announcement seeded in `.github/discussions/announcements/v0.7.4.md` and indexed in `announcements.md`.
+- ✅ Verified: `npm run check` (0 errors), `cargo check` + `cargo test` (7/7), `npm run i18n:check` (17 × 279/279), `npm run check:agents`.
+- ✅ Committed `e55086a`, pushed `main` and the annotated `v0.7.4` tag, and published the source-only GitHub release.
 
 ### ✅ Sprint 13: Tracking Ledger Realignment (Oct 06, 2026)
 
