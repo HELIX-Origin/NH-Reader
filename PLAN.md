@@ -43,6 +43,8 @@ _No active sprint — v0.7.5 shipped on 2026-10-07. The next sprint opens when M
 - ✅ Release announcement seeded in `.github/discussions/announcements/v0.7.5.md` and indexed in `announcements.md`.
 - ✅ Backfilled the missing GitHub Discussions announcements for v0.7.3/v0.7.4: `.github/workflows/seed-discussions.yml` renamed to `discussions.yml` (`name: Discussions`) and extended to seed every `announcements/v*.md`; fixed its silently broken dedup filter (gh ≥2.100 returns an object, so `.[]` → `.discussions[].title`) and made listing failures fail-closed; corrected the pre-rebrand welcome title.
 - ✅ Verified: `cargo check`, `cargo test` (7/7), `npm run check` (0 errors, 0 warnings), `npm run check:i18n` (279/279 × 17 packs), `npm run check:agents` (all gates), `npm run tauri:build:release` (vite clean; NSIS + MSI 0.7.5 bundles built).
+- ✅ Committed `297fb23`, pushed `main` and the annotated `v0.7.5` tag, and published the source-only GitHub release (no application assets).
+- ✅ Dispatched `discussions.yml` (announcements): backfilled the v0.7.3 and v0.7.4 discussion posts, posted the v0.7.5 announcement, and created the welcome/index discussion — 10 existing titles skipped, 0 duplicates.
 
 ### ✅ Sprint 15: Unified Sign Script & `tauri:*` Renames (2026-10-06)
 

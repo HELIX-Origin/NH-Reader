@@ -83,7 +83,7 @@
 ### 2026-10-02 — NSIS installer finish page text legibility & previous version uninstall failure
 
 - **Severity**: 🟠 High (Installer & Usability)
-- **Status**: ✅ resolved — uninstall fix shipped in v0.7.4; finish-page legibility and stock installer palette ship in v0.7.5 (see `CHANGELOG.md` `v0.7.5`)
+- **Status**: ✅ resolved — uninstall fix shipped in v0.7.4; finish-page legibility and stock installer palette shipped in v0.7.5 (see `CHANGELOG.md` `v0.7.5`)
 - **Root Cause**:
   1. Setting `MUI_BGCOLOR "18181B"` darkened the dialog background, but the finish page title and body text controls retained Windows default black text (`COLOR_WINDOWTEXT`), rendering dark text on a dark background. Themed checkbox and radio labels cannot be recolored at all with `SetCtlColors` (NSIS bug #443), which is why checkbox text stayed black no matter which colors were assigned.
   2. In NSIS, running the previous uninstaller without `_?=$INSTDIR` caused it to copy itself to `%TEMP%`, spawn asynchronously, and immediately exit, allowing the new installer to write files while the uninstaller was still deleting them.
