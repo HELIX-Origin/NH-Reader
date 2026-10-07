@@ -23,17 +23,31 @@
 
 ## 🎯 Active Sprints
 
-_No active sprint — v0.7.4 shipped on 2026-10-06. The next sprint opens when M13 scope work begins (see 🔮 Planned Sprints)._
+_No active sprint — v0.7.5 shipped on 2026-10-07. The next sprint opens when M13 scope work begins (see 🔮 Planned Sprints)._
 
 ---
 
 ## 🔮 Planned Sprints
 
-> No post-v0.7.4 sprint is committed yet. Candidate items live in the `⬜ Backlog / Future Enhancements` section of [`TODO.md`](./TODO.md) and the `⚠️ Active & Open Bugs` section of [`BUGS.md`](./BUGS.md); **M13** is scoped after v0.7.4 ships per [`ROADMAP.md`](./ROADMAP.md).
+> No post-v0.7.5 sprint is committed yet. Candidate items live in the `⬜ Backlog / Future Enhancements` section of [`TODO.md`](./TODO.md) and the `⚠️ Active & Open Bugs` section of [`BUGS.md`](./BUGS.md); **M13** is scoped after v0.7.5 ships per [`ROADMAP.md`](./ROADMAP.md).
 
 ---
 
 ## ✅ Completed Sprints
+
+### ✅ Sprint 16: v0.7.5 Release Prep (shipped 2026-10-07)
+
+- ✅ Bumped versions to `0.7.5` across `package.json`, `package-lock.json`, `src-tauri/tauri.conf.json`, `src-tauri/Cargo.toml`, and `src-tauri/Cargo.lock`.
+- ✅ `CHANGELOG.md` frozen: `Unreleased` promoted to `## [v0.7.5]` (2026-10-07) — installer legibility root-cause fix, header-image removal, unified `npm run sign`, and the `tauri:*` / `check:*` script renames.
+- ✅ Release notes prepared in `scratch/release-notes.md` with manual build & sign commands for every platform.
+- ✅ Release announcement seeded in `.github/discussions/announcements/v0.7.5.md` and indexed in `announcements.md`.
+- ✅ Backfilled the missing GitHub Discussions announcements for v0.7.3/v0.7.4: `.github/workflows/seed-discussions.yml` renamed to `discussions.yml` (`name: Discussions`) and extended to seed every `announcements/v*.md`; fixed its silently broken dedup filter (gh ≥2.100 returns an object, so `.[]` → `.discussions[].title`) and made listing failures fail-closed; corrected the pre-rebrand welcome title.
+- ✅ Verified: `cargo check`, `cargo test` (7/7), `npm run check` (0 errors, 0 warnings), `npm run check:i18n` (279/279 × 17 packs), `npm run check:agents` (all gates), `npm run tauri:build:release` (vite clean; NSIS + MSI 0.7.5 bundles built).
+
+### ✅ Sprint 15: Unified Sign Script & `tauri:*` Renames (2026-10-06)
+
+- ✅ Replaced the five `sign:*` npm scripts with one opt-in `npm run sign` (`scripts/sign.mjs`): per-OS artifact discovery, native signing + verification (`signtool`, `codesign` + conditional notarization, `gpg`, `apksigner`, `xcodebuild`), credentials as arguments/env. Signing stays a separate optional step, never part of `tauri:build:*`; retired `scripts/sign.ps1`.
+- ✅ Aligned live docs and templates with the unified command and the `tauri:dev` / `tauri:build:release` / `tauri:build:debug` / `tauri:android:*` / `tauri:ios:*` renames; live `signtool` sign/verify round-trip on a temp copy and `npm run check:agents` both green.
 
 ### ✅ Sprint 14: v0.7.4 Release Prep (shipped 2026-10-06)
 
@@ -162,6 +176,6 @@ cargo test
 
 ## 🔖 Metadata
 
-- **Project**: NH Reader · **version** 0.7.4
+- **Project**: NH Reader · **version** 0.7.5
 - **Agent Ecosystem:** [`AGENTS`](./AGENTS.md) and [`.agents/`](.agents/) are tracked directly in repository git tracking.
 - **Last Updated:** Oct, 06 2026 - 02:38 PM

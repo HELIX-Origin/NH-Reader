@@ -27,7 +27,7 @@ Preparing files is fine; tagging, pushing, and publishing are not.
      breakdown, and table of contents entry.
 7. **Verify changed application code only:**
    - Run `npm run check` for frontend source changes.
-   - Run `npm run i18n:check` for locale-pack or user-visible string changes.
+   - Run `npm run check:i18n` for locale-pack or user-visible string changes.
    - Run `npm run check:agents` for agent-ecosystem changes only when app code is also changed or this check is explicitly requested.
    - Run `cargo check` and `cargo test` in `src-tauri/` for Rust source changes.
    - Run `npm run tauri build` when application code or executable packaging configuration changes.

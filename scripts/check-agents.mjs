@@ -107,9 +107,38 @@ const IDENTITY_RULE = join(agentsDir, 'rules', 'identity.md');
 let repoFiles = null;
 async function allRepoFiles() {
 	if (repoFiles) return repoFiles;
-	repoFiles = await walk(root, []);
+	// Only version-controlled files participate in the gate. Gitignored,
+	// local-only artifacts (scratch/, caches) never exist on a fresh clone,
+	// so they must neither be scanned nor used to satisfy references.
+	try {
+		const out = execFileSync('git', ['--no-pager', 'ls-files', '--cached', '--others', '--exclude-standard'], {
+			cwd: root,
+			encoding: 'utf8',
+			stdio: ['ignore', 'pipe', 'ignore'],
+		});
+		repoFiles = out.split(/\r?\n/).filter(Boolean).map((n) => join(root, n));
+	} catch {
+		repoFiles = await walk(root, []);
+	}
 	return repoFiles;
 }
+
+// Gitignored paths are local-only by policy: they legitimately do not exist
+// on a fresh clone or in CI, so references into them are exempt from
+// existence checks.
+const isGitIgnored = (path) => {
+	const rel = relative(root, path);
+	if (!rel || rel.startsWith('..')) return false;
+	try {
+		execFileSync('git', ['check-ignore', '-q', '--', rel.split(sep).join('/')], {
+			cwd: root,
+			stdio: ['ignore', 'ignore', 'ignore'],
+		});
+		return true;
+	} catch {
+		return false;
+	}
+};
 
 async function changedSourceFiles() {
 	if (checkAll) {
@@ -241,6 +270,11 @@ async function checkBrokenLinks() {
 				}
 				if (found) continue;
 
+				// References into gitignored locations target local-only
+				// artifacts (e.g. scratch/) that will not exist on a fresh
+				// clone — exempt them from the existence requirement.
+				if (direct.some((path) => isGitIgnored(path))) continue;
+
 				const suffix = `/${ref.replace(/^\.\//, '')}`;
 				if (all.some((f) => posix(f).endsWith(suffix))) continue;
 
@@ -253,7 +287,7 @@ async function checkBrokenLinks() {
 			}
 		}
 	}
-	pass('LINK', 'all file references inside the ecosystem resolve.');
+	pass('LINK', 'all file references inside the ecosystem resolve (gitignored local-only targets exempt).');
 }
 
 async function checkBranding() {
@@ -331,13 +365,14 @@ async function checkDocsScripts() {
 		return;
 	}
 	const scripts = pkg.scripts ?? {};
-	for (const required of ['check', 'i18n:check', 'check:agents']) {
+	const before = findings.length;
+	for (const required of ['check', 'check:i18n', 'check:agents']) {
 		if (!scripts[required]) fail('DOCS', `package.json is missing the "${required}" script`);
 	}
 	for (const match of (await read(AGENTS_MD)).matchAll(/`npm run ([\w:-]+)`/g)) {
 		if (!scripts[match[1]]) fail('DOCS', `AGENTS.md documents "npm run ${match[1]}", which is not in package.json`);
 	}
-	pass('DOCS', 'every documented npm script exists.');
+	if (findings.length === before) pass('DOCS', 'every documented npm script exists.');
 }
 
 await checkStructure();

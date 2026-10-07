@@ -5,6 +5,20 @@ top; the current development state lives under `Unreleased`.
 
 ## Unreleased
 
+## [v0.7.5](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.5)
+
+**Release date:** 2026-10-07
+
+### 🐛 Fixes
+* **NSIS installer text legibility (actual fix):** Removed the dark installer palette from `src-tauri/windows/hooks.nsh` (`MUI_BGCOLOR`, `MUI_TEXTCOLOR`, `MUI_HEADER_*`, `MUI_INSTFILESPAGE_COLORS`, `MUI_CUSTOMFUNCTION_GUIINIT`/`EnableDarkMode`, and `SetFinishPageColors`) and returned the installer to the stock NSIS/MUI palette, keeping the custom `sidebar.bmp` branding image. The v0.7.4 hooks (`MUI_FINISHPAGE_CUSTOMFUNCTION_SHOW` / `MUI_WELCOMEPAGE_CUSTOMFUNCTION_SHOW`) never executed — MUI2 defines no such per-page hooks — so the dark-on-dark finish-page text shipped broken in v0.7.4; themed checkbox text also cannot be recolored via `SetCtlColors` (NSIS bug #443). Verified by compiling the installer and programmatic pixel capture of the pages.
+
+### 🎨 Changed
+* **Header image removed from the Windows installer:** Dropped `bundle.windows.nsis.headerImage` from `src-tauri/tauri.conf.json` and retired `src-tauri/windows/header.bmp` (including its generation in `scripts/generate-installer-bitmaps.ps1`). The asset was composed as a wide banner with the logo on the right, but NSIS places header images as a small left-aligned graphic in the top bar, so it never fit the top bar properly. The installer now shows only the `sidebar.bmp` graphic on the Welcome and Finish pages.
+
+### 🛠️ Tooling
+* **One sign command for every platform:** Replaced `sign:windows` / `sign:macos` / `sign:linux` / `sign:android` / `sign:ios` with a single opt-in `npm run sign` (`scripts/sign.mjs`) that detects the host OS, discovers that platform's build artifacts, signs with native tooling (`signtool`, `codesign` with automatic notarization when Apple credentials are set, `gpg`, `apksigner`, `xcodebuild`), and verifies every signature. Credentials pass through as arguments or environment variables (e.g. `npm run sign -- --ios CODE_SIGN_STYLE=Manual …`). Signing remains a separate optional step and is never part of the build; `scripts/sign.ps1` was retired and its certificate discovery and self-signed fallback moved into the new script.
+* **Script renames:** `dev:app` → `tauri:dev`, `build:app` → `tauri:build:release`, `build:app:debug` → `tauri:build:debug`, `mobile:android:*` → `tauri:android:*`, `mobile:ios:*` → `tauri:ios:*`, and `i18n:check` → `check:i18n` (grouping the `check:*` family together). All live documentation, rules, role READMEs, and templates updated to the new names.
+
 ## [v0.7.4](https://github.com/HELIX-Origin/NH-Reader/releases/tag/v0.7.4)
 
 **Release date:** 2026-10-06

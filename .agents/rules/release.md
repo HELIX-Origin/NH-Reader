@@ -14,7 +14,7 @@
   verify the build → tag annotated. In that order.
 - **Tag format:** `v<major>.<minor>.<patch>`, annotated (`git tag -a -m`), pointing at
   the release commit.
-- **Manual distribution only:** There is no automated packaging or release-assets workflow. Build packages locally on each target platform, sign them with the platform-specific `package.json` command and user-owned credentials, and do not publish unsigned release assets.
+- **Manual distribution only:** There is no automated packaging or release-assets workflow. Build packages locally on each target platform, sign them on demand with the opt-in `npm run sign` command and user-owned credentials (signing is never part of the build), and do not publish unsigned release assets.
 - **Release notes** come from the changelog, but are written for a person deciding whether
   to upgrade. Lead with what changed for them, not with commit subjects.
 - **Seed release discussions:** Every release must have a detailed, comprehensive release
@@ -24,7 +24,7 @@
   - **Release Notes** (`scratch/release-notes.md`, via `.agents/templates/release-notes.md`): Concise technical summary attached to GitHub Releases. Scratch-only — lives in the gitignored `scratch/` folder so it is never pushed to remote. Contains version metadata, brief highlights, change/fix lists, installer filenames, verification outputs, and commit hashes.
   - **Release Announcements** (`.github/discussions/announcements/v<version>.md`, via `.agents/templates/release-announcement.md`): Long-form, community-facing editorial discussions. Contains engaging headline (`# 📢 NH Reader v<version> — <Theme>`), narrative overview, deep thematic feature walkthroughs with emoji headers, comprehensive package table, and links to documentation guides.
 - **Verify before tagging:** Run `npm run check`, `cargo check`, `cargo test`,
-  `npm run i18n:check`, and `npm run tauri build` only when the release changes
+  `npm run check:i18n`, and `npm run tauri build` only when the release changes
   application code requiring those checks. Documentation-, version-metadata-, release-note-,
   or workflow-only releases do not require builds or tests; state that verification was
   skipped rather than recording pending checks as failures.

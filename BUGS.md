@@ -60,6 +60,10 @@
 - 💡 Galleries that legitimately contain blacklisted tags are still accessible from detail/reader
   (blacklist governs discovery lists, not direct links) — by design.
 
+## 🚀 Feature Requests
+
+- ✅ **Unified cross-platform sign script** *(2026-10-06, delivered)* — one opt-in `npm run sign` command replacing `sign:windows` / `sign:macos` / `sign:linux` / `sign:android` / `sign:ios`. Detects the host OS, discovers that platform's artifacts, signs with native tooling and verifies each signature; credentials pass through as arguments (e.g. `npm run sign -- --ios CODE_SIGN_STYLE=Manual …`) or environment variables. Signing remains a separate optional step, never part of the build. Delivered as `scripts/sign.mjs`; recorded in `TODO.md`.
+
 ## ⚠️ Active & Open Bugs
 
 *No open bugs currently reported.*
@@ -79,12 +83,12 @@
 ### 2026-10-02 — NSIS installer finish page text legibility & previous version uninstall failure
 
 - **Severity**: 🟠 High (Installer & Usability)
-- **Status**: ✅ resolved (fixed in v0.7.4)
+- **Status**: ✅ resolved — uninstall fix shipped in v0.7.4; finish-page legibility and stock installer palette ship in v0.7.5 (see `CHANGELOG.md` `v0.7.5`)
 - **Root Cause**:
-  1. Setting `MUI_BGCOLOR "18181B"` darkened the dialog background, but the finish page title and body text controls retained Windows default black text (`COLOR_WINDOWTEXT`), rendering dark text on a dark background.
+  1. Setting `MUI_BGCOLOR "18181B"` darkened the dialog background, but the finish page title and body text controls retained Windows default black text (`COLOR_WINDOWTEXT`), rendering dark text on a dark background. Themed checkbox and radio labels cannot be recolored at all with `SetCtlColors` (NSIS bug #443), which is why checkbox text stayed black no matter which colors were assigned.
   2. In NSIS, running the previous uninstaller without `_?=$INSTDIR` caused it to copy itself to `%TEMP%`, spawn asynchronously, and immediately exit, allowing the new installer to write files while the uninstaller was still deleting them.
 - **Fix**:
-  1. Added `SetFinishPageColors` with `MUI_FINISHPAGE_CUSTOMFUNCTION_SHOW` and `MUI_WELCOMEPAGE_CUSTOMFUNCTION_SHOW` in `src-tauri/windows/hooks.nsh` to explicitly color title (1201), body (1202), and checkboxes (1203/1204) with light `#FFFFFF` and `#F4F4F5` on transparent background.
+  1. *(Corrected 2026-10-06)* The fix originally recorded here — `SetFinishPageColors` invoked through `MUI_FINISHPAGE_CUSTOMFUNCTION_SHOW` / `MUI_WELCOMEPAGE_CUSTOMFUNCTION_SHOW` in `src-tauri/windows/hooks.nsh` — never executed: MUI2 defines no such per-page hooks, so v0.7.4 still shipped the dark-on-dark text. The actual fix removes the entire dark palette (`MUI_BGCOLOR`, `MUI_TEXTCOLOR`, `MUI_HEADER_*`, `MUI_INSTFILESPAGE_COLORS`, `MUI_CUSTOMFUNCTION_GUIINIT`/`EnableDarkMode`, and `SetFinishPageColors`) from `hooks.nsh`, restoring the stock NSIS/MUI palette while keeping the custom `sidebar.bmp` branding image. No color override can fix checkbox text on a dark background (NSIS bug #443), so removing the dark background is the only reliable resolution. Verified by compiling the NSIS installer and programmatic pixel capture of the rendered pages.
   2. Implemented `NSIS_HOOK_PREINSTALL` to terminate any lingering app process and invoke `"$INSTDIR\uninstall.exe" /S _?=$INSTDIR` synchronously with `ExecWait`, ensuring previous files are completely purged before the new version installs.
 
 ### 2026-10-02 — NSIS Korean language MultiUser string missing fallback warnings
@@ -150,6 +154,6 @@
 
 ## 🔖 Metadata
 
-- **Project**: NH Reader · **version** 0.7.4
+- **Project**: NH Reader · **version** 0.7.5
 - **Agent Ecosystem:** [`AGENTS`](./AGENTS.md) and [`.agents/`](.agents/) are tracked directly in repository git tracking.
-- **Last Updated:** Oct, 06 2026 - 02:38 PM
+- **Last Updated:** Oct, 06 2026 - 10:30 PM

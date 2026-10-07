@@ -39,7 +39,7 @@ Checkable, and each one runnable:
 | --- | --- | --- |
 | frontend | `npm run check` | |
 | rust | `cargo check` | |
-| i18n | `npm run i18n:check` | |
+| i18n | `npm run check:i18n` | |
 
 ## Risks
 

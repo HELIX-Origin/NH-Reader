@@ -25,4 +25,4 @@
 
 ## Verify
 
-`npm run check`, plus `npm run i18n:check` if any string changed.
+`npm run check`, plus `npm run check:i18n` if any string changed.

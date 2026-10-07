@@ -100,7 +100,7 @@ a password or a human choice, **stop and report** — never pipe credentials
 | --- | --- |
 | `src/**`, `.svelte`, `.css` | `npm run check` |
 | `src-tauri/**`, `.rs` | `cargo check` + `cargo test` (in `src-tauri/`) |
-| `src/lib/i18n/**` or user-visible strings | `npm run i18n:check` |
+| `src/lib/i18n/**` or user-visible strings | `npm run check:i18n` |
 | `.agents/**`, `AGENTS.md`, agent config | `npm run check:agents` only when app code is also changed or explicitly requested |
 | Docs, release notes, changelog, version metadata, workflow-only changes | No build or test checks |
 
@@ -109,12 +109,12 @@ Commands:
 | Action | Command |
 | --- | --- |
 | Install deps | `npm install` |
-| Run app | `npm run dev:app` (Vite on fixed port **14440**, HMR 14441, `strictPort`) |
+| Run app | `npm run tauri:dev` (Vite on fixed port **14440**, HMR 14441, `strictPort`) |
 | Frontend check | `npm run check` |
 | Frontend build | `npm run build` |
 | Rust check / test | `cargo check` / `cargo test` (in `src-tauri/`) |
 | Agent ecosystem gate | `npm run check:agents` |
-| i18n completeness | `npm run i18n:check` |
+| i18n completeness | `npm run check:i18n` |
 
 The dev port is **fixed at 14440** with `strictPort: true`. No port auto-incrementing, no
 `scripts/dev.mjs`.
@@ -184,6 +184,6 @@ came from in the same change.
 - **Packaging & uninstaller** Tauri native packaging generates native NSIS (`.exe`) and WiX MSI (`.msi`) installers on Windows (DMG on macOS, deb/AppImage on Linux), with clean uninstaller support registered in system uninstallation mechanisms, alongside portable zip packages. PAF is dropped in favor of native Tauri packaging.
 - **Mobile support (Android and iOS)** Native mobile builds via Tauri 2's Android and iOS toolchains (`tauri android` and `tauri ios`). Targets APK sideloading and iOS archives/IPAs. The maintainer does not have mobile test hardware; mobile builds are community-supported and untested.
 - **i18n** drop-in packs with `en` default; system-locale fallback; community contributions; completeness is
-  gated by `npm run i18n:check`.
+  gated by `npm run check:i18n`.
 - **Context management** DCP (`@tarquinen/opencode-dcp`) is **agent tooling, not a product
   feature**. Never let it into the app. Config in `.opencode/dcp.jsonc`.

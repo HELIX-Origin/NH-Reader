@@ -12,7 +12,7 @@ Run checks only when the change affects application code or executable applicati
 | --- | --- |
 | `src/**`, `.svelte`, `.css` | `npm run check` |
 | `src-tauri/**`, `.rs` | `cargo check` and `cargo test` in `src-tauri/` |
-| `src/lib/i18n/**` or new user-visible strings | `npm run i18n:check` |
+| `src/lib/i18n/**` or new user-visible strings | `npm run check:i18n` |
 | `.agents/**`, `AGENTS.md`, `.opencode/**` | `npm run check:agents` only when application code is also changed or the user explicitly requests this check |
 | Documentation, changelog, release notes, version metadata, or workflow-only changes | No build or test checks |
 

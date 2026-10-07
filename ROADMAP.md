@@ -59,7 +59,9 @@ public API — we fetch data, we don't scrape aggressively.
 
 ## 🔮 Planned & Future Milestones
 
-> No new milestone is committed yet. Candidate work is logged in [`TODO.md`](./TODO.md) and [`BUGS.md`](./BUGS.md) first per the tracking rules above; the next milestone (M13) is scoped after v0.7.4 ships.
+> No new milestone is committed yet. Candidate work is logged in [`TODO.md`](./TODO.md) and [`BUGS.md`](./BUGS.md) first per the tracking rules above; the next milestone (M13) is scoped after v0.7.5 ships.
+
+- ✅ **Unified cross-platform sign script** — single opt-in `npm run sign` (`scripts/sign.mjs`) replacing the five `sign:*` commands with per-OS artifact discovery, native signing + verification, and credential passthrough; signing stays out of the build pipeline *(logged 2026-10-06, delivered 2026-10-06)*.
 
 ---
 
@@ -167,6 +169,6 @@ Driving checklist lives in `TODO.md`. M12 scope items:
 
 ## 🔖 Metadata
 
-- **Project**: NH Reader · **version** 0.7.4
+- **Project**: NH Reader · **version** 0.7.5
 - **Agent Ecosystem:** [`AGENTS`](./AGENTS.md) and [`.agents/`](.agents/) are tracked directly in repository git tracking.
 - **Last Updated:** Oct, 06 2026 - 02:38 PM

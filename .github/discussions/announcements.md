@@ -6,6 +6,7 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 
 ## 📑 Release Index
 
+- **[v0.7.5 — Unified Sign Command & Cleaner Windows Installer](#v075--2026-10-07)** *(2026-10-07)*
 - **[v0.7.4 — Full Blacklist Grids & Polished Windows Installer](#v074--2026-10-06)** *(2026-10-06)*
 - **[v0.7.3 — Manual Signed Builds & Restored iOS Support](#v073--2026-10-01)** *(2026-10-01)*
 - **[v0.7.2 — Official Code Signing, Full Desktop Installers & Pages Alignment](#v072--2026-10-01)** *(2026-10-01)*
@@ -18,6 +19,15 @@ Welcome to the **NH Reader** announcements discussion board! This is the officia
 - **[v0.2.1 — Storage Architecture Hardening & Docs Synchronization](#v021--2026-09-22)** *(2026-09-22)*
 - **[v0.2.0 — Custom UI Shell, Background Service Queue & Disk Image Cache](#v020--2026-09-20)** *(2026-09-20)*
 - **[v0.1.0 — Initial Foundation Release](#v010--2026-09-15)** *(2026-09-15)*
+
+---
+
+## [v0.7.5] — 2026-10-07
+### 🔧 Unified Sign Command & Cleaner Windows Installer
+
+**Release Announcement Discussion:** [announcements/v0.7.5.md](announcements/v0.7.5.md)
+
+NH Reader v0.7.5 is a tooling and installer-cleanup release. The Windows installer drops the cramped header banner for clean Welcome and Finish pages, and the finish-page text is genuinely readable again via the stock NSIS palette — the root-cause fix for the dark-on-dark text that shipped broken in v0.7.4. A single opt-in `npm run sign` now signs and verifies artifacts on every supported platform, and npm scripts are consolidated under the `tauri:*` and `check:*` families across all documentation.
 
 ---
 

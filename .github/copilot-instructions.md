@@ -52,7 +52,7 @@ URLs, host allowlists, and user agent strings — never in the app's own name.
 | --- | --- |
 | `src/**`, `.svelte`, `.css` | `npm run check` |
 | `src-tauri/**`, `.rs` | `cargo check` and `cargo test` in `src-tauri/` |
-| `src/lib/i18n/**` or any new string | `npm run i18n:check` |
+| `src/lib/i18n/**` or any new string | `npm run check:i18n` |
 | `.agents/**`, `AGENTS.md`, `.opencode/**` | `npm run check:agents` |
 
 `npm run check:agents` is the gate for this instruction file and the `.agents/` tree. Run

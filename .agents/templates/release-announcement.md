@@ -36,11 +36,11 @@ Seeded in `.github/discussions/announcements/v<version>.md` and indexed in
 
 There are no prebuilt release assets. Build on each target platform and sign locally with your own certificate or key before distributing:
 
-- **Windows:** `npm run build:app`, then `npm run sign:windows`. Place your PFX at `certificates/nh-reader-codesign.pfx`; the script can generate a local self-signed certificate if none exists, but self-signed certificates are not trusted publisher identities.
-- **macOS:** `npm run build:app`, then `npm run sign:macos -- "<Developer ID Application identity>" "src-tauri/target/release/bundle/macos/NH Reader.app"`.
-- **Linux:** `npm run build:app`, then `npm run sign:linux -- path/to/package`; verify with `gpg --verify path/to/package.asc path/to/package`.
-- **Android:** `npm run mobile:android:init`, `npm run mobile:android:build`, then `npm run sign:android -- path/to/release.keystore --ks-key-alias <alias> path/to/app.apk`.
-- **iOS:** From macOS with Xcode and a valid Apple signing identity/provisioning profile, run `npm run mobile:ios:init`, then `npm run sign:ios -- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<team-id> CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER=<profile-name>`.
+- **Windows:** `npm run tauri:build:release`, then `npm run sign`. Place your PFX at `certificates/nh-reader-codesign.pfx`; the script can generate a local self-signed certificate if none exists, but self-signed certificates are not trusted publisher identities.
+- **macOS:** `npm run tauri:build:release`, then `npm run sign` (identity from `--identity` or `APPLE_SIGNING_IDENTITY`; notarizes and staples automatically when `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD` and `APPLE_TEAM_ID` are set).
+- **Linux:** `npm run tauri:build:release`, then `npm run sign`; verify with `gpg --verify path/to/package.asc path/to/package`.
+- **Android:** `npm run tauri:android:init`, `npm run tauri:android:build`, then `npm run sign -- path/to/app.apk` (keystore defaults to `src-tauri/gen/android/release.keystore`, alias `nh-reader`; override with `--ks`/`--ks-alias`).
+- **iOS:** From macOS with Xcode and a valid Apple signing identity/provisioning profile, run `npm run tauri:ios:init`, then `npm run sign -- --ios CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<team-id> CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER=<profile-name>`.
 
 Signing credentials and provisioning profiles are user-managed and must not be committed. The project does not publish release assets.
 

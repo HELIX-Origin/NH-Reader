@@ -41,21 +41,21 @@ then `.agents/ROLES.md`. `npm run check:agents` mechanically gates it.
 | Task | Command |
 | --- | --- |
 | Install deps | `npm install` |
-| Dev app | `npm run dev:app` (Tauri dev; Vite serves on the fixed port **14440**) |
+| Dev app | `npm run tauri:dev` (Tauri dev; Vite serves on the fixed port **14440**) |
 | Frontend type/lint | `npm run check` |
 | Frontend build | `npm run build` |
-| i18n completeness | `npm run i18n:check` |
+| i18n completeness | `npm run check:i18n` |
 | Rust check | `cargo check` (in `src-tauri/`) |
 | Rust tests | `cargo test` (in `src-tauri/`) |
-| App release bundle | `npm run build:app` |
-| App debug bundle | `npm run build:app:debug` |
-| Android init | `npm run mobile:android:init` |
-| Android build APK | `npm run mobile:android:build` |
-| iOS init | `npm run mobile:ios:init` |
-| iOS build archive | `npm run mobile:ios:build` |
+| App release bundle | `npm run tauri:build:release` |
+| App debug bundle | `npm run tauri:build:debug` |
+| Android init | `npm run tauri:android:init` |
+| Android build APK | `npm run tauri:android:build` |
+| iOS init | `npm run tauri:ios:init` |
+| iOS build archive | `npm run tauri:ios:build` |
 
 **Always** run `npm run check` for frontend changes and `cargo check` (+ `cargo test` when
-relevant) for Rust changes before calling a task done. For translation contributions, run `npm run i18n:check`.
+relevant) for Rust changes before calling a task done. For translation contributions, run `npm run check:i18n`.
 
 ## ⚠️ Working rules
 

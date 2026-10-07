@@ -28,7 +28,7 @@ Install the package you built and signed locally. The project does not publish r
 
 ### 📦 Windows
 
-1. Build with `npm run build:app` and sign with `npm run sign:windows`. Find the NSIS `.exe` or WiX `.msi` under `src-tauri/target/release/bundle/`.
+1. Build with `npm run tauri:build:release` and, when you want a signed installer, sign with `npm run sign`. Find the NSIS `.exe` or WiX `.msi` under `src-tauri/target/release/bundle/`.
 2. Run the installer:
    - **NSIS Setup**: Supports both **Current User** (per-user, non-elevated) and **All Users** (per-machine, administrative) installation scopes, custom directory selection, and creates Desktop / Start Menu shortcuts.
    - **WiX MSI**: Standard enterprise-ready Windows Installer package with silent install capability (`msiexec /i ... /qn`).
@@ -36,13 +36,13 @@ Install the package you built and signed locally. The project does not publish r
 
 ### 📦 macOS
 
-1. Build with `npm run build:app`, then sign the generated `.app` bundle using `npm run sign:macos -- "<Developer ID Application identity>" "src-tauri/target/release/bundle/macos/NH Reader.app"`.
+1. Build with `npm run tauri:build:release`, then sign the generated `.app` bundle with `npm run sign` (identity from `--identity` or `APPLE_SIGNING_IDENTITY`; notarization and stapling run automatically when `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD` and `APPLE_TEAM_ID` are set).
 2. Open the DMG disk image and drag **NH Reader** into the **Applications** folder.
 3. Launch from Launchpad or `/Applications`. *(Note: For ad-hoc unsigned builds on macOS, control-click the app and choose "Open" on first launch to approve Gatekeeper).*
 
 ### 📦 Linux
 
-1. Build with `npm run build:app`, then sign the generated package using `npm run sign:linux -- path/to/package`.
+1. Build with `npm run tauri:build:release`, then sign the generated package with `npm run sign` (an armored detached `gpg` signature created next to the package and verified automatically).
 2. For Debian/Ubuntu:
    ```bash
    sudo dpkg -i nh-reader_<version>_amd64.deb
@@ -63,13 +63,13 @@ If you prefer building your own desktop packages from source:
 2. **Build commands**:
    ```bash
    # Windows (generates NSIS .exe and WiX .msi in src-tauri/target/release/bundle/)
-   npm run build:app
+   npm run tauri:build:release
 
    # macOS (generates .dmg and .app in src-tauri/target/release/bundle/)
-   npm run build:app
+   npm run tauri:build:release
 
    # Linux (generates .deb and .AppImage in src-tauri/target/release/bundle/)
-   npm run build:app
+   npm run tauri:build:release
    ```
 
 ---
@@ -95,7 +95,7 @@ To compile and install your own Android APK:
      ```
 2. **Initialize Android Project**:
    ```bash
-   npm run mobile:android:init
+   npm run tauri:android:init
    ```
 3. **Generate a Free Release Signing Keystore**:
    ```bash
@@ -103,7 +103,7 @@ To compile and install your own Android APK:
    ```
 4. **Compile the APK**:
    ```bash
-   npm run mobile:android:build
+   npm run tauri:android:build
    ```
    The output APK will be generated at:
    `src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk`
@@ -129,12 +129,12 @@ To compile and sign for iOS:
    - CocoaPods (`sudo gem install cocoapods`) or modern SPM.
 2. **Initialize iOS Project**:
    ```bash
-   npm run mobile:ios:init
+   npm run tauri:ios:init
    ```
 3. **Build via CLI or Xcode**:
    - Via CLI:
      ```bash
-     npm run mobile:ios:build
+     npm run tauri:ios:build
      ```
    - Or open the generated Xcode project:
      ```bash
@@ -174,10 +174,10 @@ User data (favorites, blacklist, and settings stored in `database.sqlite`) is pr
 ### Free Code Signing (Zero Budget / No API Keys)
 
 - **Windows**: Uses a self-signed code signing certificate generated locally with PowerShell (`New-SelfSignedCertificate`) stored in `certificates/` as `.pfx`. This signs the binaries for integrity without requiring a paid Commercial CA certificate.
-- **macOS**: Sign the generated app bundle with your Developer ID Application identity using `npm run sign:macos -- "<identity>" "src-tauri/target/release/bundle/macos/NH Reader.app"`. Notarization is a separate Apple distribution step.
-- **Linux**: Create an armored detached signature with `npm run sign:linux -- path/to/package`; verify it with `gpg --verify path/to/package.asc path/to/package`.
-- **Android**: Generate your own protected keystore with `keytool -genkeypair -keystore src-tauri/gen/android/release.keystore -alias nh-reader -keyalg RSA -keysize 2048 -validity 10000`, then sign with `npm run sign:android -- src-tauri/gen/android/release.keystore --ks-key-alias nh-reader path/to/app.apk`. `apksigner` prompts for the keystore password.
-- **iOS**: Use `npm run sign:ios -- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<team-id> CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER=<profile-name>` on macOS with Xcode, an Apple signing identity, and a valid provisioning profile.
+- **macOS**: Sign the generated app bundle with `npm run sign` (identity from `--identity` or `APPLE_SIGNING_IDENTITY`). Notarization and stapling run automatically when `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD` and `APPLE_TEAM_ID` are set.
+- **Linux**: `npm run sign` creates an armored detached signature next to the package and verifies it; check it manually with `gpg --verify path/to/package.asc path/to/package`.
+- **Android**: Generate your own protected keystore with `keytool -genkeypair -keystore src-tauri/gen/android/release.keystore -alias nh-reader -keyalg RSA -keysize 2048 -validity 10000`, then sign with `npm run sign -- path/to/app.apk` (defaults to that keystore and the `nh-reader` alias; override with `--ks`/`--ks-alias`). `apksigner` prompts for the keystore password, or set `ANDROID_KEYSTORE_PASSWORD`.
+- **iOS**: Use `npm run sign -- --ios CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<team-id> CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER=<profile-name>` on macOS with Xcode, an Apple signing identity, and a valid provisioning profile.
 
 The Windows helper can generate a self-signed certificate if no PFX is present. That signature does not establish a trusted publisher identity. The project does not provide a trusted signing certificate for release binaries.
 

@@ -25,7 +25,7 @@ Exactly what you ran, and the result of each:
 - [ ] `npm run check` — pass / fail / not run
 - [ ] `cargo check` — pass / fail / not run
 - [ ] `cargo test` — pass / fail / not run
-- [ ] `npm run i18n:check` — pass / fail / not run (if strings changed)
+- [ ] `npm run check:i18n` — pass / fail / not run (if strings changed)
 - [ ] `npm run check:agents` — pass / fail / not run
 - [ ] manual pass — describe, or state why not possible
 

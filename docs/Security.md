@@ -34,7 +34,7 @@ Security posture, reporting, and hardening notes for NH Reader.
 | Dev CSP (Vite HMR) isolated from production | `security.devCsp` in the same config |
 | Result-based errors (no panics across the bridge) | `src-tauri/src/error.rs` |
 | Request throttle | `nh_desktop.rs` |
-| Zero-cost Windows Code Signing | Local self-signed PFX script (`npm run sign:windows`) |
+| Zero-cost Windows Code Signing | Local self-signed PFX via the opt-in `npm run sign` command |
 | Native sandboxed installers | NSIS & WiX MSI with verified cleanup |
 
 ## 🚨 Supported versions / reporting

@@ -62,7 +62,7 @@ Contributing a new language or updating an existing one requires **editing only 
 3. **Validate your translation:**
    Run the mechanical translation checker:
    ```bash
-   npm run i18n:check
+   npm run check:i18n
    ```
    The validator automatically detects your new drop-in file and verifies that all 258 required keys are present, non-empty, and free of typos.
 
@@ -228,7 +228,7 @@ npm install
 ### Run the app in development mode
 
 ```bash
-npm run dev:app
+npm run tauri:dev
 ```
 
 This starts Vite on the fixed port `14440` (HMR on `14441`) and launches the Tauri window.
@@ -420,7 +420,7 @@ Do not push directly to `main`. Releases are managed via annotated tags per `.ag
 Releases follow `.agents/rules/release.md` and `.agents/skills/cut-release.md`:
 
 1. Sync version strings in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json`.
-2. Run the verification gate: `cargo check`, `cargo test`, `npm run check`, `npm run i18n:check`, `npm run check:agents`, `npm run build`, installer smoke test.
+2. Run the verification gate: `cargo check`, `cargo test`, `npm run check`, `npm run check:i18n`, `npm run check:agents`, `npm run build`, installer smoke test.
 3. Update `CHANGELOG.md`.
 4. Rewrite `scratch/release-notes.md` for human readability.
 5. Seed release discussion in `.github/discussions/announcements/v<version>.md` and `.github/discussions/announcements.md`.

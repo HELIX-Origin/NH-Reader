@@ -1,4 +1,4 @@
-name: Seed Discussions
+name: Discussions
 
 on:
   workflow_dispatch:
@@ -26,8 +26,8 @@ permissions:
   contents: read
 
 jobs:
-  seed-discussions:
-    name: Seed Community Discussions
+  discussions:
+    name: Discussions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -66,7 +66,7 @@ jobs:
             fi
 
             # Check if a discussion with this title already exists in the repository
-            EXISTING_TITLES=$(gh discussion list -R "$GH_REPO" -L 100 --json title -q '.[].title' 2>/dev/null || echo "")
+            EXISTING_TITLES=$(gh discussion list -R "$GH_REPO" -L 100 --json title -q '.discussions[].title')
             if echo "$EXISTING_TITLES" | grep -Fxq "$title"; then
               echo "Discussion with this title already exists. Skipping to prevent duplicate."
               return 0
@@ -87,7 +87,15 @@ jobs:
 
           # 1. Announcements
           if [ "$CATEGORY_FILTER" = "all" ] || [ "$CATEGORY_FILTER" = "announcements" ]; then
-            create_discussion_if_missing "Announcements" "🚀 Welcome to the NH Desktop Community & v0.1.0 Initial Release!" ".github/discussions/announcements.md"
+            create_discussion_if_missing "Announcements" "🚀 Welcome to the NH Reader Release Announcements" ".github/discussions/announcements.md"
+            for f in .github/discussions/announcements/v*.md; do
+              if [ ! -f "$f" ]; then
+                continue
+              fi
+              title=$(head -n1 "$f")
+              title="${title#\# }"
+              create_discussion_if_missing "Announcements" "$title" "$f"
+            done
           fi
 
           # 2. General

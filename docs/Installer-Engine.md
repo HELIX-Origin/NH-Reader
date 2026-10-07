@@ -24,7 +24,7 @@ In earlier versions, a custom embedded installer was evaluated. However, custom 
 
 ```mermaid
 flowchart TD
-    A[npm run build:app / tauri build] --> B[SvelteKit build static]
+    A[npm run tauri:build:release / tauri build] --> B[SvelteKit build static]
     B --> C[Rust cargo build release]
     C --> D{Platform Bundler}
     D -->|Windows| E[NSIS setup.exe]
@@ -38,14 +38,14 @@ flowchart TD
 
 ```bash
 # Desktop release build (bundles NSIS, WiX MSI, DMG, or deb/AppImage)
-npm run build:app
+npm run tauri:build:release
 
 # Debug desktop build (unoptimized, useful for rapid testing)
-npm run build:app:debug
+npm run tauri:build:debug
 
 # Android mobile build pipeline
-npm run mobile:android:init    # initialize Android studio project
-npm run mobile:android:build   # compile standalone APK
+npm run tauri:android:init    # initialize Android studio project
+npm run tauri:android:build   # compile standalone APK
 ```
 
 ---
@@ -99,8 +99,8 @@ Tauri v2 allows deep customization of Windows installers without breaking native
 1. **NSIS Installation Mode (`installMode: "both"`)**:
    - Gives the user a choice between "Install for anyone who uses this computer (all users)" or "Install just for me (current user)".
 2. **Visual Assets**:
-   - `headerImage`: 150x57 BMP header graphic displayed during installation.
-   - `sidebarImage`: 164x314 BMP graphic displayed on the Welcome and Finish wizard pages.
+   - `headerImage`: 150x57 BMP header graphic displayed during installation. *(Not used by NH Reader: the composed wide banner renders as a small left-aligned top-bar graphic in NSIS, so the option was removed from our config.)*
+   - `sidebarImage`: 164x314 BMP graphic displayed on the Welcome and Finish wizard pages. *(The only visual asset NH Reader uses: `src-tauri/windows/sidebar.bmp`.)*
 3. **Custom NSIS Hooks (`customLanguageFiles`, custom `.nsh` includes)**:
    - For custom registry entries, environment variables, or custom styling.
 4. **WiX Templates**:

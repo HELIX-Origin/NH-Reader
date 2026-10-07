@@ -56,7 +56,7 @@ Localization files are entirely drop-in. Contributors never have to edit multipl
 3. **Run the validator:**
 
    ```bash
-   npm run i18n:check
+   npm run check:i18n
    ```
 
    It automatically discovers your new drop-in file and validates that all keys match `en.json`.
@@ -99,7 +99,7 @@ For the full list of translation keys and their JSON structural schema, see [CON
 | `src/lib/i18n/<locale>.json` | Drop-in language pack with optional `_meta` header. |
 | `src/lib/i18n/index.ts` | Dynamically imports all drop-in `.json` packs via `LocaleCatalog` with system locale fallback. |
 | `src/lib/stores/locale.svelte.ts` | Reactive current locale, system detection, persistence. |
-| `scripts/check-i18n.mjs` | `npm run i18n:check` validator. |
+| `scripts/check-i18n.mjs` | `npm run check:i18n` validator. |
 
 Lookup is `locale.t('installer.welcomeTitle')` — a dotted key resolved against the active
 dictionary. Missing keys silently fall back to English rather than rendering a raw key, so a

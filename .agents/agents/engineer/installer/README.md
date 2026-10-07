@@ -8,7 +8,7 @@
 
 - Manages Tauri native installer bundles (NSIS `.exe` and WiX `.msi` on Windows, DMG on macOS, deb/AppImage on Linux).
 - Packages portable releases: portable `.zip` archives.
-- Supports both release (`npm run build:app`) and debug (`npm run build:app:debug`) packaging.
+- Supports both release (`npm run tauri:build:release`) and debug (`npm run tauri:build:debug`) packaging.
 - Ensures all production webview resources are completely bundled and load properly.
 
 ## Never
@@ -19,4 +19,4 @@
 
 ## Verify
 
-`npm run check:agents`, `cargo check` and `cargo test` in `src-tauri/`, and `npm run build:app`.
+`npm run check:agents`, `cargo check` and `cargo test` in `src-tauri/`, and `npm run tauri:build:release`.

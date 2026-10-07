@@ -53,9 +53,9 @@ commands in `package.json` and the [installation guide](docs/Installation-and-Ma
 - **iOS:** Xcode archive or IPA, built on macOS with Xcode and Apple signing credentials.
 - **Portable:** Standalone zip package with `.portable` runtime isolation mode.
 
-Build packages locally with `npm run build:app`; use `npm run mobile:android:*` or
-`npm run mobile:ios:*` for mobile targets. Sign using the `sign:*` commands in
-`package.json`. Windows' generated self-signed certificate is not a trusted publisher identity.
+Build packages locally with `npm run tauri:build:release`; use `npm run tauri:android:*` or
+`npm run tauri:ios:*` for mobile targets. When you want signed packages, run the opt-in
+`npm run sign` command — signing is never part of the build. Windows' generated self-signed certificate is not a trusted publisher identity.
 
 ## 🛠️ Building from source
 
@@ -66,14 +66,14 @@ Requires **Node.js 20+**, **Rust stable**, and the per-platform Tauri prerequisi
 npm install
 npm run check          # svelte-kit sync + svelte-check (frontend type/lint)
 cargo check            # run inside src-tauri/ (backend)
-npm run dev:app        # run in dev mode (fixed Vite port 14440)
+npm run tauri:dev      # run in dev mode (fixed Vite port 14440)
 ```
 
 Full release bundle + installer:
 
 ```bash
-npm run build:app          # runs tauri build (native NSIS/MSI/DMG/deb bundles)
-npm run build:app:debug    # debug bundle build
+npm run tauri:build:release   # runs tauri build (native NSIS/MSI/DMG/deb bundles)
+npm run tauri:build:debug     # debug bundle build
 ```
 
 ## 🏗️ Architecture

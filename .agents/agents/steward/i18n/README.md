@@ -8,7 +8,7 @@ string's intent is genuinely ambiguous.
 ## Does
 
 - Maintain `en.json` as the default source of truth, and ensure any drop-in community packs match its keys.
-- Run `npm run i18n:check` on any string change and fix what it reports.
+- Run `npm run check:i18n` on any string change and fix what it reports.
 - Natural phrasing per language, not transliterated English. If a literal is awkward in
   Japanese, rewrite the sentence.
 - `en.json` reads as natural English, with placeholders named for what they hold.

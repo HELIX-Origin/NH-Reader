@@ -22,6 +22,17 @@
 
 ---
 
+## ✅ Completed Workstream: Unified Cross-Platform Sign Script
+
+> Single opt-in `npm run sign` command replacing the five `sign:*` scripts (requested 2026-10-06). Signing stays a separate, optional step — never wired into `tauri:build:release` or any build command — so users only sign when they deliberately run the sign command.
+
+- [x] Add `scripts/sign.mjs`: host-OS detection, artifact discovery, native signing **with verification** for Windows (`signtool`), macOS (`codesign` + automatic notarization when Apple credentials are present), Linux (`gpg`), Android (`apksigner`), and iOS (`--ios` `xcodebuild` archive with forwarded credential arguments).
+- [x] Replace `sign:windows` / `sign:macos` / `sign:linux` / `sign:android` / `sign:ios` with the single `sign` script in `package.json`; retire `scripts/sign.ps1`.
+- [x] Align all live docs/templates with the unified command **and** the `tauri:*` renames — `tauri:dev` / `tauri:build:release` / `tauri:build:debug` / `tauri:android:*` / `tauri:ios:*` (release rule, release templates, README, CONTRIBUTING, `docs/`, AGENTS.md, installer rule + engineer role README). Shipped release announcements stay historical — they document the commands as they existed at their tag.
+- [x] Verify: dry-run + live `signtool` sign/verify round-trip on a temp copy (self-signed path exercised end-to-end; the trusted-certificate `verify /pa` path is implemented but not exercised — no trusted certificate available), then `npm run check:agents` green.
+
+---
+
 ## ✅ Completed Workstream: v0.7.4 — Stability, Installer & Release Fixes
 
 > Patch release hardening merged in `171a480` (blacklist backfill, NSIS finish page & upgrade uninstall, Korean installer strings, Pages deployment auth), plus tracking-ledger realignment and release paperwork.
@@ -300,12 +311,12 @@ All other items from previous milestones and backlogs have been resolved and con
 ## 🔁 Recurring
 
 - [ ] Run `npm run check` + `cargo check` / `cargo test` before any task is marked done.
-- [ ] Run `npm run check:agents` and `npm run i18n:check` before committing.
+- [ ] Run `npm run check:agents` and `npm run check:i18n` before committing.
 
 ---
 
 ## 🔖 Metadata
 
-- **Project**: NH Reader · **version** 0.7.4
+- **Project**: NH Reader · **version** 0.7.5
 - **Agent Ecosystem:** [`AGENTS`](./AGENTS.md) and [`.agents/`](.agents/) are tracked directly in repository git tracking.
 - **Last Updated:** Oct, 06 2026 - 02:38 PM
