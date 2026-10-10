@@ -1,5 +1,9 @@
 ---
+layout: docs
 title: Documentation Home
+summary: Overview and introduction to NH Reader
+permalink: /docs/
+nav_order: 1
 ---
 # What is NH Reader?
 

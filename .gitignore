@@ -53,6 +53,8 @@ pnpm-debug.log*
 
 # --- Whitelisted Files ---
 !*.gitkeep
-# --- GitHub Pages staging ---
+# --- GitHub Pages staging & Jekyll build outputs ---
 /.pages/
-/_site/
+_site/
+.jekyll-cache/
+.jekyll-metadata
