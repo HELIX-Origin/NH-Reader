@@ -10,8 +10,6 @@ url: "https://helix-origin.github.io"
 baseurl: "/NH-Reader"
 repository: "HELIX-Origin/NH-Reader"
 github_username: "HELIX-Origin"
-logo: "/NH-Reader/assets/appicon.jpg"
-favicon: "/NH-Reader/assets/appicon.jpg"
 
 author:
   name: "HELIX Origin"
