@@ -11,6 +11,7 @@ baseurl: "/NH-Reader"
 repository: "HELIX-Origin/NH-Reader"
 github_username: "HELIX-Origin"
 logo: "assets/images/appicon.jpg"
+favicon: "assets/images/appicon.jpg"
 
 author:
   name: "HELIX Origin"
