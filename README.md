@@ -134,6 +134,6 @@ for building, testing, and translation instructions. Be respectful, keep changes
 
 ## 📄 License
 
-BSD 3-Clause (see [LICENSE.md](LICENSE.md)). NH Reader is an independent client by HELIX Origin
+⚖️ BSD-3-Clause License — see [`LICENSE`](LICENSE.md) file for details. NH Reader is an independent client by HELIX Origin
 and is not affiliated with, endorsed by, or sponsored by nhentai.net. Please respect the site's
 [terms of service](https://nhentai.net/info/terms/) and rate limits.
