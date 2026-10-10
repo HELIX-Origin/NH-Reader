@@ -77,7 +77,7 @@ returns.
 - The site has no stable "popularity" sort field — blacklist excludes are query-based and
   do not affect the available sort orders.
 - If a blacklisted tag is present on a gallery *you* made a direct link to, the detail page is
-  still accessible (see "Explicitly not bugs" in `BUGS.md`).
+  still accessible by design (see the "Explicitly Not Bugs" blacklist entry in the org bug ledger).
 
 ## 🏗️ Source
 

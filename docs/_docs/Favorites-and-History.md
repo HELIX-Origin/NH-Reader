@@ -54,7 +54,7 @@ Every gallery you **open** (reader or detail) is recorded with a timestamp. Hist
 ### 🗑️ Clearing
 
 History can be cleared as a batch from the History page. (Individual-entry removal is on the
-roadmap — see [ROADMAP.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md)).
+roadmap.)
 
 ## 💾 Storage & privacy
 

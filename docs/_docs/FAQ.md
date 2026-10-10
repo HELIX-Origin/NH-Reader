@@ -74,7 +74,7 @@ or see [Development & Contributing](Development-and-Contributing.md).
 ## 🔗 Related
 
 - [Getting Started](Getting-Started.md) · [Troubleshooting](Troubleshooting.md) ·
-  [Privacy](Privacy.md) · [ROADMAP.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md)
+  [Privacy](Privacy.md)
 
 ---
 

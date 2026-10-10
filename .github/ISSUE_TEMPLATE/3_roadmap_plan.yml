@@ -9,12 +9,11 @@ body:
         ### Issue Protocol
         Every major plan gets **ONE roadmap issue** whose first post is the **COMPLETE LIVING ROADMAP**.
         The first post is edited in place as work progresses.
-        See [`AGENTS.md`](https://github.com/HELIX-Origin/NH-Reader/blob/main/AGENTS.md) and `ROADMAP.md`.
   - type: dropdown
     id: milestone
     attributes:
       label: "Target Milestone"
-      description: "Which ROADMAP.md milestone does this plan move?"
+      description: "Which milestone does this plan move?"
       options:
         - "M1 Foundation"
         - "M2 Browse & discover"
@@ -84,8 +83,8 @@ body:
     id: sub_issue_4
     attributes:
       label: "Sub-Issue 4 Scope: Verification Gate & Docs Sync"
-      description: "cargo check/test, npm run check, TODO/BUGS/ROADMAP/CHANGELOG sync, release prep."
-      placeholder: "- [ ] Verification gate: checks green\n- [ ] Update ROADMAP/TODO/CHANGELOG"
+      description: "cargo check/test, npm run check, changelog sync, release prep."
+      placeholder: "- [ ] Verification gate: checks green\n- [ ] Update CHANGELOG/docs"
     validations:
       required: true
   - type: checkboxes
@@ -95,5 +94,5 @@ body:
       options:
         - label: "I will edit the first post of this issue in place as sub-issues progress."
           required: true
-        - label: "I will avoid hammering the nhentai API and follow rate-limit etiquette (see .agents/rules/security.md)."
+        - label: "I will avoid hammering the nhentai API and follow rate-limit etiquette."
           required: true

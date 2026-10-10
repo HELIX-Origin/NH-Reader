@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Have an idea to make **NH Reader** even better? We welcome feature proposals!
-        Please review our [Roadmap](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md) and [Documentation](https://github.com/HELIX-Origin/NH-Reader/tree/main/docs) first.
+        Please review our [Documentation](https://github.com/HELIX-Origin/NH-Reader/tree/main/docs) and [open issues](https://github.com/HELIX-Origin/NH-Reader/issues) first.
   - type: dropdown
     id: scope
     attributes:
@@ -71,7 +71,7 @@ body:
     attributes:
       label: "Design Principles Agreement"
       options:
-        - label: "I understand that networking lives in the Rust backend, not the webview (see .agents/rules/security.md)."
+        - label: "I understand that networking lives in the Rust backend, not the webview."
           required: true
-        - label: "I have checked the current ROADMAP.md and open issues to ensure this is not already planned."
+        - label: "I have checked the open issues to ensure this is not already planned."
           required: true

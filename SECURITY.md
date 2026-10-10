@@ -79,7 +79,7 @@ Out of scope:
 
 ## ⬜ Security hardening wishlist
 
-These are tracked in [ROADMAP.md](ROADMAP.md):
+These are tracked in the organization roadmap (`ROADMAP.md`, maintained in the workspace agents ecosystem):
 
 - 🔏 Code-signing / notarization for Windows + macOS release binaries.
 - Installer signature verification prior to launch-any-later-updates.

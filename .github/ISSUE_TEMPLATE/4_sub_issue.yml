@@ -67,7 +67,7 @@ body:
           required: true
         - label: "Frontend changes pass `npm run check` (if UI touched)."
           required: true
-        - label: "Tracking docs (TODO.md / ROADMAP.md / CHANGELOG.md) updated in the same change."
+        - label: "CHANGELOG.md (and related documentation) updated in the same change."
           required: true
         - label: "Parent roadmap first post updated with link to this sub-issue."
           required: true

@@ -12,11 +12,6 @@ How to build, test, and contribute to NH Reader.
 ## 🏗️ Project layout
 
 ```
-AGENTS.md        agent/setup entry point + locked-in decisions
-ROADMAP.md       product direction & milestones
-PLAN.md          active sprint plan
-TODO.md          actionable task ledger
-BUGS.md          known issues
 wiki/            GitHub wiki source (copy to .wiki.git to publish)
 src/             SvelteKit static SPA
 src-tauri/       Rust backend (Tauri 2)
@@ -24,10 +19,6 @@ src-tauri/       Rust backend (Tauri 2)
       service.rs (background queue), image_cache.rs (disk cache),
       db.rs (SQLite)
 ```
-
-The `.agents/` ecosystem holds rules, agent roles, and workflows used alongside AI-assisted
-development. Start at `AGENTS.md` — it is the entry point for agents and humans alike —
-then `.agents/ROLES.md`. `npm run check:agents` mechanically gates it.
 
 ## 📋 Prerequisites
 
@@ -59,18 +50,18 @@ relevant) for Rust changes before calling a task done. For translation contribut
 ## ⚠️ Working rules
 
 - Product identity is **NH Reader** (the folder name is a misnomer, not the product
-  name; see `.agents/rules/identity.md`).
+  name).
 - Respect nhentai.net: throttle, no scraping, no hammering — it's a public API, be polite.
 - No panics across the command boundary (return `Result<_, String>`).
-- Keep tracking docs honest: update `TODO.md`/`ROADMAP.md`/`PLAN.md`/`BUGS.md` in the same change.
-- Follow `.agents/` rules before submitting code.
+- Keep the changelog and documentation in sync with code changes.
+- Follow the project's conventions before submitting code.
 
 ## 🤝 How to contribute
 
 1. Open an issue for discussion (bug or feature).
 2. Branch, implement, and verify (checks above).
 3. Open a PR to `main` referencing the issue.
-4. Link the PR/commit in `TODO.md` when a task lands.
+4. Reference the issue in the PR description when a task lands.
 
 To contribute translations, see [Contributing Translations](https://github.com/HELIX-Origin/NH-Reader/blob/main/CONTRIBUTING.md#contributing-translations) and [Localization](Localization.md). Language packs are 100% drop-in JSON files.
 
@@ -92,7 +83,7 @@ BSD 3-Clause — see the repo root [LICENSE.md](https://github.com/HELIX-Origin/
 
 ## 🔗 Related
 
-- [ROADMAP.md](https://github.com/HELIX-Origin/NH-Reader/blob/main/ROADMAP.md) · [Backend (Rust)](Backend-Rust.md) ·
+- [Backend (Rust)](Backend-Rust.md) ·
   [Frontend (SvelteKit)](Frontend-SvelteKit.md) · [Architecture](Architecture.md)
 
 ---

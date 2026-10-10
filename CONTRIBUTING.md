@@ -2,7 +2,7 @@
 
 Thank you for your interest in **NH Reader**. This document covers how to set up a development environment, follow the project's conventions, open issues, and submit changes.
 
-If you have not read it yet, start with [`AGENTS.md`](./AGENTS.md) for the high-level project overview, stack decisions, and layout.
+If you have not read it yet, the [`README.md`](./README.md) provides the high-level project overview; the [Project Layout](#project-layout) section below covers where code lives.
 
 ---
 
@@ -37,7 +37,7 @@ If you have not read it yet, start with [`AGENTS.md`](./AGENTS.md) for the high-
 - **Report bugs** via [GitHub Issues](https://github.com/HELIX-Origin/NH-Reader/issues) using the bug-report template.
 - **Propose features** via [GitHub Issues](https://github.com/HELIX-Origin/NH-Reader/issues) using the feature-proposal template.
 - **Contribute translations** for your language (100% drop-in, see [Contributing Translations](#contributing-translations)).
-- **Improve documentation** in `README.md`, `docs/`, or `.agents/`.
+- **Improve documentation** in `README.md` or `docs/`.
 - **Submit code changes** via pull request.
 - **Review pull requests** from other contributors.
 
@@ -254,17 +254,10 @@ Always run the relevant checks before declaring a task done:
 ## Project Layout
 
 ```
-AGENTS.md                    # Agent entry point and project overview
 README.md                    # Human-facing quick start and overview
-ROADMAP.md                   # Product direction and milestones
-PLAN.md                      # Active sprint plan for the current release cycle
-TODO.md                      # Actionable task ledger
-BUGS.md                      # Known issues and quirks
 CHANGELOG.md                 # Release changelog
 LICENSE.md                   # BSD 3-Clause license
 CITATION.cff                 # Citation metadata
-.agents/                     # Agent ecosystem (ROLES.md, rules, agents, skills, templates)
-.opencode/                   # Agent tooling config (instructions wiring, commands)
 .github/                     # Issue templates and CI workflows
 src/                         # Frontend SvelteKit SPA
   lib/                       # Flat modules: api, client, types, query, cache, image, format
@@ -291,19 +284,6 @@ docs/                        # Documentation pages (with live translation & in-p
 
 ## Coding Conventions
 
-Detailed rules live in `.agents/rules/`. The routing table in
-[`AGENTS.md`](./AGENTS.md) §3 says which one to read and when:
-
-- `.agents/rules/frontend.md` — Svelte, CSS, stores, naming
-- `.agents/rules/backend.md` — Rust, commands, error handling, throttling
-- `.agents/rules/security.md` — CSP, image hosts, API key, dependencies
-- `.agents/rules/i18n.md` — drop-in language packs with en.json default
-- `.agents/rules/git-workflow.md` — commits, staging, `gh`
-- `.agents/rules/release.md` — versioning and tags
-
-`npm run check:agents` enforces the mechanical parts of this ecosystem — structure, broken
-cross-references, branding, and the comment/`any`/`unwrap` policies on changed files.
-
 The short version:
 
 ### Frontend
@@ -327,14 +307,14 @@ The short version:
 ### General
 
 - Keep changes minimal and focused.
-- Update tracker docs (`TODO.md`, `BUGS.md`, `CHANGELOG.md`, `ROADMAP.md`) when scope changes.
+- Update `CHANGELOG.md` and related documentation when scope changes.
 - Match the existing code style.
 
 ---
 
 ## Commit Message Format
 
-We use [Conventional Commits](https://www.conventionalcommits.org/) with project scopes. See `.agents/templates/commit-message.md` for the full guide.
+We use [Conventional Commits](https://www.conventionalcommits.org/) with project scopes.
 
 ```
 <type>(<scope>): <short summary in imperative mood>
@@ -350,7 +330,7 @@ Common types:
 | --- | --- | --- |
 | ✨ | `feat` | New user-facing capability |
 | 🐛 | `fix` | Bug fix |
-| 📝 | `docs` | Documentation, `.agents/` |
+| 📝 | `docs` | Documentation |
 | 🧪 | `test` | Tests only |
 | ♻️ | `refactor` | No behavior change |
 | ⚡ | `perf` | Performance improvement |
@@ -358,7 +338,7 @@ Common types:
 | 🔒 | `security` | Security hardening |
 | 🏗️ | `build` | Builds / packaging / installer |
 
-Common scopes include `ui`, `gallery`, `reader`, `search`, `blacklist`, `account`, `library`, `settings`, `installer`, `tray`, `service`, `cache`, `commands`, `api`, `docs`, `agents`, `release`, `ci`.
+Common scopes include `ui`, `gallery`, `reader`, `search`, `blacklist`, `account`, `library`, `settings`, `installer`, `tray`, `service`, `cache`, `commands`, `api`, `docs`, `release`, `ci`.
 
 ---
 
@@ -407,22 +387,22 @@ All ten unit tests must pass:
 2. **Create a branch** from `main`.
 3. **Make focused commits** following the commit-message format.
 4. **Run checks** (`npm run check`, `cargo check`, `cargo test`).
-5. **Update docs** if behavior changed (`CHANGELOG.md`, `README.md`, `docs/`, `.agents/` as appropriate).
+5. **Update docs** if behavior changed (`CHANGELOG.md`, `README.md`, `docs/` as appropriate).
 6. **Open a PR** and fill out the template. Use `--body-file` for non-interactive submission if needed.
 7. **Respond to review feedback** and keep the branch up to date with `main`.
 
-Do not push directly to `main`. Releases are managed via annotated tags per `.agents/rules/release.md`.
+Do not push directly to `main`. Releases are managed via annotated tags.
 
 ---
 
 ## Release Process
 
-Releases follow `.agents/rules/release.md` and `.agents/skills/cut-release.md`:
+To cut a release:
 
 1. Sync version strings in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json`.
-2. Run the verification gate: `cargo check`, `cargo test`, `npm run check`, `npm run check:i18n`, `npm run check:agents`, `npm run build`, installer smoke test.
+2. Run the verification gate: `cargo check`, `cargo test`, `npm run check`, `npm run check:i18n`, `npm run build`, installer smoke test.
 3. Update `CHANGELOG.md`.
-4. Rewrite `scratch/release-notes.md` for human readability.
+4. Rewrite the raw release notes for human readability.
 5. Seed release discussion in `.github/discussions/announcements/v<version>.md` and `.github/discussions/announcements.md`.
 6. Create an annotated tag: `git tag -a vX.Y.Z -m "vX.Y.Z — summary"`.
 7. Push tags: `git push origin main --tags`.
@@ -438,13 +418,13 @@ Only maintainers cut releases.
 - Do not commit API keys, passwords, or personal paths.
 - Report sensitive security issues privately per `SECURITY.md`.
 - Keep networking in the Rust backend; the frontend talks to nhentai only through Tauri commands.
-- Follow `.agents/rules/security.md` for dependency, CSP, and API-key handling guidance.
+- Keep dependencies, the CSP allow-list, and API-key handling secure; never commit secrets.
 
 ---
 
 ## Getting Help
 
-- Read [`AGENTS.md`](./AGENTS.md) and `.agents/ROLES.md`.
+- Read the [`README.md`](./README.md) and check `docs/` and existing Discussions first.
 - Check `docs/` and existing [Discussions](https://github.com/HELIX-Origin/NH-Reader/discussions).
 - Open a [GitHub Issue](https://github.com/HELIX-Origin/NH-Reader/issues) if something is unclear or broken.
 

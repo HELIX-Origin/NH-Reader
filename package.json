@@ -11,7 +11,6 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "check:i18n": "node scripts/check-i18n.mjs",
-    "check:agents": "node scripts/check-agents.mjs",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build:release": "tauri build",
