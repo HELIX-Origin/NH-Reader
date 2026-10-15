@@ -23,6 +23,7 @@
 *.nsh       text eol=lf
 *.command   text eol=lf
 *.ps1       text eol=lf
+*.cff       text eol=lf
 
 # Windows batch scripts keep CRLF
 *.bat       text eol=crlf
@@ -36,7 +37,6 @@
 *.bmp       binary
 *.ico       binary
 *.icns      binary
-*.cff       binary
 *.pdf       binary
 *.zip       binary
 *.exe       binary
