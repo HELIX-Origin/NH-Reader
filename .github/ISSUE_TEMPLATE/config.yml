@@ -3,9 +3,9 @@ contact_links:
   - name: 📖 NH Reader Documentation
     url: https://github.com/HELIX-Origin/NH-Reader/tree/main/docs
     about: Read the user guide, architecture notes, and troubleshooting documentation.
-  - name: 💬 GitHub Discussions
-    url: https://github.com/HELIX-Origin/NH-Reader/discussions
-    about: Ask general questions, share feature ideas, or engage with the community.
+  - name: 💬 Discord Community
+    url: https://discord.com/invite/Ww3XBZC2HV
+    about: Join our Discord server to ask questions, share feature ideas, or engage with the community.
   - name: 🔒 Security & Privacy Policy
     url: https://github.com/HELIX-Origin/NH-Reader/blob/main/SECURITY.md
     about: Guidelines on secret storage, webview security, CORS/CSP, and responsible disclosure.
