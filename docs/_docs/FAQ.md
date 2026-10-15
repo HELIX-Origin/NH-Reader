@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: FAQ
-summary: Frequently asked questions about NH Reader
+summary: Frequently asked questions about NH Reader
 parent: Documentation Home
 ---
 

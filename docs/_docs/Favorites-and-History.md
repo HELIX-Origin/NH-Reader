@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Favorites & History
-summary: Managing favorites and viewing history in NH Reader
+summary: Managing favorites and viewing history in NH Reader
 parent: Documentation Home
 ---
 

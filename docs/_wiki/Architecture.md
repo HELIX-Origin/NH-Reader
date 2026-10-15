@@ -1,7 +1,7 @@
 ---
 layout: wiki
 title: Architecture
-summary: High-level overview of the NH-Reader architecture
+summary: High-level overview of the NH-Reader architecture
 parent: NH Reader Technical Wiki
 ---
 

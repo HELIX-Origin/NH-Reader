@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Troubleshooting
-summary: Common problems and fixes in NH Reader
+summary: Common problems and fixes in NH Reader
 parent: Documentation Home
 ---
 

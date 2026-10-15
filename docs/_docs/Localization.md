@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Localization & Language Support
-summary: How NH Reader handles multiple languages
+summary: How NH Reader handles multiple languages
 parent: Documentation Home
 ---
 

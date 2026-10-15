@@ -1,7 +1,7 @@
 ---
 layout: wiki
 title: Security
-summary: Security posture, reporting, and hardening notes for NH Reader
+summary: Security posture, reporting, and hardening notes for NH Reader
 parent: NH Reader Technical Wiki
 ---
 

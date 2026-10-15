@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Blacklist
-summary: Managing and understanding the blacklist in NH Reader
+summary: Managing and understanding the blacklist in NH Reader
 parent: Documentation Home
 ---
 

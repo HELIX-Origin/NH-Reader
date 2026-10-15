@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Settings & API Key
-summary: How to configure settings and authenticate with an API key in NH Reader
+summary: How to configure settings and authenticate with an API key in NH Reader
 parent: Documentation Home
 ---
 

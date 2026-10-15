@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Search & Filters
-summary: How to use search and filters in NH Reader
+summary: How to use search and filters in NH Reader
 parent: Documentation Home
 ---
 

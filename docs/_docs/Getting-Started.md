@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Getting Started
-summary: Your first minutes with NH Reader
+summary: Your first minutes with NH Reader
 parent: Documentation Home
 ---
 

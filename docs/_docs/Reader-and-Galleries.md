@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Reader & Galleries
-summary: How to use the reader and gallery detail pages in NH Reader
+summary: How to use the reader and gallery detail pages in NH Reader
 parent: Documentation Home
 ---
 

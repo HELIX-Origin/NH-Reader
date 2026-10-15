@@ -1,0 +1,43 @@
+# Normalize line endings across platforms so agents on Windows, Linux, and
+# macOS see byte-identical files and the working tree never churns.
+# This overrides core.autocrlf for every matched path.
+* text=auto eol=lf
+
+# Explicit text types
+*.md        text eol=lf
+*.svelte    text eol=lf
+*.rs        text eol=lf
+*.toml      text eol=lf
+*.ts        text eol=lf
+*.js        text eol=lf
+*.mjs       text eol=lf
+*.json      text eol=lf
+*.lock      text eol=lf
+*.css       text eol=lf
+*.html      text eol=lf
+*.svg       text eol=lf
+*.xml       text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.sh        text eol=lf
+*.nsh       text eol=lf
+*.command   text eol=lf
+*.ps1       text eol=lf
+
+# Windows batch scripts keep CRLF
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+
+# Binary types (never convert)
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.bmp       binary
+*.ico       binary
+*.icns      binary
+*.cff       binary
+*.pdf       binary
+*.zip       binary
+*.exe       binary
+*.dll       binary

@@ -1,7 +1,7 @@
 ---
 layout: wiki
 title: Packaging & Installer Architecture
-summary: Overview of NH Reader packaging and installer architecture
+summary: Overview of NH Reader packaging and installer architecture
 parent: NH Reader Technical Wiki
 ---
 

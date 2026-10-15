@@ -1,7 +1,7 @@
 ---
 layout: wiki
 title: Development & Contributing
-summary: Guidelines for building, testing, and contributing to NH Reader
+summary: Guidelines for building, testing, and contributing to NH Reader
 parent: NH Reader Technical Wiki
 ---
 

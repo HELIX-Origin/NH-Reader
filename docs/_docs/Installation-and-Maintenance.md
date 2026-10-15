@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Installation & Maintenance
-summary: How to install and maintain NH Reader
+summary: How to install and maintain NH Reader
 parent: Documentation Home
 ---
 

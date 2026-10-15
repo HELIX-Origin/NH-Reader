@@ -1,7 +1,7 @@
 ---
 layout: wiki
 title: Privacy
-summary: Overview of NH Reader privacy practices and data handling
+summary: Overview of NH Reader privacy practices and data handling
 parent: NH Reader Technical Wiki
 ---
 

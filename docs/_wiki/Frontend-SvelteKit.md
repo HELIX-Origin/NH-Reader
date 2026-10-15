@@ -1,7 +1,7 @@
 ---
 layout: wiki
 title: Frontend (SvelteKit)
-summary: Overview of the NH-Reader SvelteKit frontend architecture and conventions
+summary: Overview of the NH-Reader SvelteKit frontend architecture and conventions
 parent: NH Reader Technical Wiki
 ---
 

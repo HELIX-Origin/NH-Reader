@@ -1,7 +1,7 @@
 ---
 layout: wiki
 title: Backend (Rust)
-summary: Overview of the NH-Reader Rust backend architecture and commands
+summary: Overview of the NH-Reader Rust backend architecture and commands
 parent: NH Reader Technical Wiki
 ---
 
