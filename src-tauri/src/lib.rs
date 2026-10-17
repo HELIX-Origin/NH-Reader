@@ -11,7 +11,10 @@ use nh_desktop::NhDesktopClient;
 use service::BackgroundService;
 use std::path::PathBuf;
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use tauri::Manager;
+
+static IS_QUITTING: AtomicBool = AtomicBool::new(false);
 
 fn detect_portable_dir(exe: &std::path::Path) -> Option<PathBuf> {
     let parent = exe.parent()?;
@@ -58,6 +61,18 @@ pub fn resolve_default_downloads_dir<M: Manager<R>, R: tauri::Runtime>(manager: 
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    #[cfg(windows)]
+    {
+        // Suppress spurious Chromium / WebView2 class unregistration warnings and logging noise on Windows
+        // (specifically [ERROR:ui\gfx\win\window_impl.cc:172] Failed to unregister class Chrome_WidgetWin_0. Error = 1412)
+        if std::env::var("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS").is_err() {
+            std::env::set_var(
+                "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
+                "--disable-logging --log-level=3",
+            );
+        }
+    }
+
     #[allow(unused_mut)]
     let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_opener::init());
@@ -124,6 +139,10 @@ pub fn run() {
                             }
                         }
                         "quit" => {
+                            IS_QUITTING.store(true, Ordering::SeqCst);
+                            for (_, window) in app.webview_windows() {
+                                let _ = window.destroy();
+                            }
                             app.exit(0);
                         }
                         _ => {}
@@ -159,12 +178,12 @@ pub fn run() {
 
             Ok(())
         })
-        .on_window_event(|_window, _event| {
+        .on_window_event(|window, event| {
             #[cfg(desktop)]
-            if let tauri::WindowEvent::CloseRequested { api, .. } = _event {
-                if _window.label() == "main" {
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                if window.label() == "main" && !IS_QUITTING.load(Ordering::SeqCst) {
                     api.prevent_close();
-                    let _ = _window.hide();
+                    let _ = window.hide();
                 }
             }
         })

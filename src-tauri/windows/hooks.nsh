@@ -1,12 +1,25 @@
 !macro NSIS_HOOK_PREINSTALL
-  ; Terminate any existing NH Reader instance to prevent file locking
+  ; Terminate any existing NH Reader instance to prevent file locking during installation or update
+  nsExec::Exec 'taskkill /F /IM "NH Reader.exe" /T'
+  nsExec::Exec 'taskkill /F /IM "nh-reader.exe" /T'
+  Sleep 500
+!macroend
+
+!macro NSIS_HOOK_PREUNINSTALL
+  ; Terminate any running instances and child processes before uninstallation.
+  ; Windows Add/Remove Programs invokes "$INSTDIR\uninstall.exe". If the application
+  ; is running, Windows locks open files and causes uninstallation failure or orphaned files.
   nsExec::Exec 'taskkill /F /IM "NH Reader.exe" /T'
   nsExec::Exec 'taskkill /F /IM "nh-reader.exe" /T'
   
-  ; If previous version's uninstaller exists in target directory, run it synchronously
-  ${If} ${FileExists} "$INSTDIR\uninstall.exe"
-    DetailPrint "Uninstalling previous version..."
-    ExecWait '"$INSTDIR\uninstall.exe" /S _?=$INSTDIR'
+  ; Allow time for the operating system to flush handles and release file locks
+  Sleep 1000
+!macroend
+
+!macro NSIS_HOOK_POSTUNINSTALL
+  ; Clean up any remaining directories or runtime-generated artifacts in the install location
+  ${If} ${FileExists} "$INSTDIR"
+    RMDir /r "$INSTDIR"
   ${EndIf}
 !macroend
 
@@ -19,3 +32,4 @@
     LangString MULTIUSER_INNERTEXT_INSTALLMODE_CURRENTUSER ${LANG_KOREAN} "나만을 위해 설치"
   !endif
 !endif
+
