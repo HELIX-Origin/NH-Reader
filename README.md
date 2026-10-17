@@ -1,153 +1,54 @@
+<div align="center">
+
 # NH Reader
 
 <p align="center">
+  <a href="https://github.com/HELIX-Origin/nh-reader/releases"><img src="https://img.shields.io/github/v/release/HELIX-Origin/nh-reader?include_prereleases&label=Release&color=blue" alt="Release" height="20" /></a>
   <a href="https://docs.helix-origin.club/nh-reader/"><img src="https://img.shields.io/badge/Docs-docs.helix--origin.club-brightgreen" alt="Documentation" height="20" /></a>
   <a href="https://wiki.helix-origin.club/nh-reader/"><img src="https://img.shields.io/badge/Wiki-wiki.helix--origin.club-brightgreen" alt="Technical Wiki" height="20" /></a>
   <a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD--3--Clause-blue.svg" alt="License: BSD-3-Clause" height="20" /></a>
   <a href="https://tauri.app"><img src="https://img.shields.io/badge/Tauri-v2-blue?logo=tauri" alt="Tauri v2" height="20" /></a>
 </p>
 
-**A lightweight, modern, cross-platform client for [nhentai.net](https://nhentai.net).**
+**A lightweight, modern, cross-platform client for [nhentai.net](https://nhentai.net) — built with Tauri v2 and Svelte 5.**
 
+Native desktop and mobile reader featuring an advanced search & filter engine, persistent multi-tier blacklists, local SQLite caching, archive downloads, and a private local-first architecture.
 
-NH Reader is not a web wrapper. It is a native desktop and mobile application with its **own custom UI** and a
-materially better **search & filter** and **global blacklist** experience than the site provides.
-It imports as much data as the site's API makes available — galleries, tags, languages,
-categories, artists, characters, parodies — and lets you slice it **locally, instantly**.
+> **18+ only.** This application is intended for adults only. By using it you confirm that you are of legal age in your jurisdiction to view adult content.
 
-> **18+ only.** This application is intended for adults only. By using it you confirm that you
-> are of legal age in your jurisdiction to view adult content.
+</div>
 
 ---
 
-## ✨ Highlights
+## 📖 Primary Gateways
 
-- 🔍 **Search that actually works.** A filter drawer covers text, language, category, per-type tag
-  include/exclude (artist, character, parody, group, …), page-count ranges, and six sort modes —
-  compiled into native nhentai query syntax (`language:english`, `-tag:...`, `pages:>50`).
-- **A blacklist you can trust.** Global, persistent, applied **server-side** (query `-tag:`
-  excludes) *and* **client-side** (hide/blur in grids), with a master toggle. It never silently
-  breaks the grid or the reader.
-- **Native and fast.** Tauri 2 (Rust `reqwest`) backend, native OS window decorations with an in-app top bar, SvelteKit SPA frontend with Svelte 5 runes. Everything runs locally; images load lazily with a Rust image-proxy fallback (backed by a disk cache) when the CDN 404s.
-- **Official archive downloads.** Adopts nhentai API v2's dedicated archive endpoint (`POST /api/v2/galleries/{id}/download`) to fetch pre-built zip/cbz archives directly instead of walking CDN page URLs.
-- **Background jobs built in.** Gallery downloads, image prefetch, cache/account maintenance, and an optional Popular auto-refresh run in a throttled background service with live progress. Launching the app again on desktop focuses the running window (single instance).
-- **Private & versatile account sync.** Favorites, history, blacklist, and settings live locally on your device in SQLite (`database.sqlite`). An optional account sign-in modal supports both official API Keys (bypasses Cloudflare CAPTCHAs) and direct credentials, powering live profile display and synchronized blacklists.
-- **Mihon-inspired floating navigation.** Modern thumb-friendly floating navigation bar with a 4px corner radius, backdrop blur elevation, and responsive full-width page-fitting settings layouts.
-- **Speaks your language.** Interface defaults to your system locale and can be chosen in Settings. English is shipped out of the box with simple 100% drop-in JSON files for community-contributed translations.
-- **Native installers & mobile packaging.** Native NSIS (both per-user and per-machine) and WiX MSI on Windows, DMG on macOS, deb/AppImage on Linux, APK on Android.
+All comprehensive user guides, API manuals, and technical architecture specifications are centrally hosted:
 
-## 🖥️ Platforms
+- 📖 **Documentation**: [docs.helix-origin.club/nh-reader](https://docs.helix-origin.club/nh-reader/) — Getting started, search filters, blacklist management, and reader guides.
+- 🧠 **Technical Wiki**: [wiki.helix-origin.club/nh-reader](https://wiki.helix-origin.club/nh-reader/) — Architecture, SQLite schema, background worker service, and API integration.
+- 🌐 **Organization Portal**: [www.helix-origin.club](https://www.helix-origin.club/) — HELIX Origin organization hub.
 
-| Platform | Support |
-| --- | --- |
-| Windows 10+ | ✅ Supported (NSIS installer, WiX MSI, portable zip) |
-| macOS 10.13+ | ⚠️ Toolchain supported (untested due to lack of macOS hardware) |
-| Linux (x86_64) | ✅ Supported (deb, AppImage) |
-| Android | ⚠️ Toolchain supported (currently untested due to lack of physical Android device) |
-| iOS | ⚠️ Toolchain supported (requires macOS, Xcode, and Apple signing) |
+---
 
-> [!WARNING]
-> **Platform Testing Notice (Android, macOS & iOS):** These targets are community-supported and untested by the maintainer. iOS builds require macOS, Xcode, and Apple signing credentials.
+## ⚡ Quick Start
 
-## 📖 Documentation & Technical Wiki
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v20+)
+- [Rust](https://www.rust-lang.org/) (1.80+)
 
-Comprehensive user manuals, blacklist guides, and technical architecture specifications are hosted at:
-- **Documentation**: [docs.helix-origin.club/nh-reader](https://docs.helix-origin.club/nh-reader/)
-- **Technical Wiki**: [wiki.helix-origin.club/nh-reader](https://wiki.helix-origin.club/nh-reader/)
-
-## 📦 Installation
-
-The project does not publish release assets. Build and sign packages locally using the
-commands in `package.json` and the [installation guide](https://docs.helix-origin.club/nh-reader/Installation-and-Maintenance):
-
-- 🪟 **Windows:** `NH Reader_<version>_x64-setup.exe` (NSIS) or `NH Reader_<version>_x64_en-US.msi` (WiX).
-- **macOS:** `NH Reader_<version>_x64.dmg` (or `aarch64` for Apple Silicon).
-- **Linux:** `nh-reader_<version>_amd64.deb` or `nh-reader_<version>_amd64.AppImage`.
-- **Android:** `nh-reader_<version>_universal.apk`.
-- **iOS:** Xcode archive or IPA, built on macOS with Xcode and Apple signing credentials.
-- **Portable:** Standalone zip package with `.portable` runtime isolation mode.
-
-Build packages locally with `npm run tauri:build:release`; use `npm run tauri:android:*` or
-`npm run tauri:ios:*` for mobile targets. When you want signed packages, run the opt-in
-`npm run sign` command — signing is never part of the build. Windows' generated self-signed certificate is not a trusted publisher identity.
-
-## 🛠️ Building from source
-
-Requires **Node.js 20+**, **Rust stable**, and the per-platform Tauri prerequisites
-([docs](https://v2.tauri.app/start/prerequisites/)).
-
+### Running Locally
 ```bash
 npm install
-npm run check          # svelte-kit sync + svelte-check (frontend type/lint)
-cargo check            # run inside src-tauri/ (backend)
-npm run tauri:dev      # run in dev mode (fixed Vite port 14440)
+npm run tauri dev
 ```
 
-Full release bundle + installer:
-
+### Verification & Quality Gate
 ```bash
-npm run tauri:build:release   # runs tauri build (native NSIS/MSI/DMG/deb bundles)
-npm run tauri:build:debug     # debug bundle build
+npm test                 # cargo check + cargo test + svelte-check
 ```
 
-## 🏗️ Architecture
+---
 
-Here is the app's high-level architecture: the SvelteKit SPA talks to Tauri commands in Rust,
-which wrap the throttled nhentai API client, local SQLite persistence, background worker, and disk image cache.
+## ⚖️ License
 
-```mermaid
-flowchart TD
-    A[SvelteKit SPA] -->|"invoke"| B[commands.rs]
-    B --> C[nh_desktop.rs API client]
-    B --> D[db.rs SQLite]
-    B --> S[service.rs background worker]
-    S --> K[image_cache.rs disk cache]
-    C -->|"throttled reqwest"| F[nhentai.net API]
-    F --> G[nhentai image CDNs]
-    A -->|"direct image load"| G
-    A -.->|"proxy fallback"| K
-```
-
-## 🗂️ Project layout
-
-```
-src/                  # SvelteKit SPA frontend (static, adapter-static)
-  lib/                # flat modules: api, client, types, query, cache, image, format
-  lib/i18n/           # LocaleCatalog class, en.json default, drop-in packs
-  lib/stores/         # settings, library, blacklist, account, service, locale (runes + SQLite cache)
-  lib/components/     # GalleryCard, GalleryGrid, FilterPanel, BlacklistView, ...
-  routes/             # latest, popular, search, favorites, history, blacklist, settings, gallery, reader
-src-tauri/            # Rust backend (Tauri 2)
-  src/nh_desktop.rs   # nhentai.net API client (reqwest, throttled)
-  src/commands.rs     # Tauri commands
-  src/db.rs           # local SQLite persistence with poison-recovered locks
-  src/service.rs      # background worker queue (downloads, prefetch, maintenance, sync, auto-refresh)
-  src/image_cache.rs  # disk image cache (cache-first proxy fallback)
-```
-
-## 📚 Documentation
-
-Full documentation lives in the [`docs/`](docs/README.md) folder:
-
-- [Project page](https://helix-origin.github.io/NH-Reader/) — GitHub Pages site with the landing page and documentation pages.
-- [Documentation Home](docs/README.md) · [Getting Started](docs/Getting-Started.md) · [Search & Filters](docs/Search-and-Filters.md)
-- [Blacklist](docs/Blacklist.md) · [Reader & Galleries](docs/Reader-and-Galleries.md) · [Settings & API Key](docs/Settings-and-API-Key.md)
-- [Installation & Maintenance](docs/Installation-and-Maintenance.md) · [Localization](docs/Localization.md) · [Architecture](docs/Architecture.md)
-- [Security](docs/Security.md) · [Privacy](docs/Privacy.md) · [Troubleshooting](docs/Troubleshooting.md)
-- [FAQ](docs/FAQ.md) · [Development & Contributing](docs/Development-and-Contributing.md)
-
-Also see [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
-[TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
-
-Official documentation and technical guides are hosted at **[docs.helix-origin.club/nh-reader](https://docs.helix-origin.club/nh-reader/)** and **[wiki.helix-origin.club/nh-reader](https://wiki.helix-origin.club/nh-reader/)**.
-
-## 🤝 Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for building, testing, and translation instructions. Be respectful, keep changes scoped, and match the existing conventions.
-
-## 📄 License
-
-⚖️ BSD-3-Clause License — see [`LICENSE`](LICENSE) file for details. NH Reader is an independent client by HELIX Origin
-and is not affiliated with, endorsed by, or sponsored by nhentai.net. Please respect the site's
-[terms of service](https://nhentai.net/info/terms/) and rate limits.
-
+[BSD-3-Clause](LICENSE) — Copyright (c) 2026, HELIX Origin. Independent client; not affiliated with nhentai.net.
