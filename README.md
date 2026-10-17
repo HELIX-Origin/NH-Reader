@@ -1,6 +1,14 @@
 # NH Reader
 
+<p align="center">
+  <a href="https://docs.helix-origin.club/nh-reader/"><img src="https://img.shields.io/badge/Docs-docs.helix--origin.club-brightgreen" alt="Documentation" height="20" /></a>
+  <a href="https://wiki.helix-origin.club/nh-reader/"><img src="https://img.shields.io/badge/Wiki-wiki.helix--origin.club-brightgreen" alt="Technical Wiki" height="20" /></a>
+  <a href="https://opensource.org/licenses/BSD-3-Clause"><img src="https://img.shields.io/badge/License-BSD--3--Clause-blue.svg" alt="License: BSD-3-Clause" height="20" /></a>
+  <a href="https://tauri.app"><img src="https://img.shields.io/badge/Tauri-v2-blue?logo=tauri" alt="Tauri v2" height="20" /></a>
+</p>
+
 **A lightweight, modern, cross-platform client for [nhentai.net](https://nhentai.net).**
+
 
 NH Reader is not a web wrapper. It is a native desktop and mobile application with its **own custom UI** and a
 materially better **search & filter** and **global blacklist** experience than the site provides.
@@ -131,15 +139,15 @@ Full documentation lives in the [`docs/`](docs/README.md) folder:
 Also see [CHANGELOG.md](CHANGELOG.md), [PRIVACY.md](PRIVACY.md),
 [TOS.md](TOS.md), [SECURITY.md](SECURITY.md), and [CONTRIBUTING.md](CONTRIBUTING.md) in this repository.
 
-The site at `https://helix-origin.github.io/NH-Reader/` is published from the `docs/` folder through repository **Settings → Pages**. Pages uses `docs/translate.js` for in-page Google Translate; GitHub-rendered Markdown cannot run that script and does not offer translation controls. The old [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds a staged site for a GitHub Actions Pages source, but it cannot deploy to the currently selected `docs/` source. The Tauri application is never deployed as a website.
+Official documentation and technical guides are hosted at **[docs.helix-origin.club/nh-reader](https://docs.helix-origin.club/nh-reader/)** and **[wiki.helix-origin.club/nh-reader](https://wiki.helix-origin.club/nh-reader/)**.
 
 ## 🤝 Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Development & Contributing guide](docs/Development-and-Contributing.md)
-for building, testing, and translation instructions. Be respectful, keep changes scoped, and match the existing conventions.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for building, testing, and translation instructions. Be respectful, keep changes scoped, and match the existing conventions.
 
 ## 📄 License
 
-⚖️ BSD-3-Clause License — see [`LICENSE`](LICENSE.md) file for details. NH Reader is an independent client by HELIX Origin
+⚖️ BSD-3-Clause License — see [`LICENSE`](LICENSE) file for details. NH Reader is an independent client by HELIX Origin
 and is not affiliated with, endorsed by, or sponsored by nhentai.net. Please respect the site's
 [terms of service](https://nhentai.net/info/terms/) and rate limits.
+
