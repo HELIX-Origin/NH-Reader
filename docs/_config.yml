@@ -7,8 +7,8 @@ tagline: Desktop & Android Reader
 tagline_short: Desktop & Android Reader
 description: "A native desktop and Android client for nhentai.net with advanced search, a persistent global blacklist, and a fully local library."
 url: "https://www.helix-origin.club"
-baseurl: "/NH-Reader"
-repository: "HELIX-Origin/NH-Reader"
+baseurl: "/nh-reader"
+repository: "HELIX-Origin/nh-reader"
 github_username: "HELIX-Origin"
 logo: "assets/images/logo.svg"
 favicon: "assets/images/favicon.ico"
