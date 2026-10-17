@@ -41,10 +41,16 @@ categories, artists, characters, parodies — and lets you slice it **locally, i
 > [!WARNING]
 > **Platform Testing Notice (Android, macOS & iOS):** These targets are community-supported and untested by the maintainer. iOS builds require macOS, Xcode, and Apple signing credentials.
 
+## 📖 Documentation & Technical Wiki
+
+Comprehensive user manuals, blacklist guides, and technical architecture specifications are hosted at:
+- **Documentation**: [docs.helix-origin.club/nh-reader](https://docs.helix-origin.club/nh-reader/)
+- **Technical Wiki**: [wiki.helix-origin.club/nh-reader](https://wiki.helix-origin.club/nh-reader/)
+
 ## 📦 Installation
 
 The project does not publish release assets. Build and sign packages locally using the
-commands in `package.json` and the [installation guide](docs/Installation-and-Maintenance.md):
+commands in `package.json` and the [installation guide](https://docs.helix-origin.club/nh-reader/Installation-and-Maintenance):
 
 - 🪟 **Windows:** `NH Reader_<version>_x64-setup.exe` (NSIS) or `NH Reader_<version>_x64_en-US.msi` (WiX).
 - **macOS:** `NH Reader_<version>_x64.dmg` (or `aarch64` for Apple Silicon).
